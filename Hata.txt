@@ -1,0 +1,24 @@
+(index):64 cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
+(anonymous) @ (index):64
+client:789 [vite] connecting...
+react-dom_client.js?v=090261ce:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+client:912 [vite] connected.
+pages.tsx:3982 Uncaught ReferenceError: fetchAvansIsteklerByPeriod is not defined
+    at AvansPage (pages.tsx:3982:84)
+    at react-stack-bottom-frame (react-dom_client.js?v=090261ce:17424:20)
+    at renderWithHooks (react-dom_client.js?v=090261ce:4206:24)
+    at updateFunctionComponent (react-dom_client.js?v=090261ce:6619:21)
+    at beginWork (react-dom_client.js?v=090261ce:7654:20)
+    at runWithFiberInDEV (react-dom_client.js?v=090261ce:1485:72)
+    at performUnitOfWork (react-dom_client.js?v=090261ce:10874:82)
+    at workLoopSync (react-dom_client.js?v=090261ce:10728:43)
+    at renderRootSync (react-dom_client.js?v=090261ce:10711:13)
+    at performWorkOnRoot (react-dom_client.js?v=090261ce:10359:46)
+react-dom_client.js?v=090261ce:6229 An error occurred in the <AvansPage> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+defaultOnUncaughtError @ react-dom_client.js?v=090261ce:6229
+App.tsx:366 DataProvider - nakitList after setting: (5) [{…}, {…}, {…}, {…}, {…}]
+App.tsx:366 DataProvider - nakitList after setting: (5) [{…}, {…}, {…}, {…}, {…}]
