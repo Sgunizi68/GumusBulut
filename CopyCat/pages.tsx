@@ -2217,7 +2217,7 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
 // --- B2B EKSTRE YUKLEME PAGE ---
 export const B2BUploadPage: React.FC = () => {
   const { selectedBranch, hasPermission } = useAppContext();
-  const { addB2BEkstreler } = useDataContext();
+  const { eFaturaList, updateEFatura } = useDataContext();
   const [file, setFile] = useState<File | null>(null);
   const [feedback, setFeedback] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -2250,7 +2250,7 @@ export const B2BUploadPage: React.FC = () => {
 
     try {
       const data = await file.arrayBuffer();
-      const workbook = XLSX.read(data, { type: 'array' });
+      const workbook = XLSX.read(data, { type: 'array', cellDates: true });
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       let jsonData: B2BEkstreExcelRow[] = XLSX.utils.sheet_to_json(worksheet);
 
@@ -2261,32 +2261,45 @@ export const B2BUploadPage: React.FC = () => {
         return;
       }
 
-      const newB2BEkstreler: B2BEkstre[] = jsonData
-        .map((row) => {
-          const tarih = parseDateString(row["Tarih"]);
-          return {
-            Tarih: tarih,
-            Fis_No: (row["Fiş No"] || '').substring(0, 50),
-            Fis_Turu: row["Fiş Türü"] || '',
-            Aciklama: row.Aciklama || '',
-            Borc: parseCurrencyValue(row.Borc),
-            Alacak: parseCurrencyValue(row.Alacak),
-            Toplam_Bakiye: parseCurrencyValue(row["Toplam Bakiye"]),
-            Fatura_No: row["Fatura No"] || null,
-            Fatura_Metni: row["Fatura Metni"] || null,
-            Donem: calculatePeriod(tarih),
-            Sube_ID: selectedBranch.Sube_ID,
-          };
-        });
-      
-      const { successfullyAdded, skippedRecords } = await addB2BEkstreler(newB2BEkstreler);
-      console.log("Prepared B2B Ekstre Data for Backend:", newB2BEkstreler);
+      let updatedCount = 0;
+      let skippedCount = 0;
 
-      let successMessage = `${successfullyAdded.length} ekstre başarıyla eklendi.`;
-      if (skippedRecords.length > 0) {
-        successMessage += ` ${skippedRecords.length} ekstre mevcut olduğu için atlandı: ${skippedRecords.map(s => s.Fis_No).join(', ')}.`;
+      for (const row of jsonData) {
+        const fisNo = String(row["Fiş No"] || '');
+        const aciklamaFromExcel = String(row["Açıklama"] || '');
+
+        if (!fisNo || !aciklamaFromExcel) {
+          skippedCount++;
+          continue;
+        }
+
+        const matchingEFatura = eFaturaList.find(
+          (ef) => ef.Fatura_Numarasi === fisNo && ef.Sube_ID === selectedBranch.Sube_ID
+        );
+
+        if (matchingEFatura) {
+          // Check if Aciklama is empty or null
+          if (!matchingEFatura.Aciklama) {
+            const updateResult = await updateEFatura(matchingEFatura.Fatura_ID, { Aciklama: aciklamaFromExcel });
+            if (updateResult.success) {
+              updatedCount++;
+            } else {
+              console.warn(`Failed to update Aciklama for Fatura_ID ${matchingEFatura.Fatura_ID}: ${updateResult.message}`);
+              skippedCount++;
+            }
+          } else {
+            skippedCount++; // Already has an explanation, so skip
+          }
+        } else {
+          skippedCount++; // No matching eFatura found
+        }
       }
-      setFeedback({ message: successMessage, type: 'success' });
+
+      let feedbackMessage = `${updatedCount} e-Fatura kaydı başarıyla güncellendi.`;
+      if (skippedCount > 0) {
+        feedbackMessage += ` ${skippedCount} kayıt atlandı (eşleşme bulunamadı veya açıklama zaten mevcut).`;
+      }
+      setFeedback({ message: feedbackMessage, type: 'success' });
       setFile(null);
       if(fileInputRef.current) fileInputRef.current.value = "";
 
@@ -2297,8 +2310,8 @@ export const B2BUploadPage: React.FC = () => {
   };
 
   const handleDownloadTemplate = () => {
-    alert("B2B Excel şablonu indirme işlemi simüle edildi. Konsolu kontrol edin.");
-    console.log("B2B Excel Şablon İndirme İsteği (Başlıklar):", MOCK_B2B_EKSTRE_EXCEL_SAMPLE[0] ? Object.keys(MOCK_B2B_EKSTRE_EXCEL_SAMPLE[0]) : "Şablon boş");
+    alert("Bu ekran, yükleyeceğiniz Excel dosyasındaki 'Fiş No' ve 'Açıklama' sütunlarını kullanarak mevcut e-Faturaların açıklama alanlarını günceller. Lütfen Excel dosyanızın 'Fiş No' ve 'Açıklama' sütunlarını içerdiğinden emin olun.");
+    console.log("B2B Açıklama Güncelleme Excel Şablonu Bilgisi: Excel dosyanızda 'Fiş No' ve 'Açıklama' sütunları bulunmalıdır.");
   };
 
   return (
