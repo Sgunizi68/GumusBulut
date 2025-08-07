@@ -463,14 +463,20 @@ export const DashboardPage: React.FC = () => {
 
             if (tip === 'Gider' && kategori.Kategori_Adi === 'Plan Dışı Giderler') {
               const detailedGiderler = getDetailedGiderItems(kategori.Kategori_ID, selectedPeriodForDashboard);
-              detailedGiderler.forEach(detail => {
-                subRows.push({
-                  label: `${detail.Alici_Unvani} - ${detail.Aciklama}`,
-                  value: detail.Tutar,
-                  isSubItem: true,
-                  isSubSubItem: true,
+              if (detailedGiderler.length > 0) {
+                ozetData.push({ label: 'Plan Dışı Giderler Detayları', value: 0, isTitle: true, bgColor: 'bg-gray-100' });
+                let planDisiToplam = 0;
+                detailedGiderler.forEach(detail => {
+                  ozetData.push({
+                    label: `${detail.Alici_Unvani} - ${detail.Aciklama}`,
+                    value: detail.Tutar,
+                    isSubItem: true,
+                    isSubSubItem: true,
+                  });
+                  planDisiToplam += detail.Tutar;
                 });
-              });
+                ozetData.push({ label: 'Plan Dışı Giderler Toplamı', value: planDisiToplam, isBold: true, isSubItem: false, bgColor: 'bg-gray-200' });
+              }
             }
           });
           
