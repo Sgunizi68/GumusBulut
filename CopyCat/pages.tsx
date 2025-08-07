@@ -15,12 +15,12 @@ import {
     KULLANICI_ROL_ATAMA_EKRANI_YETKI_ADI, ROL_YETKI_ATAMA_EKRANI_YETKI_ADI, 
     UST_KATEGORI_YONETIMI_EKRANI_YETKI_ADI, KATEGORI_YONETIMI_EKRANI_YETKI_ADI, 
     FATURA_YUKLEME_EKRANI_YETKI_ADI, FATURA_KATEGORI_ATAMA_EKRANI_YETKI_ADI, 
-    B2B_YUKLEME_EKRANI_YETKI_ADI, B2B_KATEGORI_ATAMA_EKRANI_YETKI_ADI, 
+    B2B_YUKLEME_EKRANI_YETKI_ADI,  
     DIGER_HARCAMALAR_EKRANI_YETKI_ADI, GELIR_GIRISI_EKRANI_YETKI_ADI, 
     STOK_TANIMLAMA_EKRANI_YETKI_ADI, STOK_FIYAT_TANIMLAMA_EKRANI_YETKI_ADI, 
     STOK_SAYIM_EKRANI_YETKI_ADI, CALISAN_YONETIMI_EKRANI_YETKI_ADI, 
     PUANTAJ_SECIM_YONETIMI_EKRANI_YETKI_ADI, PUANTAJ_GIRISI_EKRANI_YETKI_ADI, 
-    AVANS_TALEBI_EKRANI_YETKI_ADI, NAKIT_GIRISI_EKRANI_YETKI_ADI 
+    AVANS_TALEBI_EKRANI_YETKI_ADI, NAKIT_GIRISI_EKRANI_YETKI_ADI, FINANSAL_OZET_YETKI_ADI 
 } from './constants';
 import { Kullanici, Rol, Yetki, KullaniciRol, RolYetki, KullaniciFormData, RolFormData, YetkiFormData, Sube, SubeFormData, Deger, DegerFormData, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, EFatura, EFaturaExcelRow, InvoiceAssignmentFormData, B2BEkstre, B2BEkstreExcelRow, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, PuantajEntry, HarcamaTipi, Gelir, GelirEkstra, KategoriTip, AvansIstek, AvansIstekFormData } from './types'; 
 
@@ -511,9 +511,11 @@ export const DashboardPage: React.FC = () => {
     const cirodanKalan = grandTotalGelir - grandTotalGider;
     const donemKarZarari = cirodanKalan - stokSayimFarki;
 
-    ozetData.push({ label: 'FİNANSAL ÖZET', value: 0, isTitle: true, bgColor: 'bg-purple-100' });
-    ozetData.push({ label: 'Cirodan Kalan (Gelir - Gider)', value: cirodanKalan, isBold: true });
-    ozetData.push({ label: 'Dönem Kâr / Zararı (Cirodan Kalan - Stok Farkı)', value: donemKarZarari, isEmphasized: true });
+    if (hasPermission(FINANSAL_OZET_YETKI_ADI)) {
+      ozetData.push({ label: 'FİNANSAL ÖZET', value: 0, isTitle: true, bgColor: 'bg-purple-100' });
+      ozetData.push({ label: 'Cirodan Kalan (Gelir - Gider)', value: cirodanKalan, isBold: true });
+      ozetData.push({ label: 'Dönem Kâr / Zararı (Cirodan Kalan - Stok Farkı)', value: donemKarZarari, isEmphasized: true });
+    }
 
     return { gelirler: gelirlerData, giderler: giderlerData, ozet: ozetData };
 
