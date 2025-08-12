@@ -1,221 +1,982 @@
-Microsoft Windows [Version 10.0.19045.6093]
-(c) Microsoft Corporation. All rights reserved.
 
-C:\Users\Gokova>cd C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>npm run dev
 
-C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat> rmdir /s /q dist
-
-C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>dir
- Volume in drive C has no label.
- Volume Serial Number is B264-5DC8
-
- Directory of C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat
-
-11-Aug-25  06:40 PM    <DIR>          .
-11-Aug-25  06:40 PM    <DIR>          ..
-11-Aug-25  06:14 PM            65,021 App.tsx
-08-Aug-25  09:40 AM            60,235 components.tsx
-08-Aug-25  09:40 AM            33,557 constants.tsx
-08-Aug-25  09:40 AM               371 index.html
-08-Aug-25  09:40 AM               367 index.tsx
-08-Aug-25  09:40 AM               284 metadata.json
-11-Aug-25  06:22 PM    <DIR>          node_modules
-11-Aug-25  06:22 PM            61,909 package-lock.json
-08-Aug-25  09:40 AM               610 package.json
-08-Aug-25  09:40 AM           200,448 pages.tsx
-08-Aug-25  09:40 AM               706 tsconfig.json
-08-Aug-25  09:40 AM            15,774 types.ts
-11-Aug-25  06:29 PM               470 vite.config.ts
-              12 File(s)        439,752 bytes
-               3 Dir(s)  102,232,301,568 bytes free
-
-C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat> npm run deploy
-
-> silvercloud-system@0.0.0 predeploy
-> npm run build
+> silvercloud-system@0.0.0 dev
+> vite
 
 
-> silvercloud-system@0.0.0 build
-> vite build
+  VITE v6.3.5  ready in 388 ms
 
-vite v6.3.5 building for production...
-✓ 43 modules transformed.
-dist/index.html                  0.41 kB │ gzip:   0.29 kB
-dist/assets/index-8CxFmxWY.js  735.01 kB │ gzip: 224.95 kB
+  ➜  Local:   http://localhost:5173/GumusBulut/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+2:10:29 PM [vite] Internal server error: Transform failed with 22 errors:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:95:13: ERROR: Multiple exports with the same name "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI"
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:95:13: ERROR: The symbol "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13: ERROR: Multiple exports with the same name "NAKIT_GIRISI_EKRANI_YETKI_ADI"
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13: ERROR: The symbol "NAKIT_GIRISI_EKRANI_YETKI_ADI" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:97:13: ERROR: Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+...
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:95:13
 
-(!) Some chunks are larger than 500 kB after minification. Consider:
-- Using dynamic import() to code-split the application
-- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
-- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
-✓ built in 3.99s
+  Multiple exports with the same name "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI"
+  93 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  94 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
 
-> silvercloud-system@0.0.0 deploy
-> gh-pages -d dist
+  The symbol "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI" has already been declared
+  93 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  94 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
 
-ProcessError: warning: failed to remove .idea/inspectionProfiles: Permission denied
-warning: failed to remove CopyCat/dist: Permission denied
-warning: failed to remove CopyCat/node_modules/.bin: Permission denied
-warning: failed to remove CopyCat/node_modules/.vite/deps: Permission denied
-warning: failed to remove CopyCat/node_modules/@esbuild/win32-x64: Permission denied
-warning: failed to remove CopyCat/node_modules/@nodelib/fs.scandir/out/adapters: Permission denied
-warning: failed to remove CopyCat/node_modules/@nodelib/fs.scandir/out/providers: Permission denied
-warning: failed to remove CopyCat/node_modules/@nodelib/fs.scandir/out/types: Permission denied
-warning: failed to remove CopyCat/node_modules/@nodelib/fs.scandir/out/utils: Permission denied
-warning: failed to remove CopyCat/node_modules/@nodelib/fs.stat/out/adapters: Permission denied
-warning: failed to remove CopyCat/node_modules/@nodelib/fs.stat/out/providers: Permission denied
-warning: failed to remove CopyCat/node_modules/@nodelib/fs.stat/out/types: Permission denied
-warning: failed to remove CopyCat/node_modules/@nodelib/fs.walk/out/providers: Permission denied
-warning: failed to remove CopyCat/node_modules/@nodelib/fs.walk/out/readers: Permission denied
-warning: failed to remove CopyCat/node_modules/@nodelib/fs.walk/out/types: Permission denied
-warning: failed to remove CopyCat/node_modules/@rollup/rollup-win32-x64-msvc: Permission denied
-warning: failed to remove CopyCat/node_modules/@types/estree: Permission denied
-warning: failed to remove CopyCat/node_modules/@types/node/assert: Permission denied
-warning: failed to remove CopyCat/node_modules/@types/node/compatibility: Permission denied
-warning: failed to remove CopyCat/node_modules/@types/node/dns: Permission denied
-warning: failed to remove CopyCat/node_modules/@types/node/fs: Permission denied
-warning: failed to remove CopyCat/node_modules/@types/node/readline: Permission denied
-warning: failed to remove CopyCat/node_modules/@types/node/stream: Permission denied
-warning: failed to remove CopyCat/node_modules/@types/node/timers: Permission denied
-warning: failed to remove CopyCat/node_modules/@types/node/ts5.6: Permission denied
-warning: failed to remove CopyCat/node_modules/adler-32/types: Permission denied
-warning: failed to remove CopyCat/node_modules/array-union: Permission denied
-warning: failed to remove CopyCat/node_modules/async/dist: Permission denied
-warning: failed to remove CopyCat/node_modules/async/internal: Permission denied
-warning: failed to remove CopyCat/node_modules/braces/lib: Permission denied
-warning: failed to remove CopyCat/node_modules/cfb/dist: Permission denied
-warning: failed to remove CopyCat/node_modules/cfb/types: Permission denied
-warning: failed to remove CopyCat/node_modules/codepage/bits: Permission denied
-warning: failed to remove CopyCat/node_modules/codepage/dist: Permission denied
-warning: failed to remove CopyCat/node_modules/codepage/types: Permission denied
-warning: failed to remove CopyCat/node_modules/commander/lib: Permission denied
-warning: failed to remove CopyCat/node_modules/commander/typings: Permission denied
-warning: failed to remove CopyCat/node_modules/commondir/example: Permission denied
-warning: failed to remove CopyCat/node_modules/commondir/test: Permission denied
-warning: failed to remove CopyCat/node_modules/cookie/dist: Permission denied
-warning: failed to remove CopyCat/node_modules/crc-32/bin: Permission denied
-warning: failed to remove CopyCat/node_modules/crc-32/types: Permission denied
-warning: failed to remove CopyCat/node_modules/dir-glob: Permission denied
-warning: failed to remove CopyCat/node_modules/email-addresses/lib: Permission denied
-warning: failed to remove CopyCat/node_modules/email-addresses/test: Permission denied
-warning: failed to remove CopyCat/node_modules/esbuild/bin: Permission denied
-warning: failed to remove CopyCat/node_modules/esbuild/lib: Permission denied
-warning: failed to remove CopyCat/node_modules/escape-string-regexp: Permission denied
-warning: failed to remove CopyCat/node_modules/fast-glob/out/managers: Permission denied
-warning: failed to remove CopyCat/node_modules/fast-glob/out/providers/filters: Permission denied
-warning: failed to remove CopyCat/node_modules/fast-glob/out/providers/matchers: Permission denied
-warning: failed to remove CopyCat/node_modules/fast-glob/out/providers/transformers: Permission denied
-warning: failed to remove CopyCat/node_modules/fast-glob/out/readers: Permission denied
-warning: failed to remove CopyCat/node_modules/fast-glob/out/types: Permission denied
-warning: failed to remove CopyCat/node_modules/fast-glob/out/utils: Permission denied
-warning: failed to remove CopyCat/node_modules/fastq/.github/workflows: Permission denied
-warning: failed to remove CopyCat/node_modules/fastq/test: Permission denied
-warning: failed to remove CopyCat/node_modules/fdir/dist/api/functions: Permission denied
-warning: failed to remove CopyCat/node_modules/fdir/dist/builder: Permission denied
-warning: failed to remove CopyCat/node_modules/filename-reserved-regex: Permission denied
-warning: failed to remove CopyCat/node_modules/filenamify: Permission denied
-warning: failed to remove CopyCat/node_modules/fill-range: Permission denied
-warning: failed to remove CopyCat/node_modules/find-cache-dir: Permission denied
-warning: failed to remove CopyCat/node_modules/find-up: Permission denied
-warning: failed to remove CopyCat/node_modules/frac/dist: Permission denied
-warning: failed to remove CopyCat/node_modules/frac/types: Permission denied
-warning: failed to remove CopyCat/node_modules/fs-extra/lib/copy: Permission denied
-warning: failed to remove CopyCat/node_modules/fs-extra/lib/empty: Permission denied
-warning: failed to remove CopyCat/node_modules/fs-extra/lib/ensure: Permission denied
-warning: failed to remove CopyCat/node_modules/fs-extra/lib/fs: Permission denied
-warning: failed to remove CopyCat/node_modules/fs-extra/lib/json: Permission denied
-warning: failed to remove CopyCat/node_modules/fs-extra/lib/mkdirs: Permission denied
-warning: failed to remove CopyCat/node_modules/fs-extra/lib/move: Permission denied
-warning: failed to remove CopyCat/node_modules/fs-extra/lib/output-file: Permission denied
-warning: failed to remove CopyCat/node_modules/fs-extra/lib/path-exists: Permission denied
-warning: failed to remove CopyCat/node_modules/fs-extra/lib/remove: Permission denied
-warning: failed to remove CopyCat/node_modules/fs-extra/lib/util: Permission denied
-warning: failed to remove CopyCat/node_modules/gh-pages/bin: Permission denied
-warning: failed to remove CopyCat/node_modules/gh-pages/lib: Permission denied
-warning: failed to remove CopyCat/node_modules/glob-parent: Permission denied
-warning: failed to remove CopyCat/node_modules/globby: Permission denied
-warning: failed to remove CopyCat/node_modules/graceful-fs: Permission denied
-warning: failed to remove CopyCat/node_modules/ignore: Permission denied
-warning: failed to remove CopyCat/node_modules/is-extglob: Permission denied
-warning: failed to remove CopyCat/node_modules/is-glob: Permission denied
-warning: failed to remove CopyCat/node_modules/is-number: Permission denied
-warning: failed to remove CopyCat/node_modules/jsonfile: Permission denied
-warning: failed to remove CopyCat/node_modules/locate-path: Permission denied
-warning: failed to remove CopyCat/node_modules/make-dir: Permission denied
-warning: failed to remove CopyCat/node_modules/merge2: Permission denied
-warning: failed to remove CopyCat/node_modules/micromatch/node_modules/picomatch/lib: Permission denied
-warning: failed to remove CopyCat/node_modules/nanoid/async: Permission denied
-warning: failed to remove CopyCat/node_modules/nanoid/bin: Permission denied
-warning: failed to remove CopyCat/node_modules/nanoid/non-secure: Permission denied
-warning: failed to remove CopyCat/node_modules/nanoid/url-alphabet: Permission denied
-warning: failed to remove CopyCat/node_modules/p-limit: Permission denied
-warning: failed to remove CopyCat/node_modules/p-locate: Permission denied
-warning: failed to remove CopyCat/node_modules/p-try: Permission denied
-warning: failed to remove CopyCat/node_modules/path-exists: Permission denied
-warning: failed to remove CopyCat/node_modules/path-type: Permission denied
-warning: failed to remove CopyCat/node_modules/picocolors: Permission denied
-warning: failed to remove CopyCat/node_modules/picomatch/lib: Permission denied
-warning: failed to remove CopyCat/node_modules/pkg-dir: Permission denied
-warning: failed to remove CopyCat/node_modules/postcss/lib: Permission denied
-warning: failed to remove CopyCat/node_modules/queue-microtask: Permission denied
-warning: failed to remove CopyCat/node_modules/react/cjs: Permission denied
-warning: failed to remove CopyCat/node_modules/react-dom/cjs: Permission denied
-warning: failed to remove CopyCat/node_modules/react-router/dist/development/lib/types: Permission denied
-warning: failed to remove CopyCat/node_modules/react-router/dist/production/lib/types: Permission denied
-warning: failed to remove CopyCat/node_modules/react-router-dom/dist: Permission denied
-warning: failed to remove CopyCat/node_modules/reusify/.github/workflows: Permission denied
-warning: failed to remove CopyCat/node_modules/reusify/benchmarks: Permission denied
-warning: failed to remove CopyCat/node_modules/rollup/dist/bin: Permission denied
-warning: failed to remove CopyCat/node_modules/rollup/dist/es/shared: Permission denied
-warning: failed to remove CopyCat/node_modules/rollup/dist/shared: Permission denied
-warning: failed to remove CopyCat/node_modules/run-parallel: Permission denied
-warning: failed to remove CopyCat/node_modules/scheduler/cjs: Permission denied
-warning: failed to remove CopyCat/node_modules/semver/bin: Permission denied
-warning: failed to remove CopyCat/node_modules/set-cookie-parser/lib: Permission denied
-warning: failed to remove CopyCat/node_modules/slash: Permission denied
-warning: failed to remove CopyCat/node_modules/source-map-js/lib: Permission denied
-warning: failed to remove CopyCat/node_modules/ssf/types: Permission denied
-warning: failed to remove CopyCat/node_modules/strip-outer: Permission denied
-warning: failed to remove CopyCat/node_modules/tinyglobby/dist: Permission denied
-warning: failed to remove CopyCat/node_modules/to-regex-range: Permission denied
-warning: failed to remove CopyCat/node_modules/trim-repeated: Permission denied
-warning: failed to remove CopyCat/node_modules/typescript/bin: Permission denied
-warning: failed to remove CopyCat/node_modules/typescript/lib/cs: Permission denied
-warning: failed to remove CopyCat/node_modules/typescript/lib/de: Permission denied
-warning: failed to remove CopyCat/node_modules/typescript/lib/es: Permission denied
-warning: failed to remove CopyCat/node_modules/typescript/lib/fr: Permission denied
-warning: failed to remove CopyCat/node_modules/typescript/lib/it: Permission denied
-warning: failed to remove CopyCat/node_modules/typescript/lib/ja: Permission denied
-warning: failed to remove CopyCat/node_modules/typescript/lib/ko: Permission denied
-warning: failed to remove CopyCat/node_modules/typescript/lib/pl: Permission denied
-warning: failed to remove CopyCat/node_modules/typescript/lib/pt-br: Permission denied
-warning: failed to remove CopyCat/node_modules/typescript/lib/ru: Permission denied
-warning: failed to remove CopyCat/node_modules/typescript/lib/tr: Permission denied
-warning: failed to remove CopyCat/node_modules/typescript/lib/zh-cn: Permission denied
-warning: failed to remove CopyCat/node_modules/typescript/lib/zh-tw: Permission denied
-warning: failed to remove CopyCat/node_modules/undici-types: Permission denied
-warning: failed to remove CopyCat/node_modules/universalify: Permission denied
-warning: failed to remove CopyCat/node_modules/vite/bin: Permission denied
-warning: failed to remove CopyCat/node_modules/vite/dist/client: Permission denied
-warning: failed to remove CopyCat/node_modules/vite/dist/node/chunks: Permission denied
-warning: failed to remove CopyCat/node_modules/vite/dist/node-cjs: Permission denied
-warning: failed to remove CopyCat/node_modules/vite/misc: Permission denied
-warning: failed to remove CopyCat/node_modules/vite/types/internal: Permission denied
-warning: failed to remove CopyCat/node_modules/wmf/dist: Permission denied
-warning: failed to remove CopyCat/node_modules/word: Permission denied
-warning: failed to remove CopyCat/node_modules/xlsx/bin: Permission denied
-warning: failed to remove CopyCat/node_modules/xlsx/dist: Permission denied
-warning: failed to remove CopyCat/node_modules/xlsx/types: Permission denied
-warning: failed to remove __pycache__/: Permission denied
- warning: failed to remove backend/api/v1/__pycache__: Permission denied
-warning: failed to remove backend/api/__pycache__: Permission denied
-warning: failed to remove backend/core/__pycache__: Permission denied
-warning: failed to remove backend/db/__pycache__: Permission denied
-warning: failed to remove backend/schemas/__pycache__: Permission denied
-warning: failed to remove backend/__pycache__: Permission denied
+  Multiple exports with the same name "NAKIT_GIRISI_EKRANI_YETKI_ADI"
+  94 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
 
-    at ChildProcess.<anonymous> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\gh-pages\lib\git.js:42:16)
-    at ChildProcess.emit (node:events:518:28)
-    at maybeClose (node:internal/child_process:1101:16)
-    at ChildProcess._handle.onexit (node:internal/child_process:304:5)
+  The symbol "NAKIT_GIRISI_EKRANI_YETKI_ADI" has already been declared
+  94 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
 
+  Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+
+  The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+
+  Multiple exports with the same name "YAZDIRMA_YETKISI_ADI"
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+     |               ^
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+
+  The symbol "YAZDIRMA_YETKISI_ADI" has already been declared
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+     |               ^
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+
+  Multiple exports with the same name "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI"
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  The symbol "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI" has already been declared
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  Multiple exports with the same name "NAKIT_GIRISI_EKRANI_YETKI_ADI"
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+
+  The symbol "NAKIT_GIRISI_EKRANI_YETKI_ADI" has already been declared
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+
+  Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+
+  The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+
+  Multiple exports with the same name "YAZDIRMA_YETKISI_ADI"
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+     |               ^
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+
+  The symbol "YAZDIRMA_YETKISI_ADI" has already been declared
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+     |               ^
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+
+  Multiple exports with the same name "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI"
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  The symbol "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI" has already been declared
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  Multiple exports with the same name "NAKIT_GIRISI_EKRANI_YETKI_ADI"
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  106|
+
+  The symbol "NAKIT_GIRISI_EKRANI_YETKI_ADI" has already been declared
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  106|
+
+  Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  106|
+  107|
+
+  The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  106|
+  107|
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+2:10:29 PM [vite] (client) Pre-transform error: Transform failed with 22 errors:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:95:13: ERROR: Multiple exports with the same name "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI"
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:95:13: ERROR: The symbol "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13: ERROR: Multiple exports with the same name "NAKIT_GIRISI_EKRANI_YETKI_ADI"
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13: ERROR: The symbol "NAKIT_GIRISI_EKRANI_YETKI_ADI" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:97:13: ERROR: Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+...
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:95:13
+
+  Multiple exports with the same name "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI"
+  93 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  94 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  The symbol "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI" has already been declared
+  93 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  94 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  Multiple exports with the same name "NAKIT_GIRISI_EKRANI_YETKI_ADI"
+  94 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+
+  The symbol "NAKIT_GIRISI_EKRANI_YETKI_ADI" has already been declared
+  94 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+
+  Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+
+  The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+
+  Multiple exports with the same name "YAZDIRMA_YETKISI_ADI"
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+     |               ^
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+
+  The symbol "YAZDIRMA_YETKISI_ADI" has already been declared
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+     |               ^
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+
+  Multiple exports with the same name "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI"
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  The symbol "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI" has already been declared
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  Multiple exports with the same name "NAKIT_GIRISI_EKRANI_YETKI_ADI"
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+
+  The symbol "NAKIT_GIRISI_EKRANI_YETKI_ADI" has already been declared
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+
+  Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+
+  The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+
+  Multiple exports with the same name "YAZDIRMA_YETKISI_ADI"
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+     |               ^
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+
+  The symbol "YAZDIRMA_YETKISI_ADI" has already been declared
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+     |               ^
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+
+  Multiple exports with the same name "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI"
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  The symbol "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI" has already been declared
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  Multiple exports with the same name "NAKIT_GIRISI_EKRANI_YETKI_ADI"
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  106|
+
+  The symbol "NAKIT_GIRISI_EKRANI_YETKI_ADI" has already been declared
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  106|
+
+  Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  106|
+  107|
+
+  The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  106|
+  107|
+
+2:10:29 PM [vite] (client) Pre-transform error: Transform failed with 22 errors:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:95:13: ERROR: Multiple exports with the same name "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI"
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:95:13: ERROR: The symbol "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13: ERROR: Multiple exports with the same name "NAKIT_GIRISI_EKRANI_YETKI_ADI"
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13: ERROR: The symbol "NAKIT_GIRISI_EKRANI_YETKI_ADI" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:97:13: ERROR: Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+...
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:95:13
+
+  Multiple exports with the same name "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI"
+  93 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  94 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  The symbol "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI" has already been declared
+  93 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  94 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  Multiple exports with the same name "NAKIT_GIRISI_EKRANI_YETKI_ADI"
+  94 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+
+  The symbol "NAKIT_GIRISI_EKRANI_YETKI_ADI" has already been declared
+  94 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+
+  Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+
+  The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+
+  Multiple exports with the same name "YAZDIRMA_YETKISI_ADI"
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+     |               ^
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+
+  The symbol "YAZDIRMA_YETKISI_ADI" has already been declared
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+     |               ^
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+
+  Multiple exports with the same name "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI"
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  The symbol "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI" has already been declared
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  Multiple exports with the same name "NAKIT_GIRISI_EKRANI_YETKI_ADI"
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+
+  The symbol "NAKIT_GIRISI_EKRANI_YETKI_ADI" has already been declared
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+
+  Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+
+  The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+
+  Multiple exports with the same name "YAZDIRMA_YETKISI_ADI"
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+     |               ^
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+
+  The symbol "YAZDIRMA_YETKISI_ADI" has already been declared
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+     |               ^
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+
+  Multiple exports with the same name "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI"
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  The symbol "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI" has already been declared
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  Multiple exports with the same name "NAKIT_GIRISI_EKRANI_YETKI_ADI"
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  106|
+
+  The symbol "NAKIT_GIRISI_EKRANI_YETKI_ADI" has already been declared
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  106|
+
+  Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  106|
+  107|
+
+  The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  106|
+  107|
+   (x2)
+2:10:29 PM [vite] (client) Pre-transform error: Transform failed with 22 errors:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:95:13: ERROR: Multiple exports with the same name "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI"
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:95:13: ERROR: The symbol "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13: ERROR: Multiple exports with the same name "NAKIT_GIRISI_EKRANI_YETKI_ADI"
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13: ERROR: The symbol "NAKIT_GIRISI_EKRANI_YETKI_ADI" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:97:13: ERROR: Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+...
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:95:13
+
+  Multiple exports with the same name "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI"
+  93 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  94 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  The symbol "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI" has already been declared
+  93 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  94 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  Multiple exports with the same name "NAKIT_GIRISI_EKRANI_YETKI_ADI"
+  94 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+
+  The symbol "NAKIT_GIRISI_EKRANI_YETKI_ADI" has already been declared
+  94 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+
+  Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+
+  The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  95 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+
+  Multiple exports with the same name "YAZDIRMA_YETKISI_ADI"
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+     |               ^
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+
+  The symbol "YAZDIRMA_YETKISI_ADI" has already been declared
+  96 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+     |               ^
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+
+  Multiple exports with the same name "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI"
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  The symbol "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI" has already been declared
+  97 |  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  Multiple exports with the same name "NAKIT_GIRISI_EKRANI_YETKI_ADI"
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+
+  The symbol "NAKIT_GIRISI_EKRANI_YETKI_ADI" has already been declared
+  98 |  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+
+  Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+
+  The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  99 |  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+
+  Multiple exports with the same name "YAZDIRMA_YETKISI_ADI"
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+     |               ^
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+
+  The symbol "YAZDIRMA_YETKISI_ADI" has already been declared
+  100|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+     |               ^
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+
+  Multiple exports with the same name "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI"
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  The symbol "E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI" has already been declared
+  101|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+     |               ^
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+
+  Multiple exports with the same name "NAKIT_GIRISI_EKRANI_YETKI_ADI"
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  106|
+
+  The symbol "NAKIT_GIRISI_EKRANI_YETKI_ADI" has already been declared
+  102|  export const YAZDIRMA_YETKISI_ADI = 'Yazdırma Yetkisi';
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+     |               ^
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+  106|
+
+  Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  106|
+  107|
+
+  The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  103|  export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+  104|  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  105|  export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+     |               ^
+  106|
+  107|
+   (x3)
+^CTerminate batch job (Y/N)?
+^C
 C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>
+
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>npm run dev
+
+> silvercloud-system@0.0.0 dev
+> vite
+
+
+  VITE v6.3.5  ready in 1639 ms
+
+  ➜  Local:   http://localhost:5173/GumusBulut/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+2:48:49 PM [vite] (client) page reload pages.tsx
+2:48:49 PM [vite] (client) page reload pages.tsx (x2)
+2:49:05 PM [vite] (client) page reload pages.tsx (x3)
+2:50:20 PM [vite] (client) page reload index.html
+3:04:30 PM [vite] (client) page reload index.html (x2)
+3:04:30 PM [vite] (client) page reload pages.tsx
+3:04:30 PM [vite] (client) hmr update /print.css?direct
+3:10:35 PM [vite] (client) page reload pages.tsx
+3:10:51 PM [vite] (client) page reload pages.tsx (x2)
+3:22:44 PM [vite] (client) page reload pages.tsx (x3)
+4:13:45 PM [vite] (client) page reload App.tsx
+4:16:03 PM [vite] (client) page reload App.tsx (x2)
+Terminate batch job (Y/N)? ^C
+
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>npm run dev
+
+> silvercloud-system@0.0.0 dev
+> vite
+
+
+  VITE v6.3.5  ready in 554 ms
+
+  ➜  Local:   http://localhost:5173/GumusBulut/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+4:41:33 PM [vite] (client) page reload constants.tsx
+4:41:34 PM [vite] (client) Pre-transform error: Transform failed with 2 errors:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13: ERROR: The symbol "Icons" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:105:7: ERROR: Expected ":" but found "const"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13
+
+  The symbol "Icons" has already been declared
+  94 |  export const YAZDIRMA_YETKISI_ADI = "Yazdırma Yetkisi";
+  95 |
+  96 |  export const Icons = {
+     |               ^
+  97 |      Print: (props: React.SVGProps<SVGSVGElement>) => (
+  98 |          <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+
+  Expected ":" but found "const"
+  103|
+  104|  // --- MENU STRUCTURE ---
+  105|  export const DASHBOARD_ITEM = { label: 'Dashboard', path: '/', icon: Icons.Dashboard, permission: DASHBOARD_EKRANI_YETKI_ADI };
+     |         ^
+  106|
+  107|  export const MENU_GROUPS = [
+
+4:41:34 PM [vite] (client) Pre-transform error: Transform failed with 2 errors:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13: ERROR: The symbol "Icons" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:105:7: ERROR: Expected ":" but found "const"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13
+
+  The symbol "Icons" has already been declared
+  94 |  export const YAZDIRMA_YETKISI_ADI = "Yazdırma Yetkisi";
+  95 |
+  96 |  export const Icons = {
+     |               ^
+  97 |      Print: (props: React.SVGProps<SVGSVGElement>) => (
+  98 |          <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+
+  Expected ":" but found "const"
+  103|
+  104|  // --- MENU STRUCTURE ---
+  105|  export const DASHBOARD_ITEM = { label: 'Dashboard', path: '/', icon: Icons.Dashboard, permission: DASHBOARD_EKRANI_YETKI_ADI };
+     |         ^
+  106|
+  107|  export const MENU_GROUPS = [
+   (x2)
+4:41:34 PM [vite] (client) Pre-transform error: Transform failed with 2 errors:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13: ERROR: The symbol "Icons" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:105:7: ERROR: Expected ":" but found "const"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13
+
+  The symbol "Icons" has already been declared
+  94 |  export const YAZDIRMA_YETKISI_ADI = "Yazdırma Yetkisi";
+  95 |
+  96 |  export const Icons = {
+     |               ^
+  97 |      Print: (props: React.SVGProps<SVGSVGElement>) => (
+  98 |          <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+
+  Expected ":" but found "const"
+  103|
+  104|  // --- MENU STRUCTURE ---
+  105|  export const DASHBOARD_ITEM = { label: 'Dashboard', path: '/', icon: Icons.Dashboard, permission: DASHBOARD_EKRANI_YETKI_ADI };
+     |         ^
+  106|
+  107|  export const MENU_GROUPS = [
+   (x3)
+4:41:35 PM [vite] Internal server error: Transform failed with 2 errors:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13: ERROR: The symbol "Icons" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:105:7: ERROR: Expected ":" but found "const"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13
+
+  The symbol "Icons" has already been declared
+  94 |  export const YAZDIRMA_YETKISI_ADI = "Yazdırma Yetkisi";
+  95 |
+  96 |  export const Icons = {
+     |               ^
+  97 |      Print: (props: React.SVGProps<SVGSVGElement>) => (
+  98 |          <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+
+  Expected ":" but found "const"
+  103|
+  104|  // --- MENU STRUCTURE ---
+  105|  export const DASHBOARD_ITEM = { label: 'Dashboard', path: '/', icon: Icons.Dashboard, permission: DASHBOARD_EKRANI_YETKI_ADI };
+     |         ^
+  106|
+  107|  export const MENU_GROUPS = [
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+4:42:54 PM [vite] (client) page reload pages.tsx
+4:42:55 PM [vite] (client) Pre-transform error: Transform failed with 2 errors:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13: ERROR: The symbol "Icons" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:105:7: ERROR: Expected ":" but found "const"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13
+
+  The symbol "Icons" has already been declared
+  94 |  export const YAZDIRMA_YETKISI_ADI = "Yazdırma Yetkisi";
+  95 |
+  96 |  export const Icons = {
+     |               ^
+  97 |      Print: (props: React.SVGProps<SVGSVGElement>) => (
+  98 |          <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+
+  Expected ":" but found "const"
+  103|
+  104|  // --- MENU STRUCTURE ---
+  105|  export const DASHBOARD_ITEM = { label: 'Dashboard', path: '/', icon: Icons.Dashboard, permission: DASHBOARD_EKRANI_YETKI_ADI };
+     |         ^
+  106|
+  107|  export const MENU_GROUPS = [
+
+4:42:55 PM [vite] (client) Pre-transform error: Transform failed with 2 errors:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13: ERROR: The symbol "Icons" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:105:7: ERROR: Expected ":" but found "const"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13
+
+  The symbol "Icons" has already been declared
+  94 |  export const YAZDIRMA_YETKISI_ADI = "Yazdırma Yetkisi";
+  95 |
+  96 |  export const Icons = {
+     |               ^
+  97 |      Print: (props: React.SVGProps<SVGSVGElement>) => (
+  98 |          <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+
+  Expected ":" but found "const"
+  103|
+  104|  // --- MENU STRUCTURE ---
+  105|  export const DASHBOARD_ITEM = { label: 'Dashboard', path: '/', icon: Icons.Dashboard, permission: DASHBOARD_EKRANI_YETKI_ADI };
+     |         ^
+  106|
+  107|  export const MENU_GROUPS = [
+   (x2)
+4:42:55 PM [vite] Internal server error: Transform failed with 2 errors:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13: ERROR: The symbol "Icons" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:105:7: ERROR: Expected ":" but found "const"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:96:13
+
+  The symbol "Icons" has already been declared
+  94 |  export const YAZDIRMA_YETKISI_ADI = "Yazdırma Yetkisi";
+  95 |
+  96 |  export const Icons = {
+     |               ^
+  97 |      Print: (props: React.SVGProps<SVGSVGElement>) => (
+  98 |          <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+
+  Expected ":" but found "const"
+  103|
+  104|  // --- MENU STRUCTURE ---
+  105|  export const DASHBOARD_ITEM = { label: 'Dashboard', path: '/', icon: Icons.Dashboard, permission: DASHBOARD_EKRANI_YETKI_ADI };
+     |         ^
+  106|
+  107|  export const MENU_GROUPS = [
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)

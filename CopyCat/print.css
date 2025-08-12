@@ -1,67 +1,28 @@
 @media print {
-  /* Hide everything by default */
-  body > *:not(#root) { /* Hide direct children of body except #root */
+  .sidebar,
+  header.main-header,
+  .card-actions {
     display: none !important;
   }
 
-  /* Make the main layout visible */
-  #root > div { /* This targets the div in App.tsx that contains Sidebar and MainLayout */
-    display: block !important;
-    width: 100% !important;
-    height: auto !important;
-    overflow: visible !important;
-  }
-
-  /* Hide Sidebar and Header within the main layout */
-  .w-64.bg-slate-800.text-slate-100.flex.flex-col.h-full, /* Sidebar */
-  .h-16.bg-white.shadow-md.flex.items-center.justify-between.px-6.flex-shrink-0 /* Header */ {
-    display: none !important;
-  }
-
-  /* Adjust the main content area */
-  .flex-1.flex.flex-col.overflow-hidden { /* This is the div containing Header and Main */
-    width: 100% !important;
-    margin-left: 0 !important;
-    flex: none !important; /* Remove flex-1 behavior */
-    height: auto !important; /* Ensure content is not cut off */
-    overflow: visible !important; /* Ensure content is not cut off */
-  }
-
-  main.flex-1.overflow-y-auto.bg-gray-100.p-6 {
-    overflow: visible !important;
-    height: auto !important;
+  main.main-content {
     padding: 0 !important;
     margin: 0 !important;
-    width: 100% !important;
-    flex: none !important; /* Remove flex-1 behavior */
+    overflow: visible !important;
   }
 
-  /* Ensure content within cards is not cut off */
+  .flex.h-screen {
+    display: block !important;
+    height: auto !important;
+  }
+
+  .flex-1.flex.flex-col.overflow-hidden {
+    display: block !important;
+    overflow: visible !important;
+  }
+
   .card {
     box-shadow: none !important;
-    border: 1px solid #eee !important;
-    page-break-inside: avoid;
-    width: 100% !important; /* Ensure cards take full width */
-    margin-bottom: 1rem; /* Add some space between cards */
-  }
-
-  /* Ensure grid columns stack or adjust appropriately for print */
-  .grid {
-    display: block !important; /* Change grid to block layout for printing */
-  }
-
-  .grid > div {
-    width: 100% !important;
-    margin-bottom: 1rem; /* Space between sections */
-  }
-
-  /* Ensure tables and their rows don't break across pages awkwardly */
-  .table-auto, .table-auto tr, .table-auto td, .table-auto th {
-    page-break-inside: avoid;
-  }
-
-  /* Set page to landscape */
-  @page {
-    size: landscape;
+    border: none !important;
   }
 }

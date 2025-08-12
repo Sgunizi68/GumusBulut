@@ -307,6 +307,7 @@ export const DashboardPage: React.FC = () => {
 
   const canViewGizliKategoriler = hasPermission(GIZLI_KATEGORI_YETKISI_ADI);
   const canViewFullHistory = hasPermission(GIZLI_KATEGORI_YETKISI_ADI); // As per doc, Gizli Kategori permission allows viewing all past periods.
+  const canPrint = hasPermission("Yazdırma Yetkisi");
 
   const [selectedPeriodForDashboard, setSelectedPeriodForDashboard] = useState(currentPeriod || DEFAULT_PERIOD);
 
@@ -571,6 +572,11 @@ export const DashboardPage: React.FC = () => {
   return (
     <Card title={`Dashboard Raporu (Şube: ${selectedBranch.Sube_Adi})`} actions={
       <div className="flex items-center space-x-2">
+        {canPrint && (
+          <Button onClick={() => window.print()} variant="ghost" size="sm" title="Yazdır" className="print-button">
+            <Icons.Print className="w-5 h-5" />
+          </Button>
+        )}
         <label htmlFor="dashboard-period-select" className="text-sm font-medium text-gray-700">Dönem:</label>
         <Select
           id="dashboard-period-select"

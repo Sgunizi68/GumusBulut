@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Sube, Kullanici, Rol, Yetki, KullaniciRol, RolYetki, Deger, UstKategori, Kategori, EFatura, EFaturaExcelRow, B2BEkstre, B2BEkstreExcelRow, DigerHarcama, HarcamaTipi, Stok, StokFiyat, StokSayim, Calisan, PuantajSecimi, Puantaj, Gelir, GelirEkstra, AvansIstek } from './types';
 
@@ -63,6 +62,7 @@ export const OZEL_FATURA_YETKI_ADI = 'Fatura Ozel Yetkisi';
 export const PUANTAJ_HISTORY_ACCESS_YETKI_ADI = "Puantaj Geçmiş Veri Erişimi";
 export const GELIR_GECMISI_YETKI_ADI = "Gelir Geçmiş Veri Erişimi";
 export const GIZLI_KATEGORI_YETKISI_ADI = "Gizli Kategori Veri Erişimi";
+export const YAZDIRMA_YETKISI_ADI = "Yazdırma Yetkisi";
 
 // Screen view permissions
 export const DASHBOARD_EKRANI_YETKI_ADI = 'Dashboard Ekranı Görüntüleme';
@@ -78,7 +78,6 @@ export const KATEGORI_YONETIMI_EKRANI_YETKI_ADI = 'Kategori Yönetimi Ekranı G�
 export const FATURA_YUKLEME_EKRANI_YETKI_ADI = 'Fatura Yükleme Ekranı Görüntüleme';
 export const FATURA_KATEGORI_ATAMA_EKRANI_YETKI_ADI = 'Fatura Kategori Atama Ekranı Görüntüleme';
 export const B2B_YUKLEME_EKRANI_YETKI_ADI = 'B2B Ekstre Yükleme Ekranı Görüntüleme';
-
 export const DIGER_HARCAMALAR_EKRANI_YETKI_ADI = 'Diğer Harcamalar Ekranı Görüntüleme';
 export const GELIR_GIRISI_EKRANI_YETKI_ADI = 'Gelir Girişi Ekranı Görüntüleme';
 export const STOK_TANIMLAMA_EKRANI_YETKI_ADI = 'Stok Tanımlama Ekranı Görüntüleme';
@@ -90,7 +89,7 @@ export const PUANTAJ_GIRISI_EKRANI_YETKI_ADI = 'Puantaj Girişi Ekranı Görünt
 export const AVANS_TALEBI_EKRANI_YETKI_ADI = 'Avans Talebi Ekranı Görüntüleme';
 export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
 export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
-export const FINANSAL_OZET_YETKI_ADI = 'Finansal Özet Görme Yetkisi';
+export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görüntüleme";
 
 
 // --- MENU STRUCTURE ---
