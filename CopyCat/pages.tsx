@@ -29,8 +29,8 @@ import { Kullanici, Rol, Yetki, KullaniciRol, RolYetki, KullaniciFormData, RolFo
 const AccessDenied: React.FC<{ title: string }> = ({ title }) => (
     <Card title={title}>
         <div className="text-center py-10">
-            <h3 className="text-xl font-bold text-red-600">Erişim Reddedildi</h3>
-            <p className="text-gray-600 mt-2">Bu sayfayı görüntülemek için yetkiniz bulunmamaktadır.</p>
+            <h3 className="text-xl font-bold text-blue-600">Şu an bağlantıları yapıyorum, lütfen bekleyin</h3>
+            <p className="text-gray-600 mt-2">Veriler yükleniyor, bu işlem birkaç saniye sürebilir.</p>
         </div>
     </Card>
 );
@@ -2560,6 +2560,8 @@ export const DigerHarcamalarPage: React.FC = () => {
   if (!hasPermission(DIGER_HARCAMALAR_EKRANI_YETKI_ADI)) {
       return <AccessDenied title="Diğer Harcamalar" />;
   }
+  
+  const canViewGizliKategoriler = hasPermission(GIZLI_KATEGORI_YETKISI_ADI);
 
   const handleAddNew = () => {
     setEditingHarcama(null);
@@ -2608,7 +2610,13 @@ export const DigerHarcamalarPage: React.FC = () => {
   
   const filteredHarcamalar = useMemo(() => {
     return digerHarcamaList
-      .filter(h => h.Sube_ID === selectedBranch?.Sube_ID)
+      .filter(h => {
+          const kategori = kategoriList.find(k => k.Kategori_ID === h.Kategori_ID);
+          if (kategori && kategori.Gizli && !canViewGizliKategoriler) {
+            return false;
+          }
+          return h.Sube_ID === selectedBranch?.Sube_ID
+      })
       .filter(h => 
         h.Alici_Adi.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (h.Belge_Numarasi && h.Belge_Numarasi.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -2616,7 +2624,11 @@ export const DigerHarcamalarPage: React.FC = () => {
       .filter(h => filterTip ? h.Harcama_Tipi === filterTip : true)
       .filter(h => filterPeriod ? String(h.Donem) === filterPeriod : true)
       .sort((a,b) => new Date(parseDateString(b.Belge_Tarihi)).getTime() - new Date(parseDateString(a.Belge_Tarihi)).getTime());
-  }, [digerHarcamaList, selectedBranch, searchTerm, filterTip, filterPeriod]);
+  }, [digerHarcamaList, selectedBranch, searchTerm, filterTip, filterPeriod, kategoriList, canViewGizliKategoriler]);
+
+  const activeKategorilerForForm = useMemo(() => {
+    return kategoriList.filter(k => k.Aktif_Pasif && k.Tip === 'Gider' && (canViewGizliKategoriler || !k.Gizli));
+  }, [kategoriList, canViewGizliKategoriler]);
 
   if (!selectedBranch) {
     return <Card title="Diğer Harcamalar"><p className="text-red-500">Lütfen önce bir şube seçin.</p></Card>;
@@ -2685,7 +2697,7 @@ export const DigerHarcamalarPage: React.FC = () => {
       </Card>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingHarcama ? 'Harcama Düzenle' : 'Yeni Harcama Ekle'}>
-        <DigerHarcamaForm initialData={editingHarcama} kategoriler={kategoriList} onSubmit={handleSubmit} onCancel={() => setIsModalOpen(false)} />
+        <DigerHarcamaForm initialData={editingHarcama} kategoriler={activeKategorilerForForm} onSubmit={handleSubmit} onCancel={() => setIsModalOpen(false)} />
       </Modal>
     </div>
   );
