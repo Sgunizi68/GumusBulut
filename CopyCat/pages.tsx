@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { generateDashboardPdf } from './utils/pdfGenerator';
 import * as XLSX from 'xlsx';
 import { useAppContext, useDataContext } from './App';
 import { Button, Input, Modal, Card, TableLayout, StatusBadge, UserForm, RoleForm, PermissionForm, Select, DegerForm, Textarea, UstKategoriForm, KategoriForm, InlineEditInput, DigerHarcamaForm, StokForm, StokFiyatForm, NumberSpinnerInput, CalisanForm, PuantajSecimiForm, SubeForm, EFaturaReferansForm, NakitForm, AvansIstekForm } from './components';
@@ -569,11 +570,15 @@ export const DashboardPage: React.FC = () => {
     </div>
   );
 
+  const handleGeneratePdf = () => {
+    generateDashboardPdf('dashboard-content', `Dashboard_Raporu_${selectedBranch?.Sube_Adi}_${selectedPeriodForDashboard}.pdf`);
+  };
+
   return (
     <Card title={`Dashboard Raporu (Şube: ${selectedBranch.Sube_Adi})`} actions={
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 hide-on-pdf">
         {canPrint && (
-          <Button onClick={() => window.print()} variant="ghost" size="sm" title="Yazdır" className="print-button">
+          <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
             <Icons.Print className="w-5 h-5" />
           </Button>
         )}
@@ -589,7 +594,7 @@ export const DashboardPage: React.FC = () => {
       </div>
     }>
       {dashboardColumns ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div id="dashboard-content" className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {renderDashboardColumn(dashboardColumns.gelirler, "Gelirler")}
           {renderDashboardColumn(dashboardColumns.giderler, "Giderler")}
           {renderDashboardColumn(dashboardColumns.ozet, "Özet")}

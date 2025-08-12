@@ -1,8 +1,11 @@
 @media print {
-  .sidebar,
-  header.main-header,
+  /* Existing rules */
+  aside,
+  header,
   .card-actions {
     display: none !important;
+    width: 0 !important;
+    margin: 0 !important;
   }
 
   main.main-content {
@@ -24,5 +27,36 @@
   .card {
     box-shadow: none !important;
     border: none !important;
+  }
+
+  .dashboard-card > div > div {
+    page-break-inside: avoid !important;
+  }
+
+  /* New rules to hide more common UI elements and scrollbars */
+  nav, /* Hide any <nav> elements */
+  .sidebar, /* Common class for sidebars */
+  .navbar, /* Common class for navigation bars */
+  .print-hidden, /* Generic class for elements to hide during print */
+  [data-print-hide], /* Elements with a data-print-hide attribute */
+  ::-webkit-scrollbar, /* Hide WebKit scrollbars */
+  ::-moz-scrollbar, /* Hide Firefox scrollbars */
+  ::-ms-scrollbar, /* Hide IE/Edge scrollbars */
+  .no-print { /* Another common class for elements to hide */
+    display: none !important;
+  }
+
+  /* Ensure body and html are not constrained */
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Adjust main content for full width */
+  body > #root > div { /* Assuming #root is the main app container */
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 }
