@@ -1624,6 +1624,11 @@ export const UstKategorilerPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUstKategori, setEditingUstKategori] = useState<UstKategoriFormData | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const canPrint = hasPermission("Yazdırma Yetkisi");
+
+  const handleGeneratePdf = () => {
+    generateDashboardPdf('ust-kategori-content', `Ust_Kategori_Yonetimi.pdf`);
+  };
 
   if (!hasPermission(UST_KATEGORI_YONETIMI_EKRANI_YETKI_ADI)) {
       return <AccessDenied title="Üst Kategori Yönetimi" />;
@@ -1660,11 +1665,16 @@ export const UstKategorilerPage: React.FC = () => {
   }, [ustKategoriList, searchTerm]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" id="ust-kategori-content">
       <Card
         title="Üst Kategori Yönetimi"
         actions={
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 hide-on-pdf">
+                {canPrint && (
+                    <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
+                        <Icons.Print className="w-5 h-5" />
+                    </Button>
+                )}
                 <Input 
                     placeholder="Üst Kategori ara..." 
                     value={searchTerm} 
@@ -1712,6 +1722,11 @@ export const KategorilerPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUstKategoriFilter, setSelectedUstKategoriFilter] = useState<string>('');
   const [selectedTipFilter, setSelectedTipFilter] = useState<string>('');
+  const canPrint = hasPermission("Yazdırma Yetkisi");
+
+  const handleGeneratePdf = () => {
+    generateDashboardPdf('kategori-content', `Kategori_Yonetimi.pdf`);
+  };
 
   if (!hasPermission(KATEGORI_YONETIMI_EKRANI_YETKI_ADI)) {
       return <AccessDenied title="Kategori Yönetimi" />;
@@ -1759,11 +1774,16 @@ export const KategorilerPage: React.FC = () => {
   const activeUstKategorilerForFilter = useMemo(() => ustKategoriList.filter(uk => uk.Aktif_Pasif), [ustKategoriList]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" id="kategori-content">
       <Card
         title="Kategori Yönetimi"
         actions={
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 hide-on-pdf">
+            {canPrint && (
+                <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
+                    <Icons.Print className="w-5 h-5" />
+                </Button>
+            )}
             <Input 
               placeholder="Kategori ara..." 
               value={searchTerm} 
@@ -1998,6 +2018,11 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterPeriod, setFilterPeriod] = useState(""); // Default to "Tümü"
   const [filterUncategorized, setFilterUncategorized] = useState(true);
+  const canPrint = hasPermission("Yazdırma Yetkisi");
+
+  const handleGeneratePdf = () => {
+    generateDashboardPdf('invoice-category-assignment-content', `Fatura_Kategori_Atama_${selectedBranch?.Sube_Adi}_${filterPeriod}.pdf`);
+  };
   const [filterSpecial, setFilterSpecial] = useState<boolean | undefined>(undefined);
 
   if (!hasPermission(FATURA_KATEGORI_ATAMA_EKRANI_YETKI_ADI)) {
@@ -2119,8 +2144,19 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-2">
-      <Card title={`Fatura Kategori Atama (Şube: ${selectedBranch.Sube_Adi})`}>
+    <div className="space-y-2" id="invoice-category-assignment-content">
+      <Card 
+        title={`Fatura Kategori Atama (Şube: ${selectedBranch.Sube_Adi})`}
+        actions={
+          <div className="flex items-center space-x-2 hide-on-pdf">
+            {canPrint && (
+              <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
+                <Icons.Print className="w-5 h-5" />
+              </Button>
+            )}
+          </div>
+        }
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4 items-end">
           <Input 
             label="Ara (Fatura No, Alıcı, Açıklama)"
@@ -2730,10 +2766,15 @@ export const GelirPage: React.FC = () => {
 
     const canAccessHistory = hasPermission(GELIR_GECMISI_YETKI_ADI);
     const canViewGizliKategoriler = hasPermission(GIZLI_KATEGORI_YETKISI_ADI);
+    const canPrint = hasPermission("Yazdırma Yetkisi");
 
     const [viewedPeriod, setViewedPeriod] = useState(currentPeriod);
     const [isEditingDisabled, setIsEditingDisabled] = useState(false);
     const [dailyErrors, setDailyErrors] = useState<Record<string, string | null>>({});
+    
+    const handleGeneratePdf = () => {
+        generateDashboardPdf('gelir-content', `Gelir_Giris_${selectedBranch?.Sube_Adi}_${viewedPeriod}.pdf`);
+    };
     
     useEffect(() => { setViewedPeriod(currentPeriod); }, [currentPeriod]);
     useEffect(() => {
@@ -2969,7 +3010,12 @@ export const GelirPage: React.FC = () => {
     return (
         <Card title={`Gelir Girişi (Şube: ${selectedBranch.Sube_Adi})`}
             actions={
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 hide-on-pdf">
+                    {canPrint && (
+                        <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
+                            <Icons.Print className="w-5 h-5" />
+                        </Button>
+                    )}
                     <Button onClick={handlePreviousPeriod} disabled={!canAccessHistory} size="sm" variant="secondary" title="Önceki Dönem">‹</Button>
                     <span className="font-semibold text-lg">{viewedPeriod}</span>
                     <Button onClick={handleNextPeriod} disabled={viewedPeriod === currentPeriod} size="sm" variant="secondary" title="Sonraki Dönem">›</Button>
@@ -2977,7 +3023,7 @@ export const GelirPage: React.FC = () => {
                 </div>
             }
         >
-             <div className="overflow-x-auto">
+             <div className="overflow-x-auto" id="gelir-content">
                 <table className="min-w-full border-collapse border border-gray-300">
                     <colgroup>
                         <col style={{minWidth: '180px'}} />
@@ -3451,6 +3497,11 @@ export const CalisanPage: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingCalisan, setEditingCalisan] = useState<Calisan | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const canPrint = hasPermission("Yazdırma Yetkisi");
+
+    const handleGeneratePdf = () => {
+        generateDashboardPdf('calisan-content', `Calisan_Yonetimi_${selectedBranch?.Sube_Adi}.pdf`);
+    };
 
     if (!hasPermission(CALISAN_YONETIMI_EKRANI_YETKI_ADI)) {
         return <AccessDenied title="Çalışan Yönetimi" />;
@@ -3509,9 +3560,14 @@ export const CalisanPage: React.FC = () => {
     }
     
     return (
-        <div className="space-y-6">
+        <div className="space-y-6" id="calisan-content">
             <Card title={`Çalışan Yönetimi (Şube: ${selectedBranch.Sube_Adi})`} actions={
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 hide-on-pdf">
+                    {canPrint && (
+                        <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
+                            <Icons.Print className="w-5 h-5" />
+                        </Button>
+                    )}
                     <Input placeholder="Çalışan Ara (Ad, Soyad, TC)" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
                     <Button onClick={handleAddNew} leftIcon={<Icons.Add />}>Yeni Çalışan</Button>
                 </div>
@@ -3632,11 +3688,16 @@ export const PuantajPage: React.FC = () => {
         return <AccessDenied title="Puantaj Girişi" />;
     }
     const canAccessHistory = hasPermission(PUANTAJ_HISTORY_ACCESS_YETKI_ADI);
+    const canPrint = hasPermission("Yazdırma Yetkisi");
 
     const [viewedPeriod, setViewedPeriod] = useState(currentPeriod);
     const [isEditingDisabled, setIsEditingDisabled] = useState(false);
     const [popoverState, setPopoverState] = useState<{ tcNo: string; dateString: string; top: number; left: number } | null>(null);
     const tableContainerRef = useRef<HTMLDivElement>(null);
+
+    const handleGeneratePdf = () => {
+        generateDashboardPdf('puantaj-content', `Puantaj_Giris_${selectedBranch?.Sube_Adi}_${viewedPeriod}.pdf`);
+    };
 
     useEffect(() => { setViewedPeriod(currentPeriod); }, [currentPeriod]);
     
@@ -3794,9 +3855,14 @@ export const PuantajPage: React.FC = () => {
     }
 
     return (
-      <div className="space-y-4">
+      <div className="space-y-4" id="puantaj-content">
         <Card title={`Puantaj Girişi (Şube: ${selectedBranch.Sube_Adi})`} actions={
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 hide-on-pdf">
+                {canPrint && (
+                    <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
+                        <Icons.Print className="w-5 h-5" />
+                    </Button>
+                )}
                 <label htmlFor="puantaj-period-select" className="text-sm font-medium text-gray-700">Dönem:</label>
                 <Select
                   id="puantaj-period-select"
@@ -3997,6 +4063,11 @@ export const AvansPage: React.FC = () => {
   const [editingAvans, setEditingAvans] = useState<AvansIstekFormData | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilterPeriod, setSelectedFilterPeriod] = useState(currentPeriod); // New state for filter period
+  const canPrint = hasPermission("Yazdırma Yetkisi");
+
+  const handleGeneratePdf = () => {
+    generateDashboardPdf('avans-content', `Avans_Talepleri_${selectedBranch?.Sube_Adi}_${selectedFilterPeriod}.pdf`);
+  };
 
   // Determine if the currently selected filter period is editable
   const isCurrentPeriodEditable = useMemo(() => {
@@ -4109,11 +4180,16 @@ export const AvansPage: React.FC = () => {
   }, [avansIstekList, selectedBranch, currentPeriod, calisanList, searchTerm]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" id="avans-content">
       <Card
         title={`Avans Talepleri (Şube: ${selectedBranch?.Sube_Adi || 'Seçilmedi'}, Dönem: ${selectedFilterPeriod})`}
         actions={
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 hide-on-pdf">
+            {canPrint && (
+                <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
+                    <Icons.Print className="w-5 h-5" />
+                </Button>
+            )}
             <Input
               placeholder="Çalışan veya açıklama ara..."
               value={searchTerm}
@@ -4170,6 +4246,11 @@ export const NakitPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingNakit, setEditingNakit] = useState<NakitFormData | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const canPrint = hasPermission("Yazdırma Yetkisi");
+
+  const handleGeneratePdf = () => {
+    generateDashboardPdf('nakit-content', `Nakit_Girisleri_${selectedBranch?.Sube_Adi}.pdf`);
+  };
 
   useEffect(() => {
     console.log("NakitPage - nakitList changed:", nakitList);
@@ -4266,11 +4347,16 @@ export const NakitPage: React.FC = () => {
   }, [filteredNakitler]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" id="nakit-content">
       <Card
         title={`Nakit Girişleri (Şube: ${selectedBranch?.Sube_Adi || 'Seçilmedi'})`}
         actions={
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 hide-on-pdf">
+            {canPrint && (
+                <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
+                    <Icons.Print className="w-5 h-5" />
+                </Button>
+            )}
             <Select
               value={selectedPeriodFilter}
               onChange={(e) => setSelectedPeriodFilter(e.target.value)}
