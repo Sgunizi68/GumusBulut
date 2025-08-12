@@ -1,8 +1,8 @@
 .env
 .env.local
-1Hata.txt
-1a.txt
+Hata.txt
+a.txt
 CMD Backend job run command.txt
-5Screenshot.png
+*Screenshot.png
 CopyCat/dist
 CopyCat/node_modules

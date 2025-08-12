@@ -239,9 +239,9 @@ const ProtectedRoute: React.FC<{ children: ReactNode }> = ({ children }) => {
 };
 
 
-
-const API_BASE_URL = "http://localhost:8000/api/v1";
-
+// Backende de nereye gideceğini buaradab ayarlıyorum. Lokal veya bulut
+//const API_BASE_URL = "http://localhost:8000/api/v1";
+const API_BASE_URL = "https://gumusbulut.onrender.com/api/v1";
 const fetchData = async <T,>(url: string, options: RequestInit = {}): Promise<T | null> => {
   try {
     // Automatically set Content-Type for JSON, unless it's FormData
