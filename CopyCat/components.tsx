@@ -809,7 +809,7 @@ export const DigerHarcamaForm: React.FC<DigerHarcamaFormProps> = ({ initialData,
       Kategori_ID: null,
       Harcama_Tipi: 'Nakit',
       Gunluk_Harcama: false,
-      Aciklama: '', 
+      Açıklama: '', 
       Imaj: null,
       Imaj_Adi: null,
     }
@@ -900,7 +900,7 @@ export const DigerHarcamaForm: React.FC<DigerHarcamaFormProps> = ({ initialData,
           <span className="text-gray-700">Günlük Harcama</span>
         </label>
       </div>
-      <Textarea label="Açıklama" name="Açıklama" value={formData.Aciklama || ''} onChange={handleChange} rows={2} />
+      <Textarea label="Açıklama" name="Açıklama" value={formData.Açıklama || ''} onChange={handleChange} rows={2} />
       
       {/* Image Upload Fields */}
       <div>

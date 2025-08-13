@@ -167,11 +167,11 @@ export interface DigerHarcama {
   Kayit_Tarihi: string; // TIMESTAMP
   Imaj?: string; // Base64 encoded image
   Imaj_Adi?: string; // Image filename
-  Aciklama?: string; // TEXT
+  Açıklama?: string; // TEXT
 }
 
 // DigerHarcamaFormData no longer includes 'Donem' as it's derived from Belge_Tarihi
-export type DigerHarcamaFormData = Omit<DigerHarcama, 'Harcama_ID' | 'Sube_ID' | 'Kayit_Tarihi' | 'Donem' | 'Imaj' | 'Imaj_Adi'> & { Harcama_ID?: number; Aciklama?: string; Imaj?: File | null; Imaj_Adi?: string | null };
+export type DigerHarcamaFormData = Omit<DigerHarcama, 'Harcama_ID' | 'Sube_ID' | 'Kayit_Tarihi' | 'Donem' | 'Imaj' | 'Imaj_Adi'> & { Harcama_ID?: number; Açıklama?: string; Imaj?: File | null; Imaj_Adi?: string | null };
 
 export interface Stok {
   Stok_ID: number;

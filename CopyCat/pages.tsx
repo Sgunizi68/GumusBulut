@@ -3707,9 +3707,65 @@ export const PuantajPage: React.FC = () => {
     const [isEditingDisabled, setIsEditingDisabled] = useState(false);
     const [popoverState, setPopoverState] = useState<{ tcNo: string; dateString: string; top: number; left: number } | null>(null);
     const tableContainerRef = useRef<HTMLDivElement>(null);
+    const overflowContainerRef = useRef<HTMLDivElement>(null); // Added
 
-    const handleGeneratePdf = () => {
-        generateDashboardPdf('puantaj-content', `Puantaj_Giris_${selectedBranch?.Sube_Adi}_${viewedPeriod}.pdf`);
+    const handleGeneratePdf = async () => {
+        if (!selectedBranch) return;
+
+        // Create a temporary div to render the full table
+        const tempDiv = document.createElement('div');
+        tempDiv.id = 'puantaj-full-content';
+        tempDiv.style.position = 'absolute';
+        tempDiv.style.left = '-9999px'; // Move off-screen
+        tempDiv.style.width = 'max-content'; // Allow content to expand
+        document.body.appendChild(tempDiv);
+
+        // Reconstruct the table HTML with all days
+        let tableHtml = `
+            <table style="min-width: 100%; border-collapse: collapse; border: 1px solid #e2e8f0;">
+                <thead style="background-color: #f7fafc;">
+                    <tr>
+                        <th style="padding: 8px; text-align: left; font-size: 12px; font-weight: 500; color: #718096; text-transform: uppercase; min-width: 150px;">Çalışan</th>
+                        ${daysInViewedMonth.map(d => `<th style="padding: 8px; text-align: center; font-size: 12px; font-weight: 500; color: #718096; text-transform: uppercase; min-width: 140px;">${d.day}</th>`).join('')}
+                        <th style="padding: 8px; text-align: center; font-size: 12px; font-weight: 500; color: #718096; text-transform: uppercase; min-width: 100px;">Toplam</th>
+                    </tr>
+                </thead>
+                <tbody style="background-color: #ffffff;">
+                    ${activeCalisanlar.map(calisan => {
+                        let calisanTotal = 0;
+                        const cellsHtml = daysInViewedMonth.map(day => {
+                            const entry = getPuantajEntry(calisan.TC_No, day.dateString, selectedBranch.Sube_ID);
+                            const secim = entry ? puantajSecimiList.find(s => s.Secim_ID === entry.Secim_ID) : null;
+                            const degeri = secim ? secim.Degeri : 0;
+                            calisanTotal += degeri;
+                            const bgColor = secim ? secim.Renk_Kodu : '#FFFFFF';
+                            const textColor = secim ? getTextColorForBackground(secim.Renk_Kodu) : '#4B5563';
+                            return `
+                                <td style="padding: 4px; text-align: center; font-size: 12px; white-space: nowrap; background-color: ${bgColor}; color: ${textColor};">
+                                    ${secim ? `${secim.Secim} (${secim.Degeri})` : '--'}
+                                </td>
+                            `;
+                        }).join('');
+                        return `
+                            <tr>
+                                <td style="padding: 6px; white-space: nowrap; font-size: 14px; font-weight: 500; color: #4a5568;">${calisan.Adi} ${calisan.Soyadi}</td>
+                                ${cellsHtml}
+                                <td style="padding: 4px; white-space: nowrap; font-size: 14px; text-align: center; font-weight: 600;">
+                                    ${calisanTotal.toFixed(1)}
+                                </td>
+                            </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            </table>
+        `;
+        tempDiv.innerHTML = tableHtml;
+
+        try {
+            await generateDashboardPdf('puantaj-full-content', `Puantaj_Giris_${selectedBranch?.Sube_Adi}_${viewedPeriod}.pdf`);
+        } finally {
+            document.body.removeChild(tempDiv);
+        }
     };
 
     useEffect(() => { setViewedPeriod(currentPeriod); }, [currentPeriod]);
@@ -3888,7 +3944,7 @@ export const PuantajPage: React.FC = () => {
             </div>
         }>
             <div className="relative" ref={tableContainerRef}>
-              <div className="overflow-x-auto border border-gray-200 rounded-lg">
+              <div className="overflow-x-auto border border-gray-200 rounded-lg" ref={overflowContainerRef}>
                   <table className="min-w-full divide-y divide-gray-200">
                       <thead className="bg-gray-50">
                           <tr>

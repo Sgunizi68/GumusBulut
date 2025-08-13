@@ -1,0 +1,15 @@
+TABLE_SCHEMA,TABLE_NAME,COLUMN_NAME,ORDINAL_POSITION,COLUMN_DEFAULT,IS_NULLABLE,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH,NUMERIC_PRECISION,COLUMN_TYPE,COLUMN_KEY,EXTRA
+SilverCloud,Diger_Harcama,Harcama_ID,1,NULL,NO,int,NULL,10,int,PRI,auto_increment
+SilverCloud,Diger_Harcama,Alici_Adi,2,NULL,NO,varchar,200,NULL,varchar(200),,
+SilverCloud,Diger_Harcama,Belge_Numarasi,3,NULL,YES,varchar,50,NULL,varchar(50),,
+SilverCloud,Diger_Harcama,Belge_Tarihi,4,NULL,NO,date,NULL,NULL,date,,
+SilverCloud,Diger_Harcama,Donem,5,NULL,NO,int,NULL,10,int,,
+SilverCloud,Diger_Harcama,Tutar,6,NULL,NO,decimal,NULL,15,"decimal(15,2)",,
+SilverCloud,Diger_Harcama,Kategori_ID,7,NULL,NO,int,NULL,10,int,MUL,
+SilverCloud,Diger_Harcama,Harcama_Tipi,8,NULL,NO,enum,11,NULL,"enum('Nakit','Banka Ödeme','Kredi Kartı')",,
+SilverCloud,Diger_Harcama,Gunluk_Harcama,9,NULL,YES,tinyint,NULL,3,tinyint(1),,
+SilverCloud,Diger_Harcama,Sube_ID,10,NULL,NO,int,NULL,10,int,MUL,
+SilverCloud,Diger_Harcama,Açıklama,11,NULL,YES,varchar,45,NULL,varchar(45),,
+SilverCloud,Diger_Harcama,Kayit_Tarihi,12,NULL,YES,datetime,NULL,NULL,datetime,,
+SilverCloud,Diger_Harcama,Imaj,13,NULL,YES,longblob,4294967295,NULL,longblob,,
+SilverCloud,Diger_Harcama,Imaj_Adi,14,NULL,YES,varchar,255,NULL,varchar(255),,
