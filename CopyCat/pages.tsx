@@ -3753,13 +3753,58 @@ export const PuantajPage: React.FC = () => {
         return <AccessDenied title="Puantaj Girişi" />;
     }
     const canAccessHistory = hasPermission(PUANTAJ_HISTORY_ACCESS_YETKI_ADI);
-    const canPrint = hasPermission("Yazdırma Yetkisi");
+    const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
+    const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
 
     const [viewedPeriod, setViewedPeriod] = useState(currentPeriod);
     const [isEditingDisabled, setIsEditingDisabled] = useState(false);
     const [popoverState, setPopoverState] = useState<{ tcNo: string; dateString: string; top: number; left: number } | null>(null);
     const tableContainerRef = useRef<HTMLDivElement>(null);
     const overflowContainerRef = useRef<HTMLDivElement>(null); // Added
+
+    const handleExportToExcelForPuantaj = () => {
+        if (!selectedBranch) return;
+    
+        const wb = XLSX.utils.book_new();
+        const ws_data: any[][] = [];
+    
+        // Header Row
+        const header = ['Çalışan'];
+        daysInViewedMonth.forEach(d => header.push(String(d.day)));
+        header.push('Toplam');
+        ws_data.push(header);
+    
+        // Data Rows
+        activeCalisanlar.forEach(calisan => {
+            const row = [`${calisan.Adi} ${calisan.Soyadi}`];
+            let calisanTotal = 0;
+            daysInViewedMonth.forEach(day => {
+                const entry = getPuantajEntry(calisan.TC_No, day.dateString, selectedBranch.Sube_ID);
+                const secim = entry ? puantajSecimiList.find(s => s.Secim_ID === entry.Secim_ID) : null;
+                const degeri = secim ? secim.Degeri : 0;
+                calisanTotal += degeri;
+                row.push(secim ? `${secim.Secim} (${secim.Degeri})` : '--');
+            });
+            row.push(calisanTotal.toFixed(1));
+            ws_data.push(row);
+        });
+
+        // Empty row separator
+        ws_data.push([]);
+
+        // Legend Data
+        ws_data.push(['Lejant']);
+        legendData.forEach(item => {
+            ws_data.push([`${item.Secim}: ${item.count} gün`]);
+        });
+
+    
+        const ws = XLSX.utils.aoa_to_sheet(ws_data);
+        ws['!cols'] = [{ wch: 30 }]; // Set width for the first column
+        XLSX.utils.book_append_sheet(wb, ws, 'Puantaj Raporu');
+    
+        XLSX.writeFile(wb, `Puantaj_Raporu_${selectedBranch?.Sube_Adi}_${viewedPeriod}.xlsx`);
+    };
 
     const handleGeneratePdf = async () => {
         if (!selectedBranch) return;
@@ -3982,6 +4027,11 @@ export const PuantajPage: React.FC = () => {
                 {canPrint && (
                     <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
                         <Icons.Print className="w-5 h-5" />
+                    </Button>
+                )}
+                {canExportExcel && (
+                    <Button onClick={handleExportToExcelForPuantaj} variant="ghost" size="sm" title="Excel'e Aktar">
+                        <Icons.Download className="w-5 h-5" />
                     </Button>
                 )}
                 <label htmlFor="puantaj-period-select" className="text-sm font-medium text-gray-700">Dönem:</label>
