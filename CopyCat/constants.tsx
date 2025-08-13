@@ -63,6 +63,7 @@ export const PUANTAJ_HISTORY_ACCESS_YETKI_ADI = "Puantaj Geçmiş Veri Erişimi"
 export const GELIR_GECMISI_YETKI_ADI = "Gelir Geçmiş Veri Erişimi";
 export const GIZLI_KATEGORI_YETKISI_ADI = "Gizli Kategori Veri Erişimi";
 export const YAZDIRMA_YETKISI_ADI = "Yazdırma Yetkisi";
+export const EXCELE_AKTAR_YETKISI_ADI = "Excele Aktar";
 
 // Screen view permissions
 export const DASHBOARD_EKRANI_YETKI_ADI = 'Dashboard Ekranı Görüntüleme';

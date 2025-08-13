@@ -11,6 +11,8 @@ import {
     OZEL_FATURA_YETKI_ADI, DEFAULT_PERIOD, MOCK_B2B_EKSTRE_EXCEL_SAMPLE, HarcamaTipiOptions, 
     MOCK_STOK_FIYATLAR, PUANTAJ_HISTORY_ACCESS_YETKI_ADI, GELIR_GECMISI_YETKI_ADI, 
     GIZLI_KATEGORI_YETKISI_ADI, 
+    YAZDIRMA_YETKISI_ADI,
+    EXCELE_AKTAR_YETKISI_ADI,
     DASHBOARD_EKRANI_YETKI_ADI, SUBE_YONETIMI_EKRANI_YETKI_ADI, DEGER_YONETIMI_EKRANI_YETKI_ADI, 
     KULLANICI_YONETIMI_EKRANI_YETKI_ADI, ROL_YONETIMI_EKRANI_YETKI_ADI, YETKI_YONETIMI_EKRANI_YETKI_ADI, 
     KULLANICI_ROL_ATAMA_EKRANI_YETKI_ADI, ROL_YETKI_ATAMA_EKRANI_YETKI_ADI, 
@@ -308,7 +310,8 @@ export const DashboardPage: React.FC = () => {
 
   const canViewGizliKategoriler = hasPermission(GIZLI_KATEGORI_YETKISI_ADI);
   const canViewFullHistory = hasPermission(GIZLI_KATEGORI_YETKISI_ADI); // As per doc, Gizli Kategori permission allows viewing all past periods.
-  const canPrint = hasPermission("Yazdırma Yetkisi");
+  const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
 
   const [selectedPeriodForDashboard, setSelectedPeriodForDashboard] = useState(currentPeriod || DEFAULT_PERIOD);
 
@@ -574,6 +577,50 @@ export const DashboardPage: React.FC = () => {
     generateDashboardPdf('dashboard-content', `Dashboard_Raporu_${selectedBranch?.Sube_Adi}_${selectedPeriodForDashboard}.pdf`);
   };
 
+  const handleExportToExcel = () => {
+    if (!dashboardColumns) return;
+
+    const wb = XLSX.utils.book_new();
+
+    const processRowData = (data: DashboardRowData[]) => {
+        return data.map(row => {
+            let label = row.label;
+            if (row.isSubItem) label = `  ${label}`;
+            if (row.isSubSubItem) label = `    ${label}`;
+            if (row.isFromPreviousPeriod) label = `${label} (Önceki Dönem Verisi)`;
+
+            const rowData: any = { 'Kalem': label };
+            if (!row.isTitle) {
+                rowData['Tutar'] = row.value;
+            } else {
+                rowData['Tutar'] = '';
+            }
+            return rowData;
+        });
+    };
+
+    const gelirlerWsData = processRowData(dashboardColumns.gelirler);
+    const giderlerWsData = processRowData(dashboardColumns.giderler);
+    const ozetWsData = processRowData(dashboardColumns.ozet);
+
+    const wsData = [
+        ...gelirlerWsData,
+        { 'Kalem': '', 'Tutar': '' }, // Empty row as a separator
+        ...giderlerWsData,
+        { 'Kalem': '', 'Tutar': '' }, // Empty row as a separator
+        ...ozetWsData
+    ];
+
+    const ws = XLSX.utils.json_to_sheet(wsData);
+
+    // Adjust column widths
+    ws['!cols'] = [{ wch: 60 }, { wch: 20 }];
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Dashboard Raporu');
+
+    XLSX.writeFile(wb, `Dashboard_Raporu_${selectedBranch?.Sube_Adi}_${selectedPeriodForDashboard}.xlsx`);
+  };
+
   return (
     <Card title={`Dashboard Raporu (Şube: ${selectedBranch.Sube_Adi})`} actions={
       <div className="flex items-center space-x-2 hide-on-pdf">
@@ -581,6 +628,11 @@ export const DashboardPage: React.FC = () => {
           <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
             <Icons.Print className="w-5 h-5" />
           </Button>
+        )}
+        {canExportExcel && (
+            <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
+                <Icons.Download className="w-5 h-5" />
+            </Button>
         )}
         <label htmlFor="dashboard-period-select" className="text-sm font-medium text-gray-700">Dönem:</label>
         <Select
