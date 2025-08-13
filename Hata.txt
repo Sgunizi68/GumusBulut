@@ -1,26 +1,21 @@
-(index):64 cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
-(anonymous) @ (index):64
-client:789 [vite] connecting...
-client:912 [vite] connected.
-react-dom_client.js?v=80982884:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
-pages.tsx:4251 NakitPage - nakitList changed: Array(0)
-pages.tsx:4251 NakitPage - nakitList changed: Array(0)
-pages.tsx:1777 Uncaught ReferenceError: canPrint is not defined
-    at KategorilerPage (pages.tsx:1777:14)
-    at react-stack-bottom-frame (react-dom_client.js?v=80982884:17424:20)
-    at renderWithHooks (react-dom_client.js?v=80982884:4206:24)
-    at updateFunctionComponent (react-dom_client.js?v=80982884:6619:21)
-    at beginWork (react-dom_client.js?v=80982884:7654:20)
-    at runWithFiberInDEV (react-dom_client.js?v=80982884:1485:72)
-    at performUnitOfWork (react-dom_client.js?v=80982884:10874:82)
-    at workLoopSync (react-dom_client.js?v=80982884:10728:43)
-    at renderRootSync (react-dom_client.js?v=80982884:10711:13)
-    at performWorkOnRoot (react-dom_client.js?v=80982884:10359:46)
-react-dom_client.js?v=80982884:6229 An error occurred in the <KategorilerPage> component.
-
-Consider adding an error boundary to your tree to customize error handling behavior.
-Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
-
-defaultOnUncaughtError @ react-dom_client.js?v=80982884:6229
-App.tsx:368 DataProvider - nakitList after setting: Array(5)
-App.tsx:368 DataProvider - nakitList after setting: (5) [{…}, {…}, {…}, {…}, {…}]
+pdfGenerator.ts:40 Error generating PDF: ReferenceError: element is not defined
+    at generateDashboardPdf (pdfGenerator.ts:17:40)
+    at handleGeneratePdf (pages.tsx:2025:5)
+    at executeDispatch (react-dom_client.js?v=4c9a4c23:11736:11)
+    at runWithFiberInDEV (react-dom_client.js?v=4c9a4c23:1485:72)
+    at processDispatchQueue (react-dom_client.js?v=4c9a4c23:11772:37)
+    at react-dom_client.js?v=4c9a4c23:12182:11
+    at batchedUpdates$1 (react-dom_client.js?v=4c9a4c23:2628:42)
+    at dispatchEventForPluginEventSystem (react-dom_client.js?v=4c9a4c23:11877:9)
+    at dispatchEvent (react-dom_client.js?v=4c9a4c23:14792:13)
+    at dispatchDiscreteEvent (react-dom_client.js?v=4c9a4c23:14773:62)
+generateDashboardPdf @ pdfGenerator.ts:40
+handleGeneratePdf @ pages.tsx:2025
+executeDispatch @ react-dom_client.js?v=4c9a4c23:11736
+runWithFiberInDEV @ react-dom_client.js?v=4c9a4c23:1485
+processDispatchQueue @ react-dom_client.js?v=4c9a4c23:11772
+(anonymous) @ react-dom_client.js?v=4c9a4c23:12182
+batchedUpdates$1 @ react-dom_client.js?v=4c9a4c23:2628
+dispatchEventForPluginEventSystem @ react-dom_client.js?v=4c9a4c23:11877
+dispatchEvent @ react-dom_client.js?v=4c9a4c23:14792
+dispatchDiscreteEvent @ react-dom_client.js?v=4c9a4c23:14773

@@ -14,11 +14,7 @@ export const generateDashboardPdf = async (elementId: string, filename: string =
   elementsToHide.forEach(el => (el as HTMLElement).style.display = 'none');
 
   try {
-    const canvas = await html2canvas(input, {
-      scale: 2, // Increase scale for better resolution in PDF
-      useCORS: true, // Enable if you have images from different origins
-      logging: true, // Enable for debugging
-    });
+      const canvas = await html2canvas(input, { scale: 3 }); // Increased scale for better quality to fix text truncation
 
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF('p', 'mm', 'a4'); // 'p' for portrait, 'mm' for millimeters, 'a4' for A4 size

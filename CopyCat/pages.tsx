@@ -2018,6 +2018,7 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterPeriod, setFilterPeriod] = useState(""); // Default to "Tümü"
   const [filterUncategorized, setFilterUncategorized] = useState(true);
+  const [selectedKategoriFilter, setSelectedKategoriFilter] = useState(''); // New state for Kategori filter
   const canPrint = hasPermission("Yazdırma Yetkisi");
 
   const handleGeneratePdf = () => {
@@ -2086,6 +2087,10 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
     if (filterUncategorized) {
       invoicesToDisplay = invoicesToDisplay.filter(f => f.Kategori_ID === null);
     }
+    // Kategori Filter
+    if (selectedKategoriFilter) {
+      invoicesToDisplay = invoicesToDisplay.filter(f => String(f.Kategori_ID) === selectedKategoriFilter);
+    }
     
     // --- Sorting ---
     invoicesToDisplay.sort((a, b) => {
@@ -2099,7 +2104,7 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
 
     return invoicesToDisplay;
 
-  }, [eFaturaList, selectedBranch, searchTerm, filterSpecial, filterPeriod, filterUncategorized, canViewAndEditSpecial]);
+  }, [eFaturaList, selectedBranch, searchTerm, filterSpecial, filterPeriod, filterUncategorized, selectedKategoriFilter, canViewAndEditSpecial]);
 
 
   const activeKategoriler = useMemo(() => {
@@ -2175,6 +2180,14 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
                 <option value="false">Hayır</option>
             </Select>
           )}
+          <Select label="Kategori Filtresi" value={selectedKategoriFilter} onChange={e => setSelectedKategoriFilter(e.target.value)}>
+            <option value="">Tüm Kategoriler</option>
+            {activeKategoriler.map(kategori => (
+              <option key={kategori.Kategori_ID} value={kategori.Kategori_ID}>
+                {kategori.Kategori_Adi}
+              </option>
+            ))}
+          </Select>
           <label className="flex items-center space-x-2 pt-6">
             <input 
               type="checkbox" 

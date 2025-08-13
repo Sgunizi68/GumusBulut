@@ -1,9 +1,11 @@
 .env
 .env.local
-Hata.txt
+CopyCat/.env.development
+.env.*
 a.txt
 a.pdf
 CMD Backend job run command.txt
 *ScreenShot.png
 CopyCat/dist
 CopyCat/node_modules
+
