@@ -4020,11 +4020,11 @@ export const PuantajPage: React.FC = () => {
                     }).join('')}
                 </tbody>
             </table>
-            <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 16px;">
+            <div style="margin-top: 16px; display: block;">
                 ${legendData.map(item => `
-                    <div style="display: flex; align-items: center; font-size: 10px;">
-                        <div style="width: 14px; height: 14px; background-color: ${item.Renk_Kodu}; border: 1px solid #ccc; margin-right: 6px;"></div>
-                        <span style="color: #374151;">${item.Secim} (${item.Degeri.toFixed(1)})</span>
+                    <div style="display: inline-block; border: 1px solid #ccc; padding: 4px 8px; margin: 4px; border-radius: 4px; font-size: 10px;">
+                        <div style="display: inline-block; width: 12px; height: 12px; background-color: ${item.Renk_Kodu}; margin-right: 6px; vertical-align: middle;"></div>
+                        <span style="color: #374151; vertical-align: middle;">${item.Secim} (${item.Degeri.toFixed(1)})</span>
                     </div>
                 `).join('')}
             </div>
