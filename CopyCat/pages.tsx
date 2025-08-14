@@ -3642,6 +3642,7 @@ export const StokSayimPage: React.FC = () => {
         return <AccessDenied title="Stok Sayım" />;
     }
     
+    const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
     const [viewedPeriod, setViewedPeriod] = useState(currentPeriod);
     const [isEditingDisabled, setIsEditingDisabled] = useState(false);
     
@@ -3714,6 +3715,49 @@ export const StokSayimPage: React.FC = () => {
         }, 0);
     }, [activeStokList, viewedPeriod, selectedBranch, getMiktarForStok, getLatestPriceForPeriod]);
     
+    const handleExportToExcelForStokSayim = () => {
+        if (!selectedBranch) return;
+    
+        const wb = XLSX.utils.book_new();
+        const ws_data: any[][] = [];
+    
+        // Header Row
+        ws_data.push(['Kod', 'Açıklama', 'Birim', 'Miktar', 'Birim Fiyat', 'Toplam Tutar']);
+    
+        groupedStokList.forEach(group => {
+            // Group Header Row
+            const groupTotal = group.items.reduce((sum, stok) => {
+                const miktar = getMiktarForStok(stok.Malzeme_Kodu, viewedPeriod, selectedBranch.Sube_ID) || 0;
+                const fiyat = getLatestPriceForPeriod(stok.Malzeme_Kodu, viewedPeriod);
+                return sum + (miktar * fiyat);
+            }, 0);
+            ws_data.push([group.name, '', '', '', '', groupTotal]);
+    
+            // Item Rows
+            group.items.forEach(stok => {
+                const miktar = getMiktarForStok(stok.Malzeme_Kodu, viewedPeriod, selectedBranch.Sube_ID) || 0;
+                const fiyat = getLatestPriceForPeriod(stok.Malzeme_Kodu, viewedPeriod);
+                const toplamTutar = miktar * fiyat;
+                ws_data.push([
+                    stok.Malzeme_Kodu,
+                    stok.Malzeme_Aciklamasi,
+                    stok.Birimi,
+                    miktar,
+                    fiyat,
+                    toplamTutar
+                ]);
+            });
+        });
+    
+        // Footer Row (Grand Total)
+        ws_data.push(['', '', '', '', 'Genel Toplam', totalStokValue]);
+    
+        const ws = XLSX.utils.aoa_to_sheet(ws_data);
+        ws['!cols'] = [{ wch: 15 }, { wch: 40 }, { wch: 10 }, { wch: 10 }, { wch: 15 }, { wch: 20 }];
+        XLSX.utils.book_append_sheet(wb, ws, 'Stok Sayım Raporu');
+        XLSX.writeFile(wb, `Stok_Sayim_${selectedBranch?.Sube_Adi}_${viewedPeriod}.xlsx`);
+    };
+
     if (!selectedBranch) {
         return <Card title="Stok Sayım"><p className="text-red-500">Lütfen önce bir şube seçin.</p></Card>;
     }
@@ -3721,6 +3765,11 @@ export const StokSayimPage: React.FC = () => {
     return (
         <Card title={`Stok Sayım (Şube: ${selectedBranch.Sube_Adi})`} actions={
             <div className="flex items-center space-x-2">
+                {canExportExcel && (
+                    <Button onClick={handleExportToExcelForStokSayim} variant="ghost" size="sm" title="Excel'e Aktar">
+                        <Icons.Download className="w-5 h-5" />
+                    </Button>
+                )}
                 <Button onClick={handlePreviousPeriod} size="sm" variant="secondary" disabled={isEditingDisabled}>‹</Button>
                 <span className="font-semibold text-lg">{viewedPeriod}</span>
                 <Button onClick={handleNextPeriod} disabled={viewedPeriod === currentPeriod} size="sm" variant="secondary">›</Button>

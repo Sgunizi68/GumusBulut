@@ -26,3 +26,9 @@
     "vite": "^6.2.0"
   }
 }
+{
+  "scripts": {
+    "version-update": "node scripts/update-version.js",
+    "prepare": "husky install"
+  }
+}
