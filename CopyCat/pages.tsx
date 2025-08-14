@@ -2072,9 +2072,49 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
   const [filterUncategorized, setFilterUncategorized] = useState(true);
   const [selectedKategoriFilter, setSelectedKategoriFilter] = useState(''); // New state for Kategori filter
   const canPrint = hasPermission("Yazdırma Yetkisi");
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
 
   const handleGeneratePdf = () => {
     generateDashboardPdf('invoice-category-assignment-content', `Fatura_Kategori_Atama_${selectedBranch?.Sube_Adi}_${filterPeriod}.pdf`);
+  };
+
+  const handleExportToExcelForFaturaKategori = () => {
+    if (!selectedBranch) return;
+
+    const wb = XLSX.utils.book_new();
+    const ws_data = filteredFaturas.map(fatura => {
+        const kategori = kategoriList.find(k => k.Kategori_ID === fatura.Kategori_ID);
+        const row: any = {
+            'Fatura No': fatura.Fatura_Numarasi,
+            'Alıcı Ünvanı': fatura.Alici_Unvani,
+            'Fatura Tarihi': parseDateString(fatura.Fatura_Tarihi),
+            'Tutar': fatura.Tutar,
+            'Kategori': kategori ? kategori.Kategori_Adi : 'Kategorisiz',
+            'Açıklama': fatura.Aciklama || '',
+            'Dönem': fatura.Donem,
+            'Günlük': fatura.Gunluk_Harcama ? 'Evet' : 'Hayır',
+        };
+        if (canViewAndEditSpecial) {
+            row['Özel'] = fatura.Ozel ? 'Evet' : 'Hayır';
+        }
+        return row;
+    });
+
+    const ws = XLSX.utils.json_to_sheet(ws_data);
+    ws['!cols'] = [
+        { wch: 20 },
+        { wch: 30 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 20 },
+        { wch: 40 },
+        { wch: 10 },
+        { wch: 10 },
+        { wch: 10 },
+    ];
+    XLSX.utils.book_append_sheet(wb, ws, 'Fatura Kategori Atama');
+
+    XLSX.writeFile(wb, `Fatura_Kategori_Atama_${selectedBranch?.Sube_Adi}_${filterPeriod}.xlsx`);
   };
   const [filterSpecial, setFilterSpecial] = useState<boolean | undefined>(undefined);
 
@@ -2210,6 +2250,11 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
               <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
                 <Icons.Print className="w-5 h-5" />
               </Button>
+            )}
+            {canExportExcel && (
+                <Button onClick={handleExportToExcelForFaturaKategori} variant="ghost" size="sm" title="Excel'e Aktar">
+                    <Icons.Download className="w-5 h-5" />
+                </Button>
             )}
           </div>
         }
