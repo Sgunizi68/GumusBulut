@@ -1902,6 +1902,7 @@ export const KategorilerPage: React.FC = () => {
               <option value="Gelir">Gelir</option>
               <option value="Gider">Gider</option>
               <option value="Bilgi">Bilgi</option>
+              <option value="Ödeme">Ödeme</option>
             </Select>
             <Button onClick={handleAddKategori} leftIcon={<Icons.Add className="w-4 h-4" />} className="flex-shrink-0 text-sm px-3">
               Yeni Kategori

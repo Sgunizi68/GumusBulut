@@ -106,7 +106,7 @@ class Kategori(Base):
     Kategori_ID = Column(Integer, primary_key=True, index=True)
     Kategori_Adi = Column(String(100), nullable=False)
     Ust_Kategori_ID = Column(Integer, ForeignKey("UstKategori.UstKategori_ID"), nullable=True) # Changed to nullable=True based on schema
-    Tip = Column(Enum('Gelir', 'Gider', 'Bilgi'), nullable=False)
+    Tip = Column(Enum('Gelir', 'Gider', 'Bilgi', 'Ödeme'), nullable=False)
     Aktif_Pasif = Column(Boolean, default=True)
     Gizli = Column(Boolean, default=False)
 

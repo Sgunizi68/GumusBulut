@@ -817,6 +817,7 @@ export const KategoriForm: React.FC<KategoriFormProps> = ({ initialData, ustKate
         <option value="Gelir">Gelir</option>
         <option value="Gider">Gider</option>
         <option value="Bilgi">Bilgi</option>
+        <option value="Ödeme">Ödeme</option>
       </Select>
       <div className="flex space-x-6">
         <label className="flex items-center space-x-2">
