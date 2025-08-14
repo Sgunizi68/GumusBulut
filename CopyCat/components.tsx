@@ -864,6 +864,7 @@ export const DigerHarcamaForm: React.FC<DigerHarcamaFormProps> = ({ initialData,
   );
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [aciklamaError, setAciklamaError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (initialData) {
@@ -875,6 +876,12 @@ export const DigerHarcamaForm: React.FC<DigerHarcamaFormProps> = ({ initialData,
             setImagePreview(`data:image/jpeg;base64,${initialData.Imaj}`);
         } else {
             setImagePreview(null);
+        }
+        // Set initial error state for Açıklama if it exceeds limit
+        if (initialData.Açıklama && initialData.Açıklama.length > 45) {
+            setAciklamaError("Açıklama alanı 45 karakteri geçemez.");
+        } else {
+            setAciklamaError(undefined);
         }
     } else {
         setFormData({
@@ -891,6 +898,7 @@ export const DigerHarcamaForm: React.FC<DigerHarcamaFormProps> = ({ initialData,
             Donem: currentPeriod,
         });
         setImagePreview(null);
+        setAciklamaError(undefined);
     }
   }, [initialData, currentPeriod]);
 
@@ -907,6 +915,16 @@ export const DigerHarcamaForm: React.FC<DigerHarcamaFormProps> = ({ initialData,
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | React.ChangeEvent<HTMLTextAreaElement>>) => {
     const { name, value, type } = e.target;
+    if (name === 'Açıklama') {
+        if (value.length > 45) {
+            setAciklamaError("Açıklama alanı 45 karakteri geçemez.");
+            // Do not update formData for Açıklama if it exceeds the limit
+            return; 
+        } else {
+            setAciklamaError(undefined);
+        }
+    }
+
     if (type === 'checkbox') {
       const { checked } = e.target as HTMLInputElement;
       setFormData(prev => ({ ...prev, [name]: checked }));
@@ -940,6 +958,10 @@ export const DigerHarcamaForm: React.FC<DigerHarcamaFormProps> = ({ initialData,
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (aciklamaError) {
+        alert(aciklamaError);
+        return;
+    }
     if (!formData.Alici_Adi.trim()) {
       alert("Alıcı Adı boş olamaz.");
       return;
@@ -985,7 +1007,15 @@ export const DigerHarcamaForm: React.FC<DigerHarcamaFormProps> = ({ initialData,
           <span className="text-gray-700">Günlük Harcama</span>
         </label>
       </div>
-      <Textarea label="Açıklama" name="Açıklama" value={formData.Açıklama || ''} onChange={handleChange} rows={2} />
+      <Textarea 
+        label="Açıklama" 
+        name="Açıklama" 
+        value={formData.Açıklama || ''} 
+        onChange={handleChange} 
+        rows={2} 
+        maxLength={45} 
+        error={aciklamaError} 
+      />
       
       {/* Image Upload Fields */}
       <div>
