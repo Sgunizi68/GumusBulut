@@ -172,8 +172,8 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
-      <div className={`bg-white rounded-lg shadow-xl p-6 m-4 w-full ${sizeClasses[size]} transform transition-all duration-300 scale-100`}>
-        <div className="flex justify-between items-center mb-4">
+      <div className={`bg-white rounded-lg shadow-xl flex flex-col m-4 w-full ${sizeClasses[size]} transform transition-all duration-300 scale-100 max-h-[90vh]`}>
+        <div className="flex-shrink-0 flex justify-between items-center p-6 pb-4 border-b">
           <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -181,7 +181,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
             </svg>
           </button>
         </div>
-        <div>{children}</div>
+        <div className="flex-grow overflow-y-auto p-6">{children}</div>
       </div>
     </div>
   );

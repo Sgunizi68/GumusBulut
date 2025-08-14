@@ -1,28 +1,15 @@
-react-dom_client.js?v=4c9a4c23:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
-GumusBulut/#/other-expenses:1 Access to fetch at 'http://localhost:8000/api/v1/subeler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
-:8000/api/v1/subeler/:1  Failed to load resource: net::ERR_FAILED
+pages.tsx:2741 Form data received: Object
+GumusBulut/#/other-expenses:1 Access to fetch at 'http://localhost:8000/api/v1/diger-harcamalar/22' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/diger-harcamalar/22:1  Failed to load resource: net::ERR_FAILED
 App.tsx:278 Error in fetchData: TypeError: Failed to fetch
     at fetchData (App.tsx:256:28)
-    at fetchAllData (App.tsx:320:9)
-    at App.tsx:371:5
-    at react-stack-bottom-frame (react-dom_client.js?v=4c9a4c23:17478:20)
+    at App.tsx:569:34
+    at handleSubmit (pages.tsx:2756:24)
+    at handleSubmit (components.tsx:955:5)
+    at executeDispatch (react-dom_client.js?v=4c9a4c23:11736:11)
     at runWithFiberInDEV (react-dom_client.js?v=4c9a4c23:1485:72)
-    at commitHookEffectListMount (react-dom_client.js?v=4c9a4c23:8460:122)
-    at commitHookPassiveMountEffects (react-dom_client.js?v=4c9a4c23:8518:138)
-    at commitPassiveMountOnFiber (react-dom_client.js?v=4c9a4c23:9887:29)
-    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=4c9a4c23:9868:13)
-    at commitPassiveMountOnFiber (react-dom_client.js?v=4c9a4c23:9984:13)
+    at processDispatchQueue (react-dom_client.js?v=4c9a4c23:11772:37)
+    at react-dom_client.js?v=4c9a4c23:12182:11
+    at batchedUpdates$1 (react-dom_client.js?v=4c9a4c23:2628:42)
+    at dispatchEventForPluginEventSystem (react-dom_client.js?v=4c9a4c23:11877:9)
 fetchData @ App.tsx:278
-App.tsx:368 DataProvider - nakitList after setting: Array(5)
-components.tsx:858 Uncaught ReferenceError: getPreviousPeriod is not defined
-    at components.tsx:858:9
-    at mountMemo (react-dom_client.js?v=4c9a4c23:5052:25)
-    at Object.useMemo (react-dom_client.js?v=4c9a4c23:16513:20)
-    at exports.useMemo (chunk-6P6Q65E3.js?v=4c9a4c23:915:36)
-    at DigerHarcamaForm (components.tsx:853:28)
-    at react-stack-bottom-frame (react-dom_client.js?v=4c9a4c23:17424:20)
-    at renderWithHooks (react-dom_client.js?v=4c9a4c23:4206:24)
-    at updateFunctionComponent (react-dom_client.js?v=4c9a4c23:6619:21)
-    at beginWork (react-dom_client.js?v=4c9a4c23:7654:20)
-    at runWithFiberInDEV (react-dom_client.js?v=4c9a4c23:1485:72)
-App.tsx:368 DataProvider - nakitList after setting: (5) [{…}, {…}, {…}, {…}, {…}]
