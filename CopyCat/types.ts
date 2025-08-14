@@ -170,8 +170,8 @@ export interface DigerHarcama {
   Açıklama?: string; // TEXT
 }
 
-// DigerHarcamaFormData no longer includes 'Donem' as it's derived from Belge_Tarihi
-export type DigerHarcamaFormData = Omit<DigerHarcama, 'Harcama_ID' | 'Sube_ID' | 'Kayit_Tarihi' | 'Donem' | 'Imaj' | 'Imaj_Adi'> & { Harcama_ID?: number; Açıklama?: string; Imaj?: File | null; Imaj_Adi?: string | null };
+// DigerHarcamaFormData can now include 'Donem' for users with special permissions
+export type DigerHarcamaFormData = Omit<DigerHarcama, 'Harcama_ID' | 'Sube_ID' | 'Kayit_Tarihi' | 'Imaj' | 'Imaj_Adi'> & { Harcama_ID?: number; Açıklama?: string; Imaj?: File | null; Imaj_Adi?: string | null; Donem?: string; };
 
 export interface Stok {
   Stok_ID: number;

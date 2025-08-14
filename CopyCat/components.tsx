@@ -1,4 +1,4 @@
-import React, { ReactNode, useState, useEffect, useRef, forwardRef } from 'react';
+import React, { ReactNode, useState, useEffect, useRef, forwardRef, useMemo } from 'react';
 import { Icons, DEFAULT_END_DATE, MOCK_UST_KATEGORILER, OZEL_FATURA_YETKI_ADI, HarcamaTipiOptions } from './constants';
 import { useAppContext, useDataContext } from './App';
 import { 
@@ -6,6 +6,50 @@ import {
     DegerFormData, UstKategoriFormData, KategoriFormData, KategoriTip, UstKategori, Kategori, 
     EFatura, InvoiceAssignmentFormData, DigerHarcamaFormData, HarcamaTipi, StokFormData, Stok, StokFiyatFormData, CalisanFormData, PuantajSecimiFormData, NakitFormData, AvansIstekFormData
 } from './types';
+
+// Helper function to convert DD.MM.YYYY to YYYY-MM-DD
+const parseDateString = (dateStr: string): string => {
+  if (!dateStr) return '';
+  const parts = dateStr.split('.');
+  if (parts.length === 3) {
+    // Assuming DD.MM.YYYY
+    const [day, month, year] = parts;
+    if (day && month && year && year.length === 4) {
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    }
+  }
+  // If already YYYY-MM-DD or other, return as is (could add more robust parsing)
+  return dateStr; 
+};
+
+const calculatePeriod = (dateString: string): string => { // Expects YYYY-MM-DD
+  try {
+    const date = new Date(dateString); 
+    if (isNaN(date.getTime())) throw new Error("Invalid date for period calculation");
+    const year = date.getFullYear().toString().substring(2);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    return `${year}${month}`;
+  } catch (e) {
+    console.error("Error calculating period for date:", dateString, e);
+    const now = new Date();
+    const year = now.getFullYear().toString().substring(2);
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    return `${year}${month}`; // Fallback to current period
+  }
+};
+
+const getPreviousPeriod = (periodYYAA: string): string => {
+  if (!periodYYAA || periodYYAA.length !== 4) return periodYYAA; // Basic validation
+  let year = 2000 + parseInt(periodYYAA.substring(0, 2));
+  let month = parseInt(periodYYAA.substring(2, 4));
+
+  month--;
+  if (month === 0) {
+    month = 12;
+    year--;
+  }
+  return `${(year % 100).toString().padStart(2, '0')}${month.toString().padStart(2, '0')}`;
+};
 
 // --- Shared UI Components ---
 
@@ -798,8 +842,11 @@ interface DigerHarcamaFormProps {
   kategoriler: Kategori[];
   onSubmit: (data: DigerHarcamaFormData) => void;
   onCancel: () => void;
+  canEditDonem?: boolean;
 }
-export const DigerHarcamaForm: React.FC<DigerHarcamaFormProps> = ({ initialData, kategoriler, onSubmit, onCancel }) => {
+export const DigerHarcamaForm: React.FC<DigerHarcamaFormProps> = ({ initialData, kategoriler, onSubmit, onCancel, canEditDonem }) => {
+  const { currentPeriod } = useAppContext();
+
   const [formData, setFormData] = useState<DigerHarcamaFormData>(
     initialData || {
       Alici_Adi: '',
@@ -812,18 +859,51 @@ export const DigerHarcamaForm: React.FC<DigerHarcamaFormProps> = ({ initialData,
       Açıklama: '', 
       Imaj: null,
       Imaj_Adi: null,
+      Donem: currentPeriod,
     }
   );
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
-    if (initialData?.Imaj && typeof initialData.Imaj === 'string') {
-      setImagePreview(`data:image/jpeg;base64,${initialData.Imaj}`); // Assuming JPEG, adjust if needed
+    if (initialData) {
+        setFormData({
+            ...initialData,
+            Donem: initialData.Donem || calculatePeriod(initialData.Belge_Tarihi)
+        });
+        if (initialData.Imaj && typeof initialData.Imaj === 'string') {
+            setImagePreview(`data:image/jpeg;base64,${initialData.Imaj}`);
+        } else {
+            setImagePreview(null);
+        }
     } else {
-      setImagePreview(null);
+        setFormData({
+            Alici_Adi: '',
+            Belge_Numarasi: '',
+            Belge_Tarihi: new Date().toISOString().split('T')[0],
+            Tutar: 0,
+            Kategori_ID: null,
+            Harcama_Tipi: 'Nakit',
+            Gunluk_Harcama: false,
+            Açıklama: '',
+            Imaj: null,
+            Imaj_Adi: null,
+            Donem: currentPeriod,
+        });
+        setImagePreview(null);
     }
-  }, [initialData]);
+  }, [initialData, currentPeriod]);
+
+  const availablePeriods = useMemo(() => {
+    const periods = new Set<string>();
+    periods.add(currentPeriod);
+    let tempPeriod = currentPeriod;
+    for (let i = 0; i < 2; i++) {
+        tempPeriod = getPreviousPeriod(tempPeriod);
+        periods.add(tempPeriod);
+    }
+    return Array.from(periods).sort((a,b) => b.localeCompare(a));
+  }, [currentPeriod]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | React.ChangeEvent<HTMLTextAreaElement>>) => {
     const { name, value, type } = e.target;
@@ -882,6 +962,11 @@ export const DigerHarcamaForm: React.FC<DigerHarcamaFormProps> = ({ initialData,
       <Input label="Alıcı Adı" name="Alici_Adi" value={formData.Alici_Adi} onChange={handleChange} required />
       <Input label="Belge Numarası" name="Belge_Numarasi" value={formData.Belge_Numarasi || ''} onChange={handleChange} />
       <Input label="Belge Tarihi" name="Belge_Tarihi" type="date" value={formData.Belge_Tarihi} onChange={handleChange} required />
+      {canEditDonem && (
+        <Select label="Dönem" name="Donem" value={formData.Donem} onChange={handleChange} required>
+            {availablePeriods.map(p => <option key={p} value={p}>{p}</option>)}
+        </Select>
+      )}
       <Input label="Tutar" name="Tutar" type="number" step="0.01" value={formData.Tutar.toString()} onChange={handleChange} required />
       <Select label="Kategori (Gider)" name="Kategori_ID" value={formData.Kategori_ID?.toString() || ""} onChange={handleChange} required>
         <option value="">Kategori Seçin...</option>

@@ -2719,6 +2719,7 @@ export const DigerHarcamalarPage: React.FC = () => {
   }
   
   const canViewGizliKategoriler = hasPermission(GIZLI_KATEGORI_YETKISI_ADI);
+  const canEditDonem = hasPermission(GIZLI_KATEGORI_YETKISI_ADI); // Added this line
 
   const handleAddNew = () => {
     setEditingHarcama(null);
@@ -2742,7 +2743,7 @@ export const DigerHarcamalarPage: React.FC = () => {
       alert("Lütfen önce bir şube seçin.");
       return;
     }
-    const derivedDonem = calculatePeriod(data.Belge_Tarihi);
+    const derivedDonem = data.Donem ? data.Donem : calculatePeriod(data.Belge_Tarihi);
 
     const harcamaData = {
         ...data,
@@ -2854,7 +2855,13 @@ export const DigerHarcamalarPage: React.FC = () => {
       </Card>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingHarcama ? 'Harcama Düzenle' : 'Yeni Harcama Ekle'}>
-        <DigerHarcamaForm initialData={editingHarcama} kategoriler={activeKategorilerForForm} onSubmit={handleSubmit} onCancel={() => setIsModalOpen(false)} />
+        <DigerHarcamaForm 
+            initialData={editingHarcama} 
+            kategoriler={activeKategorilerForForm} 
+            onSubmit={handleSubmit} 
+            onCancel={() => setIsModalOpen(false)}
+            canEditDonem={canEditDonem}
+        />
       </Modal>
     </div>
   );
