@@ -1676,10 +1676,24 @@ export const UstKategorilerPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUstKategori, setEditingUstKategori] = useState<UstKategoriFormData | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const canPrint = hasPermission("Yazdırma Yetkisi");
+  const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
 
   const handleGeneratePdf = () => {
     generateDashboardPdf('ust-kategori-content', `Ust_Kategori_Yonetimi.pdf`);
+  };
+
+  const handleExportToExcelForUstKategori = () => {
+    const wb = XLSX.utils.book_new();
+    const ws_data = filteredUstKategoriler.map(uk => ({
+        'ID': uk.UstKategori_ID,
+        'Üst Kategori Adı': uk.UstKategori_Adi,
+        'Aktif': uk.Aktif_Pasif ? 'Evet' : 'Hayır',
+    }));
+    const ws = XLSX.utils.json_to_sheet(ws_data);
+    ws['!cols'] = [{ wch: 10 }, { wch: 40 }, { wch: 10 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'Üst Kategori Listesi');
+    XLSX.writeFile(wb, `Ust_Kategori_Yonetimi.xlsx`);
   };
 
   if (!hasPermission(UST_KATEGORI_YONETIMI_EKRANI_YETKI_ADI)) {
@@ -1725,6 +1739,11 @@ export const UstKategorilerPage: React.FC = () => {
                 {canPrint && (
                     <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
                         <Icons.Print className="w-5 h-5" />
+                    </Button>
+                )}
+                {canExportExcel && (
+                    <Button onClick={handleExportToExcelForUstKategori} variant="ghost" size="sm" title="Excel'e Aktar">
+                        <Icons.Download className="w-5 h-5" />
                     </Button>
                 )}
                 <Input 
@@ -1774,10 +1793,27 @@ export const KategorilerPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUstKategoriFilter, setSelectedUstKategoriFilter] = useState<string>('');
   const [selectedTipFilter, setSelectedTipFilter] = useState<string>('');
-  const canPrint = hasPermission("Yazdırma Yetkisi");
+  const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
 
   const handleGeneratePdf = () => {
     generateDashboardPdf('kategori-content', `Kategori_Yonetimi.pdf`);
+  };
+
+  const handleExportToExcelForKategori = () => {
+    const wb = XLSX.utils.book_new();
+    const ws_data = filteredKategoriler.map(k => ({
+        'ID': k.Kategori_ID,
+        'Kategori Adı': k.Kategori_Adi,
+        'Üst Kategori': ustKategoriList.find(uk => uk.UstKategori_ID === k.Ust_Kategori_ID)?.UstKategori_Adi || 'N/A',
+        'Tip': k.Tip,
+        'Aktif': k.Aktif_Pasif ? 'Evet' : 'Hayır',
+        'Gizli': k.Gizli ? 'Evet' : 'Hayır',
+    }));
+    const ws = XLSX.utils.json_to_sheet(ws_data);
+    ws['!cols'] = [{ wch: 10 }, { wch: 30 }, { wch: 30 }, { wch: 15 }, { wch: 10 }, { wch: 10 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'Kategori Listesi');
+    XLSX.writeFile(wb, `Kategori_Yonetimi.xlsx`);
   };
 
   if (!hasPermission(KATEGORI_YONETIMI_EKRANI_YETKI_ADI)) {
@@ -1834,6 +1870,11 @@ export const KategorilerPage: React.FC = () => {
             {canPrint && (
                 <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
                     <Icons.Print className="w-5 h-5" />
+                </Button>
+            )}
+            {canExportExcel && (
+                <Button onClick={handleExportToExcelForKategori} variant="ghost" size="sm" title="Excel'e Aktar">
+                    <Icons.Download className="w-5 h-5" />
                 </Button>
             )}
             <Input 
@@ -3453,6 +3494,8 @@ export const StokPage: React.FC = () => {
       return <AccessDenied title="Stok Tanımlama" />;
   }
 
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
+
   const handleAddNew = () => {
     setEditingStok(null);
     setIsModalOpen(true);
@@ -3497,10 +3540,31 @@ export const StokPage: React.FC = () => {
     );
   }, [stokList, searchTerm]);
 
+  const handleExportToExcelForStok = () => {
+    const wb = XLSX.utils.book_new();
+    const ws_data = filteredStoklar.map(stok => ({
+        'Kod': stok.Malzeme_Kodu,
+        'Açıklama': stok.Malzeme_Aciklamasi,
+        'Grup': stok.Urun_Grubu,
+        'Birim': stok.Birimi,
+        'Sınıf': stok.Sinif || '-',
+        'Aktif': stok.Aktif_Pasif ? 'Evet' : 'Hayır',
+    }));
+    const ws = XLSX.utils.json_to_sheet(ws_data);
+    ws['!cols'] = [{ wch: 20 }, { wch: 40 }, { wch: 20 }, { wch: 10 }, { wch: 15 }, { wch: 10 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'Stok Listesi');
+    XLSX.writeFile(wb, `Stok_Tanimlama.xlsx`);
+  };
+
   return (
     <div className="space-y-6">
       <Card title="Stok Tanımlama" actions={
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 hide-on-pdf">
+            {canExportExcel && (
+                <Button onClick={handleExportToExcelForStok} variant="ghost" size="sm" title="Excel'e Aktar">
+                    <Icons.Download className="w-5 h-5" />
+                </Button>
+            )}
           <Input placeholder="Stok Ara..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
           <Button onClick={handleAddNew} leftIcon={<Icons.Add />}>Yeni Stok</Button>
         </div>
@@ -3541,6 +3605,8 @@ export const StokFiyatPage: React.FC = () => {
       return <AccessDenied title="Stok Fiyat Tanımlama" />;
   }
 
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
+
   const handleAddNew = () => {
     setEditingFiyat(null);
     setIsModalOpen(true);
@@ -3577,6 +3643,21 @@ export const StokFiyatPage: React.FC = () => {
     }
   };
 
+  const handleExportToExcelForStokFiyat = () => {
+    const wb = XLSX.utils.book_new();
+    const ws_data = filteredFiyatlar.map(fiyat => ({
+        'Malzeme Kodu': fiyat.Malzeme_Kodu,
+        'Malzeme Açıklaması': fiyat.Malzeme_Aciklamasi,
+        'Başlangıç Tarihi': parseDateString(fiyat.Gecerlilik_Baslangic_Tarih),
+        'Fiyat': fiyat.Fiyat,
+        'Aktif': fiyat.Aktif_Pasif ? 'Evet' : 'Hayır',
+    }));
+    const ws = XLSX.utils.json_to_sheet(ws_data);
+    ws['!cols'] = [{ wch: 20 }, { wch: 40 }, { wch: 20 }, { wch: 15 }, { wch: 10 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'Stok Fiyat Listesi');
+    XLSX.writeFile(wb, `Stok_Fiyat_Tanimlama.xlsx`);
+  };
+
   const filteredFiyatlar = useMemo(() => {
     return stokFiyatList
       .filter(fiyat =>
@@ -3596,6 +3677,11 @@ export const StokFiyatPage: React.FC = () => {
         title="Stok Fiyat Tanımlama"
         actions={
           <div className="flex items-center gap-3">
+            {canExportExcel && (
+                <Button onClick={handleExportToExcelForStokFiyat} variant="ghost" size="sm" title="Excel'e Aktar">
+                    <Icons.Download className="w-5 h-5" />
+                </Button>
+            )}
             <Input
               placeholder="Malzeme Kodu/Açıklaması Ara..."
               value={searchTerm}
@@ -3613,7 +3699,7 @@ export const StokFiyatPage: React.FC = () => {
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{parseDateString(fiyat.Gecerlilik_Baslangic_Tarih)}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">{formatTrCurrencyAdvanced(fiyat.Fiyat, 2)}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm">
-                <button onClick={() => handleToggleActive(fiyat)} className="focus:outline-none">
+                <button onClick={() => { const { Fiyat_ID, ...rest } = fiyat; updateStokFiyat(Fiyat_ID, { ...rest, Aktif_Pasif: !fiyat.Aktif_Pasif }); }} className="focus:outline-none">
                   <StatusBadge isActive={fiyat.Aktif_Pasif} />
                 </button>
               </td>
