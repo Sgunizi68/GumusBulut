@@ -3946,7 +3946,7 @@ export const PuantajPage: React.FC = () => {
                 const secim = entry ? puantajSecimiList.find(s => s.Secim_ID === entry.Secim_ID) : null;
                 const degeri = secim ? secim.Degeri : 0;
                 calisanTotal += degeri;
-                row.push(secim ? `${secim.Secim} (${secim.Degeri})` : '--');
+                row.push(secim ? secim.Secim : '--');
             });
             row.push(calisanTotal.toFixed(1));
             ws_data.push(row);
@@ -3958,7 +3958,7 @@ export const PuantajPage: React.FC = () => {
         // Legend Data
         ws_data.push(['Lejant']);
         legendData.forEach(item => {
-            ws_data.push([`${item.Secim}: ${item.count} gün`]);
+            ws_data.push([`${item.Secim} (${item.Degeri.toFixed(1)})`]);
         });
 
     
@@ -3982,12 +3982,12 @@ export const PuantajPage: React.FC = () => {
 
         // Reconstruct the table HTML with all days
         let tableHtml = `
-            <table style="min-width: 100%; border-collapse: collapse; border: 1px solid #e2e8f0;">
+            <table style="border-collapse: collapse;">
                 <thead style="background-color: #f7fafc;">
                     <tr>
-                        <th style="padding: 8px; text-align: left; font-size: 12px; font-weight: 500; color: #718096; text-transform: uppercase; min-width: 150px;">Çalışan</th>
-                        ${daysInViewedMonth.map(d => `<th style="padding: 8px; text-align: center; font-size: 12px; font-weight: 500; color: #718096; text-transform: uppercase; min-width: 140px;">${d.day}</th>`).join('')}
-                        <th style="padding: 8px; text-align: center; font-size: 12px; font-weight: 500; color: #718096; text-transform: uppercase; min-width: 100px;">Toplam</th>
+                        <th style="padding: 4px 8px; text-align: left; font-size: 10px; font-weight: 500; color: #718096; border: 1px solid #e2e8f0; min-width: 120px;">Çalışan</th>
+                        ${daysInViewedMonth.map(d => `<th style="padding: 4px; text-align: center; font-size: 10px; font-weight: 500; color: #718096; border: 1px solid #e2e8f0; width: 32px;">${d.day}</th>`).join('')}
+                        <th style="padding: 4px 8px; text-align: center; font-size: 10px; font-weight: 500; color: #718096; border: 1px solid #e2e8f0; min-width: 50px;">Toplam</th>
                     </tr>
                 </thead>
                 <tbody style="background-color: #ffffff;">
@@ -4001,16 +4001,18 @@ export const PuantajPage: React.FC = () => {
                             const bgColor = secim ? secim.Renk_Kodu : '#FFFFFF';
                             const textColor = secim ? getTextColorForBackground(secim.Renk_Kodu) : '#4B5563';
                             return `
-                                <td style="padding: 4px; text-align: center; font-size: 12px; white-space: nowrap; background-color: ${bgColor}; color: ${textColor};">
-                                    ${secim ? `${secim.Secim} (${secim.Degeri})` : '--'}
+                                <td style="border: 1px solid #e2e8f0; padding: 0; text-align: center; vertical-align: middle;">
+                                    <div style="background-color: ${bgColor}; color: ${textColor}; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 10px;">
+                                        ${secim ? secim.Secim : '--'}
+                                    </div>
                                 </td>
                             `;
                         }).join('');
                         return `
                             <tr>
-                                <td style="padding: 6px; white-space: nowrap; font-size: 14px; font-weight: 500; color: #4a5568;">${calisan.Adi} ${calisan.Soyadi}</td>
+                                <td style="padding: 4px 8px; white-space: nowrap; font-size: 11px; font-weight: 500; color: #4a5568; border: 1px solid #e2e8f0;">${calisan.Adi} ${calisan.Soyadi}</td>
                                 ${cellsHtml}
-                                <td style="padding: 4px; white-space: nowrap; font-size: 14px; text-align: center; font-weight: 600;">
+                                <td style="padding: 4px 8px; white-space: nowrap; font-size: 11px; text-align: center; font-weight: 600; border: 1px solid #e2e8f0;">
                                     ${calisanTotal.toFixed(1)}
                                 </td>
                             </tr>
@@ -4018,6 +4020,14 @@ export const PuantajPage: React.FC = () => {
                     }).join('')}
                 </tbody>
             </table>
+            <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 16px;">
+                ${legendData.map(item => `
+                    <div style="display: flex; align-items: center; font-size: 10px;">
+                        <div style="width: 14px; height: 14px; background-color: ${item.Renk_Kodu}; border: 1px solid #ccc; margin-right: 6px;"></div>
+                        <span style="color: #374151;">${item.Secim} (${item.Degeri.toFixed(1)})</span>
+                    </div>
+                `).join('')}
+            </div>
         `;
         tempDiv.innerHTML = tableHtml;
 
@@ -4214,14 +4224,14 @@ export const PuantajPage: React.FC = () => {
                       <thead className="bg-gray-50">
                           <tr>
                               <th scope="col" className="sticky left-0 bg-gray-50 z-10 px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[150px]">Çalışan</th>
-                              {daysInViewedMonth.map(d => <th key={d.day} scope="col" className="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase min-w-[140px]">{d.day}</th>)}
+                              {daysInViewedMonth.map(d => <th key={d.day} scope="col" className="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase">{d.day}</th>)}
                               <th scope="col" className="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase min-w-[100px]">Toplam</th>
                           </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
                           {activeCalisanlar.map(calisan => (
                               <tr key={calisan.TC_No}>
-                                  <td className="sticky left-0 bg-white px-3 py-1.5 whitespace-nowrap text-sm font-medium text-gray-800">{calisan.Adi} {calisan.Soyadi}</td>
+                                  <td className="sticky left-0 bg-white px-2 py-1 whitespace-nowrap text-xs font-medium text-gray-800">{calisan.Adi} {calisan.Soyadi}</td>
                                   {(() => {
                                       let calisanTotal = 0;
                                       const cells = daysInViewedMonth.map(day => {
@@ -4232,14 +4242,14 @@ export const PuantajPage: React.FC = () => {
                                           const degeri = secim ? secim.Degeri : 0;
                                           calisanTotal += degeri;
                                           return (
-                                              <td key={day.dateString} className="px-1 py-1 whitespace-nowrap">
+                                              <td key={day.dateString} className="p-0 whitespace-nowrap">
                                                   <button
                                                       onClick={(e) => handleCellClick(e, calisan.TC_No, day.dateString)}
                                                       disabled={isEditingDisabled}
-                                                      className="w-full h-full text-xs text-center rounded-md p-1.5 transition-shadow hover:shadow-md disabled:cursor-not-allowed disabled:shadow-none disabled:opacity-70"
-                                                      style={{ backgroundColor: bgColor, color: textColor }}
+                                                      className="w-full h-full text-xs text-center transition-shadow hover:shadow-md disabled:cursor-not-allowed disabled:shadow-none disabled:opacity-70"
+                                                      style={{ backgroundColor: bgColor, color: textColor, width: '2.5rem', height: '2.5rem' }}
                                                   >
-                                                      {secim ? `${secim.Secim} (${secim.Degeri})` : '--'}
+                                                      {secim ? secim.Secim : '--'}
                                                   </button>
                                               </td>
                                           );
@@ -4274,7 +4284,7 @@ export const PuantajPage: React.FC = () => {
               {legendData.map(item => (
                 <div key={item.Secim_ID} className="flex items-center space-x-2 text-sm">
                    <div className="w-4 h-4 rounded-sm border border-gray-300" style={{ backgroundColor: item.Renk_Kodu }}></div>
-                   <span className="text-gray-700">{item.Secim} ({item.count})</span>
+                   <span className="text-gray-700">{item.Secim} ({item.Degeri.toFixed(1)})</span>
                 </div>
               ))}
             </div>
