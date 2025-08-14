@@ -684,6 +684,9 @@ export const SubePage: React.FC = () => {
       return <AccessDenied title="Şube Yönetimi" />;
   }
 
+  const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
+
   const handleAddSube = () => {
     setEditingSube(null);
     setIsModalOpen(true);
@@ -727,12 +730,40 @@ export const SubePage: React.FC = () => {
     );
   }, [subeList, searchTerm]);
 
+  const handleGeneratePdf = () => {
+    generateDashboardPdf('sube-yonetimi-content', `Sube_Yonetimi.pdf`);
+  };
+
+  const handleExportToExcel = () => {
+    const wb = XLSX.utils.book_new();
+    const ws_data = filteredSubeler.map(sube => ({
+        'ID': sube.Sube_ID,
+        'Şube Adı': sube.Sube_Adi,
+        'Açıklama': sube.Aciklama || '-',
+        'Aktif': sube.Aktif_Pasif ? 'Evet' : 'Hayır',
+    }));
+    const ws = XLSX.utils.json_to_sheet(ws_data);
+    ws['!cols'] = [{ wch: 10 }, { wch: 30 }, { wch: 50 }, { wch: 10 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'Şube Listesi');
+    XLSX.writeFile(wb, `Sube_Yonetimi.xlsx`);
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" id="sube-yonetimi-content">
       <Card
         title="Şube Yönetimi"
         actions={
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 hide-on-pdf">
+            {canPrint && (
+                <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir">
+                    <Icons.Print className="w-5 h-5" />
+                </Button>
+            )}
+            {canExportExcel && (
+                <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
+                    <Icons.Download className="w-5 h-5" />
+                </Button>
+            )}
             <Input
               placeholder="Şube ara..."
               value={searchTerm}
@@ -787,6 +818,9 @@ export const UsersPage: React.FC = () => {
       return <AccessDenied title="Kullanıcı Yönetimi" />;
   }
 
+  const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
+
   const handleAddUser = () => {
     setEditingUser(null);
     setIsModalOpen(true);
@@ -823,11 +857,44 @@ export const UsersPage: React.FC = () => {
     }
   };
 
+  const handleGeneratePdf = () => {
+    generateDashboardPdf('user-yonetimi-content', `Kullanici_Yonetimi.pdf`);
+  };
+
+  const handleExportToExcel = () => {
+    const wb = XLSX.utils.book_new();
+    const ws_data = users.map(user => ({
+        'ID': user.Kullanici_ID,
+        'Adı Soyadı': user.Adi_Soyadi,
+        'Kullanıcı Adı': user.Kullanici_Adi,
+        'Email': user.Email || '-',
+        'Aktif': user.Aktif_Pasif ? 'Evet' : 'Hayır',
+    }));
+    const ws = XLSX.utils.json_to_sheet(ws_data);
+    ws['!cols'] = [{ wch: 10 }, { wch: 30 }, { wch: 30 }, { wch: 40 }, { wch: 10 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'Kullanıcı Listesi');
+    XLSX.writeFile(wb, `Kullanici_Yonetimi.xlsx`);
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" id="user-yonetimi-content">
       <Card 
         title="Kullanıcı Yönetimi"
-        actions={ <Button onClick={handleAddUser} leftIcon={<Icons.Add className="w-4 h-4" />} className="text-sm px-3">Yeni Kullanıcı</Button>}
+        actions={
+            <div className="flex items-center gap-3 hide-on-pdf">
+                {canPrint && (
+                    <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir">
+                        <Icons.Print className="w-5 h-5" />
+                    </Button>
+                )}
+                {canExportExcel && (
+                    <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
+                        <Icons.Download className="w-5 h-5" />
+                    </Button>
+                )}
+                <Button onClick={handleAddUser} leftIcon={<Icons.Add className="w-4 h-4" />} className="text-sm px-3">Yeni Kullanıcı</Button>
+            </div>
+        }
       >
         <TableLayout headers={['ID', 'Adı Soyadı', 'Kullanıcı Adı', 'Email', 'Aktif', 'İşlemler']} compact={true}>
           {users.map((user) => (
@@ -874,6 +941,9 @@ export const RolesPage: React.FC = () => {
       return <AccessDenied title="Rol Yönetimi" />;
   }
 
+  const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
+
   const handleAddRole = () => {
     setEditingRole(null);
     setIsModalOpen(true);
@@ -912,11 +982,43 @@ export const RolesPage: React.FC = () => {
     }
   };
 
+  const handleGeneratePdf = () => {
+    generateDashboardPdf('rol-yonetimi-content', `Rol_Yonetimi.pdf`);
+  };
+
+  const handleExportToExcel = () => {
+    const wb = XLSX.utils.book_new();
+    const ws_data = roles.map(role => ({
+        'ID': role.Rol_ID,
+        'Rol Adı': role.Rol_Adi,
+        'Açıklama': role.Aciklama || '-',
+        'Aktif': role.Aktif_Pasif ? 'Evet' : 'Hayır',
+    }));
+    const ws = XLSX.utils.json_to_sheet(ws_data);
+    ws['!cols'] = [{ wch: 10 }, { wch: 30 }, { wch: 50 }, { wch: 10 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'Rol Listesi');
+    XLSX.writeFile(wb, `Rol_Yonetimi.xlsx`);
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" id="rol-yonetimi-content">
       <Card 
         title="Rol Yönetimi"
-        actions={ <Button onClick={handleAddRole} leftIcon={<Icons.Add className="w-4 h-4" />} className="text-sm px-3">Yeni Rol</Button> }
+        actions={
+            <div className="flex items-center gap-3 hide-on-pdf">
+                {canPrint && (
+                    <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir">
+                        <Icons.Print className="w-5 h-5" />
+                    </Button>
+                )}
+                {canExportExcel && (
+                    <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
+                        <Icons.Download className="w-5 h-5" />
+                    </Button>
+                )}
+                <Button onClick={handleAddRole} leftIcon={<Icons.Add className="w-4 h-4" />} className="text-sm px-3">Yeni Rol</Button>
+            </div>
+        }
       >
         <TableLayout headers={['ID', 'Rol Adı', 'Açıklama', 'Aktif', 'İşlemler']} compact={true}>
           {roles.map((role) => (
@@ -965,6 +1067,9 @@ export const PermissionsPage: React.FC = () => {
       return <AccessDenied title="Yetki Yönetimi" />;
   }
 
+  const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
+
   const handleAddPermission = () => {
     setEditingPermission(null);
     setIsModalOpen(true);
@@ -1002,11 +1107,44 @@ export const PermissionsPage: React.FC = () => {
     }
   };
 
+  const handleGeneratePdf = () => {
+    generateDashboardPdf('yetki-yonetimi-content', `Yetki_Yonetimi.pdf`);
+  };
+
+  const handleExportToExcel = () => {
+    const wb = XLSX.utils.book_new();
+    const ws_data = permissions.map(permission => ({
+        'ID': permission.Yetki_ID,
+        'Yetki Adı': permission.Yetki_Adi,
+        'Tip': permission.Tip || '-',
+        'Açıklama': permission.Aciklama || '-',
+        'Aktif': permission.Aktif_Pasif ? 'Evet' : 'Hayır',
+    }));
+    const ws = XLSX.utils.json_to_sheet(ws_data);
+    ws['!cols'] = [{ wch: 10 }, { wch: 40 }, { wch: 20 }, { wch: 50 }, { wch: 10 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'Yetki Listesi');
+    XLSX.writeFile(wb, `Yetki_Yonetimi.xlsx`);
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" id="yetki-yonetimi-content">
       <Card 
         title="Yetki Yönetimi"
-        actions={ <Button onClick={handleAddPermission} leftIcon={<Icons.Add className="w-4 h-4" />} className="text-sm px-3">Yeni Yetki</Button> }
+        actions={
+            <div className="flex items-center gap-3 hide-on-pdf">
+                {canPrint && (
+                    <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir">
+                        <Icons.Print className="w-5 h-5" />
+                    </Button>
+                )}
+                {canExportExcel && (
+                    <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
+                        <Icons.Download className="w-5 h-5" />
+                    </Button>
+                )}
+                <Button onClick={handleAddPermission} leftIcon={<Icons.Add className="w-4 h-4" />} className="text-sm px-3">Yeni Yetki</Button>
+            </div>
+        }
       >
         <TableLayout headers={['ID', 'Yetki Adı', 'Tip', 'Açıklama', 'Aktif', 'İşlemler']} compact={true}>
           {permissions.map((permission) => (
@@ -1594,6 +1732,9 @@ export const DegerlerPage: React.FC = () => {
       return <AccessDenied title="Değer Yönetimi" />;
   }
 
+  const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
+
   const handleAddDeger = () => {
     setEditingDeger(null);
     setIsModalOpen(true);
@@ -1627,12 +1768,42 @@ export const DegerlerPage: React.FC = () => {
     );
   }, [degerler, searchTerm]);
 
+  const handleGeneratePdf = () => {
+    generateDashboardPdf('deger-yonetimi-content', `Deger_Yonetimi.pdf`);
+  };
+
+  const handleExportToExcel = () => {
+    const wb = XLSX.utils.book_new();
+    const ws_data = filteredDegerler.map(deger => ({
+        'ID': deger.Deger_ID,
+        'Değer Adı': deger.Deger_Adi,
+        'Başlangıç Tarihi': parseDateString(deger.Gecerli_Baslangic_Tarih),
+        'Bitiş Tarihi': parseDateString(deger.Gecerli_Bitis_Tarih),
+        'Değer': deger.Deger,
+        'Açıklama': deger.Deger_Aciklama || '-',
+    }));
+    const ws = XLSX.utils.json_to_sheet(ws_data);
+    ws['!cols'] = [{ wch: 10 }, { wch: 30 }, { wch: 20 }, { wch: 20 }, { wch: 15 }, { wch: 50 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'Değer Listesi');
+    XLSX.writeFile(wb, `Deger_Yonetimi.xlsx`);
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" id="deger-yonetimi-content">
       <Card 
         title="Değer Yönetimi"
         actions={
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 hide-on-pdf">
+                {canPrint && (
+                    <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir">
+                        <Icons.Print className="w-5 h-5" />
+                    </Button>
+                )}
+                {canExportExcel && (
+                    <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
+                        <Icons.Download className="w-5 h-5" />
+                    </Button>
+                )}
                 <Input 
                     placeholder="Değer ara..." 
                     value={searchTerm} 
@@ -4501,6 +4672,9 @@ export const EFaturaReferansPage: React.FC = () => {
   //     return <AccessDenied title="e-Fatura Referans Yönetimi" />;
   // }
 
+  const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
+
   const handleAddReferans = () => {
     setEditingReferans(null);
     setIsModalOpen(true);
@@ -4548,12 +4722,41 @@ export const EFaturaReferansPage: React.FC = () => {
     );
   }, [eFaturaReferansList, searchTerm, kategoriList]);
 
+  const handleGeneratePdf = () => {
+    generateDashboardPdf('efatura-referans-yonetimi-content', `EFatura_Referans_Yonetimi.pdf`);
+  };
+
+  const handleExportToExcel = () => {
+    const wb = XLSX.utils.book_new();
+    const ws_data = filteredReferanslar.map(referans => ({
+        'Alıcı Ünvanı': referans.Alici_Unvani,
+        'Referans Kodu': referans.Referans_Kodu,
+        'Kategori': kategoriList.find(k => k.Kategori_ID === referans.Kategori_ID)?.Kategori_Adi || '-',
+        'Açıklama': referans.Aciklama || '-',
+        'Aktif': referans.Aktif_Pasif ? 'Evet' : 'Hayır',
+    }));
+    const ws = XLSX.utils.json_to_sheet(ws_data);
+    ws['!cols'] = [{ wch: 40 }, { wch: 20 }, { wch: 30 }, { wch: 50 }, { wch: 10 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'e-Fatura Referans Listesi');
+    XLSX.writeFile(wb, `EFatura_Referans_Yonetimi.xlsx`);
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" id="efatura-referans-yonetimi-content">
       <Card
         title="e-Fatura Referans Yönetimi"
         actions={
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 hide-on-pdf">
+            {canPrint && (
+                <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir">
+                    <Icons.Print className="w-5 h-5" />
+                </Button>
+            )}
+            {canExportExcel && (
+                <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
+                    <Icons.Download className="w-5 h-5" />
+                </Button>
+            )}
             <Input
               placeholder="Alıcı Ünvanı ara..."
               value={searchTerm}
