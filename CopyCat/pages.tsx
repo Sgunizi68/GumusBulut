@@ -2832,6 +2832,7 @@ export const GelirPage: React.FC = () => {
     const canAccessHistory = hasPermission(GELIR_GECMISI_YETKI_ADI);
     const canViewGizliKategoriler = hasPermission(GIZLI_KATEGORI_YETKISI_ADI);
     const canPrint = hasPermission("Yazdırma Yetkisi");
+    const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
 
     const [viewedPeriod, setViewedPeriod] = useState(currentPeriod);
     const [isEditingDisabled, setIsEditingDisabled] = useState(false);
@@ -2839,6 +2840,118 @@ export const GelirPage: React.FC = () => {
     
     const handleGeneratePdf = () => {
         generateDashboardPdf('gelir-content', `Gelir_Giris_${selectedBranch?.Sube_Adi}_${viewedPeriod}.pdf`);
+    };
+
+    const handleExportToExcelForGelir = () => {
+        if (!selectedBranch) return;
+    
+        const wb = XLSX.utils.book_new();
+        const ws_data: any[][] = [];
+    
+        // Header Row
+        const header = ['Gelir Kalemi'];
+        daysInViewedMonth.forEach(d => header.push(String(d.day)));
+        header.push('Aylık Toplam');
+        ws_data.push(header);
+    
+        // Data Rows
+        const dataRows: {key: string, label: string, dataGetter: (dateString: string) => number | undefined}[] = [
+            { key: 'robotpos-tutar', label: 'RobotPos Tutar', dataGetter: (dateString) => getGelirEkstraEntry(dateString, selectedBranch.Sube_ID)?.RobotPos_Tutar },
+            { key: 'z-rapor-tutar', label: 'Z Rapor Tutar', dataGetter: (dateString) => getGelirEkstraEntry(dateString, selectedBranch.Sube_ID)?.ZRapor_Tutar },
+        ];
+
+        dataRows.forEach(dataRow => {
+            const row = [dataRow.label];
+            let monthlyTotal = 0;
+            daysInViewedMonth.forEach(day => {
+                const value = dataRow.dataGetter(day.dateString) || 0;
+                row.push(value);
+                monthlyTotal += value;
+            });
+            row.push(monthlyTotal);
+            ws_data.push(row);
+        });
+
+        Object.entries(gelirKategoriler.grouped).forEach(([ustKategoriAdi, kategoriler]) => {
+            const ustKategoriRow = [ustKategoriAdi];
+            let ustKategoriMonthlyTotal = 0;
+            daysInViewedMonth.forEach(({ dateString }) => {
+                const dailyUstKategoriTotal = kategoriler.reduce((sum, kategori) => {
+                    return sum + (getGelirEntry(kategori.Kategori_ID, dateString, selectedBranch.Sube_ID)?.Tutar || 0);
+                }, 0);
+                ustKategoriRow.push(dailyUstKategoriTotal);
+                ustKategoriMonthlyTotal += dailyUstKategoriTotal;
+            });
+            ustKategoriRow.push(ustKategoriMonthlyTotal);
+            ws_data.push(ustKategoriRow);
+
+            kategoriler.forEach(kategori => {
+                const kategoriRow = [kategori.Kategori_Adi];
+                let kategoriMonthlyTotal = 0;
+                daysInViewedMonth.forEach(day => {
+                    const value = getGelirEntry(kategori.Kategori_ID, day.dateString, selectedBranch.Sube_ID)?.Tutar || 0;
+                    kategoriRow.push(value);
+                    kategoriMonthlyTotal += value;
+                });
+                kategoriRow.push(kategoriMonthlyTotal);
+                ws_data.push(kategoriRow);
+            });
+        });
+
+        gelirKategoriler.ungrouped.forEach(kategori => {
+            const kategoriRow = [kategori.Kategori_Adi];
+            let kategoriMonthlyTotal = 0;
+            daysInViewedMonth.forEach(day => {
+                const value = getGelirEntry(kategori.Kategori_ID, day.dateString, selectedBranch.Sube_ID)?.Tutar || 0;
+                kategoriRow.push(value);
+                kategoriMonthlyTotal += value;
+            });
+            kategoriRow.push(kategoriMonthlyTotal);
+            ws_data.push(kategoriRow);
+        });
+
+        // Summary Rows
+        const summaryRows = [
+            {
+                label: 'Toplam Satış Gelirleri',
+                dailyTotalGetter: (dateString: string) => kategoriList.filter(k => k.Tip === 'Gelir' && k.Aktif_Pasif).reduce((sum, cat) => sum + (getGelirEntry(cat.Kategori_ID, dateString, selectedBranch.Sube_ID)?.Tutar || 0), 0),
+            },
+            {
+                label: 'GÜNLÜK TOPLAM',
+                dailyTotalGetter: (dateString: string) => {
+                    const gelir = kategoriList.filter(k => k.Tip === 'Gelir' && k.Aktif_Pasif).reduce((sum, cat) => sum + (getGelirEntry(cat.Kategori_ID, dateString, selectedBranch.Sube_ID)?.Tutar || 0), 0);
+                    const harcamaEFatura = getDailyTotal(dailyEFaturaTotals, dateString);
+                    const harcamaDiger = getDailyTotal(dailyDigerHarcamaTotals, dateString);
+                    return gelir - harcamaEFatura - harcamaDiger;
+                },
+            },
+            {
+                label: 'Günlük Harcama-eFatura',
+                dailyTotalGetter: (dateString: string) => getDailyTotal(dailyEFaturaTotals, dateString),
+            },
+            {
+                label: 'Günlük Harcama-Diğer',
+                dailyTotalGetter: (dateString: string) => getDailyTotal(dailyDigerHarcamaTotals, dateString),
+            }
+        ];
+
+        summaryRows.forEach(summaryRow => {
+            const row = [summaryRow.label];
+            let monthlyTotal = 0;
+            daysInViewedMonth.forEach(day => {
+                const value = summaryRow.dailyTotalGetter(day.dateString);
+                row.push(value);
+                monthlyTotal += value;
+            });
+            row.push(monthlyTotal);
+            ws_data.push(row);
+        });
+    
+        const ws = XLSX.utils.aoa_to_sheet(ws_data);
+        ws['!cols'] = [{ wch: 30 }]; // Set width for the first column
+        XLSX.utils.book_append_sheet(wb, ws, 'Gelir Raporu');
+    
+        XLSX.writeFile(wb, `Gelir_Raporu_${selectedBranch?.Sube_Adi}_${viewedPeriod}.xlsx`);
     };
     
     useEffect(() => { setViewedPeriod(currentPeriod); }, [currentPeriod]);
@@ -3079,6 +3192,11 @@ export const GelirPage: React.FC = () => {
                     {canPrint && (
                         <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
                             <Icons.Print className="w-5 h-5" />
+                        </Button>
+                    )}
+                    {canExportExcel && (
+                        <Button onClick={handleExportToExcelForGelir} variant="ghost" size="sm" title="Excel'e Aktar">
+                            <Icons.Download className="w-5 h-5" />
                         </Button>
                     )}
                     <Button onClick={handlePreviousPeriod} disabled={!canAccessHistory} size="sm" variant="secondary" title="Önceki Dönem">‹</Button>
