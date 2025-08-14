@@ -2720,6 +2720,45 @@ export const DigerHarcamalarPage: React.FC = () => {
   
   const canViewGizliKategoriler = hasPermission(GIZLI_KATEGORI_YETKISI_ADI);
   const canEditDonem = hasPermission(GIZLI_KATEGORI_YETKISI_ADI); // Added this line
+  const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
+
+  const handleExportToExcel = () => {
+    if (!selectedBranch) return;
+
+    const wb = XLSX.utils.book_new();
+    const ws_data = filteredHarcamalar.map(h => {
+        const kategoriAdi = kategoriList.find(k => k.Kategori_ID === h.Kategori_ID)?.Kategori_Adi || 'N/A';
+        return {
+            'Alıcı Adı': h.Alici_Adi,
+            'Belge No': h.Belge_Numarasi || '-',
+            'Belge Tarihi': parseDateString(h.Belge_Tarihi),
+            'Tutar': h.Tutar,
+            'Kategori': kategoriAdi,
+            'Tip': h.Harcama_Tipi,
+            'Günlük': h.Gunluk_Harcama ? 'Evet' : 'Hayır',
+            'Resim': h.Imaj_Adi || '-',
+        };
+    });
+
+    const ws = XLSX.utils.json_to_sheet(ws_data);
+    ws['!cols'] = [
+        { wch: 30 },
+        { wch: 20 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 20 },
+        { wch: 15 },
+        { wch: 10 },
+        { wch: 30 },
+    ];
+    XLSX.utils.book_append_sheet(wb, ws, 'Diğer Harcamalar');
+    XLSX.writeFile(wb, `Diger_Harcamalar_${selectedBranch?.Sube_Adi}_${filterPeriod}.xlsx`);
+  };
+
+  const handleGeneratePdf = () => {
+    generateDashboardPdf('diger-harcamalar-content', `Diger_Harcamalar_${selectedBranch?.Sube_Adi}_${filterPeriod}.pdf`);
+  };
 
   const handleAddNew = () => {
     setEditingHarcama(null);
@@ -2793,9 +2832,19 @@ export const DigerHarcamalarPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" id="diger-harcamalar-content">
       <Card title={`Diğer Harcamalar (Şube: ${selectedBranch.Sube_Adi})`} actions={
-         <div className="flex items-center gap-3">
+         <div className="flex items-center gap-3 hide-on-pdf">
+            {canPrint && (
+                <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
+                    <Icons.Print className="w-5 h-5" />
+                </Button>
+            )}
+            {canExportExcel && (
+                <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
+                    <Icons.Download className="w-5 h-5" />
+                </Button>
+            )}
             <Input 
                 placeholder="Alıcı/Belge No ara..." 
                 value={searchTerm} 
