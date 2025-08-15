@@ -287,4 +287,5 @@ Returning 9 calisanlar
 ←[32mINFO←[0m:     127.0.0.1:63214 - "←[1mGET /api/v1/yetkiler/ HTTP/1.1←[0m" ←[32m200 OK←[0m
 ←[32mINFO←[0m:     127.0.0.1:63223 - "←[1mGET /api/v1/roller/ HTTP/1.1←[0m" ←[32m200 OK←[0m
 ←[32mINFO←[0m:     127.0.0.1:63223 - "←[1mGET /api/v1/yetkiler/ HTTP/1.1←[0m" ←[32m200 OK←[0m
-←[32mINFO←[0m:     127.0.0.1:63225 - "←[1mGET /api/v1/kullanici-rolleri/ HTTP/1.1←[0m" ←[32m200 OK←[0m
+←[32mINFO←[0m:     127.0.0.1:63225 - "←[1mGET /api/v1/kullanici-roll
+eri/ HTTP/1.1←[0m" ←[32m200 OK←[0m
