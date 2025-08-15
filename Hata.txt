@@ -280,9 +280,7 @@ LookupError: 'Ödeme' is not among the defined enum values. Enum name: None. Pos
 Request received for /calisanlar/
 ←[32mINFO←[0m:     127.0.0.1:63225 - "←[1mGET /api/v1/roller/ HTTP/1.1←[0m" ←[32m200 OK←[0m
 Returning 9 calisanlar
-←[32mINFO←[0m:     1
-
-7.0.0.1:63214 - "←[1mGET /api/v1/e-fatura-referans/ HTTP/1.1←[0m" ←[32m200 OK←[0m
+←[32mINFO←[0m7.0.0.1:63214 - "←[1mGET /api/v1/e-fatura-referans/ HTTP/1.1←[0m" ←[32m200 OK←[0m
 ←[32mINFO←[0m:     127.0.0.1:63216 - "←[1mGET /api/v1/calisanlar/ HTTP/1.1←[0m" ←[32m200 OK←[0m
 ←[32mINFO←[0m:     127.0.0.1:63215 - "←[1mGET /api/v1/nakit/ HTTP/1.1←[0m" ←[32m200 OK←[0m
 ←[32mINFO←[0m:     127.0.0.1:63223 - "←[1mGET /api/v1/kullanici-rolleri/?kullanici_id=1 HTTP/1.1←[0m" ←[32m200 OK←[0m
