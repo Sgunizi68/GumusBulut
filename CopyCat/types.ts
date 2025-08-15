@@ -317,6 +317,7 @@ export interface DataContextType {
   b2bEkstreList: B2BEkstre[];
   addB2BEkstreler: (newEkstreler: B2BEkstre[]) => Promise<{ successfullyAdded: B2BEkstre[], skippedRecords: Array<{ Fis_No: string, Tarih: string, reason: string }> }>;
   updateB2BEkstre: (ekstreId: number, data: B2BAssignmentFormData) => Promise<void>;
+  uploadB2BEkstre: (formData: FormData) => Promise<{ added: number, skipped: number } | null>;
 
   digerHarcamaList: DigerHarcama[];
   addDigerHarcama: (harcama: FormData) => Promise<void>;

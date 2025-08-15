@@ -350,6 +350,50 @@ def delete_b2b_ekstre(db: Session, ekstre_id: int):
         db.commit()
     return db_ekstre
 
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def get_b2b_ekstre_by_unique_fields(db: Session, ekstre: b2b_ekstre.B2BEkstreCreate):
+    return db.query(models.B2BEkstre).filter(
+        models.B2BEkstre.Tarih == ekstre.Tarih,
+        models.B2BEkstre.Fis_No == ekstre.Fis_No,
+        models.B2BEkstre.Borc == ekstre.Borc,
+        models.B2BEkstre.Alacak == ekstre.Alacak,
+        models.B2BEkstre.Sube_ID == ekstre.Sube_ID
+    ).first()
+
+def create_b2b_ekstre_bulk(db: Session, ekstreler: List[b2b_ekstre.B2BEkstreCreate]):
+    added_count = 0
+    skipped_count = 0
+    logger.info(f"Starting bulk create of B2B Ekstre for {len(ekstreler)} records.")
+    
+    for ekstre_data in ekstreler:
+        existing_ekstre = get_b2b_ekstre_by_unique_fields(db, ekstre_data)
+        if existing_ekstre:
+            logger.info(f"Skipping existing record: {ekstre_data.Fis_No}")
+            skipped_count += 1
+            continue
+        
+        ekstre_dict = ekstre_data.dict()
+        ekstre_dict['Donem'] = int(ekstre_dict['Donem'])
+        db_ekstre = models.B2BEkstre(**ekstre_dict)
+        db.add(db_ekstre)
+        added_count += 1
+    
+    try:
+        db.commit()
+        logger.info(f"Successfully committed {added_count} new B2B Ekstre records.")
+    except Exception as e:
+        logger.error(f"Error committing B2B Ekstre records: {e}")
+        db.rollback()
+        raise
+        
+    return {"added": added_count, "skipped": skipped_count}
+
+
 # --- DigerHarcama CRUD ---
 import base64
 

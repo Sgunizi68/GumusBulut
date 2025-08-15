@@ -2,8 +2,7 @@
 .env.local
 CopyCat/.env.development
 .env.*
-a.txt
-a.pdf
+
 CMD Backend job run command.txt
 CopyCat/dist
 CopyCat/node_modules

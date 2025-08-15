@@ -529,6 +529,14 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       );
     }
   }, []);
+
+  const uploadB2BEkstre = useCallback(async (formData: FormData) => {
+    const result = await fetchData<any>(`${API_BASE_URL}/b2b-ekstreler/upload/`, {
+        method: 'POST',
+        body: formData,
+    });
+    return result;
+  }, []);
   
   const addDigerHarcama = useCallback(async (data: DigerHarcamaFormData) => {
     const formData = new FormData();
@@ -1254,6 +1262,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     b2bEkstreList,
     addB2BEkstreler,
     updateB2BEkstre,
+    uploadB2BEkstre, // Add this line
     digerHarcamaList,
     addDigerHarcama,
     updateDigerHarcama,

@@ -2595,7 +2595,7 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
 // --- B2B EKSTRE YUKLEME PAGE ---
 export const B2BUploadPage: React.FC = () => {
   const { selectedBranch, hasPermission } = useAppContext();
-  const { eFaturaList, updateEFatura } = useDataContext();
+  const { updateEFatura, uploadB2BEkstre } = useDataContext(); // Use uploadB2BEkstre from context
   const [file, setFile] = useState<File | null>(null);
   const [feedback, setFeedback] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -2607,11 +2607,11 @@ export const B2BUploadPage: React.FC = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const selectedFile = event.target.files[0];
-      if (selectedFile.name.endsWith('.xlsx') || selectedFile.name.endsWith('.xls')) {
+      if (selectedFile.name.endsWith('.xlsx') || selectedFile.name.endsWith('.xls') || selectedFile.name.endsWith('.csv')) {
         setFile(selectedFile);
         setFeedback(null);
       } else {
-        setFeedback({ message: "Lütfen geçerli bir Excel dosyası (.xlsx veya .xls) seçin.", type: 'error' });
+        setFeedback({ message: "Lütfen geçerli bir Excel (.xlsx, .xls) veya CSV dosyası seçin.", type: 'error' });
         setFile(null);
         if(fileInputRef.current) fileInputRef.current.value = "";
       }
@@ -2624,67 +2624,48 @@ export const B2BUploadPage: React.FC = () => {
       return;
     }
 
-    setFeedback({ message: `"${file.name}" dosyası yükleniyor ve işleniyor...`, type: 'success' });
+    setFeedback({ message: `Dosya yükleniyor ve işleniyor...`, type: 'info' });
 
     try {
-      const data = await file.arrayBuffer();
-      const workbook = XLSX.read(data, { type: 'array', cellDates: true });
-      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      let jsonData: B2BEkstreExcelRow[] = XLSX.utils.sheet_to_json(worksheet);
+        let fileToUpload: File;
 
-      console.log("Raw JSON data from Excel:", jsonData);
-
-      if (!Array.isArray(jsonData) || jsonData.length === 0) {
-        setFeedback({ message: "Excel dosyasında işlenecek veri bulunamadı veya dosya formatı hatalı.", type: 'error' });
-        return;
-      }
-
-      let updatedCount = 0;
-      let skippedCount = 0;
-
-      for (const row of jsonData) {
-        const fisNo = String(row["Fiş No"] || '');
-        const aciklamaFromExcel = String(row["Açıklama"] || '');
-
-        if (!fisNo || !aciklamaFromExcel) {
-          skippedCount++;
-          continue;
-        }
-
-        const matchingEFatura = eFaturaList.find(
-          (ef) => ef.Fatura_Numarasi === fisNo && ef.Sube_ID === selectedBranch.Sube_ID
-        );
-
-        if (matchingEFatura) {
-          // Check if Aciklama is empty or null
-          if (!matchingEFatura.Aciklama) {
-            const updateResult = await updateEFatura(matchingEFatura.Fatura_ID, { Aciklama: aciklamaFromExcel });
-            if (updateResult.success) {
-              updatedCount++;
-            } else {
-              console.warn(`Failed to update Aciklama for Fatura_ID ${matchingEFatura.Fatura_ID}: ${updateResult.message}`);
-              skippedCount++;
-            }
-          } else {
-            skippedCount++; // Already has an explanation, so skip
-          }
+        // If the file is an excel file, convert it to CSV
+        if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+            const data = await file.arrayBuffer();
+            const workbook = XLSX.read(data, { type: 'array' });
+            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+            const csvData = XLSX.utils.sheet_to_csv(worksheet);
+            const blob = new Blob([csvData], { type: 'text/csv' });
+            fileToUpload = new File([blob], "uploaded_ekstre.csv", { type: 'text/csv' });
         } else {
-          skippedCount++; // No matching eFatura found
+            fileToUpload = file;
         }
-      }
 
-      let feedbackMessage = `${updatedCount} e-Fatura kaydı başarıyla güncellendi.`;
-      if (skippedCount > 0) {
-        feedbackMessage += ` ${skippedCount} kayıt atlandı (eşleşme bulunamadı veya açıklama zaten mevcut).`;
-      }
-      setFeedback({ message: feedbackMessage, type: 'success' });
-      setFile(null);
-      if(fileInputRef.current) fileInputRef.current.value = "";
+        const formData = new FormData();
+        formData.append('file', fileToUpload);
+        formData.append('sube_id', selectedBranch.Sube_ID.toString());
+
+        const result = await uploadB2BEkstre(formData);
+
+        if (result) {
+            setFeedback({ 
+                message: `İşlem tamamlandı. Eklenen kayıtlar: ${result.added}, Atlanan kayıtlar: ${result.skipped}`,
+                type: 'success' 
+            });
+        } else {
+            setFeedback({ 
+                message: "Dosya yüklenirken bir hata oluştu. Lütfen backend loglarını kontrol edin.", 
+                type: 'error' 
+            });
+        }
 
     } catch (error) {
-      console.error("Error processing B2B file:", error);
-      setFeedback({ message: "Dosya işlenirken bir hata oluştu. Detaylar için konsolu kontrol edin.", type: 'error' });
+        console.error("File processing error:", error);
+        setFeedback({ message: "Dosya işlenirken bir hata oluştu. Lütfen dosyanın formatını kontrol edin.", type: 'error' });
     }
+
+    setFile(null);
+    if(fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleDownloadTemplate = () => {
