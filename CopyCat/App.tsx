@@ -1455,9 +1455,8 @@ const App: React.FC = () => {
     }, []);
 
   const hasPermission = useCallback((permissionName: string): boolean => {
-     if (currentUser?.Kullanici_Adi.toLowerCase() === 'admin') return true; 
      return currentUserPermissions.includes(permissionName);
-  }, [currentUser, currentUserPermissions]);
+  }, [currentUserPermissions]);
 
   const appContextValue: AppContextType = {
     isAuthenticated,

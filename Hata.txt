@@ -105,4 +105,4 @@ Traceback (most recent call last):
   File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\db\crud.py", line 2, in <module>
     def get_odeme(db: Session, odeme_id: int):
                       ^^^^^^^
-NameError: name 'Session' is not defined
+NameError: name 'Se

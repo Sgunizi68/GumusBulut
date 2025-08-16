@@ -90,7 +90,7 @@ export const PUANTAJ_GIRISI_EKRANI_YETKI_ADI = 'Puantaj Girişi Ekranı Görünt
 export const AVANS_TALEBI_EKRANI_YETKI_ADI = 'Avans Talebi Ekranı Görüntüleme';
 export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
 export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
-export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görüntüleme";
+export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
 
 
 // --- MENU STRUCTURE ---
