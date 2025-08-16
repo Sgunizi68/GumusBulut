@@ -23,6 +23,7 @@ class Sube(Base):
     puantajlar = relationship("Puantaj", back_populates="sube")
     avans_istekler = relationship("AvansIstek", back_populates="sube")
     nakitler = relationship("Nakit", back_populates="sube")
+    odemeler = relationship("Odeme", back_populates="sube")
 
 class Kullanici(Base):
     __tablename__ = "Kullanici"
@@ -115,6 +116,8 @@ class Kategori(Base):
     b2b_ekstreler = relationship("B2BEkstre", back_populates="kategori")
     diger_harcamalar = relationship("DigerHarcama", back_populates="kategori")
     gelirler = relationship("Gelir", back_populates="kategori")
+    odemeler = relationship("Odeme", back_populates="kategori")
+    odeme_referanslar = relationship("OdemeReferans", back_populates="kategori")
 
 class EFatura(Base):
     __tablename__ = "e_Fatura"
@@ -327,3 +330,31 @@ class Nakit(Base):
     Imaj = Column(LargeBinary, nullable=True)
 
     sube = relationship("Sube", back_populates="nakitler")
+
+class Odeme(Base):
+    __tablename__ = "Odeme"
+
+    Odeme_ID = Column(Integer, primary_key=True, index=True)
+    Tip = Column(String(50), nullable=False)
+    Hesap_Adi = Column(String(50), nullable=False)
+    Tarih = Column(Date, nullable=False)
+    Aciklama = Column(String(200), nullable=False)
+    Tutar = Column(DECIMAL(15, 2), nullable=False, default=0.00)
+    Kategori_ID = Column(Integer, ForeignKey("Kategori.Kategori_ID"), nullable=True)
+    Donem = Column(Integer, nullable=True)
+    Sube_ID = Column(Integer, ForeignKey("Sube.Sube_ID"), default=1)
+    Kayit_Tarihi = Column(DateTime, default=func.now())
+
+    kategori = relationship("Kategori", back_populates="odemeler")
+    sube = relationship("Sube", back_populates="odemeler")
+
+class OdemeReferans(Base):
+    __tablename__ = "Odeme_Referans"
+
+    Referans_ID = Column(Integer, primary_key=True, index=True)
+    Referans_Metin = Column(String(50), nullable=False, unique=True)
+    Kategori_ID = Column(Integer, ForeignKey("Kategori.Kategori_ID"), nullable=False)
+    Aktif_Pasif = Column(Boolean, default=True)
+    Kayit_Tarihi = Column(DateTime, default=func.now())
+
+    kategori = relationship("Kategori", back_populates="odeme_referanslar")

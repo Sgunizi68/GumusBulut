@@ -1,0 +1,18 @@
+'CREATE TABLE "Odeme" (
+  "Odeme_ID" int NOT NULL AUTO_INCREMENT,
+  "Tip" varchar(50) COLLATE utf8mb4_turkish_ci NOT NULL,
+  "Hesap_Adi" varchar(50) COLLATE utf8mb4_turkish_ci NOT NULL,
+  "Tarih" date NOT NULL,
+  "Aciklama" varchar(200) COLLATE utf8mb4_turkish_ci NOT NULL,
+  "Tutar" decimal(15,2) NOT NULL DEFAULT ''0.00'',
+  "Kategori_ID" int DEFAULT NULL,
+  "Donem" int DEFAULT NULL,
+  "Sube_ID" int DEFAULT ''1'',
+  "Kayit_Tarihi" datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY ("Odeme_ID"),
+  UNIQUE KEY "Odeme_ID_UNIQUE" ("Odeme_ID"),
+  KEY "Kategori_ID" ("Kategori_ID"),
+  KEY "Sube_ID" ("Sube_ID"),
+  CONSTRAINT "Odeme_ibfk_1" FOREIGN KEY ("Kategori_ID") REFERENCES "Kategori" ("Kategori_ID"),
+  CONSTRAINT "Odeme_ibfk_2" FOREIGN KEY ("Sube_ID") REFERENCES "Sube" ("Sube_ID")
+)'

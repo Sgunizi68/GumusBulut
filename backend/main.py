@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from db.database import engine, Base
 from api.v1.endpoints import (
     sube, users, roles, permissions, kullanici_rol, rol_yetki, e_fatura,
-    b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, calisan, puantaj_secimi, puantaj, avans_istek, kategori, ust_kategori, token, deger, e_fatura_referans, nakit
+    b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, calisan, puantaj_secimi, puantaj, avans_istek, kategori, ust_kategori, token, deger, e_fatura_referans, nakit, odeme, odeme_referans
 )
 
 # Create database tables
@@ -43,6 +43,8 @@ app.include_router(deger.router, prefix="/api/v1", tags=["Deger"])
 app.include_router(token.router, prefix="/api/v1", tags=["Token"])
 app.include_router(e_fatura_referans.router, prefix="/api/v1", tags=["EFatura Referans"])
 app.include_router(nakit.router, prefix="/api/v1", tags=["Nakit"])
+app.include_router(odeme.router, prefix="/api/v1", tags=["Odeme"])
+app.include_router(odeme_referans.router, prefix="/api/v1", tags=["Odeme Referans"])
 
 
 app.include_router(calisan.router, prefix="/api/v1", tags=["Calisan"])

@@ -3,7 +3,7 @@ from passlib.context import CryptContext
 from typing import List
 
 from db import models
-from schemas import sube, user, role, permission, kullanici_rol, rol_yetki, e_fatura, b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, stok_fiyat, stok_sayim, calisan, puantaj_secimi, puantaj, avans_istek, ust_kategori, kategori, deger, e_fatura_referans, nakit
+from schemas import sube, user, role, permission, kullanici_rol, rol_yetki, e_fatura, b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, stok_fiyat, stok_sayim, calisan, puantaj_secimi, puantaj, avans_istek, ust_kategori, kategori, deger, e_fatura_referans, nakit, odeme, odeme_referans
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -995,3 +995,63 @@ def delete_nakit(db: Session, nakit_id: int):
         db.delete(db_nakit)
         db.commit()
     return db_nakit
+
+# --- Odeme CRUD ---
+def get_odeme(db: Session, odeme_id: int):
+    return db.query(models.Odeme).filter(models.Odeme.Odeme_ID == odeme_id).first()
+
+def get_odemeler(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Odeme).offset(skip).limit(limit).all()
+
+def create_odeme(db: Session, odeme: odeme.OdemeCreate):
+    db_odeme = models.Odeme(**odeme.dict())
+    db.add(db_odeme)
+    db.commit()
+    db.refresh(db_odeme)
+    return db_odeme
+
+def update_odeme(db: Session, odeme_id: int, odeme: odeme.OdemeUpdate):
+    db_odeme = db.query(models.Odeme).filter(models.Odeme.Odeme_ID == odeme_id).first()
+    if db_odeme:
+        for key, value in odeme.dict(exclude_unset=True).items():
+            setattr(db_odeme, key, value)
+        db.commit()
+        db.refresh(db_odeme)
+    return db_odeme
+
+def delete_odeme(db: Session, odeme_id: int):
+    db_odeme = db.query(models.Odeme).filter(models.Odeme.Odeme_ID == odeme_id).first()
+    if db_odeme:
+        db.delete(db_odeme)
+        db.commit()
+    return db_odeme
+
+# --- OdemeReferans CRUD ---
+def get_odeme_referans(db: Session, referans_id: int):
+    return db.query(models.OdemeReferans).filter(models.OdemeReferans.Referans_ID == referans_id).first()
+
+def get_odeme_referanslar(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.OdemeReferans).offset(skip).limit(limit).all()
+
+def create_odeme_referans(db: Session, odeme_referans: odeme_referans.OdemeReferansCreate):
+    db_odeme_referans = models.OdemeReferans(**odeme_referans.dict())
+    db.add(db_odeme_referans)
+    db.commit()
+    db.refresh(db_odeme_referans)
+    return db_odeme_referans
+
+def update_odeme_referans(db: Session, referans_id: int, odeme_referans: odeme_referans.OdemeReferansUpdate):
+    db_odeme_referans = db.query(models.OdemeReferans).filter(models.OdemeReferans.Referans_ID == referans_id).first()
+    if db_odeme_referans:
+        for key, value in odeme_referans.dict(exclude_unset=True).items():
+            setattr(db_odeme_referans, key, value)
+        db.commit()
+        db.refresh(db_odeme_referans)
+    return db_odeme_referans
+
+def delete_odeme_referans(db: Session, referans_id: int):
+    db_odeme_referans = db.query(models.OdemeReferans).filter(models.OdemeReferans.Referans_ID == referans_id).first()
+    if db_odeme_referans:
+        db.delete(db_odeme_referans)
+        db.commit()
+    return db_odeme_referans
