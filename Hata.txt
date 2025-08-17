@@ -1,44 +1,11 @@
-(index):64 cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
-(anonymous) @ (index):64
-(anonymous) @ (index):64
-client:789 [vite] connecting...
-client:912 [vite] connected.
-react-dom_client.js?v=6fa0fad5:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
-pages.tsx:316 React has detected a change in the order of Hooks called by DashboardPage. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks
-
-   Previous render            Next render
-   ------------------------------------------------------
-1. useContext                 useContext
-2. useContext                 useContext
-3. undefined                  useState
-   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-updateHookTypesDev @ react-dom_client.js?v=6fa0fad5:4146
-useState @ react-dom_client.js?v=6fa0fad5:16661
-exports.useState @ chunk-6P6Q65E3.js?v=e429c3f6:927
-DashboardPage @ pages.tsx:316
-react-stack-bottom-frame @ react-dom_client.js?v=6fa0fad5:17424
-renderWithHooks @ react-dom_client.js?v=6fa0fad5:4206
-updateFunctionComponent @ react-dom_client.js?v=6fa0fad5:6619
-beginWork @ react-dom_client.js?v=6fa0fad5:7654
-runWithFiberInDEV @ react-dom_client.js?v=6fa0fad5:1485
-performUnitOfWork @ react-dom_client.js?v=6fa0fad5:10874
-workLoopSync @ react-dom_client.js?v=6fa0fad5:10728
-renderRootSync @ react-dom_client.js?v=6fa0fad5:10711
-performWorkOnRoot @ react-dom_client.js?v=6fa0fad5:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=6fa0fad5:11623
-performWorkUntilDeadline @ react-dom_client.js?v=6fa0fad5:36
-react-dom_client.js?v=6fa0fad5:4242 Internal React error: Expected static flag was missing. Please notify the React team.
-finishRenderingHooks @ react-dom_client.js?v=6fa0fad5:4242
-renderWithHooks @ react-dom_client.js?v=6fa0fad5:4227
-updateFunctionComponent @ react-dom_client.js?v=6fa0fad5:6619
-beginWork @ react-dom_client.js?v=6fa0fad5:7654
-runWithFiberInDEV @ react-dom_client.js?v=6fa0fad5:1485
-performUnitOfWork @ react-dom_client.js?v=6fa0fad5:10874
-workLoopSync @ react-dom_client.js?v=6fa0fad5:10728
-renderRootSync @ react-dom_client.js?v=6fa0fad5:10711
-performWorkOnRoot @ react-dom_client.js?v=6fa0fad5:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=6fa0fad5:11623
-performWorkUntilDeadline @ react-dom_client.js?v=6fa0fad5:36
-App.tsx:368 DataProvider - nakitList after setting: Array(5)
-App.tsx:368 DataProvider - nakitList after setting: Array(5)
+GumusBulut/#/login:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/token' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/token:1  Failed to load resource: net::ERR_FAILED
+index-Dtye-fLG.js:422   Uncaught (in promise) TypeError: Failed to fetch
+    at index-Dtye-fLG.js:422:21779
+    at n (index-Dtye-fLG.js:369:60634)
+    at zw (index-Dtye-fLG.js:48:118623)
+    at index-Dtye-fLG.js:48:123934
+    at nf (index-Dtye-fLG.js:48:9050)
+    at sm (index-Dtye-fLG.js:48:119874)
+    at wm (index-Dtye-fLG.js:49:26930)
+    at RE (index-Dtye-fLG.js:49:26748)
