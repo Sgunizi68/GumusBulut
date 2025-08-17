@@ -166,7 +166,7 @@ const Header: React.FC = () => {
             <label htmlFor="period-input" className="text-sm font-medium text-gray-700">Dönem:</label>
             <Input 
                 id="period-input"
-                type="text"
+                type="text" disabled
                 value={currentPeriod}
                 onChange={(e) => setPeriod(e.target.value)}
                 maxLength={4}
