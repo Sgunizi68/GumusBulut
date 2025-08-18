@@ -2411,9 +2411,9 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
   const activeKategoriler = useMemo(() => {
     return kategoriList.filter(k => 
       k.Aktif_Pasif &&
-      k.Tip !== "Gelir" &&
+      k.Tip === "Gider" &&
       (canViewGizliKategoriler || !k.Gizli)
-    );
+    ).sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi));
   }, [kategoriList, canViewGizliKategoriler]);
 
   const handleUpdate = (faturaId: number, field: keyof InvoiceAssignmentFormData, value: any) => {
@@ -2786,7 +2786,7 @@ export const B2BCategoryAssignmentPage: React.FC = () => {
 
   }, [b2bEkstreList, selectedBranch, searchTerm, filterPeriod, filterUncategorized, currentAppContextPeriod, previousAppContextPeriod]);
 
-  const activeKategoriler = useMemo(() => kategoriList.filter(k => k.Aktif_Pasif), [kategoriList]); // All active categories
+  const activeKategoriler = useMemo(() => kategoriList.filter(k => k.Aktif_Pasif).sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi)), [kategoriList]); // All active categories
 
   const handleUpdate = (ekstreId: number, field: keyof B2BAssignmentFormData, value: any) => {
     console.log(`[B2BCategoryAssignmentPage] handleUpdate called for ekstreId: ${ekstreId}, field: ${field}, value: ${value}`);
@@ -3014,7 +3014,7 @@ export const DigerHarcamalarPage: React.FC = () => {
   }, [digerHarcamaList, selectedBranch, searchTerm, filterTip, filterPeriod, kategoriList, canViewGizliKategoriler]);
 
   const activeKategorilerForForm = useMemo(() => {
-    return kategoriList.filter(k => k.Aktif_Pasif && k.Tip === 'Gider' && (canViewGizliKategoriler || !k.Gizli));
+    return kategoriList.filter(k => k.Aktif_Pasif && k.Tip === 'Gider' && (canViewGizliKategoriler || !k.Gizli)).sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi));
   }, [kategoriList, canViewGizliKategoriler]);
 
   if (!selectedBranch) {

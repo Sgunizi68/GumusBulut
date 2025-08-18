@@ -756,7 +756,11 @@ interface KategoriFormProps {
   onCancel: () => void;
 }
 export const KategoriForm: React.FC<KategoriFormProps> = ({ initialData, ustKategoriler, onSubmit, onCancel }) => {
-  const activeUstKategoriler = ustKategoriler.filter(uk => uk.Aktif_Pasif || (initialData && uk.UstKategori_ID === initialData.Ust_Kategori_ID));
+  const activeUstKategoriler = useMemo(() => {
+    return ustKategoriler
+      .filter(uk => uk.Aktif_Pasif || (initialData && uk.UstKategori_ID === initialData.Ust_Kategori_ID))
+      .sort((a, b) => a.UstKategori_Adi.localeCompare(b.UstKategori_Adi));
+  }, [ustKategoriler, initialData]);
   
   const [formData, setFormData] = React.useState<KategoriFormData>(
     initialData || { 
@@ -978,7 +982,11 @@ export const DigerHarcamaForm: React.FC<DigerHarcamaFormProps> = ({ initialData,
     onSubmit(formData);
   };
   
-  const activeKategoriler = kategoriler.filter(k => k.Aktif_Pasif && k.Tip === 'Gider');
+  const activeKategoriler = useMemo(() => {
+    return kategoriler
+      .filter(k => k.Aktif_Pasif && k.Tip === 'Gider')
+      .sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi));
+  }, [kategoriler]);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -1462,7 +1470,11 @@ export const EFaturaReferansForm: React.FC<EFaturaReferansFormProps> = ({ initia
     onSubmit(formData);
   };
 
-  const activeKategoriler = kategoriler.filter(k => k.Aktif_Pasif);
+  const activeKategoriler = useMemo(() => {
+    return kategoriler
+      .filter(k => k.Aktif_Pasif)
+      .sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi));
+  }, [kategoriler]);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
