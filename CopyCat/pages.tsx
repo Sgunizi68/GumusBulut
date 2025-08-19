@@ -4413,9 +4413,20 @@ export const PuantajPage: React.FC = () => {
 
     const activeCalisanlar = useMemo(() => {
         if (!selectedBranch) return [];
-        return calisanList.filter(c => c.Sube_ID === selectedBranch.Sube_ID && c.Aktif_Pasif)
-            .sort((a, b) => a.Adi.localeCompare(b.Adi));
-    }, [calisanList, selectedBranch]);
+        return calisanList.filter(c => {
+            if (c.Sube_ID !== selectedBranch.Sube_ID || !c.Aktif_Pasif) {
+                return false;
+            }
+            if (c.Sigorta_Cikis) {
+                const cikisPeriod = calculatePeriod(parseDateString(c.Sigorta_Cikis));
+                if (cikisPeriod < viewedPeriod) {
+                    return false;
+                }
+            }
+            return true;
+        })
+        .sort((a, b) => a.Adi.localeCompare(b.Adi));
+    }, [calisanList, selectedBranch, viewedPeriod]);
 
     const daysInViewedMonth = useMemo(() => {
         if (!viewedPeriod) return [];
