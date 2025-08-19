@@ -4463,6 +4463,26 @@ export const PuantajPage: React.FC = () => {
             return;
         }
 
+        const calisan = calisanList.find(c => c.TC_No === tcNo);
+        if (calisan) {
+            if (calisan.Sigorta_Giris) {
+                const girisDate = new Date(parseDateString(calisan.Sigorta_Giris));
+                girisDate.setHours(0, 0, 0, 0);
+                if (cellDate < girisDate) {
+                    alert("Çalışanın sigorta giriş tarihinden öncesine puantaj girişi yapılamaz.");
+                    return;
+                }
+            }
+            if (calisan.Sigorta_Cikis) {
+                const cikisDate = new Date(parseDateString(calisan.Sigorta_Cikis));
+                cikisDate.setHours(0, 0, 0, 0);
+                if (cellDate > cikisDate) {
+                    alert("Çalışanın sigorta çıkış tarihinden sonrasına puantaj girişi yapılamaz.");
+                    return;
+                }
+            }
+        }
+
         const cell = event.currentTarget as HTMLElement;
         const popoverWidth = 200;
     
