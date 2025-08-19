@@ -786,6 +786,14 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       return;
     }
 
+    const secim = puantajSecimiList.find(s => s.Secim_ID === entry.Secim_ID);
+    if (secim && secim.Secim === 'Çıkış') {
+        const calisan = calisanList.find(c => c.TC_No === entry.TC_No);
+        if (calisan) {
+            await updateCalisan(entry.TC_No, { ...calisan, Sigorta_Cikis: entry.Tarih });
+        }
+    }
+
     if (existingPuantaj) {
       const updatedPuantaj = await fetchData<Puantaj>(`${API_BASE_URL}/puantajlar/${existingPuantaj.Puantaj_ID}`, {
         method: 'PUT',
@@ -807,7 +815,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setPuantajList(prevList => [...prevList, newPuantaj]);
       }
     }
-  }, [puantajList]);
+  }, [puantajList, puantajSecimiList, calisanList, updateCalisan]);
   
   const getPuantajEntry = useCallback((tcNo: string, tarih: string, subeId: number): Puantaj | undefined => {
     // This function is currently used for local lookup. If direct API call is needed, it should be async.
