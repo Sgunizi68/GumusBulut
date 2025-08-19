@@ -4,7 +4,6 @@ class PuantajSecimiBase(BaseModel):
     Secim: str
     Degeri: float
     Renk_Kodu: str
-    Aciklama: str | None = None
     Aktif_Pasif: bool = True
 
 class PuantajSecimiCreate(PuantajSecimiBase):
@@ -14,7 +13,6 @@ class PuantajSecimiUpdate(BaseModel):
     Secim: str | None = None
     Degeri: float | None = None
     Renk_Kodu: str | None = None
-    Aciklama: str | None = None
     Aktif_Pasif: bool | None = None
 
 class PuantajSecimiInDB(PuantajSecimiBase):

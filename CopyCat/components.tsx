@@ -1360,7 +1360,7 @@ export const PuantajSecimiForm: React.FC<PuantajSecimiFormProps> = ({ initialDat
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : (type === 'number' ? parseFloat(value) : value),
+      [name]: type === 'checkbox' ? checked : (type === 'number' ? (value === '' ? 0 : parseFloat(value)) : value),
     }));
   };
 
