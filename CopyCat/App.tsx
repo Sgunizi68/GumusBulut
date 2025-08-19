@@ -769,18 +769,19 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const addOrUpdatePuantajEntry = useCallback(async (entry: PuantajEntry) => {
-    if (entry.Secim_ID === null) { 
-      // If Secim_ID is null, it means delete the entry
-      await fetchData<any>(`${API_BASE_URL}/puantajlar/${entry.TC_No}/${entry.Tarih}/${entry.Sube_ID}`, {
-        method: 'DELETE',
-      });
-      setPuantajList(prevList => prevList.filter(p => !(p.TC_No === entry.TC_No && p.Tarih === entry.Tarih && p.Sube_ID === entry.Sube_ID)));
-      return;
-    }
-
     const existingPuantaj = puantajList.find(
       p => p.TC_No === entry.TC_No && p.Tarih === entry.Tarih && p.Sube_ID === entry.Sube_ID
     );
+
+    if (entry.Secim_ID === null) {
+      if (existingPuantaj) {
+        await fetchData<any>(`${API_BASE_URL}/puantajlar/${existingPuantaj.Puantaj_ID}`, {
+          method: 'DELETE',
+        });
+        setPuantajList(prevList => prevList.filter(p => p.Puantaj_ID !== existingPuantaj.Puantaj_ID));
+      }
+      return;
+    }
 
     if (existingPuantaj) {
       const updatedPuantaj = await fetchData<Puantaj>(`${API_BASE_URL}/puantajlar/${existingPuantaj.Puantaj_ID}`, {

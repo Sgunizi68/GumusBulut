@@ -274,10 +274,14 @@ export interface AvansIstek {
 
 export interface EFaturaReferans {
   Alici_Unvani: string;
-  Kategori_ID: number;
+  Referans_Kodu: string;
+  Kategori_ID: number | null;
+  Aciklama: string;
+  Aktif_Pasif: boolean;
+  Kayit_Tarihi: string;
 }
 
-export type EFaturaReferansFormData = EFaturaReferans;
+export type EFaturaReferansFormData = Partial<Omit<EFaturaReferans, 'Kayit_Tarihi'>>;
 
 export interface Nakit {
   Nakit_ID: number;

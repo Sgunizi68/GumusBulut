@@ -1449,7 +1449,7 @@ export const EFaturaReferansForm: React.FC<EFaturaReferansFormProps> = ({ initia
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : (name === 'Kategori_ID' ? parseInt(value) : value),
+      [name]: type === 'checkbox' ? checked : (name === 'Kategori_ID' ? (value ? parseInt(value) : null) : value),
     }));
   };
 
@@ -1480,7 +1480,7 @@ export const EFaturaReferansForm: React.FC<EFaturaReferansFormProps> = ({ initia
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input label="Alıcı Ünvanı" name="Alici_Unvani" value={formData.Alici_Unvani} onChange={handleChange} required />
       <Input label="Referans Kodu" name="Referans_Kodu" value={formData.Referans_Kodu} onChange={handleChange} required />
-      <Select label="Kategori" name="Kategori_ID" value={formData.Kategori_ID} onChange={handleChange} required>
+      <Select label="Kategori" name="Kategori_ID" value={formData.Kategori_ID || ''} onChange={handleChange} required>
         <option value="">Kategori Seçin...</option>
         {activeKategoriler.map(k => (
           <option key={k.Kategori_ID} value={k.Kategori_ID}>{k.Kategori_Adi}</option>

@@ -12,7 +12,7 @@ def create_puantaj(puantaj: puantaj.PuantajCreate, db: Session = Depends(databas
     return crud.create_puantaj(db=db, puantaj=puantaj)
 
 @router.get("/puantajlar/", response_model=List[puantaj.PuantajInDB])
-def read_puantajlar(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
+def read_puantajlar(skip: int = 0, limit: int = 10000, db: Session = Depends(database.get_db)):
     puantajlar = crud.get_puantajlar(db, skip=skip, limit=limit)
     return puantajlar
 

@@ -14,6 +14,7 @@ class EFaturaReferansCreate(EFaturaReferansBase):
 
 class EFaturaReferansUpdate(BaseModel):
     Referans_Kodu: Optional[str] = Field(None, max_length=50)
+    Kategori_ID: Optional[int] = None
     Aciklama: Optional[str] = Field(None, max_length=500)
     Aktif_Pasif: Optional[bool] = None
 
