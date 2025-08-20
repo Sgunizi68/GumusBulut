@@ -89,7 +89,9 @@ export const PUANTAJ_SECIM_YONETIMI_EKRANI_YETKI_ADI = 'Puantaj Seçim Yönetimi
 export const PUANTAJ_GIRISI_EKRANI_YETKI_ADI = 'Puantaj Girişi Ekranı Görüntüleme';
 export const AVANS_TALEBI_EKRANI_YETKI_ADI = 'Avans Talebi Ekranı Görüntüleme';
 export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Yönetimi Ekranı Görüntüleme';
+export const ODEME_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'Ödeme Referans Yönetimi Ekran Görüntüleme';
 export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+export const ODEME_YUKLEME_EKRANI_YETKI_ADI = 'Ödeme Yükleme Ekranı Görüntüleme';
 export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
 
 
@@ -108,6 +110,7 @@ export const MENU_GROUPS = [
             { label: 'Kullanıcı Rol Atama', path: '/user-role-assignment', icon: Icons.Assignments, permission: KULLANICI_ROL_ATAMA_EKRANI_YETKI_ADI },
             { label: 'Rol Yetki Atama', path: '/role-permission-assignment', icon: Icons.Assignments, permission: ROL_YETKI_ATAMA_EKRANI_YETKI_ADI },
             { label: 'e-Fatura Referans Yönetimi', path: '/e-fatura-referans', icon: Icons.Invoice, permission: E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI },
+            { label: 'Ödeme Referans Yönetimi', path: '/odeme-referans', icon: Icons.Invoice, permission: ODEME_REFERANS_YONETIMI_EKRANI_YETKI_ADI },
         ]
     },
     {
@@ -123,7 +126,7 @@ export const MENU_GROUPS = [
             { label: 'Fatura Yükleme', path: '/invoice-upload', icon: Icons.Upload, permission: FATURA_YUKLEME_EKRANI_YETKI_ADI },
             { label: 'Fatura Kategori Atama', path: '/invoice-category-assignment', icon: Icons.Category, permission: FATURA_KATEGORI_ATAMA_EKRANI_YETKI_ADI },
             { label: 'B2B Ekstre Yükleme', path: '/b2b-upload', icon: Icons.ClipboardDocumentList, permission: B2B_YUKLEME_EKRANI_YETKI_ADI },
-            
+            { label: 'Ödeme Yükleme', path: '/odeme-yukleme', icon: Icons.Upload, permission: ODEME_YUKLEME_EKRANI_YETKI_ADI },
             { label: 'Diğer Harcamalar', path: '/other-expenses', icon: Icons.CreditCard, permission: DIGER_HARCAMALAR_EKRANI_YETKI_ADI },
         ]
     },

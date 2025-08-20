@@ -5161,3 +5161,29 @@ export const NakitPage: React.FC = () => {
     </div>
   );
 };
+
+// --- ÖDEME YÜKLEME PAGE ---
+export const OdemeYuklemePage: React.FC = () => {
+  return (
+    <Card title="Ödeme Yükleme">
+      <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+        <Icons.Upload className="w-16 h-16 mb-4" />
+        <p className="text-xl">Bu sayfa yapım aşamasındadır.</p>
+        <p>"Ödeme Yükleme" için içerik yakında eklenecektir.</p>
+      </div>
+    </Card>
+  );
+};
+
+// --- ÖDEME REFERANS YÖNETİMİ PAGE ---
+export const OdemeReferansPage: React.FC = () => {
+  return (
+    <Card title="Ödeme Referans Yönetimi">
+      <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+        <Icons.Invoice className="w-16 h-16 mb-4" />
+        <p className="text-xl">Bu sayfa yapım aşamasındadır.</p>
+        <p>"Ödeme Referans Yönetimi" için içerik yakında eklenecektir.</p>
+      </div>
+    </Card>
+  );
+};
