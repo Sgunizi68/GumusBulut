@@ -5,13 +5,14 @@ import csv
 import io
 import logging
 from datetime import datetime
+from decimal import Decimal # Import Decimal
 
 from db import crud, database
 from schemas import odeme
 
 # Configure logging (using print for debugging as requested)
 # logging.basicConfig(level=logging.INFO)
-# logger = logging.getLogger(__name__)
+# logger = logger.getLogger(__name__)
 
 router = APIRouter()
 
@@ -55,7 +56,7 @@ async def upload_odeme_csv(
 
             # Clean and parse Tutar
             tutar_str = row_normalized.get("tutar", "0.0").replace('.', '').replace(',', '.')
-            tutar = float(tutar_str) if tutar_str else 0.0
+            tutar = Decimal(tutar_str) if tutar_str else Decimal('0.0') # Changed to Decimal
 
             tarih_dt = datetime.strptime(tarih_str, '%d/%m/%Y')
             donem = int(f"{tarih_dt.year}{tarih_dt.month:02d}")
