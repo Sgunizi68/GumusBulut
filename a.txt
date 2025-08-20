@@ -1,0 +1,950 @@
+Microsoft Windows [Version 10.0.19045.6216]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Gokova>Frontend
+'Frontend' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\Users\Gokova>
+C:\Users\Gokova>cd C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat
+
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat> npm install
+
+> silvercloud-system@1.0.0 prepare
+> husky install
+
+husky - install command is DEPRECATED
+
+up to date, audited 102 packages in 2s
+
+14 packages are looking for funding
+  run `npm fund` for details
+
+1 high severity vulnerability
+
+Some issues need review, and may require choosing
+a different dependency.
+
+Run `npm audit` for details.
+
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>npm run dev
+
+> silvercloud-system@1.0.0 dev
+> vite
+
+
+  VITE v6.3.5  ready in 1177 ms
+
+  ➜  Local:   http://localhost:5173/GumusBulut/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+^CTerminate batch job (Y/N)?
+^C
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>npm run dev
+
+> silvercloud-system@1.0.0 dev
+> vite
+
+
+  VITE v6.3.5  ready in 451 ms
+
+  ➜  Local:   http://localhost:5173/GumusBulut/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+10:23:24 PM [vite] (client) page reload App.tsx
+Terminate batch job (Y/N)?
+^C
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>npm run dev
+
+> silvercloud-system@1.0.0 dev
+> vite
+
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\rollup\dist\native.js:64
+                throw new Error(
+                      ^
+
+Error: Cannot find module @rollup/rollup-win32-x64-msvc. npm has a bug related to optional dependencies (https://github.com/npm/cli/issues/4828). Please try `npm i` again after removing both package-lock.json and node_modules directory.
+    at requireWithFriendlyError (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\rollup\dist\native.js:64:9)
+    at Object.<anonymous> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\rollup\dist\native.js:73:76)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at cjsLoader (node:internal/modules/esm/translators:266:5)
+    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7) {
+  [cause]: Error: Cannot find module 'C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@rollup\rollup-win32-x64-msvc\rollup.win32-x64-msvc.node'. Please verify that the package.json has a valid "main" entry
+      at tryPackage (node:internal/modules/cjs/loader:511:19)
+      at Function._findPath (node:internal/modules/cjs/loader:796:18)
+      at Function._resolveFilename (node:internal/modules/cjs/loader:1387:27)
+      at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+      at Function._load (node:internal/modules/cjs/loader:1211:37)
+      at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+      at Module.require (node:internal/modules/cjs/loader:1487:12)
+      at require (node:internal/modules/helpers:135:16) {
+    code: 'MODULE_NOT_FOUND',
+    path: '\\\\?\\C:\\Users\\Gokova\\OneDrive - CELEBI HAVACILIK HOLDING A.S\\Personel\\Programming\\Python\\CopyCat\\node_modules\\@rollup\\rollup-win32-x64-msvc\\package.json',
+    requestPath: '@rollup/rollup-win32-x64-msvc'
+  }
+}
+
+Node.js v22.17.0
+
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>npm run dev
+
+> silvercloud-system@1.0.0 dev
+> vite
+
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\rollup\dist\native.js:64
+                throw new Error(
+                      ^
+
+Error: Cannot find module @rollup/rollup-win32-x64-msvc. npm has a bug related to optional dependencies (https://github.com/npm/cli/issues/4828). Please try `npm i` again after removing both package-lock.json and node_modules directory.
+    at requireWithFriendlyError (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\rollup\dist\native.js:64:9)
+    at Object.<anonymous> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\rollup\dist\native.js:73:76)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at cjsLoader (node:internal/modules/esm/translators:266:5)
+    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7) {
+  [cause]: Error: Cannot find module 'C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@rollup\rollup-win32-x64-msvc\rollup.win32-x64-msvc.node'. Please verify that the package.json has a valid "main" entry
+      at tryPackage (node:internal/modules/cjs/loader:511:19)
+      at Function._findPath (node:internal/modules/cjs/loader:796:18)
+      at Function._resolveFilename (node:internal/modules/cjs/loader:1387:27)
+      at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+      at Function._load (node:internal/modules/cjs/loader:1211:37)
+      at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+      at Module.require (node:internal/modules/cjs/loader:1487:12)
+      at require (node:internal/modules/helpers:135:16) {
+    code: 'MODULE_NOT_FOUND',
+    path: '\\\\?\\C:\\Users\\Gokova\\OneDrive - CELEBI HAVACILIK HOLDING A.S\\Personel\\Programming\\Python\\CopyCat\\node_modules\\@rollup\\rollup-win32-x64-msvc\\package.json',
+    requestPath: '@rollup/rollup-win32-x64-msvc'
+  }
+}
+
+Node.js v22.17.0
+
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>npm run dev
+
+> silvercloud-system@2.0.0 dev
+> vite
+
+
+  VITE v6.3.5  ready in 346 ms
+
+  ➜  Local:   http://localhost:5173/GumusBulut/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+10:34:06 PM [vite] (client) ✨ new dependencies optimized: react/jsx-dev-runtime
+10:34:06 PM [vite] (client) ✨ optimized dependencies changed. reloading
+11:31:05 AM [vite] (client) page reload App.tsx
+11:34:13 AM [vite] (client) page reload pages.tsx
+11:40:06 AM [vite] (client) page reload index.tsx
+11:40:20 AM [vite] (client) page reload index.html
+11:48:23 AM [vite] (client) page reload index.html (x2)
+^CTerminate batch job (Y/N)? ^C
+
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>npm run dev
+
+> silvercloud-system@2.0.0 dev
+> vite
+
+11:49:29 AM [vite] (client) Re-optimizing dependencies because lockfile has changed
+
+  VITE v6.3.5  ready in 701 ms
+
+  ➜  Local:   http://localhost:5173/GumusBulut/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+11:49:51 AM [vite] Internal server error: [postcss] It looks like you're trying to use `tailwindcss` directly as a PostCSS plugin. The PostCSS plugin has moved to a separate package, so to continue using Tailwind CSS with PostCSS you'll need to install `@tailwindcss/postcss` and update your PostCSS configuration.
+  Plugin: vite:css
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/styles/main.css:undefined:NaN
+      at We (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\tailwindcss\dist\lib.js:35:2121)
+      at LazyResult.runOnRoot (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:361:16)
+      at LazyResult.runAsync (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:290:26)
+      at LazyResult.async (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:192:30)
+      at LazyResult.then (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:436:17)
+11:49:51 AM [vite] (client) Pre-transform error: [postcss] It looks like you're trying to use `tailwindcss` directly as a PostCSS plugin. The PostCSS plugin has moved to a separate package, so to continue using Tailwind CSS with PostCSS you'll need to install `@tailwindcss/postcss` and update your PostCSS configuration.
+  Plugin: vite:css
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/styles/main.css:undefined:NaN
+11:49:52 AM [vite] (client) ✨ new dependencies optimized: react/jsx-dev-runtime
+11:49:52 AM [vite] (client) ✨ optimized dependencies changed. reloading
+11:49:52 AM [vite] (client) Pre-transform error: [postcss] It looks like you're trying to use `tailwindcss` directly as a PostCSS plugin. The PostCSS plugin has moved to a separate package, so to continue using Tailwind CSS with PostCSS you'll need to install `@tailwindcss/postcss` and update your PostCSS configuration.
+  Plugin: vite:css
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/styles/main.css:undefined:NaN
+11:49:53 AM [vite] Internal server error: [postcss] It looks like you're trying to use `tailwindcss` directly as a PostCSS plugin. The PostCSS plugin has moved to a separate package, so to continue using Tailwind CSS with PostCSS you'll need to install `@tailwindcss/postcss` and update your PostCSS configuration.
+  Plugin: vite:css
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/styles/main.css:undefined:NaN
+      at We (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\tailwindcss\dist\lib.js:35:2121)
+      at LazyResult.runOnRoot (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:361:16)
+      at LazyResult.runAsync (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:290:26)
+      at LazyResult.async (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:192:30)
+      at LazyResult.then (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:436:17)
+11:49:55 AM [vite] Internal server error: [postcss] It looks like you're trying to use `tailwindcss` directly as a PostCSS plugin. The PostCSS plugin has moved to a separate package, so to continue using Tailwind CSS with PostCSS you'll need to install `@tailwindcss/postcss` and update your PostCSS configuration.
+  Plugin: vite:css
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/styles/main.css:undefined:NaN
+      at We (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\tailwindcss\dist\lib.js:35:2121)
+      at LazyResult.runOnRoot (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:361:16)
+      at LazyResult.runAsync (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:290:26)
+      at LazyResult.async (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:192:30)
+      at LazyResult.then (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:436:17) (x2)
+12:06:36 PM [vite] Internal server error: [postcss] It looks like you're trying to use `tailwindcss` directly as a PostCSS plugin. The PostCSS plugin has moved to a separate package, so to continue using Tailwind CSS with PostCSS you'll need to install `@tailwindcss/postcss` and update your PostCSS configuration.
+  Plugin: vite:css
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/styles/main.css:undefined:NaN
+      at We (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\tailwindcss\dist\lib.js:35:2121)
+      at LazyResult.runOnRoot (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:361:16)
+      at LazyResult.runAsync (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:290:26)
+      at LazyResult.async (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:192:30)
+      at LazyResult.then (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:436:17) (x3)
+^CTerminate batch job (Y/N)?
+^C
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>npm run dev
+
+> silvercloud-system@2.0.0 dev
+> vite
+
+12:06:46 PM [vite] (client) Re-optimizing dependencies because lockfile has changed
+
+  VITE v6.3.5  ready in 496 ms
+
+  ➜  Local:   http://localhost:5173/GumusBulut/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+12:06:47 PM [vite] (client) Pre-transform error: [postcss] It looks like you're trying to use `tailwindcss` directly as a PostCSS plugin. The PostCSS plugin has moved to a separate package, so to continue using Tailwind CSS with PostCSS you'll need to install `@tailwindcss/postcss` and update your PostCSS configuration.
+  Plugin: vite:css
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/styles/main.css:undefined:NaN
+12:06:47 PM [vite] Internal server error: [postcss] It looks like you're trying to use `tailwindcss` directly as a PostCSS plugin. The PostCSS plugin has moved to a separate package, so to continue using Tailwind CSS with PostCSS you'll need to install `@tailwindcss/postcss` and update your PostCSS configuration.
+  Plugin: vite:css
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/styles/main.css:undefined:NaN
+      at We (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\tailwindcss\dist\lib.js:35:2121)
+      at LazyResult.runOnRoot (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:361:16)
+      at LazyResult.runAsync (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:290:26)
+      at LazyResult.async (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:192:30)
+      at LazyResult.then (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:436:17)
+12:26:10 PM [vite] Internal server error: [postcss] It looks like you're trying to use `tailwindcss` directly as a PostCSS plugin. The PostCSS plugin has moved to a separate package, so to continue using Tailwind CSS with PostCSS you'll need to install `@tailwindcss/postcss` and update your PostCSS configuration.
+  Plugin: vite:css
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/styles/main.css:undefined:NaN
+      at We (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\tailwindcss\dist\lib.js:35:2121)
+      at LazyResult.runOnRoot (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:361:16)
+      at LazyResult.runAsync (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:290:26)
+      at LazyResult.async (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:192:30)
+      at LazyResult.then (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:436:17) (x2)
+12:27:37 PM [vite] (client) page reload index.tsx
+12:27:37 PM [vite] (client) page reload index.html
+1:30:31 PM [vite] (client) page reload pages.tsx
+1:31:16 PM [vite] (client) page reload components.tsx
+1:31:31 PM [vite] (client) page reload constants.tsx
+1:31:41 PM [vite] (client) page reload constants.tsx (x2)
+1:31:53 PM [vite] (client) page reload App.tsx
+1:32:01 PM [vite] (client) page reload App.tsx (x2)
+1:32:01 PM [vite] (client) page reload App.tsx (x3)
+1:32:15 PM [vite] (client) page reload App.tsx (x4)
+1:32:23 PM [vite] (client) page reload App.tsx (x5)
+1:32:31 PM [vite] (client) page reload App.tsx (x6)
+1:32:45 PM [vite] (client) page reload App.tsx (x7)
+1:32:51 PM [vite] (client) page reload App.tsx (x8)
+4:23:51 PM [vite] (client) page reload components.tsx
+4:23:51 PM [vite] (client) page reload constants.tsx
+4:23:51 PM [vite] (client) page reload App.tsx
+4:23:51 PM [vite] (client) page reload pages.tsx
+4:23:51 PM [vite] (client) page reload App.tsx
+4:59:00 PM [vite] (client) page reload pages.tsx
+4:59:00 PM [vite] (client) page reload pages.tsx (x2)
+5:01:38 PM [vite] (client) page reload pages.tsx (x3)
+5:11:09 PM [vite] (client) page reload constants.tsx
+5:11:10 PM [vite] (client) Pre-transform error: Transform failed with 2 errors:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:94:13: ERROR: Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:94:13: ERROR: The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:94:13
+
+  Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+  92 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  93 |  export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
+  94 |  export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
+     |               ^
+  95 |
+  96 |  // --- MENU STRUCTURE ---
+
+  The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  92 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  93 |  export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
+  94 |  export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
+     |               ^
+  95 |
+  96 |  // --- MENU STRUCTURE ---
+
+5:11:10 PM [vite] (client) Pre-transform error: Transform failed with 2 errors:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:94:13: ERROR: Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:94:13: ERROR: The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:94:13
+
+  Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+  92 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  93 |  export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
+  94 |  export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
+     |               ^
+  95 |
+  96 |  // --- MENU STRUCTURE ---
+
+  The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  92 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  93 |  export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
+  94 |  export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
+     |               ^
+  95 |
+  96 |  // --- MENU STRUCTURE ---
+   (x2)
+5:11:10 PM [vite] Internal server error: Transform failed with 2 errors:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:94:13: ERROR: Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:94:13: ERROR: The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:94:13
+
+  Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+  92 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  93 |  export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
+  94 |  export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
+     |               ^
+  95 |
+  96 |  // --- MENU STRUCTURE ---
+
+  The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  92 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  93 |  export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
+  94 |  export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
+     |               ^
+  95 |
+  96 |  // --- MENU STRUCTURE ---
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+5:11:10 PM [vite] (client) Pre-transform error: Transform failed with 2 errors:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:94:13: ERROR: Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:94:13: ERROR: The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/constants.tsx:94:13
+
+  Multiple exports with the same name "FINANSAL_OZET_YETKI_ADI"
+  92 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  93 |  export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
+  94 |  export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
+     |               ^
+  95 |
+  96 |  // --- MENU STRUCTURE ---
+
+  The symbol "FINANSAL_OZET_YETKI_ADI" has already been declared
+  92 |  export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
+  93 |  export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
+  94 |  export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
+     |               ^
+  95 |
+  96 |  // --- MENU STRUCTURE ---
+
+5:15:01 PM [vite] (client) page reload constants.tsx
+5:24:54 PM [vite] (client) page reload components.tsx
+5:25:06 PM [vite] (client) page reload components.tsx (x2)
+5:25:39 PM [vite] (client) page reload components.tsx (x3)
+5:33:19 PM [vite] (client) page reload pages.tsx
+5:50:39 PM [vite] (client) page reload pages.tsx (x2)
+5:50:40 PM [vite] (client) Pre-transform error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:1432:102: ERROR: Expected ">" but found "<"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:1432:102
+
+  Expected ">" but found "<"
+  1430|                          >
+  1431|                              <option value="">-- Şube --</option>
+  1432|                              {activeBranchesForForm.map(s => <option key={s.Sube_ID} value={s.Sube_Adi}</option>)}
+     |                                                                                                        ^
+  1433|                          </Select>
+  1434|                           <label className="flex items-center space-x-2 text-sm md:mt-6">
+
+5:50:40 PM [vite] (client) Pre-transform error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:1432:102: ERROR: Expected ">" but found "<"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:1432:102
+
+  Expected ">" but found "<"
+  1430|                          >
+  1431|                              <option value="">-- Şube --</option>
+  1432|                              {activeBranchesForForm.map(s => <option key={s.Sube_ID} value={s.Sube_Adi}</option>)}
+     |                                                                                                        ^
+  1433|                          </Select>
+  1434|                           <label className="flex items-center space-x-2 text-sm md:mt-6">
+   (x2)
+5:50:41 PM [vite] Internal server error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:1432:102: ERROR: Expected ">" but found "<"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:1432:102
+
+  Expected ">" but found "<"
+  1430|                          >
+  1431|                              <option value="">-- Şube --</option>
+  1432|                              {activeBranchesForForm.map(s => <option key={s.Sube_ID} value={s.Sube_Adi}</option>)}
+     |                                                                                                        ^
+  1433|                          </Select>
+  1434|                           <label className="flex items-center space-x-2 text-sm md:mt-6">
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+5:53:15 PM [vite] Internal server error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:1432:102: ERROR: Expected ">" but found "<"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:1432:102
+
+  Expected ">" but found "<"
+  1430|                          >
+  1431|                              <option value="">-- Şube --</option>
+  1432|                              {activeBranchesForForm.map(s => <option key={s.Sube_ID} value={s.Sube_Adi}</option>)}
+     |                                                                                                        ^
+  1433|                          </Select>
+  1434|                           <label className="flex items-center space-x-2 text-sm md:mt-6">
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23) (x2)
+6:59:58 PM [vite] Internal server error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:1432:102: ERROR: Expected ">" but found "<"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:1432:102
+
+  Expected ">" but found "<"
+  1430|                          >
+  1431|                              <option value="">-- Şube --</option>
+  1432|                              {activeBranchesForForm.map(s => <option key={s.Sube_ID} value={s.Sube_Adi}</option>)}
+     |                                                                                                        ^
+  1433|                          </Select>
+  1434|                           <label className="flex items-center space-x-2 text-sm md:mt-6">
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23) (x3)
+7:05:51 PM [vite] (client) page reload pages.tsx
+7:05:52 PM [vite] (client) Pre-transform error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:2002:0: ERROR: Unexpected end of file
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:2002:0
+
+  Unexpected end of file
+  2000|
+  2001|    const handleToggleAktif = (kategori: Kategori) => {
+  2002|
+     |  ^
+
+7:05:52 PM [vite] (client) Pre-transform error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:2002:0: ERROR: Unexpected end of file
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:2002:0
+
+  Unexpected end of file
+  2000|
+  2001|    const handleToggleAktif = (kategori: Kategori) => {
+  2002|
+     |  ^
+   (x2)
+7:05:53 PM [vite] Internal server error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:2002:0: ERROR: Unexpected end of file
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:2002:0
+
+  Unexpected end of file
+  2000|
+  2001|    const handleToggleAktif = (kategori: Kategori) => {
+  2002|
+     |  ^
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+7:08:46 PM [vite] Internal server error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:2002:0: ERROR: Unexpected end of file
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:2002:0
+
+  Unexpected end of file
+  2000|
+  2001|    const handleToggleAktif = (kategori: Kategori) => {
+  2002|
+     |  ^
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23) (x2)
+Terminate batch job (Y/N)? ^C
+
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>npm run dev
+
+> silvercloud-system@2.0.0 dev
+> vite
+
+7:08:56 PM [vite] (client) Re-optimizing dependencies because lockfile has changed
+
+  VITE v6.3.5  ready in 791 ms
+
+  ➜  Local:   http://localhost:5173/GumusBulut/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+7:08:58 PM [vite] (client) Pre-transform error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:2002:0: ERROR: Unexpected end of file
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:2002:0
+
+  Unexpected end of file
+  2000|
+  2001|    const handleToggleAktif = (kategori: Kategori) => {
+  2002|
+     |  ^
+
+7:08:58 PM [vite] (client) Pre-transform error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:2002:0: ERROR: Unexpected end of file
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:2002:0
+
+  Unexpected end of file
+  2000|
+  2001|    const handleToggleAktif = (kategori: Kategori) => {
+  2002|
+     |  ^
+   (x2)
+Error:   Failed to scan for dependencies from entries:
+  C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/index.html
+
+  X [ERROR] Unexpected end of file
+
+    pages.tsx:2002:0:
+      2002 │
+           ╵ ^
+
+
+    at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+    at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:924:25
+    at runOnEndCallbacks (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1305:45)
+    at buildResponseToResult (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:922:7)
+    at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:934:9
+    at new Promise (<anonymous>)
+    at requestCallbacks.on-end (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:933:54)
+    at handleRequest (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:626:17)
+    at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:651:7)
+    at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+7:08:58 PM [vite] Internal server error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:2002:0: ERROR: Unexpected end of file
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages.tsx:2002:0
+
+  Unexpected end of file
+  2000|
+  2001|    const handleToggleAktif = (kategori: Kategori) => {
+  2002|
+     |  ^
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+7:08:59 PM [vite] (client) ✨ new dependencies optimized: react/jsx-dev-runtime, react, react-dom/client, react-router-dom
+8:04:57 PM [vite] (client) page reload components.tsx
+8:04:57 PM [vite] (client) page reload constants.tsx
+8:05:06 PM [vite] (client) ✨ new dependencies optimized: xlsx, html2canvas, jspdf
+8:05:06 PM [vite] (client) ✨ optimized dependencies changed. reloading
+8:57:36 PM [vite] (client) page reload pages.tsx
+8:57:42 PM [vite] (client) page reload pages.tsx (x2)
+8:57:45 PM [vite] (client) page reload pages.tsx (x3)
+8:57:48 PM [vite] (client) page reload pages.tsx (x4)
+8:57:49 PM [vite] (client) page reload pages.tsx (x5)
+8:58:04 PM [vite] (client) page reload components.tsx
+8:58:06 PM [vite] (client) page reload components.tsx (x2)
+8:58:12 PM [vite] (client) page reload components.tsx (x3)
+8:58:17 PM [vite] (client) page reload components.tsx (x4)
+8:58:18 PM [vite] (client) page reload components.tsx (x5)
+9:09:04 PM [vite] (client) page reload pages.tsx
+9:18:59 PM [vite] (client) page reload components.tsx
+9:19:06 PM [vite] (client) page reload components.tsx (x2)
+9:19:18 PM [vite] (client) page reload components.tsx (x3)
+Terminate batch job (Y/N)?
+^C
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>npm run dev
+
+> silvercloud-system@2.0.0 dev
+> vite
+
+6:31:35 PM [vite] (client) Re-optimizing dependencies because lockfile has changed
+
+  VITE v6.3.5  ready in 935 ms
+
+  ➜  Local:   http://localhost:5173/GumusBulut/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+6:39:26 PM [vite] (client) ✨ new dependencies optimized: react/jsx-dev-runtime
+6:39:26 PM [vite] (client) ✨ optimized dependencies changed. reloading
+7:04:08 PM [vite] (client) page reload App.tsx
+Terminate batch job (Y/N)?
+^C
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>npm run dev
+
+> silvercloud-system@3.0.0 dev
+> vite
+
+
+  VITE v6.3.5  ready in 1008 ms
+
+  ➜  Local:   http://localhost:5173/GumusBulut/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+8:25:52 PM [vite] (client) ✨ new dependencies optimized: react/jsx-dev-runtime
+8:25:52 PM [vite] (client) ✨ optimized dependencies changed. reloading
+9:06:08 PM [vite] (client) page reload components.tsx
+9:06:08 PM [vite] (client) page reload components.tsx (x2)
+9:21:03 PM [vite] (client) page reload App.tsx
+9:45:57 PM [vite] (client) page reload public/silvercloud_favicon.html
+9:49:00 PM [vite] (client) page reload index.html
+^CTerminate batch job (Y/N)?
+^C
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat>npm run dev
+
+> silvercloud-system@4.0.0 dev
+> vite
+
+
+  VITE v6.3.5  ready in 1269 ms
+
+  ➜  Local:   http://localhost:5173/GumusBulut/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+
+10:28:17 PM [vite] (client) ✨ new dependencies optimized: react/jsx-dev-runtime
+10:28:17 PM [vite] (client) ✨ optimized dependencies changed. reloading
+10:34:53 PM [vite] (client) page reload App.tsx
+10:48:37 PM [vite] (client) page reload pages.tsx
+10:04:33 AM [vite] (client) page reload pages.tsx (x2)
+10:04:33 AM [vite] (client) page reload pages.tsx (x3)
+10:05:11 AM [vite] (client) page reload App.tsx
+10:05:21 AM [vite] (client) page reload App.tsx (x2)
+10:06:12 AM [vite] (client) page reload constants.tsx
+10:06:29 AM [vite] (client) page reload constants.tsx (x2)
+10:14:08 AM [vite] (client) page reload pages.tsx
+10:14:21 AM [vite] (client) page reload App.tsx
+10:16:03 AM [vite] (client) page reload App.tsx (x2)
+10:16:34 AM [vite] (client) page reload constants.tsx
+10:16:45 AM [vite] (client) page reload constants.tsx (x2)
+10:38:00 AM [vite] (client) page reload constants.tsx (x3)
+11:19:44 AM [vite] (client) page reload App.tsx
+11:20:00 AM [vite] (client) page reload App.tsx (x2)
+11:20:01 AM [vite] (client) Pre-transform error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6: ERROR: Unexpected "if"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6
+
+  Unexpected "if"
+  347|          fetchData<Odeme[]>(`${API_BASE_URL}/odemeler/`),
+  348|
+  349|        if (subeler) setSubeList(subeler);
+     |        ^
+  350|        if (eFaturalar) setEFaturaList(eFaturalar);
+  351|        if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
+
+11:20:01 AM [vite] Internal server error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6: ERROR: Unexpected "if"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6
+
+  Unexpected "if"
+  347|          fetchData<Odeme[]>(`${API_BASE_URL}/odemeler/`),
+  348|
+  349|        if (subeler) setSubeList(subeler);
+     |        ^
+  350|        if (eFaturalar) setEFaturaList(eFaturalar);
+  351|        if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+11:20:13 AM [vite] (client) page reload App.tsx
+11:20:14 AM [vite] (client) Pre-transform error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6: ERROR: Unexpected "if"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6
+
+  Unexpected "if"
+  347|          fetchData<Odeme[]>(`${API_BASE_URL}/odemeler/`),
+  348|
+  349|        if (subeler) setSubeList(subeler);
+     |        ^
+  350|        if (eFaturalar) setEFaturaList(eFaturalar);
+  351|        if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
+
+11:20:14 AM [vite] Internal server error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6: ERROR: Unexpected "if"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6
+
+  Unexpected "if"
+  347|          fetchData<Odeme[]>(`${API_BASE_URL}/odemeler/`),
+  348|
+  349|        if (subeler) setSubeList(subeler);
+     |        ^
+  350|        if (eFaturalar) setEFaturaList(eFaturalar);
+  351|        if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+11:22:24 AM [vite] (client) page reload App.tsx
+11:22:24 AM [vite] (client) Pre-transform error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6: ERROR: Unexpected "if"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6
+
+  Unexpected "if"
+  347|          fetchData<Odeme[]>(`${API_BASE_URL}/odemeler/`),
+  348|
+  349|        if (subeler) setSubeList(subeler);
+     |        ^
+  350|        if (eFaturalar) setEFaturaList(eFaturalar);
+  351|        if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
+
+11:22:24 AM [vite] Internal server error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6: ERROR: Unexpected "if"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6
+
+  Unexpected "if"
+  347|          fetchData<Odeme[]>(`${API_BASE_URL}/odemeler/`),
+  348|
+  349|        if (subeler) setSubeList(subeler);
+     |        ^
+  350|        if (eFaturalar) setEFaturaList(eFaturalar);
+  351|        if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+11:23:24 AM [vite] (client) page reload App.tsx
+11:23:25 AM [vite] (client) Pre-transform error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6: ERROR: Unexpected "if"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6
+
+  Unexpected "if"
+  347|          fetchData<Odeme[]>(`${API_BASE_URL}/odemeler/`),
+  348|
+  349|        if (subeler) setSubeList(subeler);
+     |        ^
+  350|        if (eFaturalar) setEFaturaList(eFaturalar);
+  351|        if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
+
+11:23:25 AM [vite] Internal server error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6: ERROR: Unexpected "if"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6
+
+  Unexpected "if"
+  347|          fetchData<Odeme[]>(`${API_BASE_URL}/odemeler/`),
+  348|
+  349|        if (subeler) setSubeList(subeler);
+     |        ^
+  350|        if (eFaturalar) setEFaturaList(eFaturalar);
+  351|        if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+11:23:36 AM [vite] (client) page reload App.tsx
+11:23:37 AM [vite] (client) Pre-transform error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6: ERROR: Unexpected "if"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6
+
+  Unexpected "if"
+  347|          fetchData<Odeme[]>(`${API_BASE_URL}/odemeler/`),
+  348|
+  349|        if (subeler) setSubeList(subeler);
+     |        ^
+  350|        if (eFaturalar) setEFaturaList(eFaturalar);
+  351|        if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
+
+11:23:37 AM [vite] Internal server error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6: ERROR: Unexpected "if"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6
+
+  Unexpected "if"
+  347|          fetchData<Odeme[]>(`${API_BASE_URL}/odemeler/`),
+  348|
+  349|        if (subeler) setSubeList(subeler);
+     |        ^
+  350|        if (eFaturalar) setEFaturaList(eFaturalar);
+  351|        if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+11:23:53 AM [vite] (client) page reload App.tsx
+11:23:54 AM [vite] (client) Pre-transform error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6: ERROR: Unexpected "if"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6
+
+  Unexpected "if"
+  347|          fetchData<Odeme[]>(`${API_BASE_URL}/odemeler/`),
+  348|
+  349|        if (subeler) setSubeList(subeler);
+     |        ^
+  350|        if (eFaturalar) setEFaturaList(eFaturalar);
+  351|        if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
+
+11:23:54 AM [vite] Internal server error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6: ERROR: Unexpected "if"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6
+
+  Unexpected "if"
+  347|          fetchData<Odeme[]>(`${API_BASE_URL}/odemeler/`),
+  348|
+  349|        if (subeler) setSubeList(subeler);
+     |        ^
+  350|        if (eFaturalar) setEFaturaList(eFaturalar);
+  351|        if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+11:24:13 AM [vite] (client) page reload pages.tsx
+11:24:14 AM [vite] (client) Pre-transform error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6: ERROR: Unexpected "if"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6
+
+  Unexpected "if"
+  347|          fetchData<Odeme[]>(`${API_BASE_URL}/odemeler/`),
+  348|
+  349|        if (subeler) setSubeList(subeler);
+     |        ^
+  350|        if (eFaturalar) setEFaturaList(eFaturalar);
+  351|        if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
+
+11:24:14 AM [vite] Internal server error: Transform failed with 1 error:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6: ERROR: Unexpected "if"
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:349:6
+
+  Unexpected "if"
+  347|          fetchData<Odeme[]>(`${API_BASE_URL}/odemeler/`),
+  348|
+  349|        if (subeler) setSubeList(subeler);
+     |        ^
+  350|        if (eFaturalar) setEFaturaList(eFaturalar);
+  351|        if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)

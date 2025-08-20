@@ -1,101 +1,672 @@
-
-(venv) C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend>uvicorn main:app --reload  --env-file "..\.env.local"
-←[32mINFO←[0m:     Will watch for changes in these directories: ['C:\\Users\\Gokova\\OneDrive - CELEBI HAVACILIK HOLDING A.S\\Personel\\Programming\\Python\\backend']
-←[32mINFO←[0m:     Loading environment from '..\.env.local'
-←[32mINFO←[0m:     Uvicorn running on ←[1mhttp://127.0.0.1:8000←[0m (Press CTRL+C to quit)
-←[32mINFO←[0m:     Started reloader process [←[36m←[1m21476←[0m] using ←[36m←[1mWatchFiles←[0m
-C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_config.py:373: UserWarning: Valid config keys have changed in V2:
-* 'orm_mode' has been renamed to 'from_attributes'
-  warnings.warn(message, UserWarning)
-←[32mINFO←[0m:     Started server process [←[36m26320←[0m]
-←[32mINFO←[0m:     Waiting for application startup.
-←[32mINFO←[0m:     Application startup complete.
-←[32mINFO←[0m:     127.0.0.1:64089 - "←[1mPOST /api/v1/puantaj-secimi/ HTTP/1.1←[0m" ←[91m500 Internal Server Error←[0m
-←[31mERROR←[0m:    Exception in ASGI application
-Traceback (most recent call last):
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\protocols\http\httptools_impl.py", line 409, in run_asgi
-    result = await app(  # type: ignore[func-returns-value]
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        self.scope, self.receive, self.send
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\middleware\proxy_headers.py", line 60, in __call__
-    return await self.app(scope, receive, send)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\fastapi\applications.py", line 1054, in __call__
-    await super().__call__(scope, receive, send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\applications.py", line 112, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\middleware\errors.py", line 187, in __call__
-    raise exc
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\middleware\errors.py", line 165, in __call__
-    await self.app(scope, receive, _send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\middleware\cors.py", line 93, in __call__
-    await self.simple_response(scope, receive, send, request_headers=headers)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\middleware\cors.py", line 144, in simple_response
-    await self.app(scope, receive, send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
-    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
-    raise exc
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
-    await app(scope, receive, sender)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\routing.py", line 714, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\routing.py", line 734, in app
-    await route.handle(scope, receive, send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\routing.py", line 288, in handle
-    await self.app(scope, receive, send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\routing.py", line 76, in app
-    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
-    raise exc
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
-    await app(scope, receive, sender)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\routing.py", line 73, in app
-    response = await f(request)
-               ^^^^^^^^^^^^^^^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\fastapi\routing.py", line 301, in app
-    raw_response = await run_endpoint_function(
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ...<3 lines>...
-    )
-    ^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\fastapi\routing.py", line 214, in run_endpoint_function
-    return await run_in_threadpool(dependant.call, **values)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\concurrency.py", line 37, in run_in_threadpool
-    return await anyio.to_thread.run_sync(func)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\anyio\to_thread.py", line 56, in run_sync
-    return await get_async_backend().run_sync_in_worker_thread(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2470, in run_sync_in_worker_thread
-    return await future
-           ^^^^^^^^^^^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 967, in run
-    result = context.run(func, *args)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\api\v1\endpoints\puantaj_secimi.py", line 12, in create_puantaj_secimi
-    return crud.create_puantaj_secimi(db=db, puantaj_secimi=puantaj_secimi)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\db\crud.py", line 757, in create_puantaj_secimi
-    db_puantaj_secimi = models.PuantajSecimi(**puantaj_secimi.dict())
-  File "<string>", line 4, in __init__
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 571, in _initialize_instance
-    with util.safe_reraise():
-         ~~~~~~~~~~~~~~~~~^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 224, in __exit__
-    raise exc_value.with_traceback(exc_tb)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\sqlalchemy\orm\state.py", line 569, in _initialize_instance
-    manager.original_init(*mixed[1:], **kwargs)
-    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\sqlalchemy\orm\decl_base.py", line 2173, in _declarative_constructor
-    raise TypeError(
-        "%r is an invalid keyword argument for %s" % (k, cls_.__name__)
-    )
-TypeError: 'Aciklama' is an invalid keyword argument for PuantajSecimi
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/b2b-ekstreler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/b2b-ekstreler/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:325:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/e-faturalar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/e-faturalar/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:324:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/ust-kategoriler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/ust-kategoriler/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:336:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/stok-sayimlar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/stok-sayimlar/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:329:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/e-faturalar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/e-faturalar/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:324:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/nakit/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/nakit/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:345:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/avans-istekler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/avans-istekler/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:335:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/diger-harcamalar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/diger-harcamalar/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:326:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/yetkiler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/yetkiler/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:341:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/roles/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/roles/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:340:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/yetkiler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/yetkiler/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:341:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/puantaj-secimi/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/puantaj-secimi/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:331:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/diger-harcamalar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/diger-harcamalar/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:326:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/gelir-ekstra/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/gelir-ekstra/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:334:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/rol-yetkileri/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/rol-yetkileri/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:343:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/kullanici-rolleri/?kullanici_id=2' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/kullanici-rolleri/?kullanici_id=2:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchPermissions (App.tsx:1377:33)
+    at App.tsx:1410:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/kullanici-rolleri/?kullanici_id=2' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/kullanici-rolleri/?kullanici_id=2:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchPermissions (App.tsx:1377:33)
+    at App.tsx:1410:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/avans-istekler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/avans-istekler/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:335:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/gelirler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/gelirler/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:333:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/calisanlar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/calisanlar/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:330:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/stoklar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/stoklar/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:327:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/degerler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/degerler/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:338:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/puantaj-secimi/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/puantaj-secimi/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:331:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/ust-kategoriler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/ust-kategoriler/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:336:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/degerler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/degerler/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:338:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/kategoriler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/kategoriler/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:337:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/gelir-ekstra/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/gelir-ekstra/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:334:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/e-fatura-referans/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/e-fatura-referans/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:344:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/puantajlar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/puantajlar/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:332:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/users/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/users/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:339:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/nakit/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/nakit/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:345:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/calisanlar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/calisanlar/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:330:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/subeler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/subeler/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:323:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/rol-yetkileri/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/rol-yetkileri/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:343:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/puantajlar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/puantajlar/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:332:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/stoklar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/stoklar/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:327:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/subeler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/subeler/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:323:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/stok-fiyatlar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/stok-fiyatlar/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:328:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/users/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/users/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:339:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/roles/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/roles/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:340:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/kategoriler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/kategoriler/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:337:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/b2b-ekstreler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/b2b-ekstreler/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:325:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/stok-sayimlar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/stok-sayimlar/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:329:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/kullanici-rolleri/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/kullanici-rolleri/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:342:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/e-fatura-referans/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/e-fatura-referans/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:344:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/stok-fiyatlar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/stok-fiyatlar/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:328:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10016:13)
+    at recursivelyTraverseReconnectPassiveEffects (react-dom_client.js?v=26e92b99:9995:11)
+    at reconnectPassiveEffects (react-dom_client.js?v=26e92b99:10054:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/gelirler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/gelirler/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:333:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
+GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/kullanici-rolleri/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+:8000/api/v1/kullanici-rolleri/:1  Failed to load resource: net::ERR_FAILED
+App.tsx:281 Error in fetchData: TypeError: Failed to fetch
+    at fetchData (App.tsx:259:28)
+    at fetchAllData (App.tsx:342:9)
+    at App.tsx:374:5
+    at react-stack-bottom-frame (react-dom_client.js?v=26e92b99:17478:20)
+    at runWithFiberInDEV (react-dom_client.js?v=26e92b99:1485:72)
+    at commitHookEffectListMount (react-dom_client.js?v=26e92b99:8460:122)
+    at commitHookPassiveMountEffects (react-dom_client.js?v=26e92b99:8518:138)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9887:29)
+    at recursivelyTraversePassiveMountEffects (react-dom_client.js?v=26e92b99:9868:13)
+    at commitPassiveMountOnFiber (react-dom_client.js?v=26e92b99:9984:13)
+fetchData @ App.tsx:281
