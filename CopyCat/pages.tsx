@@ -23,7 +23,8 @@ import {
     STOK_TANIMLAMA_EKRANI_YETKI_ADI, STOK_FIYAT_TANIMLAMA_EKRANI_YETKI_ADI, 
     STOK_SAYIM_EKRANI_YETKI_ADI, CALISAN_YONETIMI_EKRANI_YETKI_ADI, 
     PUANTAJ_SECIM_YONETIMI_EKRANI_YETKI_ADI, PUANTAJ_GIRISI_EKRANI_YETKI_ADI, 
-    AVANS_TALEBI_EKRANI_YETKI_ADI, NAKIT_GIRISI_EKRANI_YETKI_ADI, FINANSAL_OZET_YETKI_ADI 
+    AVANS_TALEBI_EKRANI_YETKI_ADI, NAKIT_GIRISI_EKRANI_YETKI_ADI, FINANSAL_OZET_YETKI_ADI,
+    ODEME_YUKLEME_EKRANI_YETKI_ADI // Explicitly add it here
 } from './constants';
 import { Kullanici, Rol, Yetki, KullaniciRol, RolYetki, KullaniciFormData, RolFormData, YetkiFormData, Sube, SubeFormData, Deger, DegerFormData, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, EFatura, EFaturaExcelRow, InvoiceAssignmentFormData, B2BEkstre, B2BEkstreExcelRow, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, PuantajEntry, HarcamaTipi, Gelir, GelirEkstra, KategoriTip, AvansIstek, AvansIstekFormData } from './types'; 
 
@@ -5164,12 +5165,107 @@ export const NakitPage: React.FC = () => {
 
 // --- ÖDEME YÜKLEME PAGE ---
 export const OdemeYuklemePage: React.FC = () => {
+  const { selectedBranch, hasPermission } = useAppContext();
+  const { uploadOdeme } = useDataContext();
+  const [file, setFile] = useState<File | null>(null);
+  const [feedback, setFeedback] = useState<{ message: string, type: 'success' | 'error' | 'info' } | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  if (!hasPermission(ODEME_YUKLEME_EKRANI_YETKI_ADI)) {
+      return <AccessDenied title="Ödeme Yükleme" />;
+  }
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const selectedFile = event.target.files[0];
+      if (selectedFile.name.endsWith('.csv')) {
+        setFile(selectedFile);
+        setFeedback(null);
+      } else {
+        setFeedback({ message: "Lütfen geçerli bir CSV dosyası seçin.", type: 'error' });
+        setFile(null);
+        if(fileInputRef.current) fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!file || !selectedBranch) {
+      setFeedback({ message: "Lütfen bir dosya seçin ve şubenin seçili olduğundan emin olun.", type: 'error' });
+      return;
+    }
+
+    setFeedback({ message: `Dosya yükleniyor ve işleniyor...`, type: 'info' });
+
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const result = await uploadOdeme(formData, selectedBranch.Sube_ID);
+
+        if (result && result.message) {
+            setFeedback({ 
+                message: result.message,
+                type: 'success' 
+            });
+        } else {
+            setFeedback({ 
+                message: "Dosya yüklenirken bir hata oluştu. Lütfen backend loglarını kontrol edin.", 
+                type: 'error' 
+            });
+        }
+
+    } catch (error: any) {
+        console.error("File processing error:", error);
+        setFeedback({ message: `Dosya işlenirken bir hata oluştu: ${error.message || error}. Lütfen dosyanın formatını kontrol edin.`, type: 'error' });
+    }
+
+    setFile(null);
+    if(fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const handleDownloadTemplate = () => {
+    alert("Ödeme yükleme CSV şablonu indirme işlemi simüle edildi. Konsolu kontrol edin.");
+    console.log("Ödeme Yükleme CSV Şablonu Bilgisi: CSV dosyanızda 'Tip', 'Hesap_Adi', 'Tarih' (GG/AA/YYYY), 'Açıklama', 'Tutar' sütunları bulunmalıdır.");
+  };
+
   return (
-    <Card title="Ödeme Yükleme">
-      <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-        <Icons.Upload className="w-16 h-16 mb-4" />
-        <p className="text-xl">Bu sayfa yapım aşamasındadır.</p>
-        <p>"Ödeme Yükleme" için içerik yakında eklenecektir.</p>
+    <Card title={`Ödeme Yükleme (Şube: ${selectedBranch?.Sube_Adi || 'Seçilmedi'})`}>
+      <div className="space-y-6">
+        <div>
+          <label htmlFor="odeme-file-upload" className="block text-sm font-medium text-gray-700 mb-1">
+            CSV Dosyası (.csv)
+          </label>
+          <div className="mt-1 flex items-center space-x-3">
+            <Input 
+              type="file" 
+              id="odeme-file-upload"
+              ref={fileInputRef}
+              accept=".csv"
+              onChange={handleFileChange} 
+              className="flex-grow"
+            />
+            <Button onClick={handleUpload} disabled={!file} variant="primary">
+              <Icons.Upload className="mr-2 w-4 h-4" /> Yükle
+            </Button>
+          </div>
+          {file && <p className="text-sm text-gray-500 mt-1">Seçilen dosya: {file.name}</p>}
+        </div>
+
+        {feedback && (
+          <div className={`p-3 rounded-md text-sm ${feedback.type === 'success' ? 'bg-green-50 text-green-700' : feedback.type === 'info' ? 'bg-blue-50 text-blue-700' : 'bg-red-50 text-red-700'}`}>
+            {feedback.message}
+          </div>
+        )}
+
+        <div>
+          <Button onClick={handleDownloadTemplate} variant="secondary" size="sm" leftIcon={<Icons.Download className="w-4 h-4" />}>
+            Örnek Şablon İndir
+          </Button>
+           <p className="text-xs text-gray-500 mt-1">
+             Yüklenecek CSV dosyasının sütunları: "Tip", "Hesap_Adi", "Tarih" (GG/AA/YYYY), "Açıklama", "Tutar".
+          </p>
+        </div>
       </div>
     </Card>
   );

@@ -540,6 +540,14 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     });
     return result;
   }, []);
+
+  const uploadOdeme = useCallback(async (formData: FormData, subeId: number) => {
+    const result = await fetchData<any>(`${API_BASE_URL}/odeme/upload-csv/?sube_id=${subeId}`, {
+        method: 'POST',
+        body: formData,
+    });
+    return result;
+  }, []);
   
   const addDigerHarcama = useCallback(async (data: DigerHarcamaFormData) => {
     const formData = new FormData();
@@ -1274,7 +1282,8 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     b2bEkstreList,
     addB2BEkstreler,
     updateB2BEkstre,
-    uploadB2BEkstre, // Add this line
+    uploadB2BEkstre,
+    uploadOdeme, // Add this line
     digerHarcamaList,
     addDigerHarcama,
     updateDigerHarcama,
