@@ -5201,7 +5201,7 @@ export const OdemeYuklemePage: React.FC = () => {
         const formData = new FormData();
         formData.append('file', file);
 
-        const result = await uploadOdeme(formData, selectedBranch.Sube_ID);
+        const result = await uploadOdeme(formData);
 
         if (result && result.message) {
             setFeedback({ 

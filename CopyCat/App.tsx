@@ -541,8 +541,8 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     return result;
   }, []);
 
-  const uploadOdeme = useCallback(async (formData: FormData, subeId: number) => {
-    const result = await fetchData<any>(`${API_BASE_URL}/odeme/upload-csv/?sube_id=${subeId}`, {
+  const uploadOdeme = useCallback(async (formData: FormData) => {
+    const result = await fetchData<any>(`${API_BASE_URL}/odeme/upload-csv/`, {
         method: 'POST',
         body: formData,
     });

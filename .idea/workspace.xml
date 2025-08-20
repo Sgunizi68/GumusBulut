@@ -6,13 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="12b83747-183f-439c-be58-d70805019bed" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1ScreenShot.png" beforeDir="false" afterPath="$PROJECT_DIR$/1ScreenShot.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CopyCat/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CopyCat/pages.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/pages.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Hata.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Hata.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Odeme-small.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Odeme-small.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/api/endpoints/odeme.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/api/v1/endpoints/odeme.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/v1/endpoints/odeme.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/db/crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db/crud.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
