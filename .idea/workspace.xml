@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="12b83747-183f-439c-be58-d70805019bed" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Odeme-small.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/api/endpoints_sil/odeme.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/api/v1/endpoints/odeme.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/v1/endpoints/odeme.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/schemas/odeme.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/schemas/odeme.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Hata.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Hata.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

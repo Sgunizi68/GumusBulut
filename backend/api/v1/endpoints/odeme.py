@@ -35,7 +35,7 @@ async def upload_odeme_csv(
         print(f"Failed to decode file: {e}")
         raise HTTPException(status_code=400, detail="Cannot decode file content. Please ensure it's UTF-8 encoded.")
 
-    csv_reader = csv.DictReader(stream)
+    csv_reader = csv.DictReader(stream, delimiter=';')
 
     odemeler_to_create = []
     rows_read = 0
