@@ -37,7 +37,8 @@ async def upload_odeme_csv(
 
     csv_reader = csv.DictReader(stream, delimiter=';')
 
-    odemeler_to_create = []
+    added_count = 0
+    skipped_count = 0
     rows_read = 0
     for row in csv_reader:
         rows_read += 1
@@ -52,6 +53,7 @@ async def upload_odeme_csv(
             tarih_str = row_normalized.get("tarih")
             if not tarih_str:
                 print(f"Skipping row {rows_read} due to missing 'tarih'.")
+                skipped_count += 1
                 continue
 
             # Clean and parse Tutar
@@ -71,29 +73,30 @@ async def upload_odeme_csv(
                 Donem=donem,
                 Sube_ID=sube_id,
             )
+
+            # Check for existing odeme
+            existing_odeme = crud.get_odeme_by_unique_fields(db=db, odeme_data=odeme_data)
+            if existing_odeme:
+                print(f"Skipping existing record: {odeme_data.Aciklama[:30]}")
+                skipped_count += 1
+                continue
+
             # Use crud.create_odeme for single record creation
-            created_odeme = crud.create_odeme(db=db, odeme=odeme_data)
-            odemeler_to_create.append(created_odeme)
+            crud.create_odeme(db=db, odeme=odeme_data)
+            added_count += 1
         except (ValueError, KeyError, TypeError) as e:
             print(f"CSV parsing error on row {rows_read}: {e} - Row data: {row_normalized}")
+            skipped_count += 1
             continue # Continue with the next rows
 
     print(f"Total rows read from CSV: {rows_read}")
-    print(f"Number of records to be created: {len(odemeler_to_create)}")
+    print(f"Number of records added: {added_count}")
+    print(f"Number of records skipped: {skipped_count}")
 
-    if not odemeler_to_create:
-        print("CSV file is empty or contains no valid data to insert.")
-        return {"message": "CSV file is empty or contains no valid data to insert.", "added": 0, "skipped": 0}
-
-    # Assuming crud.create_odeme returns the created object, and we are creating one by one
-    # The previous code used crud.create_odemeler_bulk, which is not defined in the provided crud.py
-    # So, I'm adapting to the single create method.
-    # The 'skipped' count would need more complex logic if we were checking for duplicates before creation.
-    
     return {
-        "message": f"Odeme file processed successfully. Added {len(odemeler_to_create)} records.",
-        "added": len(odemeler_to_create),
-        "skipped": 0 # Assuming no explicit skip logic here
+        "message": f"Odeme file processed successfully. Added {added_count} records, skipped {skipped_count} records.",
+        "added": added_count,
+        "skipped": skipped_count
     }
 
 
