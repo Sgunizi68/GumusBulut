@@ -37,6 +37,9 @@ async def upload_odeme_csv(
 
     csv_reader = csv.DictReader(stream, delimiter=';')
 
+    # Get all odeme referanslar
+    odeme_referanslar = crud.get_odeme_referanslar(db=db)
+
     added_count = 0
     skipped_count = 0
     rows_read = 0
@@ -63,13 +66,22 @@ async def upload_odeme_csv(
             tarih_dt = datetime.strptime(tarih_str, '%d/%m/%Y')
             donem = int(f"{tarih_dt.year}{tarih_dt.month:02d}")
 
+            aciklama = row_normalized.get("aciklama")
+
+            # Find Kategori_ID from odeme_referanslar
+            kategori_id = None
+            for ref in odeme_referanslar:
+                if ref.Referans_Metin in aciklama:
+                    kategori_id = ref.Kategori_ID
+                    break
+
             odeme_data = odeme.OdemeCreate(
                 Tip=row_normalized.get("tip"),
                 Hesap_Adi=row_normalized.get("hesap_adi"),
                 Tarih=tarih_dt.date(),
-                Aciklama=row_normalized.get("aciklama"),
+                Aciklama=aciklama,
                 Tutar=tutar,
-                Kategori_ID=None,  # Or logic to determine category
+                Kategori_ID=kategori_id,
                 Donem=donem,
                 Sube_ID=sube_id,
             )
