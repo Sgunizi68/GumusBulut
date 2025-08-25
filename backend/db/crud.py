@@ -1096,9 +1096,10 @@ def get_bankaya_yatan_by_sube_and_donem(db: Session, sube_id: int, donem: int):
     
     logger = logging.getLogger(__name__)
     
-    # Convert 4-digit donem (2508) to 6-digit (202508) if needed
-    if len(str(donem)) == 4:
-        donem = 2000 + donem  # Convert 2508 to 202508
+    # Keep donem as is since database now stores periods in 4-digit format
+    # No conversion needed - if input is 6-digit, convert to 4-digit
+    if len(str(donem)) == 6:
+        donem = donem - 2000  # Convert 202508 to 2508
     
     logger.info(f"Fetching Bankaya Yatan records for Sube_ID: {sube_id}, Donem: {donem}")
     
@@ -1153,9 +1154,10 @@ def get_nakit_girisi_by_sube_and_donem(db: Session, sube_id: int, donem: int):
     
     logger = logging.getLogger(__name__)
     
-    # Convert 4-digit donem (2508) to 6-digit (202508) if needed
-    if len(str(donem)) == 4:
-        donem = 2000 + donem  # Convert 2508 to 202508
+    # Keep donem as is since database now stores periods in 4-digit format
+    # No conversion needed - if input is 6-digit, convert to 4-digit
+    if len(str(donem)) == 6:
+        donem = donem - 2000  # Convert 202508 to 2508
     
     logger.info(f"Fetching Nakit Girişi records for Sube_ID: {sube_id}, Donem: {donem}")
     

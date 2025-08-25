@@ -64,7 +64,7 @@ async def upload_odeme_csv(
             tutar = Decimal(tutar_str) if tutar_str else Decimal('0.0') # Changed to Decimal
 
             tarih_dt = datetime.strptime(tarih_str, '%d/%m/%Y')
-            donem = int(f"{tarih_dt.year}{tarih_dt.month:02d}")
+            donem = int(f"{tarih_dt.year % 100:02d}{tarih_dt.month:02d}")
 
             aciklama = row_normalized.get("aciklama")
 

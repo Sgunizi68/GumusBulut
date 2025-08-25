@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { generateDashboardPdf } from './utils/pdfGenerator';
 import * as XLSX from 'xlsx';
 import { useAppContext, useDataContext } from './App';
-import { Button, Input, Modal, Card, TableLayout, StatusBadge, UserForm, RoleForm, PermissionForm, Select, DegerForm, Textarea, UstKategoriForm, KategoriForm, InlineEditInput, DigerHarcamaForm, StokForm, StokFiyatForm, NumberSpinnerInput, CalisanForm, PuantajSecimiForm, SubeForm, EFaturaReferansForm, NakitForm, AvansIstekForm } from './components';
+import { Button, Input, Modal, Card, TableLayout, StatusBadge, UserForm, RoleForm, PermissionForm, Select, DegerForm, Textarea, UstKategoriForm, KategoriForm, InlineEditInput, DigerHarcamaForm, StokForm, StokFiyatForm, NumberSpinnerInput, CalisanForm, PuantajSecimiForm, SubeForm, EFaturaReferansForm, OdemeReferansForm, NakitForm, AvansIstekForm } from './components';
 import { 
     Icons, 
     MOCK_USERS, MOCK_ROLES, MOCK_USER_ROLES, MOCK_ROLE_PERMISSIONS, MOCK_BRANCHES, 
@@ -24,9 +24,9 @@ import {
     STOK_SAYIM_EKRANI_YETKI_ADI, CALISAN_YONETIMI_EKRANI_YETKI_ADI, 
     PUANTAJ_SECIM_YONETIMI_EKRANI_YETKI_ADI, PUANTAJ_GIRISI_EKRANI_YETKI_ADI, 
     AVANS_TALEBI_EKRANI_YETKI_ADI, NAKIT_GIRISI_EKRANI_YETKI_ADI, FINANSAL_OZET_YETKI_ADI,
-    ODEME_YUKLEME_EKRANI_YETKI_ADI, NAKIT_YATIRMA_RAPORU_YETKI_ADI // Explicitly add it here
+    ODEME_YUKLEME_EKRANI_YETKI_ADI, ODEME_REFERANS_YONETIMI_EKRANI_YETKI_ADI, NAKIT_YATIRMA_RAPORU_YETKI_ADI // Explicitly add it here
 } from './constants';
-import { Kullanici, Rol, Yetki, KullaniciRol, RolYetki, KullaniciFormData, RolFormData, YetkiFormData, Sube, SubeFormData, Deger, DegerFormData, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, EFatura, EFaturaExcelRow, InvoiceAssignmentFormData, B2BEkstre, B2BEkstreExcelRow, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, PuantajEntry, HarcamaTipi, Gelir, GelirEkstra, KategoriTip, AvansIstek, AvansIstekFormData } from './types'; 
+import { Kullanici, Rol, Yetki, KullaniciRol, RolYetki, KullaniciFormData, RolFormData, YetkiFormData, Sube, SubeFormData, Deger, DegerFormData, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, EFatura, EFaturaExcelRow, InvoiceAssignmentFormData, B2BEkstre, B2BEkstreExcelRow, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, PuantajEntry, HarcamaTipi, Gelir, GelirEkstra, KategoriTip, AvansIstek, AvansIstekFormData, OdemeReferans, OdemeReferansFormData } from './types'; 
 
 // --- HELPER COMPONENTS & FUNCTIONS ---
 
@@ -5273,13 +5273,133 @@ export const OdemeYuklemePage: React.FC = () => {
 
 // --- ÖDEME REFERANS YÖNETİMİ PAGE ---
 export const OdemeReferansPage: React.FC = () => {
+  const { odemeReferansList, addOdemeReferans, updateOdemeReferans, deleteOdemeReferans } = useDataContext();
+  const { kategoriList } = useDataContext();
+  const { hasPermission } = useAppContext();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingReferans, setEditingReferans] = useState<OdemeReferansFormData | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Permissions check
+  // if (!hasPermission(ODEME_REFERANS_YONETIMI_EKRANI_YETKI_ADI)) {
+  //     return <AccessDenied title="Ödeme Referans Yönetimi" />;
+  // }
+
+  const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
+
+  const handleAddReferans = () => {
+    setEditingReferans(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEditReferans = (referans: OdemeReferans) => {
+    setEditingReferans({ ...referans });
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteReferans = async (referansId: number) => {
+    if (window.confirm(`Bu referansı silmek istediğinizden emin misiniz?`)) {
+      const result = await deleteOdemeReferans(referansId);
+      if (result && result.success) {
+        alert("Referans başarıyla silindi.");
+      } else if (result && result.message) {
+        alert(result.message);
+      } else {
+        alert("Referans silinirken bir hata oluştu.");
+      }
+    }
+  };
+
+  const handleSubmit = async (data: OdemeReferansFormData) => {
+    let result;
+    if (editingReferans && editingReferans.Referans_ID) {
+      result = await updateOdemeReferans(editingReferans.Referans_ID, data);
+    } else {
+      result = await addOdemeReferans(data);
+    }
+
+    if (result && result.success) {
+      setIsModalOpen(false);
+      setEditingReferans(null);
+    } else if (result && result.message) {
+      alert(result.message);
+    }
+  };
+
+  const filteredReferanslar = useMemo(() => {
+    return odemeReferansList.filter(ref =>
+      ref.Referans_Metin.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (kategoriList.find(k => k.Kategori_ID === ref.Kategori_ID)?.Kategori_Adi || '').toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [odemeReferansList, searchTerm, kategoriList]);
+
+  const handleGeneratePdf = () => {
+    generateDashboardPdf('odeme-referans-yonetimi-content', `Odeme_Referans_Yonetimi.pdf`);
+  };
+
+  const handleExportToExcel = () => {
+    const wb = XLSX.utils.book_new();
+    const ws_data = filteredReferanslar.map(referans => ({
+        'Referans Metni': referans.Referans_Metin,
+        'Kategori': kategoriList.find(k => k.Kategori_ID === referans.Kategori_ID)?.Kategori_Adi || '-',
+        'Aktif': referans.Aktif_Pasif ? 'Evet' : 'Hayır',
+    }));
+    const ws = XLSX.utils.json_to_sheet(ws_data);
+    ws['!cols'] = [{ wch: 40 }, { wch: 30 }, { wch: 10 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'Ödeme Referans Listesi');
+    XLSX.writeFile(wb, `Odeme_Referans_Yonetimi.xlsx`);
+  };
+
   return (
-    <Card title="Ödeme Referans Yönetimi">
-      <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-        <Icons.Invoice className="w-16 h-16 mb-4" />
-        <p className="text-xl">Bu sayfa yapım aşamasındadır.</p>
-        <p>"Ödeme Referans Yönetimi" için içerik yakında eklenecektir.</p>
-      </div>
-    </Card>
+    <div className="space-y-6" id="odeme-referans-yonetimi-content">
+      <Card
+        title="Ödeme Referans Yönetimi"
+        actions={
+          <div className="flex items-center gap-3 hide-on-pdf">
+            {canPrint && (
+                <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir">
+                    <Icons.Print className="w-5 h-5" />
+                </Button>
+            )}
+            {canExportExcel && (
+                <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
+                    <Icons.Download className="w-5 h-5" />
+                </Button>
+            )}
+            <Input
+              placeholder="Referans metni ara..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="flex-grow min-w-[200px] text-sm py-2"
+            />
+            <Button onClick={handleAddReferans} leftIcon={<Icons.Add className="w-4 h-4" />} className="flex-shrink-0 text-sm px-3">Yeni Referans</Button>
+          </div>
+        }
+      >
+        <TableLayout headers={['REFERANS METNİ', 'KATEGORİ', 'AKTİF', 'İŞLEMLER']} compact={true}>
+          {filteredReferanslar.map((referans) => {
+            const kategoriAdi = kategoriList.find(k => k.Kategori_ID === referans.Kategori_ID)?.Kategori_Adi || '-';
+            return (
+              <tr key={referans.Referans_ID}>
+                <td className="px-4 py-0.5 whitespace-nowrap text-sm text-gray-900">{referans.Referans_Metin}</td>
+                <td className="px-4 py-0.5 whitespace-nowrap text-sm text-gray-500">{kategoriAdi}</td>
+                <td className="px-4 py-0.5 whitespace-nowrap text-sm text-gray-500">{referans.Aktif_Pasif ? 'Evet' : 'Hayır'}</td>
+                <td className="px-4 py-0.5 whitespace-nowrap text-sm font-medium flex items-center justify-center space-x-0.5">
+                  <Button variant="ghost" size="sm" onClick={() => handleEditReferans(referans)} leftIcon={<Icons.Edit className="w-4 h-4" />} title="Düzenle" className="p-1" />
+                  <Button variant="ghost" size="sm" onClick={() => handleDeleteReferans(referans.Referans_ID)} leftIcon={<Icons.Delete className="w-4 h-4 text-red-500" />} title="Sil" className="p-1" />
+                </td>
+              </tr>
+            );
+          })}
+        </TableLayout>
+        {filteredReferanslar.length === 0 && <p className="text-center py-4 text-gray-500">Arama kriterlerine uygun referans bulunamadı.</p>}
+      </Card>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingReferans ? 'Ödeme Referans Düzenle' : 'Yeni Ödeme Referans Ekle'}>
+        <OdemeReferansForm initialData={editingReferans} kategoriler={kategoriList} onSubmit={handleSubmit} onCancel={() => setIsModalOpen(false)} />
+      </Modal>
+    </div>
   );
 };

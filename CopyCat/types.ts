@@ -283,6 +283,16 @@ export interface EFaturaReferans {
 
 export type EFaturaReferansFormData = Partial<Omit<EFaturaReferans, 'Kayit_Tarihi'>>;
 
+export interface OdemeReferans {
+  Referans_ID: number;
+  Referans_Metin: string;
+  Kategori_ID: number;
+  Aktif_Pasif: boolean;
+  Kayit_Tarihi: string;
+}
+
+export type OdemeReferansFormData = Omit<OdemeReferans, 'Referans_ID' | 'Kayit_Tarihi'> & { Referans_ID?: number };
+
 export interface Nakit {
   Nakit_ID: number;
   Tarih: string; // DATE (YYYY-MM-DD)
@@ -370,6 +380,11 @@ export interface DataContextType {
   addEFaturaReferans: (data: EFaturaReferansFormData) => Promise<{ success: boolean; message?: string }>;
   updateEFaturaReferans: (Alici_Unvani: string, data: Partial<EFaturaReferansFormData>) => Promise<{ success: boolean; message?: string }>;
   deleteEFaturaReferans: (Alici_Unvani: string) => Promise<{ success: boolean; message?: string }>;
+
+  odemeReferansList: OdemeReferans[];
+  addOdemeReferans: (data: OdemeReferansFormData) => Promise<{ success: boolean; message?: string }>;
+  updateOdemeReferans: (referansId: number, data: Partial<OdemeReferansFormData>) => Promise<{ success: boolean; message?: string }>;
+  deleteOdemeReferans: (referansId: number) => Promise<{ success: boolean; message?: string }>;
 
   ustKategoriList: UstKategori[];
   addUstKategori: (data: UstKategoriFormData) => Promise<{ success: boolean; message?: string }>;

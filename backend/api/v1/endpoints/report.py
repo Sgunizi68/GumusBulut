@@ -21,15 +21,22 @@ def get_nakit_yatirma_kontrol_raporu(sube_id: int, donem: int, db: Session = Dep
     Returns:
         NakitYatirmaRaporu: Contains bankaya_yatan and nakit_girisi data
     """
-    logger.info(f"Getting Nakit Yatırma Kontrol Raporu for Sube_ID: {sube_id}, Donem: {donem}")
+    logger.info(f"Getting Nakit Yatırma Kontrol Raporu for Sube_ID: {sube_id}, Donem: {donem} (original format)")
     
     try:
         # Validate inputs
         if sube_id <= 0:
             raise HTTPException(status_code=400, detail="Invalid sube_id")
         
-        if donem <= 0 or len(str(donem)) not in [4, 6]:
-            raise HTTPException(status_code=400, detail="Invalid donem format. Expected YYMM or YYYYMM format (e.g., 2508 or 202508)")
+        donem_str = str(donem)
+        if donem <= 0 or len(donem_str) not in [4, 6]:
+            raise HTTPException(status_code=400, detail=f"Invalid donem format. Expected YYMM (4-digit) or YYYYMM (6-digit) format, got: {donem} (length: {len(donem_str)})")
+        
+        # Log period format information
+        if len(donem_str) == 4:
+            logger.info(f"Period format: 4-digit ({donem}) - querying database directly")
+        else:
+            logger.info(f"Period format: 6-digit ({donem}) - will be converted to 4-digit in CRUD functions")
         
         # Fetch data
         bankaya_yatan = crud.get_bankaya_yatan_by_sube_and_donem(db, sube_id=sube_id, donem=donem)

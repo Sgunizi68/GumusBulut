@@ -4,7 +4,7 @@ import { useAppContext, useDataContext } from './App';
 import { 
     Sube, SubeFormData, Kullanici, Rol, Yetki, KullaniciRol, RolYetki, KullaniciFormData, RolFormData, YetkiFormData, 
     DegerFormData, UstKategoriFormData, KategoriFormData, KategoriTip, UstKategori, Kategori, 
-    EFatura, InvoiceAssignmentFormData, DigerHarcamaFormData, HarcamaTipi, StokFormData, Stok, StokFiyatFormData, CalisanFormData, PuantajSecimiFormData, NakitFormData, AvansIstekFormData
+    EFatura, InvoiceAssignmentFormData, DigerHarcamaFormData, HarcamaTipi, StokFormData, Stok, StokFiyatFormData, CalisanFormData, PuantajSecimiFormData, NakitFormData, AvansIstekFormData, EFaturaReferansFormData, OdemeReferansFormData, OdemeReferans
 } from './types';
 
 // Helper function to convert DD.MM.YYYY to YYYY-MM-DD
@@ -1490,6 +1490,81 @@ export const EFaturaReferansForm: React.FC<EFaturaReferansFormProps> = ({ initia
       <div>
         <label className="flex items-center space-x-2">
           <input type="checkbox" name="Aktif_Pasif" checked={formData.Aktif_Pasif} onChange={handleChange} className="form-checkbox h-5 w-5 text-blue-600" />
+          <span className="text-gray-700">Aktif</span>
+        </label>
+      </div>
+      <div className="flex justify-end space-x-3 pt-4">
+        <Button type="button" variant="secondary" onClick={onCancel}>İptal</Button>
+        <Button type="submit" variant="primary">Kaydet</Button>
+      </div>
+    </form>
+  );
+};
+
+interface OdemeReferansFormProps {
+  initialData?: OdemeReferansFormData | null;
+  kategoriler: Kategori[];
+  onSubmit: (data: OdemeReferansFormData) => void;
+  onCancel: () => void;
+}
+
+export const OdemeReferansForm: React.FC<OdemeReferansFormProps> = ({ initialData, kategoriler, onSubmit, onCancel }) => {
+  const [formData, setFormData] = useState<OdemeReferansFormData>(
+    initialData || { Referans_Metin: '', Kategori_ID: 0, Aktif_Pasif: true }
+  );
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : (name === 'Kategori_ID' ? (value ? parseInt(value) : 0) : value),
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.Referans_Metin.trim()) {
+      alert("Referans Metni boş olamaz.");
+      return;
+    }
+    if (!formData.Kategori_ID) {
+      alert("Kategori seçimi zorunludur.");
+      return;
+    }
+    onSubmit(formData);
+  };
+
+  const activeKategoriler = useMemo(() => {
+    return kategoriler
+      .filter(k => k.Aktif_Pasif)
+      .sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi));
+  }, [kategoriler]);
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <Input 
+        label="Referans Metni" 
+        name="Referans_Metin" 
+        value={formData.Referans_Metin} 
+        onChange={handleChange} 
+        maxLength={50}
+        required 
+      />
+      <Select label="Kategori" name="Kategori_ID" value={formData.Kategori_ID || ''} onChange={handleChange} required>
+        <option value="">Kategori Seçin...</option>
+        {activeKategoriler.map(k => (
+          <option key={k.Kategori_ID} value={k.Kategori_ID}>{k.Kategori_Adi}</option>
+        ))}
+      </Select>
+      <div>
+        <label className="flex items-center space-x-2">
+          <input 
+            type="checkbox" 
+            name="Aktif_Pasif" 
+            checked={formData.Aktif_Pasif} 
+            onChange={handleChange} 
+            className="form-checkbox h-5 w-5 text-blue-600" 
+          />
           <span className="text-gray-700">Aktif</span>
         </label>
       </div>

@@ -48,7 +48,7 @@ def create_test_odeme_data(db: Session):
             "Aciklama": "Nakit Yatırma",
             "Tutar": Decimal("3000.00"),
             "Kategori_ID": 60,
-            "Donem": 202508,
+            "Donem": 2508,
             "Sube_ID": 1
         },
         {
@@ -58,7 +58,7 @@ def create_test_odeme_data(db: Session):
             "Aciklama": "Nakit Yatırma",
             "Tutar": Decimal("9400.00"),
             "Kategori_ID": 60,
-            "Donem": 202508,
+            "Donem": 2508,
             "Sube_ID": 1
         },
         {
@@ -68,7 +68,7 @@ def create_test_odeme_data(db: Session):
             "Aciklama": "Nakit Yatırma",
             "Tutar": Decimal("13600.00"),
             "Kategori_ID": 60,
-            "Donem": 202508,
+            "Donem": 2508,
             "Sube_ID": 1
         },
         {
@@ -78,7 +78,7 @@ def create_test_odeme_data(db: Session):
             "Aciklama": "Nakit Yatırma",
             "Tutar": Decimal("5600.00"),
             "Kategori_ID": 60,
-            "Donem": 202508,
+            "Donem": 2508,
             "Sube_ID": 1
         },
         {
@@ -88,7 +88,7 @@ def create_test_odeme_data(db: Session):
             "Aciklama": "Nakit Yatırma",
             "Tutar": Decimal("3300.00"),
             "Kategori_ID": 60,
-            "Donem": 202508,
+            "Donem": 2508,
             "Sube_ID": 1
         },
         {
@@ -98,7 +98,7 @@ def create_test_odeme_data(db: Session):
             "Aciklama": "Nakit Yatırma",
             "Tutar": Decimal("9900.00"),
             "Kategori_ID": 60,
-            "Donem": 202508,
+            "Donem": 2508,
             "Sube_ID": 1
         },
         {
@@ -108,7 +108,7 @@ def create_test_odeme_data(db: Session):
             "Aciklama": "Nakit Yatırma",
             "Tutar": Decimal("10100.00"),
             "Kategori_ID": 60,
-            "Donem": 202508,
+            "Donem": 2508,
             "Sube_ID": 1
         }
     ]
@@ -140,49 +140,49 @@ def create_test_nakit_data(db: Session):
             "Tarih": date(2025, 8, 22),
             "Tutar": Decimal("3000.00"),
             "Tip": "Bankaya Yatan",
-            "Donem": 202508,
+            "Donem": 2508,
             "Sube_ID": 1
         },
         {
             "Tarih": date(2025, 8, 21),
             "Tutar": Decimal("9400.00"),
             "Tip": "Bankaya Yatan",
-            "Donem": 202508,
+            "Donem": 2508,
             "Sube_ID": 1
         },
         {
             "Tarih": date(2025, 8, 20),
             "Tutar": Decimal("12800.00"),
             "Tip": "Bankaya Yatan",
-            "Donem": 202508,
+            "Donem": 2508,
             "Sube_ID": 1
         },
         {
             "Tarih": date(2025, 8, 19),
             "Tutar": Decimal("5600.00"),
             "Tip": "Bankaya Yatan",
-            "Donem": 202508,
+            "Donem": 2508,
             "Sube_ID": 1
         },
         {
             "Tarih": date(2025, 8, 18),
             "Tutar": Decimal("4100.00"),
             "Tip": "Bankaya Yatan",
-            "Donem": 202508,
+            "Donem": 2508,
             "Sube_ID": 1
         },
         {
             "Tarih": date(2025, 8, 17),
             "Tutar": Decimal("9900.00"),
             "Tip": "Bankaya Yatan",
-            "Donem": 202508,
+            "Donem": 2508,
             "Sube_ID": 1
         },
         {
             "Tarih": date(2025, 8, 15),
             "Tutar": Decimal("8500.00"),
             "Tip": "Bankaya Yatan",
-            "Donem": 202508,
+            "Donem": 2508,
             "Sube_ID": 1
         }
     ]
