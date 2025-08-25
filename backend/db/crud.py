@@ -1091,41 +1091,106 @@ def get_bankaya_yatan_by_sube_and_donem(db: Session, sube_id: int, donem: int):
     """
     Get Odeme records where Kategori_ID == 60 (Bankaya Yatan) for specific sube and donem
     """
+    import logging
     from schemas.report import ReportDataItem
     
-    records = db.query(models.Odeme).filter(
-        models.Odeme.Sube_ID == sube_id,
-        models.Odeme.Donem == donem,
-        models.Odeme.Kategori_ID == 60
-    ).all()
+    logger = logging.getLogger(__name__)
     
-    result = []
-    for record in records:
-        result.append(ReportDataItem(
-            Tarih=record.Tarih.strftime('%Y-%m-%d'),
-            Donem=record.Donem,
-            Tutar=float(record.Tutar)
-        ))
+    # Convert 4-digit donem (2508) to 6-digit (202508) if needed
+    if len(str(donem)) == 4:
+        donem = 2000 + donem  # Convert 2508 to 202508
     
-    return result
+    logger.info(f"Fetching Bankaya Yatan records for Sube_ID: {sube_id}, Donem: {donem}")
+    
+    try:
+        # Query with debug info
+        query = db.query(models.Odeme).filter(
+            models.Odeme.Sube_ID == sube_id,
+            models.Odeme.Donem == donem,
+            models.Odeme.Kategori_ID == 60
+        )
+        
+        logger.info(f"Query SQL: {str(query)}")
+        records = query.all()
+        logger.info(f"Found {len(records)} Bankaya Yatan records")
+        
+        # Also check if there are any Odeme records without Kategori_ID filter for debugging
+        total_odeme_count = db.query(models.Odeme).filter(
+            models.Odeme.Sube_ID == sube_id,
+            models.Odeme.Donem == donem
+        ).count()
+        logger.info(f"Total Odeme records for this sube/donem: {total_odeme_count}")
+        
+        # Check if Kategori_ID=60 exists at all
+        kategori_60_exists = db.query(models.Kategori).filter(models.Kategori.Kategori_ID == 60).first()
+        logger.info(f"Kategori_ID=60 exists: {kategori_60_exists is not None}")
+        
+        result = []
+        for record in records:
+            try:
+                result.append(ReportDataItem(
+                    Tarih=record.Tarih.strftime('%Y-%m-%d'),
+                    Donem=record.Donem,
+                    Tutar=float(record.Tutar)
+                ))
+            except Exception as e:
+                logger.error(f"Error processing record {record.Odeme_ID}: {e}")
+                continue
+        
+        logger.info(f"Successfully processed {len(result)} Bankaya Yatan records")
+        return result
+        
+    except Exception as e:
+        logger.error(f"Error in get_bankaya_yatan_by_sube_and_donem: {e}")
+        return []
 
 def get_nakit_girisi_by_sube_and_donem(db: Session, sube_id: int, donem: int):
     """
     Get Nakit records for specific sube and donem
     """
+    import logging
     from schemas.report import ReportDataItem
     
-    records = db.query(models.Nakit).filter(
-        models.Nakit.Sube_ID == sube_id,
-        models.Nakit.Donem == donem
-    ).all()
+    logger = logging.getLogger(__name__)
     
-    result = []
-    for record in records:
-        result.append(ReportDataItem(
-            Tarih=record.Tarih.strftime('%Y-%m-%d'),
-            Donem=record.Donem,
-            Tutar=float(record.Tutar)
-        ))
+    # Convert 4-digit donem (2508) to 6-digit (202508) if needed
+    if len(str(donem)) == 4:
+        donem = 2000 + donem  # Convert 2508 to 202508
     
-    return result
+    logger.info(f"Fetching Nakit Girişi records for Sube_ID: {sube_id}, Donem: {donem}")
+    
+    try:
+        # Query with debug info
+        query = db.query(models.Nakit).filter(
+            models.Nakit.Sube_ID == sube_id,
+            models.Nakit.Donem == donem
+        )
+        
+        logger.info(f"Query SQL: {str(query)}")
+        records = query.all()
+        logger.info(f"Found {len(records)} Nakit Girişi records")
+        
+        # Also check total count for debugging
+        total_nakit_count = db.query(models.Nakit).filter(
+            models.Nakit.Sube_ID == sube_id
+        ).count()
+        logger.info(f"Total Nakit records for this sube: {total_nakit_count}")
+        
+        result = []
+        for record in records:
+            try:
+                result.append(ReportDataItem(
+                    Tarih=record.Tarih.strftime('%Y-%m-%d'),
+                    Donem=record.Donem,
+                    Tutar=float(record.Tutar)
+                ))
+            except Exception as e:
+                logger.error(f"Error processing Nakit record {record.Nakit_ID}: {e}")
+                continue
+        
+        logger.info(f"Successfully processed {len(result)} Nakit Girişi records")
+        return result
+        
+    except Exception as e:
+        logger.error(f"Error in get_nakit_girisi_by_sube_and_donem: {e}")
+        return []

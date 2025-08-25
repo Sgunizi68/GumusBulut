@@ -25,6 +25,8 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
     const [reportData, setReportData] = useState<NakitYatirmaRaporuData | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [selectedPeriod, setSelectedPeriod] = useState(currentPeriod);
+    const [error, setError] = useState<string | null>(null);
+    const [debugInfo, setDebugInfo] = useState<string>('');
 
     // Function moved before usage to fix Temporal Dead Zone error
     const getPreviousPeriod = (periodYYAA: string): string => {
@@ -44,16 +46,37 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
         const fetchReportData = async () => {
             if (selectedBranch && selectedPeriod) {
                 setLoading(true);
+                setError(null);
+                setDebugInfo('');
+                
                 try {
-                    const response = await fetch(`${API_BASE_URL}/nakit-yatirma-kontrol/${selectedBranch.Sube_ID}/${selectedPeriod}`);
+                    const url = `${API_BASE_URL}/nakit-yatirma-kontrol/${selectedBranch.Sube_ID}/${selectedPeriod}`;
+                    console.log('🔍 Fetching report data from:', url);
+                    setDebugInfo(`Fetching from: ${url}`);
+                    
+                    const response = await fetch(url);
+                    
                     if (response.ok) {
                         const data = await response.json();
+                        console.log('✅ Report data received:', data);
                         setReportData(data);
+                        
+                        // Add debug information
+                        const bankCount = data?.bankaya_yatan?.length || 0;
+                        const nakitCount = data?.nakit_girisi?.length || 0;
+                        setDebugInfo(`Data loaded - Bankaya Yatan: ${bankCount} records, Nakit Girişi: ${nakitCount} records`);
+                        
+                        if (bankCount === 0 && nakitCount === 0) {
+                            setError('Bu dönem için veri bulunamadı. Lütfen başka bir dönem seçin.');
+                        }
                     } else {
-                        console.error('Error fetching nakit yatirma raporu:', response.statusText);
+                        const errorText = await response.text();
+                        console.error('❌ Error response:', response.status, errorText);
+                        setError(`Veri alınırken hata oluştu: ${response.status} - ${errorText}`);
                     }
                 } catch (error) {
-                    console.error('Error fetching nakit yatirma raporu:', error);
+                    console.error('❌ Network error:', error);
+                    setError(`Bağlantı hatası: ${error instanceof Error ? error.message : 'Bilinmeyen hata'}`);
                 }
                 setLoading(false);
             }
@@ -82,6 +105,10 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
         return reportData?.nakit_girisi.reduce((sum, item) => sum + item.Tutar, 0) || 0;
     }, [reportData]);
 
+    const farkTutar = useMemo(() => {
+        return bankayaYatanTotal - nakitGirisiTotal;
+    }, [bankayaYatanTotal, nakitGirisiTotal]);
+
     return (
         <div className="space-y-6">
             <Card title={`Nakit Yatırma Kontrol Raporu (Şube: ${selectedBranch?.Sube_Adi})`} actions={
@@ -95,9 +122,49 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
                     </Select>
                 </div>
             }>
+                {/* Debug Information */}
+                {debugInfo && (
+                    <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded text-sm text-blue-700">
+                        <strong>Debug:</strong> {debugInfo}
+                    </div>
+                )}
+                
                 {loading ? (
                     <div className="flex justify-center items-center py-8">
-                        <div className="text-lg text-gray-600">Yükleniyor...</div>
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                        <div className="ml-3 text-lg text-gray-600">Rapor yükleniyor...</div>
+                    </div>
+                ) : error ? (
+                    <div className="text-center py-10">
+                        <div className="text-red-600 mb-4">
+                            <svg className="mx-auto h-12 w-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.94-.833-2.71 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                            </svg>
+                        </div>
+                        <p className="text-gray-600 font-medium mb-2">Hata</p>
+                        <p className="text-sm text-gray-500 mb-4">{error}</p>
+                        <Button 
+                            variant="primary" 
+                            onClick={() => window.location.reload()}
+                            className="mx-auto"
+                        >
+                            Tekrar Dene
+                        </Button>
+                    </div>
+                ) : !reportData || (reportData.bankaya_yatan.length === 0 && reportData.nakit_girisi.length === 0) ? (
+                    <div className="text-center py-10">
+                        <div className="text-gray-400 mb-4">
+                            <svg className="mx-auto h-12 w-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <p className="text-gray-600 font-medium mb-2">Veri Bulunamadı</p>
+                        <p className="text-sm text-gray-500 mb-4">
+                            {selectedPeriod} döneminde Şube: {selectedBranch?.Sube_Adi} için nakit yatırma verisi bulunamadı.
+                        </p>
+                        <p className="text-xs text-gray-400 mb-4">
+                            Not: Rapor için hem Kategori_ID=60 olan Ödeme kayıtları hem de Nakit girişi kayıtları gereklidir.
+                        </p>
                     </div>
                 ) : reportData ? (
                     <div className="space-y-6">
@@ -179,7 +246,7 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
                         
                         <div className="bg-gradient-to-r from-slate-800 to-slate-600 text-white p-6 rounded-lg">
                             <h3 className="text-lg font-semibold mb-4 text-center">Özet Bilgiler</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div className="bg-white bg-opacity-10 p-4 rounded-lg text-center">
                                     <div className="text-sm opacity-90 mb-1">Bankaya Yatan Toplam</div>
                                     <div className="text-xl font-bold">{formatCurrency(bankayaYatanTotal)}</div>
@@ -188,14 +255,19 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
                                     <div className="text-sm opacity-90 mb-1">Nakit Girişi Toplam</div>
                                     <div className="text-xl font-bold">{formatCurrency(nakitGirisiTotal)}</div>
                                 </div>
+                                <div className="bg-white bg-opacity-10 p-4 rounded-lg text-center">
+                                    <div className="text-sm opacity-90 mb-1">Fark</div>
+                                    <div className={`text-xl font-bold ${
+                                        Math.abs(farkTutar) < 0.01 ? 'text-green-300' : 
+                                        farkTutar > 0 ? 'text-orange-300' : 'text-red-300'
+                                    }`}>
+                                        {formatCurrency(farkTutar)}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                ) : (
-                    <div className="text-center py-10">
-                        <p className="text-gray-600">Rapor verisi bulunamadı.</p>
-                    </div>
-                )}
+                ) : null}
             </Card>
         </div>
     );
