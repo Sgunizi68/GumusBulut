@@ -1085,3 +1085,47 @@ def delete_odeme_referans(db: Session, referans_id: int):
         db.delete(db_odeme_referans)
         db.commit()
     return db_odeme_referans
+
+# --- Report CRUD Functions ---
+def get_bankaya_yatan_by_sube_and_donem(db: Session, sube_id: int, donem: int):
+    """
+    Get Odeme records where Kategori_ID == 60 (Bankaya Yatan) for specific sube and donem
+    """
+    from schemas.report import ReportDataItem
+    
+    records = db.query(models.Odeme).filter(
+        models.Odeme.Sube_ID == sube_id,
+        models.Odeme.Donem == donem,
+        models.Odeme.Kategori_ID == 60
+    ).all()
+    
+    result = []
+    for record in records:
+        result.append(ReportDataItem(
+            Tarih=record.Tarih.strftime('%Y-%m-%d'),
+            Donem=record.Donem,
+            Tutar=float(record.Tutar)
+        ))
+    
+    return result
+
+def get_nakit_girisi_by_sube_and_donem(db: Session, sube_id: int, donem: int):
+    """
+    Get Nakit records for specific sube and donem
+    """
+    from schemas.report import ReportDataItem
+    
+    records = db.query(models.Nakit).filter(
+        models.Nakit.Sube_ID == sube_id,
+        models.Nakit.Donem == donem
+    ).all()
+    
+    result = []
+    for record in records:
+        result.append(ReportDataItem(
+            Tarih=record.Tarih.strftime('%Y-%m-%d'),
+            Donem=record.Donem,
+            Tutar=float(record.Tutar)
+        ))
+    
+    return result

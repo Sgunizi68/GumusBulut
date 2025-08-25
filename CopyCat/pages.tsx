@@ -24,7 +24,7 @@ import {
     STOK_SAYIM_EKRANI_YETKI_ADI, CALISAN_YONETIMI_EKRANI_YETKI_ADI, 
     PUANTAJ_SECIM_YONETIMI_EKRANI_YETKI_ADI, PUANTAJ_GIRISI_EKRANI_YETKI_ADI, 
     AVANS_TALEBI_EKRANI_YETKI_ADI, NAKIT_GIRISI_EKRANI_YETKI_ADI, FINANSAL_OZET_YETKI_ADI,
-    ODEME_YUKLEME_EKRANI_YETKI_ADI // Explicitly add it here
+    ODEME_YUKLEME_EKRANI_YETKI_ADI, NAKIT_YATIRMA_RAPORU_YETKI_ADI // Explicitly add it here
 } from './constants';
 import { Kullanici, Rol, Yetki, KullaniciRol, RolYetki, KullaniciFormData, RolFormData, YetkiFormData, Sube, SubeFormData, Deger, DegerFormData, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, EFatura, EFaturaExcelRow, InvoiceAssignmentFormData, B2BEkstre, B2BEkstreExcelRow, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, PuantajEntry, HarcamaTipi, Gelir, GelirEkstra, KategoriTip, AvansIstek, AvansIstekFormData } from './types'; 
 

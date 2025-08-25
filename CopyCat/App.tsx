@@ -5,6 +5,7 @@ import { LoginPage, DashboardPage, SubePage, UsersPage, RolesPage, PermissionsPa
 import { MENU_GROUPS, DASHBOARD_ITEM, Icons, DEFAULT_PERIOD, OZEL_FATURA_YETKI_ADI, PUANTAJ_HISTORY_ACCESS_YETKI_ADI, GELIR_GECMISI_YETKI_ADI, DEFAULT_END_DATE, STORAGE_KEYS } from './constants';
 
 import { EFaturaReferansPage } from './pages';
+import { NakitYatirmaRaporuPage } from './pages/NakitYatirmaRaporu';
 import { Input, Select } from './components'; 
 
 // --- Helper types for local storage data ---
@@ -1530,6 +1531,7 @@ const App: React.FC = () => {
                       <Route path="/avans" element={<AvansPage />} />
                       <Route path="/nakit-girisi" element={<NakitPage />} />
                       <Route path="/odeme-yukleme" element={<OdemeYuklemePage />} />
+                      <Route path="/nakit-yatirma-raporu" element={<NakitYatirmaRaporuPage />} />
                       
                       <Route path="*" element={<Navigate to="/" />} /> 
                     </Routes>
