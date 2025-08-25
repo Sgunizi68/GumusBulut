@@ -109,6 +109,89 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
         return bankayaYatanTotal - nakitGirisiTotal;
     }, [bankayaYatanTotal, nakitGirisiTotal]);
 
+    // Enhanced matching logic with better tolerance and detailed matching info
+    const matchingResults = useMemo(() => {
+        if (!reportData) return { matched: [], unmatchedBankaya: [], unmatchedNakit: [] };
+        
+        const tolerance = 0.01; // 1 kuruş tolerance for floating point precision
+        const matched: Array<{bankaya: ReportDataItem, nakit: ReportDataItem, index: {bankaya: number, nakit: number}}> = [];
+        const unmatchedBankaya: Array<{item: ReportDataItem, index: number}> = [];
+        const unmatchedNakit: Array<{item: ReportDataItem, index: number}> = [];
+        
+        const usedNakitIndices = new Set<number>();
+        
+        // Find matches for Bankaya Yatan records
+        reportData.bankaya_yatan.forEach((bankayaItem, bankayaIndex) => {
+            let matchFound = false;
+            
+            reportData.nakit_girisi.forEach((nakitItem, nakitIndex) => {
+                if (usedNakitIndices.has(nakitIndex)) return;
+                
+                // Match criteria: same period and amount within tolerance (ignoring date)
+                const samePeriod = bankayaItem.Donem === nakitItem.Donem;
+                const sameAmount = Math.abs(bankayaItem.Tutar - nakitItem.Tutar) < tolerance;
+                
+                if (samePeriod && sameAmount) {
+                    matched.push({
+                        bankaya: bankayaItem,
+                        nakit: nakitItem,
+                        index: { bankaya: bankayaIndex, nakit: nakitIndex }
+                    });
+                    usedNakitIndices.add(nakitIndex);
+                    matchFound = true;
+                    return;
+                }
+            });
+            
+            if (!matchFound) {
+                unmatchedBankaya.push({ item: bankayaItem, index: bankayaIndex });
+            }
+        });
+        
+        // Find unmatched Nakit Girişi records
+        reportData.nakit_girisi.forEach((nakitItem, nakitIndex) => {
+            if (!usedNakitIndices.has(nakitIndex)) {
+                unmatchedNakit.push({ item: nakitItem, index: nakitIndex });
+            }
+        });
+        
+        return { matched, unmatchedBankaya, unmatchedNakit };
+    }, [reportData]);
+
+    // Helper function to get row styling based on matching status
+    const getRowStyling = (index: number, type: 'bankaya' | 'nakit') => {
+        const isMatched = matchingResults.matched.some(match => 
+            match.index[type] === index
+        );
+        
+        if (isMatched) {
+            return 'bg-green-100 border-l-4 border-green-500';
+        } else {
+            return 'bg-red-50 border-l-4 border-red-400 hover:bg-red-100';
+        }
+    };
+
+    // Get status icon for matched/unmatched records
+    const getStatusIcon = (index: number, type: 'bankaya' | 'nakit') => {
+        const isMatched = matchingResults.matched.some(match => 
+            match.index[type] === index
+        );
+        
+        if (isMatched) {
+            return (
+                <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+            );
+        } else {
+            return (
+                <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+            );
+        }
+    };
+
     return (
         <div className="space-y-6">
             <Card title={`Nakit Yatırma Kontrol Raporu (Şube: ${selectedBranch?.Sube_Adi})`} actions={
@@ -177,6 +260,7 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
                                     <table className="w-full">
                                         <thead className="bg-gray-50 sticky top-0">
                                             <tr>
+                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Durum</th>
                                                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tarih</th>
                                                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dönem</th>
                                                 <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Tutar</th>
@@ -184,11 +268,11 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
                                         </thead>
                                         <tbody className="bg-white divide-y divide-gray-200">
                                             {reportData.bankaya_yatan.map((item, index) => {
-                                                const isMatched = reportData.nakit_girisi.some(nakit => 
-                                                    nakit.Tarih === item.Tarih && Math.abs(nakit.Tutar - item.Tutar) < 0.01
-                                                );
                                                 return (
-                                                    <tr key={index} className={isMatched ? 'bg-green-50' : 'hover:bg-gray-50'}>
+                                                    <tr key={index} className={getRowStyling(index, 'bankaya')}>
+                                                        <td className="px-4 py-3 text-sm text-center">
+                                                            {getStatusIcon(index, 'bankaya')}
+                                                        </td>
                                                         <td className="px-4 py-3 text-sm text-gray-700">
                                                             {new Date(item.Tarih).toLocaleDateString('tr-TR')}
                                                         </td>
@@ -214,6 +298,7 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
                                     <table className="w-full">
                                         <thead className="bg-gray-50 sticky top-0">
                                             <tr>
+                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Durum</th>
                                                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tarih</th>
                                                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dönem</th>
                                                 <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Tutar</th>
@@ -221,11 +306,11 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
                                         </thead>
                                         <tbody className="bg-white divide-y divide-gray-200">
                                             {reportData.nakit_girisi.map((item, index) => {
-                                                const isMatched = reportData.bankaya_yatan.some(odeme => 
-                                                    odeme.Tarih === item.Tarih && Math.abs(odeme.Tutar - item.Tutar) < 0.01
-                                                );
                                                 return (
-                                                    <tr key={index} className={isMatched ? 'bg-green-50' : 'hover:bg-gray-50'}>
+                                                    <tr key={index} className={getRowStyling(index, 'nakit')}>
+                                                        <td className="px-4 py-3 text-sm text-center">
+                                                            {getStatusIcon(index, 'nakit')}
+                                                        </td>
                                                         <td className="px-4 py-3 text-sm text-gray-700">
                                                             {new Date(item.Tarih).toLocaleDateString('tr-TR')}
                                                         </td>
@@ -244,6 +329,71 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
                             </div>
                         </div>
                         
+                        {/* Matching Statistics */}
+                        <div className="bg-white border rounded-lg shadow-sm p-4 mb-4">
+                            <h4 className="text-lg font-semibold mb-3 text-gray-800">Eşleşme Durumu</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                                <div className="bg-green-50 border border-green-200 p-3 rounded-lg text-center">
+                                    <div className="flex items-center justify-center mb-1">
+                                        <svg className="w-4 h-4 text-green-600 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                        </svg>
+                                        <span className="text-green-800 font-medium">Eşleşen</span>
+                                    </div>
+                                    <div className="text-2xl font-bold text-green-700">{matchingResults.matched.length}</div>
+                                </div>
+                                <div className="bg-red-50 border border-red-200 p-3 rounded-lg text-center">
+                                    <div className="flex items-center justify-center mb-1">
+                                        <svg className="w-4 h-4 text-red-600 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                        </svg>
+                                        <span className="text-red-800 font-medium">Bankaya Eşleşmeyen</span>
+                                    </div>
+                                    <div className="text-2xl font-bold text-red-700">{matchingResults.unmatchedBankaya.length}</div>
+                                </div>
+                                <div className="bg-red-50 border border-red-200 p-3 rounded-lg text-center">
+                                    <div className="flex items-center justify-center mb-1">
+                                        <svg className="w-4 h-4 text-red-600 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                        </svg>
+                                        <span className="text-red-800 font-medium">Nakit Eşleşmeyen</span>
+                                    </div>
+                                    <div className="text-2xl font-bold text-red-700">{matchingResults.unmatchedNakit.length}</div>
+                                </div>
+                                <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg text-center">
+                                    <div className="flex items-center justify-center mb-1">
+                                        <span className="text-blue-800 font-medium">Eşleşme Oranı</span>
+                                    </div>
+                                    <div className="text-2xl font-bold text-blue-700">
+                                        {reportData && (reportData.bankaya_yatan.length + reportData.nakit_girisi.length) > 0 
+                                            ? Math.round((matchingResults.matched.length * 2) / (reportData.bankaya_yatan.length + reportData.nakit_girisi.length) * 100)
+                                            : 0}%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Legend */}
+                        <div className="bg-gray-50 border rounded-lg p-4 mb-6">
+                            <h4 className="text-sm font-semibold mb-2 text-gray-700">Açıklama</h4>
+                            <div className="flex flex-wrap gap-4 text-xs">
+                                <div className="flex items-center">
+                                    <div className="w-4 h-4 bg-green-100 border-l-4 border-green-500 mr-2 rounded"></div>
+                                    <svg className="w-3 h-3 text-green-600 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                    </svg>
+                                    <span className="text-gray-600">Eşleşen kayıtlar (aynı dönem ve tutar)</span>
+                                </div>
+                                <div className="flex items-center">
+                                    <div className="w-4 h-4 bg-red-50 border-l-4 border-red-400 mr-2 rounded"></div>
+                                    <svg className="w-3 h-3 text-red-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                    </svg>
+                                    <span className="text-gray-600">Eşleşmeyen kayıtlar</span>
+                                </div>
+                            </div>
+                        </div>
+
                         <div className="bg-gradient-to-r from-slate-800 to-slate-600 text-white p-6 rounded-lg">
                             <h3 className="text-lg font-semibold mb-4 text-center">Özet Bilgiler</h3>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
