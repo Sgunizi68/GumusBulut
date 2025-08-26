@@ -133,6 +133,7 @@ class EFatura(Base):
     Donem = Column(Integer, nullable=False) # Stored as INT in DB, but often handled as string 'YYMM'
     Ozel = Column(Boolean, default=False)
     Gunluk_Harcama = Column(Boolean, default=False)
+    Giden_Fatura = Column(Boolean, default=False)
     Sube_ID = Column(Integer, ForeignKey("Sube.Sube_ID"), nullable=False)
     Kayit_Tarihi = Column(DateTime, default=func.now())
 

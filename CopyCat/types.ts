@@ -98,6 +98,7 @@ export interface EFatura {
   Donem: string; // INT(4) -> string YYAA format (örn: "2307")
   Ozel: boolean; // BOOLEAN, DEFAULT FALSE
   Gunluk_Harcama: boolean; // BOOLEAN, DEFAULT FALSE
+  Giden_Fatura: boolean; // TINYINT(1) -> boolean
   Sube_ID: number; // Foreign Key to Sube.Sube_ID, NOT NULL
   Kayit_Tarihi: string; // TIMESTAMP, DEFAULT CURRENT_TIMESTAMP (YYYY-MM-DD HH:mm:ss)
 }

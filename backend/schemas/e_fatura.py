@@ -15,6 +15,7 @@ class EFaturaBase(BaseModel):
     Donem: int # int in DB, but frontend uses YYMM string
     Ozel: bool = False
     Gunluk_Harcama: bool = False
+    Giden_Fatura: bool = False
     Sube_ID: int
 
 class EFaturaCreate(EFaturaBase):
@@ -25,6 +26,7 @@ class EFaturaUpdate(EFaturaBase):
     Fatura_Numarasi: Optional[str] = Field(None, max_length=50)
     Alici_Unvani: Optional[str] = Field(None, max_length=200)
     Tutar: Optional[Decimal] = Field(None, ge=0)
+    Giden_Fatura: Optional[bool] = None
     Sube_ID: Optional[int] = None
 
 class EFaturaInDB(EFaturaBase):

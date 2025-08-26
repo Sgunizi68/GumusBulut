@@ -260,9 +260,9 @@ export const MOCK_E_FATURALAR: EFatura[] = [];
 // Sample data for simulating Excel upload
 export const MOCK_E_FATURA_EXCEL_SAMPLE: EFaturaExcelRow[] = [
   { "Alici Adi": "Tech Solutions Ltd.", "Fatura Numarasi": "INV2024001", "Fatura Tarihi": "15.07.2024", "Durum": "Onaylandı", "Tutar": 1500.75 },
-  { "Alici Adi": "Green Grocers Inc.", "Fatura Numarasi": "INV2024002", "Fatura Tarihi": "16.07.2024", "Geliş Tarihi": "17.07.2024", "Senaryo": "TEMELFATURA", "Durum": "Onaylandı", "Tutar": 850.00 },
+  { "Alici Adi": "Green Grocers Inc.", "Fatura Numarasi": "INV2024002", "Fatura Tarihi": "16.07.2024", "Geliş Tarihi": "17.07.2024", "Senaryo": "TEMELFATURA", "Durum": "Gönderildi", "Tutar": 850.00 },
   { "Alici Adi": "Office Supplies Co.", "Fatura Numarasi": "INV2024003", "Fatura Tarihi": "10.07.2024", "Durum": "Reddedildi", "Tutar": 300.50 }, 
-  { "Alici Adi": "Consulting Services", "Fatura Numarasi": "INV2024004", "Fatura Tarihi": "20.06.2024", "Durum": "Onaylandı", "Tutar": 2200.00 },
+  { "Alici Adi": "Consulting Services", "Fatura Numarasi": "INV2024004", "Fatura Tarihi": "20.06.2024", "Durum": "Gönderildi", "Tutar": 2200.00 },
   { "Alici Adi": "Tech Solutions Ltd.", "Fatura Numarasi": "INV2024001", "Fatura Tarihi": "20.07.2024", "Durum": "Onaylandı", "Tutar": 1600.00 }, 
 ];
 

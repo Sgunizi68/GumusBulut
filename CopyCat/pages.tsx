@@ -2185,6 +2185,10 @@ export const InvoiceUploadPage: React.FC = () => {
             const period = calculatePeriod(dateStr);
             const aliciUnvani = String(row["Alıcı Adı"] || '');
             const matchingReferans = eFaturaReferansList.find(ref => ref.Alici_Unvani === aliciUnvani);
+            
+            // Process Durum field for Giden_Fatura
+            const durumValue = String(row["Durum"] || '');
+            const gidenFatura = durumValue.toLowerCase().trim() === 'gönderildi';
 
             return {
               Sube_ID: selectedBranch.Sube_ID,
@@ -2194,6 +2198,8 @@ export const InvoiceUploadPage: React.FC = () => {
               Tutar: parseCurrencyValue(row["Tutar"]),
               Donem: period,
               Ozel: false,
+              Gunluk_Harcama: false,
+              Giden_Fatura: gidenFatura,
               Kategori_ID: matchingReferans ? matchingReferans.Kategori_ID : null, // Assign Kategori_ID if match found
             };
           } catch (e: any) {
@@ -3348,9 +3354,9 @@ export const GelirPage: React.FC = () => {
                 return sum + (getGelirEntry(cat.Kategori_ID, dateString, selectedBranch.Sube_ID)?.Tutar || 0);
             }, 0);
 
-            // Use a small tolerance for floating point comparisons
-            if (Math.abs(robotPosTutar - toplamSatisGelirleri) > 0.01) {
-                newErrors[dateString] = `Uyuşmazlık: RobotPos (${formatNumberForDisplay(robotPosTutar,2)}) ≠ Toplam Satış (${formatNumberForDisplay(toplamSatisGelirleri,2)})`;
+            // Show warning only when RobotPos is greater than Toplam Satış Gelirleri
+            if (robotPosTutar > toplamSatisGelirleri && (robotPosTutar - toplamSatisGelirleri) > 0.01) {
+                newErrors[dateString] = `Uyarı: RobotPos (${formatNumberForDisplay(robotPosTutar,2)}) > Toplam Satış (${formatNumberForDisplay(toplamSatisGelirleri,2)})`;
             } else {
                 newErrors[dateString] = null;
             }
