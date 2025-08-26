@@ -5419,7 +5419,6 @@ export const OdemeKategoriAtamaPage: React.FC = () => {
 
   // State management
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedKategoriId, setSelectedKategoriId] = useState<number | null>(null);
   const [viewedPeriod, setViewedPeriod] = useState(currentPeriod);
   const [showOnlyUncategorized, setShowOnlyUncategorized] = useState(false);
 
@@ -5430,7 +5429,14 @@ export const OdemeKategoriAtamaPage: React.FC = () => {
     if (next.localeCompare(currentPeriod) <= 0) setViewedPeriod(next);
   };
 
-  // Filter kategoriler from "Ödeme Sistemleri" and "Bilgi" UstKategori
+  // Available periods calculation based on actual data
+  const availablePeriods = useMemo(() => {
+    const periods = new Set(odemeList.map(o => o.Donem?.toString() || ''));
+    periods.add(currentPeriod);
+    return Array.from(periods).filter(p => p).sort((a, b) => b.localeCompare(a));
+  }, [odemeList, currentPeriod]);
+
+  // Filter kategoriler from "Ödeme Sistemleri" and "Bilgi" UstKategori, sorted alphabetically
   const paymentKategoriler = useMemo(() => {
     const odemeUstKategori = ustKategoriList.find(uk => uk.UstKategori_Adi === 'Ödeme Sistemleri');
     const bilgiUstKategori = ustKategoriList.find(uk => uk.UstKategori_Adi === 'Bilgi');
@@ -5439,7 +5445,7 @@ export const OdemeKategoriAtamaPage: React.FC = () => {
       k.Aktif_Pasif && 
       (k.Ust_Kategori_ID === odemeUstKategori?.UstKategori_ID || 
        k.Ust_Kategori_ID === bilgiUstKategori?.UstKategori_ID)
-    );
+    ).sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi, 'tr', { sensitivity: 'base' }));
   }, [kategoriList, ustKategoriList]);
 
   // Filter odeme records
@@ -5469,25 +5475,7 @@ export const OdemeKategoriAtamaPage: React.FC = () => {
     await updateOdeme(odemeId, { Donem: donem });
   };
 
-  const handleBulkKategoriAssignment = async () => {
-    if (!selectedKategoriId) {
-      alert('Lütfen önce bir kategori seçin.');
-      return;
-    }
-    
-    const uncategorizedOdemes = filteredOdemeList.filter(o => !o.Kategori_ID);
-    if (uncategorizedOdemes.length === 0) {
-      alert('Kategori atanacak ödeme bulunamadı.');
-      return;
-    }
-    
-    if (confirm(`${uncategorizedOdemes.length} adet kategorisiz ödemeye kategori atanacak. Onaylıyor musunuz?`)) {
-      for (const odeme of uncategorizedOdemes) {
-        await updateOdeme(odeme.Odeme_ID, { Kategori_ID: selectedKategoriId });
-      }
-      alert('Toplu kategori ataması tamamlandı.');
-    }
-  };
+
 
   // Export functions
   const handleExportToExcel = () => {
@@ -5515,13 +5503,6 @@ export const OdemeKategoriAtamaPage: React.FC = () => {
     generateDashboardPdf('odeme-kategori-atama-content', `Odeme_Kategori_Atama_${selectedBranch?.Sube_Adi}_${viewedPeriod}.pdf`);
   };
 
-  // Period options for dropdown
-  const periodOptions = [
-    { value: getPreviousPeriod(currentPeriod), label: `Önceki Dönem (${getPreviousPeriod(currentPeriod)})` },
-    { value: currentPeriod, label: `Mevcut Dönem (${currentPeriod})` },
-    { value: getNextPeriod(currentPeriod), label: `Sonraki Dönem (${getNextPeriod(currentPeriod)})` }
-  ];
-
   if (!selectedBranch) {
     return <Card title="Ödeme Kategori Atama"><p className="text-red-500">Lütfen önce bir şube seçin.</p></Card>;
   }
@@ -5542,31 +5523,11 @@ export const OdemeKategoriAtamaPage: React.FC = () => {
                 <Icons.Download className="w-5 h-5" />
               </Button>
             )}
-            <div className="flex items-center space-x-2">
-              <Button 
-                onClick={handlePreviousPeriod} 
-                variant="ghost" 
-                size="sm" 
-                title="Önceki Dönem"
-              >
-                <Icons.ChevronLeft className="w-4 h-4" />
-              </Button>
-              <span className="text-sm font-medium px-2">{viewedPeriod}</span>
-              <Button 
-                onClick={handleNextPeriod} 
-                variant="ghost" 
-                size="sm" 
-                title="Sonraki Dönem"
-                disabled={getNextPeriod(viewedPeriod) > currentPeriod}
-              >
-                <Icons.ChevronRight className="w-4 h-4" />
-              </Button>
-            </div>
           </div>
         }
       >
         {/* Filter Controls */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 items-end">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Arama</label>
             <Input
@@ -5577,26 +5538,21 @@ export const OdemeKategoriAtamaPage: React.FC = () => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Toplu Kategori Ataması</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Dönem Filtresi</label>
             <select
-              value={selectedKategoriId || ''}
-              onChange={(e) => setSelectedKategoriId(e.target.value ? parseInt(e.target.value) : null)}
+              value={viewedPeriod}
+              onChange={(e) => setViewedPeriod(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="">Kategori seçin...</option>
-              {paymentKategoriler.map(k => (
-                <option key={k.Kategori_ID} value={k.Kategori_ID}>{k.Kategori_Adi}</option>
+              {availablePeriods.map(period => (
+                <option key={period} value={period}>{period}</option>
               ))}
             </select>
           </div>
           
-          <div className="flex items-end">
-            <Button onClick={handleBulkKategoriAssignment} disabled={!selectedKategoriId}>
-              Toplu Atama
-            </Button>
-          </div>
+          <div></div>
           
-          <div className="flex items-end">
+          <div className="flex items-center">
             <label className="flex items-center">
               <input
                 type="checkbox"
@@ -5644,8 +5600,8 @@ export const OdemeKategoriAtamaPage: React.FC = () => {
                     className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
                   >
                     <option value="">Seçin...</option>
-                    {periodOptions.map(option => (
-                      <option key={option.value} value={option.value}>{option.label}</option>
+                    {availablePeriods.map(period => (
+                      <option key={period} value={period}>{period}</option>
                     ))}
                   </select>
                 </td>

@@ -1000,7 +1000,7 @@ def delete_nakit(db: Session, nakit_id: int):
 def get_odeme(db: Session, odeme_id: int):
     return db.query(models.Odeme).filter(models.Odeme.Odeme_ID == odeme_id).first()
 
-def get_odemeler(db: Session, skip: int = 0, limit: int = 100):
+def get_odemeler(db: Session, skip: int = 0, limit: int = 1000):
     return db.query(models.Odeme).offset(skip).limit(limit).all()
 
 def create_odeme(db: Session, odeme: odeme.OdemeCreate):
