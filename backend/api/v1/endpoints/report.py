@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import logging
 from db import crud
 from db.database import get_db
 from schemas.report import NakitYatirmaRaporu
+from schemas.odeme_rapor import OdemeRaporResponse
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -61,4 +62,57 @@ def get_nakit_yatirma_kontrol_raporu(sube_id: int, donem: int, db: Session = Dep
         raise
     except Exception as e:
         logger.error(f"Error in get_nakit_yatirma_kontrol_raporu: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+
+@router.get("/odeme-rapor/", response_model=OdemeRaporResponse)
+def get_odeme_rapor(
+    donem: Optional[List[int]] = Query(None),
+    kategori: Optional[List[int]] = Query(None),
+    sube_id: Optional[int] = None,
+    db: Session = Depends(get_db)
+):
+    """
+    Odeme Rapor endpoint - comprehensive payment report with grouping
+    
+    Args:
+        donem: Optional list of periods (e.g., [2508, 2509])
+        kategori: Optional list of category IDs
+        sube_id: Branch ID filter
+        
+    Returns:
+        OdemeRaporResponse: Grouped report data with totals
+    """
+    logger.info(f"Getting Odeme Rapor for Sube_ID: {sube_id}, Donem: {donem}, Kategori: {kategori}")
+    
+    try:
+        # Validate inputs
+        if sube_id and sube_id <= 0:
+            raise HTTPException(status_code=400, detail="Invalid sube_id")
+        
+        # Validate period format if provided
+        if donem:
+            for d in donem:
+                donem_str = str(d)
+                if d <= 0 or len(donem_str) not in [4, 6]:
+                    raise HTTPException(
+                        status_code=400, 
+                        detail=f"Invalid donem format. Expected YYMM (4-digit) or YYYYMM (6-digit) format, got: {d}"
+                    )
+        
+        # Get report data using the comprehensive CRUD function
+        report_data = crud.get_odeme_rapor(
+            db=db,
+            donem_list=donem,
+            kategori_list=kategori,
+            sube_id=sube_id
+        )
+        
+        logger.info(f"Successfully generated Odeme report with {len(report_data.data)} period groups, {report_data.total_records} total records")
+        return report_data
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in get_odeme_rapor: {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")

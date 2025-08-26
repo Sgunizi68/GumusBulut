@@ -6,6 +6,7 @@ import { MENU_GROUPS, DASHBOARD_ITEM, Icons, DEFAULT_PERIOD, OZEL_FATURA_YETKI_A
 
 import { EFaturaReferansPage } from './pages';
 import { NakitYatirmaRaporuPage } from './pages/NakitYatirmaRaporu';
+import { OdemeRaporPage } from './pages/OdemeRapor';
 import { Input, Select } from './components'; 
 
 // --- Helper types for local storage data ---
@@ -1602,6 +1603,7 @@ const App: React.FC = () => {
                       <Route path="/nakit-girisi" element={<NakitPage />} />
                       <Route path="/odeme-yukleme" element={<OdemeYuklemePage />} />
                       <Route path="/nakit-yatirma-raporu" element={<NakitYatirmaRaporuPage />} />
+                      <Route path="/odeme-rapor" element={<OdemeRaporPage />} />
                       
                       <Route path="*" element={<Navigate to="/" />} /> 
                     </Routes>

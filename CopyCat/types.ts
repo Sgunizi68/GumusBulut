@@ -319,6 +319,50 @@ export interface Nakit {
   Imaj?: string; // LONGBLOB (Base64 encoded string)
 }
 
+// --- ODEME REPORT TYPES ---
+export interface OdemeRaporRequest {
+  donem?: number[];     // Optional array of periods (e.g., [2508, 2509])
+  kategori?: number[];  // Optional array of category IDs
+  sube_id?: number;     // Branch filter (from context)
+}
+
+export interface OdemeRaporDetail {
+  odeme_id: number;
+  tip: string;
+  hesap_adi: string;
+  tarih: string;        // Date in YYYY-MM-DD format
+  aciklama: string;
+  tutar: number;
+}
+
+export interface OdemeRaporKategoriGroup {
+  kategori_id: number | null;
+  kategori_adi: string;
+  kategori_total: number;
+  record_count: number;
+  details: OdemeRaporDetail[];
+}
+
+export interface OdemeRaporDonemGroup {
+  donem: number;
+  donem_total: number;
+  record_count: number;
+  kategoriler: OdemeRaporKategoriGroup[];
+}
+
+export interface OdemeRaporTotals {
+  donem_totals: { [donem: number]: number };
+  kategori_totals: { [kategori_id: string]: number };
+  grand_total: number;
+}
+
+export interface OdemeRaporResponse {
+  data: OdemeRaporDonemGroup[];
+  totals: OdemeRaporTotals;
+  filters_applied: OdemeRaporRequest;
+  total_records: number;
+}
+
 export type NakitFormData = Omit<Nakit, 'Nakit_ID' | 'Kayıt_Tarih' | 'Imaj' | 'Donem'> & { Nakit_ID?: number; Imaj?: File | null; Imaj_Adı?: string | null; Donem?: number | string; };
 
 

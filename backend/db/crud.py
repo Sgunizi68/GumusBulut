@@ -1196,3 +1196,192 @@ def get_nakit_girisi_by_sube_and_donem(db: Session, sube_id: int, donem: int):
     except Exception as e:
         logger.error(f"Error in get_nakit_girisi_by_sube_and_donem: {e}")
         return []
+
+# --- Odeme Report CRUD Functions ---
+def get_odeme_rapor(db: Session, donem_list: Optional[List[int]] = None, kategori_list: Optional[List[int]] = None, sube_id: Optional[int] = None):
+    """
+    Get comprehensive Odeme report with grouping by Donem and Kategori
+    """
+    import logging
+    from collections import defaultdict
+    from decimal import Decimal
+    from sqlalchemy import or_
+    from schemas.odeme_rapor import OdemeRaporResponse, DonemGroup, KategoriGroup, OdemeDetail, OdemeRaporTotals, OdemeRaporRequest
+    
+    logger = logging.getLogger(__name__)
+    
+    try:
+        # Build base query
+        query = db.query(models.Odeme)
+        
+        # Apply filters
+        if sube_id:
+            query = query.filter(models.Odeme.Sube_ID == sube_id)
+            
+        if donem_list:
+            # Handle period format conversion if needed
+            converted_donem_list = []
+            for donem in donem_list:
+                if len(str(donem)) == 6:
+                    converted_donem_list.append(donem - 200000)  # Convert 202508 to 2508
+                else:
+                    converted_donem_list.append(donem)
+            query = query.filter(models.Odeme.Donem.in_(converted_donem_list))
+            
+        if kategori_list:
+            # Include specified categories or uncategorized if requested
+            if -1 in kategori_list:  # -1 represents uncategorized
+                kategori_list_clean = [k for k in kategori_list if k != -1]
+                if kategori_list_clean:
+                    query = query.filter(
+                        or_(
+                            models.Odeme.Kategori_ID.in_(kategori_list_clean),
+                            models.Odeme.Kategori_ID.is_(None)
+                        )
+                    )
+                else:
+                    query = query.filter(models.Odeme.Kategori_ID.is_(None))
+            else:
+                query = query.filter(models.Odeme.Kategori_ID.in_(kategori_list))
+        
+        # Join with Kategori to get category names
+        query = query.outerjoin(models.Kategori, models.Odeme.Kategori_ID == models.Kategori.Kategori_ID)
+        
+        # Order by Donem, Kategori, Tarih
+        query = query.order_by(models.Odeme.Donem.desc(), models.Odeme.Kategori_ID, models.Odeme.Tarih.desc())
+        
+        records = query.all()
+        logger.info(f"Found {len(records)} Odeme records for report")
+        
+        # Group data by Donem and Kategori
+        donem_groups = defaultdict(lambda: {
+            'donem_total': Decimal('0'),
+            'record_count': 0,
+            'kategoriler': defaultdict(lambda: {
+                'kategori_adi': 'Kategorilendirilmemiş',
+                'kategori_total': Decimal('0'),
+                'record_count': 0,
+                'details': []
+            })
+        })
+        
+        # Collect all category names
+        kategori_names = {}
+        if kategori_list:
+            kategoriler = db.query(models.Kategori).filter(models.Kategori.Kategori_ID.in_(kategori_list)).all()
+            for kat in kategoriler:
+                kategori_names[kat.Kategori_ID] = kat.Kategori_Adi
+        
+        # Process records
+        total_records = 0
+        grand_total = Decimal('0')
+        donem_totals = defaultdict(lambda: Decimal('0'))
+        kategori_totals = defaultdict(lambda: Decimal('0'))
+        
+        for record in records:
+            donem = record.Donem
+            kategori_id = record.Kategori_ID or 'uncategorized'
+            kategori_adi = 'Kategorilendirilmemiş'
+            
+            # Get category name
+            if record.Kategori_ID and hasattr(record, 'kategori') and record.kategori:
+                kategori_adi = record.kategori.Kategori_Adi
+            elif record.Kategori_ID in kategori_names:
+                kategori_adi = kategori_names[record.Kategori_ID]
+            
+            # Set category name
+            donem_groups[donem]['kategoriler'][kategori_id]['kategori_adi'] = kategori_adi
+            
+            # Create detail record
+            detail = OdemeDetail(
+                odeme_id=record.Odeme_ID,
+                tip=record.Tip,
+                hesap_adi=record.Hesap_Adi,
+                tarih=record.Tarih,
+                aciklama=record.Aciklama,
+                tutar=record.Tutar
+            )
+            
+            # Add to collections
+            donem_groups[donem]['kategoriler'][kategori_id]['details'].append(detail)
+            donem_groups[donem]['kategoriler'][kategori_id]['kategori_total'] += record.Tutar
+            donem_groups[donem]['kategoriler'][kategori_id]['record_count'] += 1
+            donem_groups[donem]['donem_total'] += record.Tutar
+            donem_groups[donem]['record_count'] += 1
+            
+            # Update totals
+            donem_totals[donem] += record.Tutar
+            kategori_totals[str(kategori_id)] += record.Tutar
+            grand_total += record.Tutar
+            total_records += 1
+        
+        # Convert to response format
+        result_data = []
+        for donem in sorted(donem_groups.keys(), reverse=True):
+            donem_data = donem_groups[donem]
+            
+            kategori_groups = []
+            for kategori_id in sorted(donem_data['kategoriler'].keys(), 
+                                    key=lambda x: (x == 'uncategorized', x)):
+                kategori_data = donem_data['kategoriler'][kategori_id]
+                
+                kategori_group = KategoriGroup(
+                    kategori_id=None if kategori_id == 'uncategorized' else kategori_id,
+                    kategori_adi=kategori_data['kategori_adi'],
+                    kategori_total=kategori_data['kategori_total'],
+                    record_count=kategori_data['record_count'],
+                    details=sorted(kategori_data['details'], key=lambda x: x.tarih, reverse=True)
+                )
+                kategori_groups.append(kategori_group)
+            
+            donem_group = DonemGroup(
+                donem=donem,
+                donem_total=donem_data['donem_total'],
+                record_count=donem_data['record_count'],
+                kategoriler=kategori_groups
+            )
+            result_data.append(donem_group)
+        
+        # Create totals
+        totals = OdemeRaporTotals(
+            donem_totals=dict(donem_totals),
+            kategori_totals=dict(kategori_totals),
+            grand_total=grand_total
+        )
+        
+        # Create filters applied
+        filters_applied = OdemeRaporRequest(
+            donem=donem_list,
+            kategori=kategori_list,
+            sube_id=sube_id
+        )
+        
+        # Create final response
+        response = OdemeRaporResponse(
+            data=result_data,
+            totals=totals,
+            filters_applied=filters_applied,
+            total_records=total_records
+        )
+        
+        logger.info(f"Successfully generated Odeme report with {len(result_data)} period groups, {total_records} total records")
+        return response
+        
+    except Exception as e:
+        logger.error(f"Error in get_odeme_rapor: {e}")
+        # Return empty response on error
+        empty_response = OdemeRaporResponse(
+            data=[],
+            totals=OdemeRaporTotals(
+                donem_totals={},
+                kategori_totals={},
+                grand_total=Decimal('0')
+            ),
+            filters_applied=OdemeRaporRequest(
+                donem=donem_list,
+                kategori=kategori_list,
+                sube_id=sube_id
+            ),
+            total_records=0
+        )
+        return empty_response
