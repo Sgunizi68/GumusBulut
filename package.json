@@ -1,9 +1,12 @@
 {
   "devDependencies": {
-    "husky": "^9.1.7"
+    "@types/node": "^24.3.0",
+    "husky": "^9.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
   },
   "scripts": {
     "prepare": "husky install"
   },
-  "version": "0.31.1"
+  "version": "1.0.0"
 }

@@ -759,7 +759,7 @@ export const KategoriForm: React.FC<KategoriFormProps> = ({ initialData, ustKate
   const activeUstKategoriler = useMemo(() => {
     return ustKategoriler
       .filter(uk => uk.Aktif_Pasif || (initialData && uk.UstKategori_ID === initialData.Ust_Kategori_ID))
-      .sort((a, b) => a.UstKategori_Adi.localeCompare(b.UstKategori_Adi));
+      .sort((a, b) => a.UstKategori_Adi.localeCompare(b.UstKategori_Adi, 'tr', { sensitivity: 'base' }));
   }, [ustKategoriler, initialData]);
   
   const [formData, setFormData] = React.useState<KategoriFormData>(
@@ -985,7 +985,7 @@ export const DigerHarcamaForm: React.FC<DigerHarcamaFormProps> = ({ initialData,
   const activeKategoriler = useMemo(() => {
     return kategoriler
       .filter(k => k.Aktif_Pasif && k.Tip === 'Gider')
-      .sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi));
+      .sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi, 'tr', { sensitivity: 'base' }));
   }, [kategoriler]);
 
   return (
@@ -1473,7 +1473,7 @@ export const EFaturaReferansForm: React.FC<EFaturaReferansFormProps> = ({ initia
   const activeKategoriler = useMemo(() => {
     return kategoriler
       .filter(k => k.Aktif_Pasif)
-      .sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi));
+      .sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi, 'tr', { sensitivity: 'base' }));
   }, [kategoriler]);
 
   return (
@@ -1537,7 +1537,7 @@ export const OdemeReferansForm: React.FC<OdemeReferansFormProps> = ({ initialDat
   const activeKategoriler = useMemo(() => {
     return kategoriler
       .filter(k => k.Aktif_Pasif)
-      .sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi));
+      .sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi, 'tr', { sensitivity: 'base' }));
   }, [kategoriler]);
 
   return (

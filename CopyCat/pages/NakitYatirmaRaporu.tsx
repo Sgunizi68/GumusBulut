@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useAppContext, useDataContext } from '../App';
 import { Button, Card, Select, TableLayout } from '../components';
-import { Icons } from '../constants';
+import { Icons, YAZDIRMA_YETKISI_ADI, EXCELE_AKTAR_YETKISI_ADI } from '../constants';
+import { generateDashboardPdf } from '../utils/pdfGenerator';
+import * as XLSX from 'xlsx';
 
 interface ReportDataItem {
     Tarih: string;
@@ -14,19 +16,30 @@ interface NakitYatirmaRaporuData {
     nakit_girisi: ReportDataItem[];
 }
 
+const formatNumber = (value: number) => {
+    return new Intl.NumberFormat('tr-TR', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+        useGrouping: true,
+    }).format(value);
+};
+
 const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(value);
+    return `₺${formatNumber(value)}`;
 };
 
 const API_BASE_URL = "https://gumusbulut.onrender.com/api/v1";
 
 export const NakitYatirmaRaporuPage: React.FC = () => {
-    const { selectedBranch, currentPeriod } = useAppContext();
+    const { selectedBranch, currentPeriod, hasPermission } = useAppContext();
     const [reportData, setReportData] = useState<NakitYatirmaRaporuData | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [selectedPeriod, setSelectedPeriod] = useState(currentPeriod);
     const [error, setError] = useState<string | null>(null);
-    const [debugInfo, setDebugInfo] = useState<string>('');
+    
+    // Permission checks for export functionality
+    const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
+    const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
 
     // Function moved before usage to fix Temporal Dead Zone error
     const getPreviousPeriod = (periodYYAA: string): string => {
@@ -47,12 +60,10 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
             if (selectedBranch && selectedPeriod) {
                 setLoading(true);
                 setError(null);
-                setDebugInfo('');
                 
                 try {
                     const url = `${API_BASE_URL}/nakit-yatirma-kontrol/${selectedBranch.Sube_ID}/${selectedPeriod}`;
                     console.log('🔍 Fetching report data from:', url);
-                    setDebugInfo(`Fetching from: ${url}`);
                     
                     const response = await fetch(url);
                     
@@ -61,10 +72,10 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
                         console.log('✅ Report data received:', data);
                         setReportData(data);
                         
-                        // Add debug information
+                        // Console log for development (debug info removed from UI)
                         const bankCount = data?.bankaya_yatan?.length || 0;
                         const nakitCount = data?.nakit_girisi?.length || 0;
-                        setDebugInfo(`Data loaded - Bankaya Yatan: ${bankCount} records, Nakit Girişi: ${nakitCount} records`);
+                        console.log(`✅ Data loaded - Bankaya Yatan: ${bankCount} records, Nakit Girişi: ${nakitCount} records`);
                         
                         if (bankCount === 0 && nakitCount === 0) {
                             setError('Bu dönem için veri bulunamadı. Lütfen başka bir dönem seçin.');
@@ -84,6 +95,124 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
 
         fetchReportData();
     }, [selectedBranch, selectedPeriod]);
+    
+    // Export Functions
+    const handleGeneratePdf = () => {
+        generateDashboardPdf(
+            'nakit-yatirma-raporu-content',
+            `Nakit_Yatirma_Kontrol_Raporu_${selectedBranch?.Sube_Adi}_${selectedPeriod}.pdf`
+        );
+    };
+    
+    const handleExportToExcel = () => {
+        if (!reportData || !selectedBranch) return;
+
+        const wb = XLSX.utils.book_new();
+        
+        // Helper function to check if a record is matched
+        const isMatched = (index: number, type: 'bankaya' | 'nakit') => {
+            return matchingResults.matched.some(match => match.index[type] === index);
+        };
+        
+        // Sheet 1: Bankaya Yatan (Bank Deposits)
+        const bankayaData = reportData.bankaya_yatan.map((item, index) => ({
+            'Sıra': index + 1,
+            'Tarih': new Date(item.Tarih).toLocaleDateString('tr-TR'),
+            'Dönem': item.Donem,
+            'Tutar': item.Tutar,
+            'Durum': isMatched(index, 'bankaya') ? 'Eşleşti' : 'Eşleşmedi'
+        }));
+        
+        const wsBankaya = XLSX.utils.json_to_sheet(bankayaData);
+        wsBankaya['!cols'] = [
+            { wch: 8 },  // Sıra
+            { wch: 15 }, // Tarih
+            { wch: 10 }, // Dönem
+            { wch: 15 }, // Tutar
+            { wch: 12 }  // Durum
+        ];
+        XLSX.utils.book_append_sheet(wb, wsBankaya, 'Bankaya Yatan');
+        
+        // Sheet 2: Nakit Girişi (Cash Entries)
+        const nakitData = reportData.nakit_girisi.map((item, index) => ({
+            'Sıra': index + 1,
+            'Tarih': new Date(item.Tarih).toLocaleDateString('tr-TR'),
+            'Dönem': item.Donem,
+            'Tutar': item.Tutar,
+            'Durum': isMatched(index, 'nakit') ? 'Eşleşti' : 'Eşleşmedi'
+        }));
+        
+        const wsNakit = XLSX.utils.json_to_sheet(nakitData);
+        wsNakit['!cols'] = [
+            { wch: 8 },  // Sıra
+            { wch: 15 }, // Tarih
+            { wch: 10 }, // Dönem
+            { wch: 15 }, // Tutar
+            { wch: 12 }  // Durum
+        ];
+        XLSX.utils.book_append_sheet(wb, wsNakit, 'Nakit Girişi');
+        
+        // Sheet 3: Özet Rapor (Summary Report)
+        const ozet = [
+            {
+                'Kategori': 'Bankaya Yatan',
+                'Toplam Tutar': bankayaYatanTotal,
+                'Kayıt Sayısı': reportData.bankaya_yatan.length,
+                'Eşleşen': matchingResults.matched.length,
+                'Eşleşmeyen': matchingResults.unmatchedBankaya.length
+            },
+            {
+                'Kategori': 'Nakit Girişi',
+                'Toplam Tutar': nakitGirisiTotal,
+                'Kayıt Sayısı': reportData.nakit_girisi.length,
+                'Eşleşen': matchingResults.matched.length,
+                'Eşleşmeyen': matchingResults.unmatchedNakit.length
+            },
+            {
+                'Kategori': 'Fark',
+                'Toplam Tutar': farkTutar,
+                'Kayıt Sayısı': '',
+                'Eşleşen': '',
+                'Eşleşmeyen': ''
+            }
+        ];
+        
+        const wsOzet = XLSX.utils.json_to_sheet(ozet);
+        wsOzet['!cols'] = [
+            { wch: 20 }, // Kategori
+            { wch: 15 }, // Toplam Tutar
+            { wch: 12 }, // Kayıt Sayısı
+            { wch: 10 }, // Eşleşen
+            { wch: 12 }  // Eşleşmeyen
+        ];
+        XLSX.utils.book_append_sheet(wb, wsOzet, 'Özet Rapor');
+        
+        // Sheet 4: Eşleşme Analizi (Matching Analysis)
+        const eslesmeler = matchingResults.matched.map((match, index) => ({
+            'Sıra': index + 1,
+            'Bankaya Yatan Tutar': match.bankaya.Tutar,
+            'Nakit Girişi Tutar': match.nakit.Tutar,
+            'Fark': Math.abs(match.bankaya.Tutar - match.nakit.Tutar),
+            'Bankaya Yatan Dönem': match.bankaya.Donem,
+            'Nakit Girişi Dönem': match.nakit.Donem,
+            'Durum': 'Eşleşti'
+        }));
+        
+        const wsEslesmeler = XLSX.utils.json_to_sheet(eslesmeler);
+        wsEslesmeler['!cols'] = [
+            { wch: 8 },  // Sıra
+            { wch: 18 }, // Bankaya Yatan Tutar
+            { wch: 18 }, // Nakit Girişi Tutar
+            { wch: 10 }, // Fark
+            { wch: 18 }, // Bankaya Yatan Dönem
+            { wch: 18 }, // Nakit Girişi Dönem
+            { wch: 10 }  // Durum
+        ];
+        XLSX.utils.book_append_sheet(wb, wsEslesmeler, 'Eşleşme Analizi');
+        
+        // Save the file
+        XLSX.writeFile(wb, `Nakit_Yatirma_Kontrol_Raporu_${selectedBranch.Sube_Adi}_${selectedPeriod}.xlsx`);
+    };
 
     const availablePeriods = useMemo(() => {
         const periods = new Set<string>();
@@ -193,9 +322,19 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6" id="nakit-yatirma-raporu-content">
             <Card title={`Nakit Yatırma Kontrol Raporu (Şube: ${selectedBranch?.Sube_Adi})`} actions={
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 hide-on-pdf">
+                    {canPrint && (
+                        <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
+                            <Icons.Print className="w-5 h-5" />
+                        </Button>
+                    )}
+                    {canExportExcel && (
+                        <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
+                            <Icons.Download className="w-5 h-5" />
+                        </Button>
+                    )}
                     <Select
                         value={selectedPeriod}
                         onChange={(e) => setSelectedPeriod(e.target.value)}
@@ -205,12 +344,7 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
                     </Select>
                 </div>
             }>
-                {/* Debug Information */}
-                {debugInfo && (
-                    <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded text-sm text-blue-700">
-                        <strong>Debug:</strong> {debugInfo}
-                    </div>
-                )}
+                {/* Debug Information removed from UI - now only in console logs */}
                 
                 {loading ? (
                     <div className="flex justify-center items-center py-8">

@@ -9,6 +9,7 @@ import {
     OdemeRaporDetail,
     Kategori 
 } from '../types';
+import { sortPaymentKategoriler, createKategoriMultiSelectOptions } from '../utils/categoryUtils';
 
 // API constants
 const API_BASE_URL = 'http://localhost:8000/api/v1';
@@ -221,11 +222,9 @@ export const OdemeRaporPage: React.FC = () => {
                 const response = await fetch(`${API_BASE_URL}/kategoriler/`);
                 if (response.ok) {
                     const data = await response.json();
-                    // Filter only payment categories
-                    const paymentKategoriler = data.filter((k: Kategori) => 
-                        k.Aktif_Pasif && (k.Tip === 'Ödeme' || k.Tip === 'Gider')
-                    );
-                    setAvailableKategoriler(paymentKategoriler);
+                    // Filter and sort payment categories using utility function
+                    const sortedPaymentKategoriler = sortPaymentKategoriler(data);
+                    setAvailableKategoriler(sortedPaymentKategoriler);
                 }
             } catch (error) {
                 console.error('Error fetching kategoriler:', error);
@@ -315,13 +314,9 @@ export const OdemeRaporPage: React.FC = () => {
         label: donem.toString()
     }));
 
-    const kategoriOptions = [
-        { value: -1, label: 'Kategorilendirilmemiş' }, // Special option for uncategorized
-        ...availableKategoriler.map(kategori => ({
-            value: kategori.Kategori_ID,
-            label: kategori.Kategori_Adi
-        }))
-    ];
+    const kategoriOptions = useMemo(() => {
+        return createKategoriMultiSelectOptions(availableKategoriler, true);
+    }, [availableKategoriler]);
 
     return (
         <div className="space-y-6">

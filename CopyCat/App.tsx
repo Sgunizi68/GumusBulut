@@ -149,7 +149,7 @@ const Sidebar: React.FC = () => {
         })}
       </nav>
       <div className="p-2 text-center text-xs text-slate-400">
-        Version: 0.13.0
+        Version: 4.0.0
       </div>
     </div>
   );
