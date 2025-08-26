@@ -1,180 +1,193 @@
 #!/usr/bin/env python3
 """
-Test script to validate Giden_Fatura implementation
-Tests the logic for marking outgoing invoices based on Durum field
+Test script to validate the implementation of "Giden Fatura" category type enhancement.
+This script tests both backend and frontend related functionality.
 """
 
-def test_giden_fatura_logic():
-    """Test the JavaScript logic that will be implemented in the frontend"""
-    
-    # Test cases for different Durum values
-    test_cases = [
-        {"durum": "Gönderildi", "expected": True, "description": "Exact match - should be marked as outgoing"},
-        {"durum": "gönderildi", "expected": True, "description": "Lowercase - should be marked as outgoing"},
-        {"durum": " Gönderildi ", "expected": True, "description": "With spaces - should be marked as outgoing"},
-        {"durum": "GÖNDERILDI", "expected": True, "description": "Uppercase - should be marked as outgoing (case insensitive)"},
-        {"durum": "Onaylandı", "expected": False, "description": "Different status - should NOT be marked"},
-        {"durum": "Reddedildi", "expected": False, "description": "Rejected status - should NOT be marked"},
-        {"durum": "", "expected": False, "description": "Empty status - should NOT be marked"},
-        {"durum": None, "expected": False, "description": "None status - should NOT be marked"},
-        {"durum": "Gönderilemedi", "expected": False, "description": "Similar but different status - should NOT be marked"},
-    ]
-    
-    def determine_giden_fatura(durum_value):
-        """Simulate the JavaScript logic in Python"""
-        if durum_value is None:
-            durum_value = ""
-        
-        status = str(durum_value).lower().strip()
-        return status == 'gönderildi'
-    
-    print("Testing Giden_Fatura Logic Implementation")
-    print("=" * 50)
-    
-    all_passed = True
-    
-    for i, test_case in enumerate(test_cases, 1):
-        durum = test_case["durum"]
-        expected = test_case["expected"]
-        description = test_case["description"]
-        
-        result = determine_giden_fatura(durum)
-        passed = result == expected
-        
-        if not passed:
-            all_passed = False
-        
-        status_symbol = "✓" if passed else "✗"
-        print(f"{status_symbol} Test {i}: {description}")
-        print(f"   Input: '{durum}' -> Expected: {expected}, Got: {result}")
-        
-        if not passed:
-            print(f"   FAILED!")
-        print()
-    
-    print("=" * 50)
-    if all_passed:
-        print("🎉 All tests PASSED! Implementation logic is correct.")
-    else:
-        print("❌ Some tests FAILED! Review the implementation.")
-    
-    return all_passed
+import sys
+import os
 
-def test_backend_schema_validation():
-    """Test that backend schemas can handle the new field"""
-    print("\nTesting Backend Schema Structure")
-    print("=" * 50)
-    
-    # Simulate the expected schema structure
-    efatura_base_fields = [
-        "Fatura_Tarihi",
-        "Fatura_Numarasi", 
-        "Alici_Unvani",
-        "Alici_VKN_TCKN",
-        "Tutar",
-        "Kategori_ID",
-        "Aciklama",
-        "Donem",
-        "Ozel",
-        "Gunluk_Harcama",
-        "Giden_Fatura",  # New field
-        "Sube_ID"
-    ]
-    
-    print("✓ EFaturaBase schema should include these fields:")
-    for field in efatura_base_fields:
-        marker = "→" if field == "Giden_Fatura" else " "
-        print(f"  {marker} {field}")
-    
-    print("\n✓ EFaturaUpdate schema should include:")
-    print("   → Giden_Fatura: Optional[bool] = None")
-    
-    print("\n✓ Database model should include:")
-    print("   → Giden_Fatura = Column(Boolean, default=False)")
+# Add the backend directory to the Python path
+backend_path = os.path.join(os.path.dirname(__file__), 'backend')
+sys.path.insert(0, backend_path)
 
-def test_frontend_interface():
-    """Test frontend TypeScript interface structure"""
-    print("\nTesting Frontend Interface Structure")
-    print("=" * 50)
-    
-    efatura_interface_fields = [
-        "Fatura_ID: number",
-        "Fatura_Tarihi: string",
-        "Fatura_Numarasi: string",
-        "Alici_Unvani: string",
-        "Alici_VKN_TCKN?: string",
-        "Tutar: number",
-        "Kategori_ID: number | null",
-        "Aciklama?: string",
-        "Donem: string",
-        "Ozel: boolean",
-        "Gunluk_Harcama: boolean",
-        "Giden_Fatura: boolean",  # New field
-        "Sube_ID: number",
-        "Kayit_Tarihi: string"
-    ]
-    
-    print("✓ EFatura interface should include these fields:")
-    for field in efatura_interface_fields:
-        marker = "→" if "Giden_Fatura" in field else " "
-        print(f"  {marker} {field}")
+try:
+    from schemas.kategori import KategoriBase, KategoriCreate
+    from db.models import Kategori
+    print("✅ Successfully imported backend schemas and models")
+except ImportError as e:
+    print(f"❌ Error importing backend modules: {e}")
+    sys.exit(1)
 
-def print_sample_test_data():
-    """Print sample test data for manual testing"""
-    print("\nSample Test Data for Manual Testing")
-    print("=" * 50)
+def test_pydantic_schema():
+    """Test that the Pydantic schema accepts 'Giden Fatura' as a valid type."""
+    print("\n=== Testing Pydantic Schema ===")
     
-    sample_excel_data = [
-        {
-            "Alıcı Adı": "Test Company 1",
-            "Fatura Numarası": "TEST001",
-            "Fatura Tarihi": "15.12.2024",
-            "Durum": "Gönderildi",
-            "Tutar": 1000.00,
-            "Expected Giden_Fatura": True
-        },
-        {
-            "Alıcı Adı": "Test Company 2", 
-            "Fatura Numarası": "TEST002",
-            "Fatura Tarihi": "16.12.2024",
-            "Durum": "Onaylandı",
-            "Tutar": 2000.00,
-            "Expected Giden_Fatura": False
-        },
-        {
-            "Alıcı Adı": "Test Company 3",
-            "Fatura Numarası": "TEST003", 
-            "Fatura Tarihi": "17.12.2024",
-            "Durum": " gönderildi ",
-            "Tutar": 1500.00,
-            "Expected Giden_Fatura": True
+    try:
+        # Test creating a category with 'Giden Fatura' type
+        test_data = {
+            "Kategori_Adi": "Test Giden Fatura Kategorisi",
+            "Ust_Kategori_ID": 1,
+            "Tip": "Giden Fatura",
+            "Aktif_Pasif": True,
+            "Gizli": False
         }
-    ]
-    
-    print("Use this sample data to test the Excel upload:")
-    print()
-    for i, data in enumerate(sample_excel_data, 1):
-        print(f"Row {i}:")
-        for key, value in data.items():
-            if key == "Expected Giden_Fatura":
-                print(f"  Expected {key}: {value}")
-            else:
-                print(f"  {key}: {value}")
-        print()
+        
+        kategori_base = KategoriBase(**test_data)
+        kategori_create = KategoriCreate(**test_data)
+        
+        print(f"✅ KategoriBase validation passed: {kategori_base.Tip}")
+        print(f"✅ KategoriCreate validation passed: {kategori_create.Tip}")
+        
+        # Test all valid types
+        valid_types = ["Gelir", "Gider", "Bilgi", "Ödeme", "Giden Fatura"]
+        for tip in valid_types:
+            test_data["Tip"] = tip
+            kategori = KategoriBase(**test_data)
+            print(f"✅ Valid type accepted: {tip}")
+        
+        return True
+        
+    except Exception as e:
+        print(f"❌ Pydantic schema test failed: {e}")
+        return False
 
-if __name__ == "__main__":
-    # Run all tests
-    print("Giden_Fatura Implementation Test Suite")
+def test_typescript_types():
+    """Test frontend TypeScript type definitions by reading the types file."""
+    print("\n=== Testing TypeScript Types ===")
+    
+    try:
+        types_file_path = os.path.join(os.path.dirname(__file__), 'CopyCat', 'types.ts')
+        
+        with open(types_file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Check if the KategoriTip type includes all expected values
+        expected_types = ["'Gelir'", "'Gider'", "'Bilgi'", "'Ödeme'", "'Giden Fatura'"]
+        
+        if "export type KategoriTip = 'Gelir' | 'Gider' | 'Bilgi' | 'Ödeme' | 'Giden Fatura';" in content:
+            print("✅ TypeScript KategoriTip type definition is correct")
+            
+            for expected_type in expected_types:
+                if expected_type in content:
+                    print(f"✅ Found expected type in definition: {expected_type}")
+                else:
+                    print(f"❌ Missing expected type: {expected_type}")
+                    return False
+            
+            return True
+        else:
+            print("❌ KategoriTip type definition not found or incorrect")
+            return False
+            
+    except Exception as e:
+        print(f"❌ TypeScript types test failed: {e}")
+        return False
+
+def test_component_dropdowns():
+    """Test that frontend components include the new dropdown option."""
+    print("\n=== Testing Frontend Components ===")
+    
+    try:
+        # Test KategoriForm component
+        components_file_path = os.path.join(os.path.dirname(__file__), 'CopyCat', 'components.tsx')
+        
+        with open(components_file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Check if KategoriForm includes Giden Fatura option
+        if '<option value="Giden Fatura">Giden Fatura</option>' in content:
+            print("✅ KategoriForm component includes 'Giden Fatura' option")
+        else:
+            print("❌ KategoriForm component missing 'Giden Fatura' option")
+            return False
+        
+        # Test category management page filters
+        pages_file_path = os.path.join(os.path.dirname(__file__), 'CopyCat', 'pages.tsx')
+        
+        with open(pages_file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Check if filter dropdown includes Giden Fatura option
+        giden_fatura_count = content.count('<option value="Giden Fatura">Giden Fatura</option>')
+        if giden_fatura_count >= 1:
+            print(f"✅ Category management page filter includes 'Giden Fatura' option (found {giden_fatura_count} instances)")
+        else:
+            print("❌ Category management page filter missing 'Giden Fatura' option")
+            return False
+        
+        return True
+        
+    except Exception as e:
+        print(f"❌ Frontend components test failed: {e}")
+        return False
+
+def test_database_model():
+    """Test that the database model enum constraint includes 'Giden Fatura'."""
+    print("\n=== Testing Database Model ===")
+    
+    try:
+        models_file_path = os.path.join(os.path.dirname(__file__), 'backend', 'db', 'models.py')
+        
+        with open(models_file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Check if the Kategori model Tip field includes 'Giden Fatura'
+        expected_enum = "Enum('Gelir', 'Gider', 'Bilgi', 'Ödeme', 'Giden Fatura')"
+        if expected_enum in content:
+            print("✅ Database model Tip enum includes 'Giden Fatura'")
+            return True
+        else:
+            print("❌ Database model Tip enum missing 'Giden Fatura' or incorrect format")
+            return False
+            
+    except Exception as e:
+        print(f"❌ Database model test failed: {e}")
+        return False
+
+def main():
+    """Run all tests and provide a summary."""
+    print("🔧 Testing 'Giden Fatura' Category Type Implementation")
     print("=" * 60)
     
-    logic_passed = test_giden_fatura_logic()
-    test_backend_schema_validation()
-    test_frontend_interface()
-    print_sample_test_data()
+    tests = [
+        ("Database Model", test_database_model),
+        ("Pydantic Schema", test_pydantic_schema), 
+        ("TypeScript Types", test_typescript_types),
+        ("Frontend Components", test_component_dropdowns),
+    ]
     
+    results = []
+    
+    for test_name, test_func in tests:
+        try:
+            result = test_func()
+            results.append((test_name, result))
+        except Exception as e:
+            print(f"❌ {test_name} test crashed: {e}")
+            results.append((test_name, False))
+    
+    # Summary
     print("\n" + "=" * 60)
-    print("Test Summary:")
-    print(f"Logic Tests: {'PASSED' if logic_passed else 'FAILED'}")
-    print("Schema Structure: VERIFIED")
-    print("Interface Structure: VERIFIED")
-    print("\nReady for integration testing!")
+    print("📊 TEST SUMMARY")
+    print("=" * 60)
+    
+    passed = sum(1 for _, result in results if result)
+    total = len(results)
+    
+    for test_name, result in results:
+        status = "✅ PASSED" if result else "❌ FAILED"
+        print(f"{test_name:20} {status}")
+    
+    print(f"\nOverall Result: {passed}/{total} tests passed")
+    
+    if passed == total:
+        print("🎉 All tests passed! 'Giden Fatura' category type implementation is successful.")
+        return True
+    else:
+        print("⚠️  Some tests failed. Please review the implementation.")
+        return False
+
+if __name__ == "__main__":
+    success = main()
+    sys.exit(0 if success else 1)

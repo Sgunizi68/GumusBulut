@@ -45,7 +45,7 @@ export interface UstKategori {
   Aktif_Pasif: boolean;
 }
 
-export type KategoriTip = 'Gelir' | 'Gider' | 'Bilgi';
+export type KategoriTip = 'Gelir' | 'Gider' | 'Bilgi' | 'Ödeme' | 'Giden Fatura';
 
 export interface Kategori {
   Kategori_ID: number;
@@ -119,7 +119,7 @@ export interface EFaturaExcelRow {
 export type EFaturaFormData = Omit<EFatura, 'Fatura_ID' | 'Kayit_Tarihi' | 'Sube_ID' | 'Donem'> & { Fatura_ID?: number};
 
 // For the InvoiceCategoryAssignment (inline editing or form)
-export type InvoiceAssignmentFormData = Partial<Pick<EFatura, 'Kategori_ID' | 'Donem' | 'Gunluk_Harcama' | 'Ozel' | 'Aciklama'>>;
+export type InvoiceAssignmentFormData = Partial<Pick<EFatura, 'Kategori_ID' | 'Donem' | 'Gunluk_Harcama' | 'Ozel' | 'Aciklama' | 'Giden_Fatura'>>;
 
 export interface B2BEkstre {
   Ekstre_ID: number;

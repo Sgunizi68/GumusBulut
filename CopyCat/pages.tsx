@@ -2071,6 +2071,7 @@ export const KategorilerPage: React.FC = () => {
               <option value="Gider">Gider</option>
               <option value="Bilgi">Bilgi</option>
               <option value="Ödeme">Ödeme</option>
+              <option value="Giden Fatura">Giden Fatura</option>
             </Select>
             <Button onClick={handleAddKategori} leftIcon={<Icons.Add className="w-4 h-4" />} className="flex-shrink-0 text-sm px-3">
               Yeni Kategori
@@ -2287,6 +2288,7 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
   const [filterPeriod, setFilterPeriod] = useState(""); // Default to "Tümü"
   const [filterUncategorized, setFilterUncategorized] = useState(true);
   const [selectedKategoriFilter, setSelectedKategoriFilter] = useState(''); // New state for Kategori filter
+  const [filterGidenFatura, setFilterGidenFatura] = useState<boolean | undefined>(false); // Default to Gelen Fatura (false)
   const canPrint = hasPermission("Yazdırma Yetkisi");
   const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
 
@@ -2309,6 +2311,7 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
             'Açıklama': fatura.Aciklama || '',
             'Dönem': fatura.Donem,
             'Günlük': fatura.Gunluk_Harcama ? 'Evet' : 'Hayır',
+            'Fatura Türü': fatura.Giden_Fatura ? 'Giden Fatura' : 'Gelen Fatura',
         };
         if (canViewAndEditSpecial) {
             row['Özel'] = fatura.Ozel ? 'Evet' : 'Hayır';
@@ -2326,6 +2329,7 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
         { wch: 40 },
         { wch: 10 },
         { wch: 10 },
+        { wch: 15 },
         { wch: 10 },
     ];
     XLSX.utils.book_append_sheet(wb, ws, 'Fatura Kategori Atama');
@@ -2399,6 +2403,11 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
     if (selectedKategoriFilter) {
       invoicesToDisplay = invoicesToDisplay.filter(f => String(f.Kategori_ID) === selectedKategoriFilter);
     }
+
+    // Giden/Gelen Fatura Filter
+    if (filterGidenFatura !== undefined) {
+      invoicesToDisplay = invoicesToDisplay.filter(f => f.Giden_Fatura === filterGidenFatura);
+    }
     
     // --- Sorting ---
     invoicesToDisplay.sort((a, b) => {
@@ -2412,9 +2421,32 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
 
     return invoicesToDisplay;
 
-  }, [eFaturaList, selectedBranch, searchTerm, filterSpecial, filterPeriod, filterUncategorized, selectedKategoriFilter, canViewAndEditSpecial]);
+  }, [eFaturaList, selectedBranch, searchTerm, filterSpecial, filterPeriod, filterUncategorized, selectedKategoriFilter, filterGidenFatura, canViewAndEditSpecial]);
 
 
+  // Enhanced category filtering function for invoice type based filtering
+  const getCategoriesForInvoiceType = useMemo(() => {
+    return (isGidenFatura: boolean) => {
+      const allowedTips = isGidenFatura 
+        ? ['Bilgi', 'Giden Fatura'] 
+        : ['Bilgi', 'Gider'];
+      
+      return kategoriList.filter(k => 
+        k.Aktif_Pasif &&
+        allowedTips.includes(k.Tip) &&
+        (canViewGizliKategoriler || !k.Gizli)
+      ).sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi, 'tr', { sensitivity: 'base' }));
+    };
+  }, [kategoriList, canViewGizliKategoriler]);
+
+  // Pre-computed category lists for performance optimization
+  const gidenFaturaCategories = useMemo(() => 
+    getCategoriesForInvoiceType(true), [getCategoriesForInvoiceType]);
+
+  const gelenFaturaCategories = useMemo(() => 
+    getCategoriesForInvoiceType(false), [getCategoriesForInvoiceType]);
+
+  // Legacy activeKategoriler for backward compatibility (used in filter dropdown)
   const activeKategoriler = useMemo(() => {
     return kategoriList.filter(k => 
       k.Aktif_Pasif &&
@@ -2486,6 +2518,11 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
             <option value="">Tümü (Varsayılan: Kategorisiz + Cari/Önceki Dönem)</option>
             {availableMainFilterPeriods.map(p => <option key={p} value={p}>{p}</option>)}
           </Select>
+          <Select label="Fatura Türü" value={filterGidenFatura === undefined ? "" : (filterGidenFatura ? "true" : "false")} onChange={e => setFilterGidenFatura(e.target.value === "" ? undefined : e.target.value === "true")}>
+            <option value="false">Gelen Fatura</option>
+            <option value="true">Giden Fatura</option>
+            <option value="">Tümü</option>
+          </Select>
           {canViewAndEditSpecial && (
             <Select label="Özel Fatura" value={filterSpecial === undefined ? "" : (filterSpecial ? "true" : "false")} onChange={e => setFilterSpecial(e.target.value === "" ? undefined : e.target.value === "true")}>
                 <option value="">Tümü</option>
@@ -2493,6 +2530,8 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
                 <option value="false">Hayır</option>
             </Select>
           )}
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4 items-end">
           <Select label="Kategori Filtresi" value={selectedKategoriFilter} onChange={e => setSelectedKategoriFilter(e.target.value)}>
             <option value="">Tüm Kategoriler</option>
             {activeKategoriler.map(kategori => (
@@ -2510,6 +2549,8 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
             />
             <span className="text-gray-700 text-sm">Sadece Kategorisizleri Göster</span>
           </label>
+          <div></div>
+          <div></div>
         </div>
       </Card>
 
@@ -2530,7 +2571,7 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
                       className="text-xs p-1 w-full"
                     >
                       <option value="">Seçin...</option>
-                      {activeKategoriler.map((kategori) => (
+                      {(fatura.Giden_Fatura ? gidenFaturaCategories : gelenFaturaCategories).map((kategori) => (
                         <option key={kategori.Kategori_ID} value={kategori.Kategori_ID}>
                           {kategori.Kategori_Adi}
                         </option>
@@ -2560,13 +2601,17 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
                     </Select>
                   </td>
                   <td className="px-2 py-1.5 text-xs text-center">
-                    <input
-                      type="checkbox"
-                      checked={fatura.Gunluk_Harcama}
-                      onChange={() => handleUpdate(fatura.Fatura_ID, "Gunluk_Harcama", !fatura.Gunluk_Harcama)}
-                      className="form-checkbox h-4 w-4 text-blue-500 cursor-pointer"
-                      aria-label={`Fatura ${fatura.Fatura_Numarasi} için günlük harcama`}
-                    />
+                    {fatura.Giden_Fatura ? (
+                      <span className="text-gray-600 font-medium">Giden</span>
+                    ) : (
+                      <input
+                        type="checkbox"
+                        checked={fatura.Gunluk_Harcama}
+                        onChange={() => handleUpdate(fatura.Fatura_ID, "Gunluk_Harcama", !fatura.Gunluk_Harcama)}
+                        className="form-checkbox h-4 w-4 text-blue-500 cursor-pointer"
+                        aria-label={`Fatura ${fatura.Fatura_Numarasi} için günlük harcama`}
+                      />
+                    )}
                   </td>
                   {canViewAndEditSpecial && (
                     <td className="px-2 py-1.5 text-xs text-center">

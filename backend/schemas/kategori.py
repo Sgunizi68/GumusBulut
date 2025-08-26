@@ -4,7 +4,7 @@ from typing import Literal
 class KategoriBase(BaseModel):
     Kategori_Adi: str
     Ust_Kategori_ID: int | None = None
-    Tip: Literal["Gelir", "Gider", "Bilgi", "Ödeme"]
+    Tip: Literal["Gelir", "Gider", "Bilgi", "Ödeme", "Giden Fatura"]
     Aktif_Pasif: bool = True
     Gizli: bool = False
 
