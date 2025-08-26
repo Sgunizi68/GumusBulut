@@ -517,12 +517,12 @@ export const DashboardPage: React.FC = () => {
     ozetData.push({ label: 'Stok Değer Farkı', value: stokSayimFarki, isBold: true });
 
     const cirodanKalan = grandTotalGelir - grandTotalGider;
-    const donemKarZarari = cirodanKalan - stokSayimFarki;
+    const donemKarZarari = cirodanKalan + stokSayimFarki;
 
     if (hasPermission(FINANSAL_OZET_YETKI_ADI)) {
       ozetData.push({ label: 'FİNANSAL ÖZET', value: 0, isTitle: true, bgColor: 'bg-purple-100' });
       ozetData.push({ label: 'Cirodan Kalan (Gelir - Gider)', value: cirodanKalan, isBold: true });
-      ozetData.push({ label: 'Dönem Kâr / Zararı (Cirodan Kalan - Stok Farkı)', value: donemKarZarari, isEmphasized: true });
+      ozetData.push({ label: 'Dönem Kâr / Zararı (Cirodan Kalan + Stok Farkı)', value: donemKarZarari, isEmphasized: true });
     }
 
     return { gelirler: gelirlerData, giderler: giderlerData, ozet: ozetData };
