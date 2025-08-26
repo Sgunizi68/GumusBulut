@@ -6,4 +6,5 @@ CopyCat/.env.development
 CMD Backend job run command.txt
 CopyCat/dist
 CopyCat/node_modules
+.qoder
 
