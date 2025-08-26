@@ -1,11 +1,76 @@
-NakitYatirmaRaporu.tsx:56 Uncaught ReferenceError: Cannot access 'getPreviousPeriod' before initialization
-    at NakitYatirmaRaporu.tsx:56:32
-    at mountMemo (react-dom_client.js?v=fdffb896:5052:25)
-    at Object.useMemo (react-dom_client.js?v=fdffb896:16513:20)
-    at exports.useMemo (chunk-S4ZYCIRL.js?v=fdffb896:915:36)
-    at NakitYatirmaRaporuPage (NakitYatirmaRaporu.tsx:51:30)
-    at react-stack-bottom-frame (react-dom_client.js?v=fdffb896:17424:20)
-    at renderWithHooks (react-dom_client.js?v=fdffb896:4206:24)
-    at updateFunctionComponent (react-dom_client.js?v=fdffb896:6619:21)
-    at beginWork (react-dom_client.js?v=fdffb896:7654:20)
+react-dom_client.js?v=fdffb896:3216 Uncaught Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `OdemeKategoriAtamaPage`.
+    at createFiberFromTypeAndProps (react-dom_client.js?v=fdffb896:3216:30)
+    at createFiberFromElement (react-dom_client.js?v=fdffb896:3229:16)
+    at createChild (react-dom_client.js?v=fdffb896:5571:32)
+    at reconcileChildrenArray (react-dom_client.js?v=fdffb896:5789:26)
+    at reconcileChildFibersImpl (react-dom_client.js?v=fdffb896:5995:88)
+    at react-dom_client.js?v=fdffb896:6061:35
+    at reconcileChildren (react-dom_client.js?v=fdffb896:6444:53)
+    at beginWork (react-dom_client.js?v=fdffb896:7830:104)
     at runWithFiberInDEV (react-dom_client.js?v=fdffb896:1485:72)
+    at performUnitOfWork (react-dom_client.js?v=fdffb896:10874:82)
+createFiberFromTypeAndProps @ react-dom_client.js?v=fdffb896:3216
+createFiberFromElement @ react-dom_client.js?v=fdffb896:3229
+createChild @ react-dom_client.js?v=fdffb896:5571
+reconcileChildrenArray @ react-dom_client.js?v=fdffb896:5789
+reconcileChildFibersImpl @ react-dom_client.js?v=fdffb896:5995
+(anonymous) @ react-dom_client.js?v=fdffb896:6061
+reconcileChildren @ react-dom_client.js?v=fdffb896:6444
+beginWork @ react-dom_client.js?v=fdffb896:7830
+runWithFiberInDEV @ react-dom_client.js?v=fdffb896:1485
+performUnitOfWork @ react-dom_client.js?v=fdffb896:10874
+workLoopSync @ react-dom_client.js?v=fdffb896:10728
+renderRootSync @ react-dom_client.js?v=fdffb896:10711
+performWorkOnRoot @ react-dom_client.js?v=fdffb896:10359
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=fdffb896:11623
+performWorkUntilDeadline @ react-dom_client.js?v=fdffb896:36
+<button>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=fdffb896:250
+Button @ components.tsx:78
+react-stack-bottom-frame @ react-dom_client.js?v=fdffb896:17424
+renderWithHooksAgain @ react-dom_client.js?v=fdffb896:4281
+renderWithHooks @ react-dom_client.js?v=fdffb896:4217
+updateFunctionComponent @ react-dom_client.js?v=fdffb896:6619
+beginWork @ react-dom_client.js?v=fdffb896:7654
+runWithFiberInDEV @ react-dom_client.js?v=fdffb896:1485
+performUnitOfWork @ react-dom_client.js?v=fdffb896:10874
+workLoopSync @ react-dom_client.js?v=fdffb896:10728
+renderRootSync @ react-dom_client.js?v=fdffb896:10711
+performWorkOnRoot @ react-dom_client.js?v=fdffb896:10359
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=fdffb896:11623
+performWorkUntilDeadline @ react-dom_client.js?v=fdffb896:36
+<Button>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=fdffb896:250
+OdemeKategoriAtamaPage @ pages.tsx:5546
+react-stack-bottom-frame @ react-dom_client.js?v=fdffb896:17424
+renderWithHooksAgain @ react-dom_client.js?v=fdffb896:4281
+renderWithHooks @ react-dom_client.js?v=fdffb896:4217
+updateFunctionComponent @ react-dom_client.js?v=fdffb896:6619
+beginWork @ react-dom_client.js?v=fdffb896:7654
+runWithFiberInDEV @ react-dom_client.js?v=fdffb896:1485
+performUnitOfWork @ react-dom_client.js?v=fdffb896:10874
+workLoopSync @ react-dom_client.js?v=fdffb896:10728
+renderRootSync @ react-dom_client.js?v=fdffb896:10711
+performWorkOnRoot @ react-dom_client.js?v=fdffb896:10359
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=fdffb896:11623
+performWorkUntilDeadline @ react-dom_client.js?v=fdffb896:36
+<OdemeKategoriAtamaPage>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=fdffb896:250
+App @ App.tsx:1591
+react-stack-bottom-frame @ react-dom_client.js?v=fdffb896:17424
+renderWithHooksAgain @ react-dom_client.js?v=fdffb896:4281
+renderWithHooks @ react-dom_client.js?v=fdffb896:4217
+updateFunctionComponent @ react-dom_client.js?v=fdffb896:6619
+beginWork @ react-dom_client.js?v=fdffb896:7654
+runWithFiberInDEV @ react-dom_client.js?v=fdffb896:1485
+performUnitOfWork @ react-dom_client.js?v=fdffb896:10874
+workLoopSync @ react-dom_client.js?v=fdffb896:10728
+renderRootSync @ react-dom_client.js?v=fdffb896:10711
+performWorkOnRoot @ react-dom_client.js?v=fdffb896:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=fdffb896:11623
+performWorkUntilDeadline @ react-dom_client.js?v=fdffb896:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=fdffb896:250
+(anonymous) @ index.tsx:14

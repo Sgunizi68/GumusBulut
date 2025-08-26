@@ -1,7 +1,7 @@
 import React, { useState, createContext, useContext, useCallback, ReactNode, useEffect, useMemo } from 'react';
 import { HashRouter, Routes, Route, Link, NavLink, Navigate, useLocation } from 'react-router-dom';
-import { AppContextType, Sube, Kullanici, EFatura, InvoiceAssignmentFormData, DataContextType, RolYetki, B2BEkstre, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, Puantaj, PuantajEntry, Gelir, GelirEkstra, AvansIstek, Rol, Yetki, KullaniciRol, Deger, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, Nakit, NakitFormData, EFaturaReferans, EFaturaReferansFormData, OdemeReferans, OdemeReferansFormData } from './types';
-import { LoginPage, DashboardPage, SubePage, UsersPage, RolesPage, PermissionsPage, UserRoleAssignmentPage, RolePermissionAssignmentPage, DegerlerPage, PlaceholderPage, UstKategorilerPage, KategorilerPage, InvoiceUploadPage, InvoiceCategoryAssignmentPage, B2BUploadPage, DigerHarcamalarPage, GelirPage, StokPage, StokFiyatPage, StokSayimPage, CalisanPage, PuantajSecimPage, PuantajPage, AvansPage, NakitPage, OdemeYuklemePage, OdemeReferansPage } from './pages';
+import { AppContextType, Sube, Kullanici, EFatura, InvoiceAssignmentFormData, DataContextType, RolYetki, B2BEkstre, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, Puantaj, PuantajEntry, Gelir, GelirEkstra, AvansIstek, Rol, Yetki, KullaniciRol, Deger, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, Nakit, NakitFormData, EFaturaReferans, EFaturaReferansFormData, OdemeReferans, OdemeReferansFormData, Odeme, OdemeAssignmentFormData } from './types';
+import { LoginPage, DashboardPage, SubePage, UsersPage, RolesPage, PermissionsPage, UserRoleAssignmentPage, RolePermissionAssignmentPage, DegerlerPage, PlaceholderPage, UstKategorilerPage, KategorilerPage, InvoiceUploadPage, InvoiceCategoryAssignmentPage, B2BUploadPage, DigerHarcamalarPage, GelirPage, StokPage, StokFiyatPage, StokSayimPage, CalisanPage, PuantajSecimPage, PuantajPage, AvansPage, NakitPage, OdemeYuklemePage, OdemeReferansPage, OdemeKategoriAtamaPage } from './pages';
 import { MENU_GROUPS, DASHBOARD_ITEM, Icons, DEFAULT_PERIOD, OZEL_FATURA_YETKI_ADI, PUANTAJ_HISTORY_ACCESS_YETKI_ADI, GELIR_GECMISI_YETKI_ADI, DEFAULT_END_DATE, STORAGE_KEYS } from './constants';
 
 import { EFaturaReferansPage } from './pages';
@@ -28,6 +28,7 @@ interface StoredDataState {
     rolesList: Rol[];
     eFaturaReferansList: EFaturaReferans[];
     nakitList: Nakit[];
+    odemeList: Odeme[];
 }
 
 interface StoredAppState {
@@ -312,6 +313,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [eFaturaReferansList, setEFaturaReferansList] = useState<EFaturaReferans[]>([]);
   const [odemeReferansList, setOdemeReferansList] = useState<OdemeReferans[]>([]);
   const [nakitList, setNakitList] = useState<Nakit[]>([]);
+  const [odemeList, setOdemeList] = useState<Odeme[]>([]);
 
   // Initial data fetching for all lists
   useEffect(() => {
@@ -320,7 +322,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         subeler, eFaturalar, b2bEkstreler, digerHarcamalar, stoklar, stokFiyatlar,
         stokSayimlar, calisanlar, puantajSecimleri, puantajlar, gelirler,
         gelirEkstralar, avansIstekler, ustKategoriler, kategoriler, degerler,
-        users, roles, permissions, userRoles, rolePermissions, eFaturaReferanslar, odemeReferanslar, nakitler
+        users, roles, permissions, userRoles, rolePermissions, eFaturaReferanslar, odemeReferanslar, nakitler, odemeler
       ] = await Promise.all([
         fetchData<Sube[]>(`${API_BASE_URL}/subeler/`),
         fetchData<EFatura[]>(`${API_BASE_URL}/e-faturalar/`),
@@ -346,6 +348,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         fetchData<EFaturaReferans[]>(`${API_BASE_URL}/e-fatura-referans/`),
         fetchData<OdemeReferans[]>(`${API_BASE_URL}/Odeme_Referans/`),
         fetchData<Nakit[]>(`${API_BASE_URL}/nakit/`),
+        fetchData<Odeme[]>(`${API_BASE_URL}/Odeme/`),
       ]);
 
       if (subeler) setSubeList(subeler);
@@ -372,7 +375,9 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       if (eFaturaReferanslar) setEFaturaReferansList(eFaturaReferanslar);
       if (odemeReferanslar) setOdemeReferansList(odemeReferanslar);
       setNakitList(nakitler || []);
+      setOdemeList(odemeler || []);
       console.log("DataProvider - nakitList after setting:", nakitler || []);
+      console.log("DataProvider - odemeList after setting:", odemeler || []);
     };
 
     fetchAllData();
@@ -1315,6 +1320,20 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     return { success: false, message: "Nakit girişi silinirken bir hata oluştu." };
   }, []);
 
+  const updateOdeme = useCallback(async (odemeId: number, data: OdemeAssignmentFormData) => {
+    console.log(`[updateOdeme] API'ye gönderilen veri: odemeId=${odemeId}, data=`, data);
+    const updatedOdeme = await fetchData<Odeme>(`${API_BASE_URL}/Odeme/${odemeId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (updatedOdeme) {
+      setOdemeList(prevList =>
+        prevList.map(o => (o.Odeme_ID === odemeId ? updatedOdeme : o))
+      );
+    }
+  }, []);
+
   const dataContextValue: DataContextType = useMemo(() => ({
     subeList,
     addSube,
@@ -1401,7 +1420,10 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     addNakit,
     updateNakit,
     deleteNakit,
-  }), [subeList, eFaturaList, b2bEkstreList, digerHarcamaList, stokList, stokFiyatList, stokSayimList, calisanList, puantajSecimiList, puantajList, gelirList, gelirEkstraList, avansIstekList, ustKategoriList, kategoriList, degerList, userList, rolesList, permissionsList, userRolesList, rolePermissionsList, eFaturaReferansList, odemeReferansList, nakitList, addSube, updateSube, addEFaturas, updateEFatura, addB2BEkstreler, updateB2BEkstre, addDigerHarcama, updateDigerHarcama, deleteDigerHarcama, addStok, updateStok, addStokFiyat, updateStokFiyat, addOrUpdateStokSayim, addCalisan, updateCalisan, addUser, updateUser, addPuantajSecimi, updatePuantajSecimi, addOrUpdatePuantajEntry, getPuantajEntry, deletePuantajEntry, addOrUpdateGelirEntry, getGelirEntry, addOrUpdateGelirEkstraEntry, getGelirEkstraEntry, addOrUpdateAvansIstek, deleteAvansIstek, getAvansIstek, addUstKategori, updateUstKategori, addKategori, updateKategori, fetchDegerler, addDeger, updateDeger, addRole, updateRole, deleteRole, addPermission, updatePermission, deletePermission, addUserRole, updateUserRole, deleteUserRole, addRolePermission, updateRolePermission, deleteRolePermission, addEFaturaReferans, updateEFaturaReferans, deleteEFaturaReferans, addOdemeReferans, updateOdemeReferans, deleteOdemeReferans, addNakit, updateNakit, deleteNakit]);
+    odemeList,
+    updateOdeme,
+    uploadOdeme,
+  }), [subeList, eFaturaList, b2bEkstreList, digerHarcamaList, stokList, stokFiyatList, stokSayimList, calisanList, puantajSecimiList, puantajList, gelirList, gelirEkstraList, avansIstekList, ustKategoriList, kategoriList, degerList, userList, rolesList, permissionsList, userRolesList, rolePermissionsList, eFaturaReferansList, odemeReferansList, nakitList, odemeList, addSube, updateSube, addEFaturas, updateEFatura, addB2BEkstreler, updateB2BEkstre, addDigerHarcama, updateDigerHarcama, deleteDigerHarcama, addStok, updateStok, addStokFiyat, updateStokFiyat, addOrUpdateStokSayim, addCalisan, updateCalisan, addUser, updateUser, addPuantajSecimi, updatePuantajSecimi, addOrUpdatePuantajEntry, getPuantajEntry, deletePuantajEntry, addOrUpdateGelirEntry, getGelirEntry, addOrUpdateGelirEkstraEntry, getGelirEkstraEntry, addOrUpdateAvansIstek, deleteAvansIstek, getAvansIstek, addUstKategori, updateUstKategori, addKategori, updateKategori, fetchDegerler, addDeger, updateDeger, addRole, updateRole, deleteRole, addPermission, updatePermission, deletePermission, addUserRole, updateUserRole, deleteUserRole, addRolePermission, updateRolePermission, deleteRolePermission, addEFaturaReferans, updateEFaturaReferans, deleteEFaturaReferans, addOdemeReferans, updateOdemeReferans, deleteOdemeReferans, addNakit, updateNakit, deleteNakit, updateOdeme]);
 
   return <DataContext.Provider value={dataContextValue}>{children}</DataContext.Provider>;
 };
@@ -1565,6 +1587,8 @@ const App: React.FC = () => {
                       <Route path="/invoice-upload" element={<InvoiceUploadPage />} />
                       <Route path="/invoice-category-assignment" element={<InvoiceCategoryAssignmentPage />} />
                       <Route path="/b2b-upload" element={<B2BUploadPage />} />
+                      <Route path="/odeme-yukleme" element={<OdemeYuklemePage />} />
+                      <Route path="/odeme-kategori-atama" element={<OdemeKategoriAtamaPage />} />
                       
                       <Route path="/other-expenses" element={<DigerHarcamalarPage />} />
                       <Route path="/gelir" element={<GelirPage />} />

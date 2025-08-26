@@ -293,6 +293,21 @@ export interface OdemeReferans {
 
 export type OdemeReferansFormData = Omit<OdemeReferans, 'Referans_ID' | 'Kayit_Tarihi'> & { Referans_ID?: number };
 
+export interface Odeme {
+  Odeme_ID: number;
+  Tip: string; // VARCHAR(50)
+  Hesap_Adi: string; // VARCHAR(50)
+  Tarih: string; // DATE (YYYY-MM-DD)
+  Aciklama: string; // VARCHAR(200)
+  Tutar: number; // DECIMAL(15,2)
+  Kategori_ID: number | null; // Foreign Key to Kategori.Kategori_ID
+  Donem: number | null; // INT
+  Sube_ID: number; // Foreign Key to Sube.Sube_ID
+  Kayit_Tarihi: string; // TIMESTAMP
+}
+
+export type OdemeAssignmentFormData = Partial<Pick<Odeme, 'Kategori_ID' | 'Donem'>>;
+
 export interface Nakit {
   Nakit_ID: number;
   Tarih: string; // DATE (YYYY-MM-DD)
@@ -414,6 +429,10 @@ export interface DataContextType {
   addNakit: (data: FormData) => Promise<{ success: boolean; message?: string }>;
   updateNakit: (nakitId: number, data: FormData) => Promise<{ success: boolean; message?: string }>;
   deleteNakit: (nakitId: number) => Promise<{ success: boolean; message?: string }>;
+
+  odemeList: Odeme[];
+  updateOdeme: (odemeId: number, data: OdemeAssignmentFormData) => Promise<void>;
+  uploadOdeme: (formData: FormData) => Promise<{ added: number; skipped: number } | null>;
 }
 
   }

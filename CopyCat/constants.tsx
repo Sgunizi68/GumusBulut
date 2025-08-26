@@ -29,6 +29,8 @@ export const Icons = {
   EyeSlash: (props: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={props.className || "w-5 h-5"}><path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.575M5.121 5.121A15.085 15.085 0 0112 5.25c.163 0 .322.016.48.045m10.198 10.198L12 12M5.121 5.121L12 12m6.879 6.879L5.121 5.121" /></svg>,
   UserCircle: (props: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={props.className || "w-6 h-6"}><path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" /></svg>,
   ChevronDown: (props: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={props.className || "w-4 h-4"}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>,
+  ChevronLeft: (props: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={props.className || "w-4 h-4"}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>,
+  ChevronRight: (props: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={props.className || "w-4 h-4"}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>,
   Upload: (props: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={props.className || "w-5 h-5"}><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>,
   Download: (props: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={props.className || "w-5 h-5"}><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>,
   SilverCloudLogo: (props: { className?: string }) => (
@@ -93,6 +95,7 @@ export const E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'e-Fatura Referans Y�
 export const ODEME_REFERANS_YONETIMI_EKRANI_YETKI_ADI = 'Ödeme Referans Yönetimi Ekran Görüntüleme';
 export const NAKIT_GIRISI_EKRANI_YETKI_ADI = 'Nakit Girişi Ekranı Görüntüleme';
 export const ODEME_YUKLEME_EKRANI_YETKI_ADI = 'Ödeme Yükleme Ekranı Görüntüleme';
+export const ODEME_KATEGORI_ATAMA_EKRANI_YETKI_ADI = 'Ödeme Kategori Atama Ekranı Görüntüleme';
 export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
 export const NAKIT_YATIRMA_RAPORU_YETKI_ADI = 'Nakit Yatırma Kontrol Raporu Görüntüleme';
 
@@ -129,6 +132,7 @@ export const MENU_GROUPS = [
             { label: 'Fatura Kategori Atama', path: '/invoice-category-assignment', icon: Icons.Category, permission: FATURA_KATEGORI_ATAMA_EKRANI_YETKI_ADI },
             { label: 'B2B Ekstre Yükleme', path: '/b2b-upload', icon: Icons.ClipboardDocumentList, permission: B2B_YUKLEME_EKRANI_YETKI_ADI },
             { label: 'Ödeme Yükleme', path: '/odeme-yukleme', icon: Icons.Upload, permission: ODEME_YUKLEME_EKRANI_YETKI_ADI },
+            { label: 'Ödeme Kategori Atama', path: '/odeme-kategori-atama', icon: Icons.Category, permission: ODEME_KATEGORI_ATAMA_EKRANI_YETKI_ADI },
             { label: 'Diğer Harcamalar', path: '/other-expenses', icon: Icons.CreditCard, permission: DIGER_HARCAMALAR_EKRANI_YETKI_ADI },
         ]
     },

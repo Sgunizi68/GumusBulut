@@ -24,9 +24,9 @@ import {
     STOK_SAYIM_EKRANI_YETKI_ADI, CALISAN_YONETIMI_EKRANI_YETKI_ADI, 
     PUANTAJ_SECIM_YONETIMI_EKRANI_YETKI_ADI, PUANTAJ_GIRISI_EKRANI_YETKI_ADI, 
     AVANS_TALEBI_EKRANI_YETKI_ADI, NAKIT_GIRISI_EKRANI_YETKI_ADI, FINANSAL_OZET_YETKI_ADI,
-    ODEME_YUKLEME_EKRANI_YETKI_ADI, ODEME_REFERANS_YONETIMI_EKRANI_YETKI_ADI, NAKIT_YATIRMA_RAPORU_YETKI_ADI // Explicitly add it here
+    ODEME_YUKLEME_EKRANI_YETKI_ADI, ODEME_KATEGORI_ATAMA_EKRANI_YETKI_ADI, ODEME_REFERANS_YONETIMI_EKRANI_YETKI_ADI, NAKIT_YATIRMA_RAPORU_YETKI_ADI // Explicitly add it here
 } from './constants';
-import { Kullanici, Rol, Yetki, KullaniciRol, RolYetki, KullaniciFormData, RolFormData, YetkiFormData, Sube, SubeFormData, Deger, DegerFormData, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, EFatura, EFaturaExcelRow, InvoiceAssignmentFormData, B2BEkstre, B2BEkstreExcelRow, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, PuantajEntry, HarcamaTipi, Gelir, GelirEkstra, KategoriTip, AvansIstek, AvansIstekFormData, OdemeReferans, OdemeReferansFormData } from './types'; 
+import { Kullanici, Rol, Yetki, KullaniciRol, RolYetki, KullaniciFormData, RolFormData, YetkiFormData, Sube, SubeFormData, Deger, DegerFormData, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, EFatura, EFaturaExcelRow, InvoiceAssignmentFormData, B2BEkstre, B2BEkstreExcelRow, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, PuantajEntry, HarcamaTipi, Gelir, GelirEkstra, KategoriTip, AvansIstek, AvansIstekFormData, OdemeReferans, OdemeReferansFormData, Odeme, OdemeAssignmentFormData } from './types'; 
 
 // --- HELPER COMPONENTS & FUNCTIONS ---
 
@@ -5400,6 +5400,266 @@ export const OdemeReferansPage: React.FC = () => {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingReferans ? 'Ödeme Referans Düzenle' : 'Yeni Ödeme Referans Ekle'}>
         <OdemeReferansForm initialData={editingReferans} kategoriler={kategoriList} onSubmit={handleSubmit} onCancel={() => setIsModalOpen(false)} />
       </Modal>
+    </div>
+  );
+};
+
+// --- ÖDEME KATEGORİ ATAMA PAGE ---
+export const OdemeKategoriAtamaPage: React.FC = () => {
+  const { selectedBranch, currentPeriod, hasPermission } = useAppContext();
+  const { odemeList, updateOdeme, kategoriList, ustKategoriList } = useDataContext();
+
+  // Permission check
+  if (!hasPermission(ODEME_KATEGORI_ATAMA_EKRANI_YETKI_ADI)) {
+    return <AccessDenied title="Ödeme Kategori Atama" />;
+  }
+
+  const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
+
+  // State management
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedKategoriId, setSelectedKategoriId] = useState<number | null>(null);
+  const [viewedPeriod, setViewedPeriod] = useState(currentPeriod);
+  const [showOnlyUncategorized, setShowOnlyUncategorized] = useState(false);
+
+  // Period navigation
+  const handlePreviousPeriod = () => setViewedPeriod(getPreviousPeriod(viewedPeriod));
+  const handleNextPeriod = () => {
+    const next = getNextPeriod(viewedPeriod);
+    if (next.localeCompare(currentPeriod) <= 0) setViewedPeriod(next);
+  };
+
+  // Filter kategoriler from "Ödeme Sistemleri" and "Bilgi" UstKategori
+  const paymentKategoriler = useMemo(() => {
+    const odemeUstKategori = ustKategoriList.find(uk => uk.UstKategori_Adi === 'Ödeme Sistemleri');
+    const bilgiUstKategori = ustKategoriList.find(uk => uk.UstKategori_Adi === 'Bilgi');
+    
+    return kategoriList.filter(k => 
+      k.Aktif_Pasif && 
+      (k.Ust_Kategori_ID === odemeUstKategori?.UstKategori_ID || 
+       k.Ust_Kategori_ID === bilgiUstKategori?.UstKategori_ID)
+    );
+  }, [kategoriList, ustKategoriList]);
+
+  // Filter odeme records
+  const filteredOdemeList = useMemo(() => {
+    if (!selectedBranch) return [];
+    
+    return odemeList.filter(odeme => {
+      const matchesBranch = odeme.Sube_ID === selectedBranch.Sube_ID;
+      const matchesPeriod = odeme.Donem === parseInt(viewedPeriod);
+      const matchesSearch = 
+        odeme.Tip.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        odeme.Hesap_Adi.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        odeme.Aciklama.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        odeme.Tutar.toString().includes(searchTerm);
+      const matchesCategory = showOnlyUncategorized ? !odeme.Kategori_ID : true;
+      
+      return matchesBranch && matchesPeriod && matchesSearch && matchesCategory;
+    });
+  }, [odemeList, selectedBranch, viewedPeriod, searchTerm, showOnlyUncategorized]);
+
+  // Update handlers
+  const handleKategoriChange = async (odemeId: number, kategoriId: number | null) => {
+    await updateOdeme(odemeId, { Kategori_ID: kategoriId });
+  };
+
+  const handleDonemChange = async (odemeId: number, donem: number | null) => {
+    await updateOdeme(odemeId, { Donem: donem });
+  };
+
+  const handleBulkKategoriAssignment = async () => {
+    if (!selectedKategoriId) {
+      alert('Lütfen önce bir kategori seçin.');
+      return;
+    }
+    
+    const uncategorizedOdemes = filteredOdemeList.filter(o => !o.Kategori_ID);
+    if (uncategorizedOdemes.length === 0) {
+      alert('Kategori atanacak ödeme bulunamadı.');
+      return;
+    }
+    
+    if (confirm(`${uncategorizedOdemes.length} adet kategorisiz ödemeye kategori atanacak. Onaylıyor musunuz?`)) {
+      for (const odeme of uncategorizedOdemes) {
+        await updateOdeme(odeme.Odeme_ID, { Kategori_ID: selectedKategoriId });
+      }
+      alert('Toplu kategori ataması tamamlandı.');
+    }
+  };
+
+  // Export functions
+  const handleExportToExcel = () => {
+    const wb = XLSX.utils.book_new();
+    const ws_data = filteredOdemeList.map(odeme => {
+      const kategori = kategoriList.find(k => k.Kategori_ID === odeme.Kategori_ID);
+      return {
+        'Tip': odeme.Tip,
+        'Hesap Adı': odeme.Hesap_Adi,
+        'Tarih': parseDateString(odeme.Tarih),
+        'Açıklama': odeme.Aciklama,
+        'Tutar': odeme.Tutar,
+        'Kategori': kategori?.Kategori_Adi || '-',
+        'Dönem': odeme.Donem || '-'
+      };
+    });
+    
+    const ws = XLSX.utils.json_to_sheet(ws_data);
+    ws['!cols'] = [{ wch: 15 }, { wch: 20 }, { wch: 12 }, { wch: 30 }, { wch: 15 }, { wch: 20 }, { wch: 10 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'Ödeme Kategori Atama');
+    XLSX.writeFile(wb, `Odeme_Kategori_Atama_${selectedBranch?.Sube_Adi}_${viewedPeriod}.xlsx`);
+  };
+
+  const handleGeneratePdf = () => {
+    generateDashboardPdf('odeme-kategori-atama-content', `Odeme_Kategori_Atama_${selectedBranch?.Sube_Adi}_${viewedPeriod}.pdf`);
+  };
+
+  // Period options for dropdown
+  const periodOptions = [
+    { value: getPreviousPeriod(currentPeriod), label: `Önceki Dönem (${getPreviousPeriod(currentPeriod)})` },
+    { value: currentPeriod, label: `Mevcut Dönem (${currentPeriod})` },
+    { value: getNextPeriod(currentPeriod), label: `Sonraki Dönem (${getNextPeriod(currentPeriod)})` }
+  ];
+
+  if (!selectedBranch) {
+    return <Card title="Ödeme Kategori Atama"><p className="text-red-500">Lütfen önce bir şube seçin.</p></Card>;
+  }
+
+  return (
+    <div className="space-y-6" id="odeme-kategori-atama-content">
+      <Card
+        title={`Ödeme Kategori Atama - ${selectedBranch.Sube_Adi} (${viewedPeriod})`}
+        actions={
+          <div className="flex items-center gap-3 hide-on-pdf">
+            {canPrint && (
+              <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir">
+                <Icons.Print className="w-5 h-5" />
+              </Button>
+            )}
+            {canExportExcel && (
+              <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
+                <Icons.Download className="w-5 h-5" />
+              </Button>
+            )}
+            <div className="flex items-center space-x-2">
+              <Button 
+                onClick={handlePreviousPeriod} 
+                variant="ghost" 
+                size="sm" 
+                title="Önceki Dönem"
+              >
+                <Icons.ChevronLeft className="w-4 h-4" />
+              </Button>
+              <span className="text-sm font-medium px-2">{viewedPeriod}</span>
+              <Button 
+                onClick={handleNextPeriod} 
+                variant="ghost" 
+                size="sm" 
+                title="Sonraki Dönem"
+                disabled={getNextPeriod(viewedPeriod) > currentPeriod}
+              >
+                <Icons.ChevronRight className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        }
+      >
+        {/* Filter Controls */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Arama</label>
+            <Input
+              placeholder="Tip, hesap adı, açıklama, tutar..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Toplu Kategori Ataması</label>
+            <select
+              value={selectedKategoriId || ''}
+              onChange={(e) => setSelectedKategoriId(e.target.value ? parseInt(e.target.value) : null)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Kategori seçin...</option>
+              {paymentKategoriler.map(k => (
+                <option key={k.Kategori_ID} value={k.Kategori_ID}>{k.Kategori_Adi}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="flex items-end">
+            <Button onClick={handleBulkKategoriAssignment} disabled={!selectedKategoriId}>
+              Toplu Atama
+            </Button>
+          </div>
+          
+          <div className="flex items-end">
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={showOnlyUncategorized}
+                onChange={(e) => setShowOnlyUncategorized(e.target.checked)}
+                className="mr-2"
+              />
+              <span className="text-sm">Sadece kategorisiz</span>
+            </label>
+          </div>
+        </div>
+
+        {/* Ödeme Table */}
+        <TableLayout headers={['TİP', 'HESAP ADI', 'TARİH', 'AÇIKLAMA', 'TUTAR', 'KATEGORİ', 'DÖNEM']}>
+          {filteredOdemeList.map((odeme) => {
+            const kategori = kategoriList.find(k => k.Kategori_ID === odeme.Kategori_ID);
+            
+            return (
+              <tr key={odeme.Odeme_ID}>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{odeme.Tip}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{odeme.Hesap_Adi}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{parseDateString(odeme.Tarih)}</td>
+                <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate" title={odeme.Aciklama}>{odeme.Aciklama}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">{formatTrCurrencyAdvanced(odeme.Tutar, 2)}</td>
+                
+                {/* Kategori Dropdown */}
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <select
+                    value={odeme.Kategori_ID || ''}
+                    onChange={(e) => handleKategoriChange(odeme.Odeme_ID, e.target.value ? parseInt(e.target.value) : null)}
+                    className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  >
+                    <option value="">Seçin...</option>
+                    {paymentKategoriler.map(k => (
+                      <option key={k.Kategori_ID} value={k.Kategori_ID}>{k.Kategori_Adi}</option>
+                    ))}
+                  </select>
+                </td>
+                
+                {/* Dönem Dropdown */}
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <select
+                    value={odeme.Donem || ''}
+                    onChange={(e) => handleDonemChange(odeme.Odeme_ID, e.target.value ? parseInt(e.target.value) : null)}
+                    className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  >
+                    <option value="">Seçin...</option>
+                    {periodOptions.map(option => (
+                      <option key={option.value} value={option.value}>{option.label}</option>
+                    ))}
+                  </select>
+                </td>
+              </tr>
+            );
+          })}
+        </TableLayout>
+        
+        {filteredOdemeList.length === 0 && (
+          <p className="text-center py-4 text-gray-500">
+            {showOnlyUncategorized ? 'Kategorisiz ödeme bulunamadı.' : 'Arama kriterlerine uygun ödeme bulunamadı.'}
+          </p>
+        )}
+      </Card>
     </div>
   );
 };
