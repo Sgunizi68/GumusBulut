@@ -1,8 +1,11 @@
 import React, { useState, createContext, useContext, useCallback, ReactNode, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from 'react';
 import { HashRouter, Routes, Route, Link, NavLink, Navigate, useLocation } from 'react-router-dom';
 import { AppContextType, Sube, Kullanici, EFatura, InvoiceAssignmentFormData, DataContextType, RolYetki, B2BEkstre, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, Puantaj, PuantajEntry, Gelir, GelirEkstra, AvansIstek, Rol, Yetki, KullaniciRol, Deger, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, Nakit, NakitFormData, EFaturaReferans, EFaturaReferansFormData, OdemeReferans, OdemeReferansFormData, Odeme, OdemeAssignmentFormData } from './types';
 import { LoginPage, DashboardPage, SubePage, UsersPage, RolesPage, PermissionsPage, UserRoleAssignmentPage, RolePermissionAssignmentPage, DegerlerPage, PlaceholderPage, UstKategorilerPage, KategorilerPage, InvoiceUploadPage, InvoiceCategoryAssignmentPage, B2BUploadPage, DigerHarcamalarPage, GelirPage, StokPage, StokFiyatPage, StokSayimPage, CalisanPage, PuantajSecimPage, PuantajPage, AvansPage, NakitPage, OdemeYuklemePage, OdemeReferansPage, OdemeKategoriAtamaPage } from './pages';
 import { MENU_GROUPS, DASHBOARD_ITEM, Icons, DEFAULT_PERIOD, OZEL_FATURA_YETKI_ADI, PUANTAJ_HISTORY_ACCESS_YETKI_ADI, GELIR_GECMISI_YETKI_ADI, DEFAULT_END_DATE, STORAGE_KEYS } from './constants';
+import { ErrorProvider, useErrorContext, classifyError } from './contexts/ErrorContext';
+import { ToastContainer, ConnectionStatusBanner, useToast } from './contexts/ToastContext';
 
 import { EFaturaReferansPage } from './pages';
 import { NakitYatirmaRaporuPage } from './pages/NakitYatirmaRaporu';
@@ -249,6 +252,8 @@ const ProtectedRoute: React.FC<{ children: ReactNode }> = ({ children }) => {
 //const API_BASE_URL = "http://localhost:8000/api/v1";
 //const API_BASE_URL = "https://gumusbulut.onrender.com/api/v1";
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://gumusbulut.onrender.com/api/v1";
+
+// Enhanced fetchData with error classification and suppression
 const fetchData = async <T,>(url: string, options: RequestInit = {}): Promise<T | null> => {
   try {
     // Automatically set Content-Type for JSON, unless it's FormData
@@ -281,9 +286,34 @@ const fetchData = async <T,>(url: string, options: RequestInit = {}): Promise<T 
     return text ? JSON.parse(text) : ({ success: true } as T);
 
   } catch (error: any) {
-    console.error("Error in fetchData:", error); 
     const errorMessage = error instanceof Error ? error.message : String(error);
-    alert(`API çağrısı başarısız: ${url}\n${errorMessage}`);
+    const statusCode = error.response?.status || (error.name === 'TypeError' ? 0 : undefined);
+    
+    // Classify the error to determine how to handle it
+    const { type, severity, shouldDisplay } = classifyError(statusCode, errorMessage, url);
+    
+    // Always log to console for debugging
+    console.error("Error in fetchData:", {
+      url,
+      errorMessage,
+      statusCode,
+      type,
+      severity,
+      shouldDisplay
+    });
+    
+    // Only show user-facing messages for non-connection errors
+    if (shouldDisplay) {
+      // For authentication errors, show a more user-friendly message
+      if (type === 'authentication') {
+        console.warn('Authentication error - user may need to login again');
+      } else if (type === 'validation') {
+        console.warn('Validation error:', errorMessage);
+      } else {
+        console.warn('General error:', errorMessage);
+      }
+    }
+    
     return null;
   }
 };
@@ -1346,7 +1376,6 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     addB2BEkstreler,
     updateB2BEkstre,
     uploadB2BEkstre,
-    uploadOdeme, // Add this line
     digerHarcamaList,
     addDigerHarcama,
     updateDigerHarcama,
@@ -1430,8 +1459,9 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 };
 
 
-// Main App Component
-const App: React.FC = () => {
+// Enhanced App component with toast notifications for login
+const AppWithToast: React.FC = () => {
+  const { showError } = useToast();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => (loadFromLocalStorage<Partial<StoredAppState>>(STORAGE_KEYS.APP_STATE, {})).isAuthenticated || false);
   const [currentUser, setCurrentUser] = useState<Kullanici | null>(() => (loadFromLocalStorage<Partial<StoredAppState>>(STORAGE_KEYS.APP_STATE, {})).currentUser || null);
   const [selectedBranch, setSelectedBranch] = useState<Sube | null>(() => {
@@ -1517,12 +1547,12 @@ const App: React.FC = () => {
               }
           }
       } else {
-          alert("Geçersiz kullanıcı adı veya kullanıcı pasif.");
+          showError("Giriş Hatası", "Geçersiz kullanıcı adı veya kullanıcı pasif.");
       }
     } else {
-      alert("Geçersiz kullanıcı adı veya şifre.");
+      showError("Giriş Hatası", "Geçersiz kullanıcı adı veya şifre.");
     }
-  }, [selectedBranch]); 
+  }, [selectedBranch, showError]);
 
   const logout = useCallback(() => {
     setIsAuthenticated(false);
@@ -1535,15 +1565,15 @@ const App: React.FC = () => {
     setSelectedBranch(branch);
   }, []);
 
-    const setPeriod = useCallback((period: string) => {
-        if (period === "") {
-            setCurrentPeriod(DEFAULT_PERIOD);
-            return;
-        }
-        if (/^\d{0,4}$/.test(period)) {
-            setCurrentPeriod(period);
-        }
-    }, []);
+  const setPeriod = useCallback((period: string) => {
+      if (period === "") {
+          setCurrentPeriod(DEFAULT_PERIOD);
+          return;
+      }
+      if (/^\d{0,4}$/.test(period)) {
+          setCurrentPeriod(period);
+      }
+  }, []);
 
   const hasPermission = useCallback((permissionName: string): boolean => {
      return currentUserPermissions.includes(permissionName);
@@ -1572,6 +1602,7 @@ const App: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <MainLayout>
+                    <ConnectionStatusBanner />
                     <Routes>
                       <Route path="/" element={<DashboardPage />} />
                       <Route path="/branches" element={<SubePage />} />
@@ -1613,8 +1644,18 @@ const App: React.FC = () => {
             />
           </Routes>
         </HashRouter>
+        <ToastContainer />
       </DataProvider>
     </AppContext.Provider>
+  );
+};
+
+// Main App Component
+const App: React.FC = () => {
+  return (
+    <ErrorProvider>
+      <AppWithToast />
+    </ErrorProvider>
   );
 };
 

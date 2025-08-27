@@ -67,4 +67,49 @@
   .print-only-text {
     display: block !important; /* Ensure it's visible in print */
   }
+
+  /* Dashboard-specific print styles */
+  #dashboard-content {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    overflow: visible !important;
+  }
+
+  /* Force dashboard grid to stack vertically for better PDF layout */
+  #dashboard-content.grid {
+    display: block !important;
+    grid-template-columns: none !important;
+  }
+
+  #dashboard-content > div {
+    width: 100% !important;
+    margin-bottom: 2rem !important;
+    page-break-inside: avoid !important;
+    display: block !important;
+  }
+
+  /* Ensure all overflow containers show content */
+  .overflow-x-auto,
+  .overflow-y-auto,
+  .overflow-auto,
+  .overflow-hidden {
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  /* Make sure tables expand properly */
+  table {
+    width: 100% !important;
+    table-layout: auto !important;
+  }
+
+  /* Hide scrollable container constraints */
+  .space-y-1,
+  .space-y-2,
+  .space-y-4,
+  .space-y-6 {
+    display: block !important;
+  }
 }

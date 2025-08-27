@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { generateDashboardPdf } from './utils/pdfGenerator';
 import * as XLSX from 'xlsx';
 import { useAppContext, useDataContext } from './App';
+import { useToast } from './contexts/ToastContext';
 import { Button, Input, Modal, Card, TableLayout, StatusBadge, UserForm, RoleForm, PermissionForm, Select, DegerForm, Textarea, UstKategoriForm, KategoriForm, InlineEditInput, DigerHarcamaForm, StokForm, StokFiyatForm, NumberSpinnerInput, CalisanForm, PuantajSecimiForm, SubeForm, EFaturaReferansForm, OdemeReferansForm, NakitForm, AvansIstekForm } from './components';
 import { 
     Icons, 
@@ -241,6 +242,7 @@ const getDailyTotal = (dailyTotalsMap: Map<string, number>, dateString: string) 
 
 export const LoginPage: React.FC = () => {
   const { login } = useAppContext();
+  const { showError } = useToast();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -249,7 +251,7 @@ export const LoginPage: React.FC = () => {
     if (username.trim() && password.trim()) { 
       login(username, password);
     } else {
-      alert("Kullanıcı adı ve şifre gereklidir.");
+      showError("Giriş Hatası", "Kullanıcı adı ve şifre gereklidir.");
     }
   };
 
@@ -571,6 +573,7 @@ export const DashboardPage: React.FC = () => {
   );
 
   const handleGeneratePdf = () => {
+    // Use enhanced PDF generation for better results
     generateDashboardPdf('dashboard-content', `Dashboard_Raporu_${selectedBranch?.Sube_Adi}_${selectedPeriodForDashboard}.pdf`);
   };
 
@@ -578,42 +581,132 @@ export const DashboardPage: React.FC = () => {
     if (!dashboardColumns) return;
 
     const wb = XLSX.utils.book_new();
-
-    const processRowData = (data: DashboardRowData[]) => {
-        return data.map(row => {
-            let label = row.label;
-            if (row.isSubItem) label = `  ${label}`;
-            if (row.isSubSubItem) label = `    ${label}`;
-            if (row.isFromPreviousPeriod) label = `${label} (Önceki Dönem Verisi)`;
-
-            const rowData: any = { 'Kalem': label };
-            if (!row.isTitle) {
-                rowData['Tutar'] = row.value;
-            } else {
-                rowData['Tutar'] = '';
-            }
-            return rowData;
+    
+    // Helper function to format currency values for Excel
+    const formatCurrencyForExcel = (value: number) => {
+      return value; // Keep as number for Excel calculations
+    };
+    
+    // Helper function to create formatted data with better structure
+    const createFormattedData = (data: DashboardRowData[], sectionTitle: string) => {
+      const formattedData: any[] = [];
+      
+      // Add section header
+      formattedData.push({
+        'Kategori': sectionTitle.toUpperCase(),
+        'Kalem Adı': '',
+        'Tutar (₺)': '',
+        'Durum': ''
+      });
+      
+      // Add an empty row for better spacing
+      formattedData.push({
+        'Kategori': '',
+        'Kalem Adı': '',
+        'Tutar (₺)': '',
+        'Durum': ''
+      });
+      
+      data.forEach(row => {
+        let category = '';
+        let itemName = row.label;
+        let status = '';
+        
+        // Determine hierarchy and formatting
+        if (row.isTitle) {
+          category = 'BAŞLIK';
+          status = 'Kategori Başlığı';
+        } else if (row.isSubItem) {
+          category = 'Alt Kalem';
+          itemName = row.label; // Remove indentation for Excel
+          status = row.isFromPreviousPeriod ? 'Önceki Dönem' : 'Mevcut Dönem';
+        } else if (row.isSubSubItem) {
+          category = 'Detay';
+          itemName = row.label; // Remove indentation for Excel
+          status = row.isFromPreviousPeriod ? 'Önceki Dönem' : 'Mevcut Dönem';
+        } else {
+          category = 'Ana Kalem';
+          status = row.isFromPreviousPeriod ? 'Önceki Dönem' : 'Mevcut Dönem';
+        }
+        
+        if (row.isFromPreviousPeriod) {
+          itemName = `${itemName} (Önceki Dönem Verisi)`;
+        }
+        
+        formattedData.push({
+          'Kategori': category,
+          'Kalem Adı': itemName,
+          'Tutar (₺)': row.isTitle ? '' : formatCurrencyForExcel(row.value),
+          'Durum': status
         });
+      });
+      
+      return formattedData;
     };
 
-    const gelirlerWsData = processRowData(dashboardColumns.gelirler);
-    const giderlerWsData = processRowData(dashboardColumns.giderler);
-    const ozetWsData = processRowData(dashboardColumns.ozet);
-
-    const wsData = [
-        ...gelirlerWsData,
-        { 'Kalem': '', 'Tutar': '' }, // Empty row as a separator
-        ...giderlerWsData,
-        { 'Kalem': '', 'Tutar': '' }, // Empty row as a separator
-        ...ozetWsData
+    // Create main summary sheet with all data
+    const allData = [
+      ...createFormattedData(dashboardColumns.gelirler, 'Gelirler'),
+      // Add separator
+      { 'Kategori': '', 'Kalem Adı': '', 'Tutar (₺)': '', 'Durum': '' },
+      ...createFormattedData(dashboardColumns.giderler, 'Giderler'),
+      // Add separator
+      { 'Kategori': '', 'Kalem Adı': '', 'Tutar (₺)': '', 'Durum': '' },
+      ...createFormattedData(dashboardColumns.ozet, 'Özet')
     ];
+    
+    const mainWs = XLSX.utils.json_to_sheet(allData);
+    
+    // Set column widths for better display
+    mainWs['!cols'] = [
+      { wch: 15 }, // Kategori
+      { wch: 50 }, // Kalem Adı
+      { wch: 20 }, // Tutar
+      { wch: 20 }  // Durum
+    ];
+    
+    XLSX.utils.book_append_sheet(wb, mainWs, 'Tam Rapor');
 
-    const ws = XLSX.utils.json_to_sheet(wsData);
-
-    // Adjust column widths
-    ws['!cols'] = [{ wch: 60 }, { wch: 20 }];
-
-    XLSX.utils.book_append_sheet(wb, ws, 'Dashboard Raporu');
+    // Create separate sheets for each section
+    const gelirlerWs = XLSX.utils.json_to_sheet(createFormattedData(dashboardColumns.gelirler, 'Gelirler'));
+    gelirlerWs['!cols'] = [{ wch: 15 }, { wch: 50 }, { wch: 20 }, { wch: 20 }];
+    XLSX.utils.book_append_sheet(wb, gelirlerWs, 'Gelirler');
+    
+    const giderlerWs = XLSX.utils.json_to_sheet(createFormattedData(dashboardColumns.giderler, 'Giderler'));
+    giderlerWs['!cols'] = [{ wch: 15 }, { wch: 50 }, { wch: 20 }, { wch: 20 }];
+    XLSX.utils.book_append_sheet(wb, giderlerWs, 'Giderler');
+    
+    const ozetWs = XLSX.utils.json_to_sheet(createFormattedData(dashboardColumns.ozet, 'Özet'));
+    ozetWs['!cols'] = [{ wch: 15 }, { wch: 50 }, { wch: 20 }, { wch: 20 }];
+    XLSX.utils.book_append_sheet(wb, ozetWs, 'Özet');
+    
+    // Create a summary statistics sheet
+    const summaryData = [];
+    
+    // Calculate totals
+    const gelirTotal = dashboardColumns.gelirler
+      .filter(row => !row.isTitle && !row.isSubItem && !row.isSubSubItem)
+      .reduce((sum, row) => sum + row.value, 0);
+      
+    const giderTotal = dashboardColumns.giderler
+      .filter(row => !row.isTitle && !row.isSubItem && !row.isSubSubItem)
+      .reduce((sum, row) => sum + row.value, 0);
+    
+    summaryData.push(
+      { 'Açıklama': 'Rapor Özeti', 'Değer': '' },
+      { 'Açıklama': '', 'Değer': '' },
+      { 'Açıklama': 'Şube', 'Değer': selectedBranch?.Sube_Adi || '' },
+      { 'Açıklama': 'Dönem', 'Değer': selectedPeriodForDashboard },
+      { 'Açıklama': 'Rapor Tarihi', 'Değer': new Date().toLocaleDateString('tr-TR') },
+      { 'Açıklama': '', 'Değer': '' },
+      { 'Açıklama': 'Toplam Gelir', 'Değer': gelirTotal },
+      { 'Açıklama': 'Toplam Gider', 'Değer': giderTotal },
+      { 'Açıklama': 'Net Fark (Gelir - Gider)', 'Değer': gelirTotal - giderTotal }
+    );
+    
+    const summaryWs = XLSX.utils.json_to_sheet(summaryData);
+    summaryWs['!cols'] = [{ wch: 30 }, { wch: 25 }];
+    XLSX.utils.book_append_sheet(wb, summaryWs, 'Özet İstatistik');
 
     XLSX.writeFile(wb, `Dashboard_Raporu_${selectedBranch?.Sube_Adi}_${selectedPeriodForDashboard}.xlsx`);
   };
@@ -643,10 +736,118 @@ export const DashboardPage: React.FC = () => {
       </div>
     }>
       {dashboardColumns ? (
-        <div id="dashboard-content" className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {renderDashboardColumn(dashboardColumns.gelirler, "Gelirler")}
-          {renderDashboardColumn(dashboardColumns.giderler, "Giderler")}
-          {renderDashboardColumn(dashboardColumns.ozet, "Özet")}
+        <div id="dashboard-content" className="w-full">
+          {/* For screen: use grid layout */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 print:hidden">
+            {renderDashboardColumn(dashboardColumns.gelirler, "Gelirler")}
+            {renderDashboardColumn(dashboardColumns.giderler, "Giderler")}
+            {renderDashboardColumn(dashboardColumns.ozet, "Özet")}
+          </div>
+          
+          {/* For PDF: use stacked layout */}
+          <div className="hidden print:block space-y-8">
+            <div className="w-full">
+              <h3 className="text-lg font-bold mb-4 text-green-800 border-b-2 border-green-200 pb-2">GELİRLER</h3>
+              <div className="space-y-1">
+                {dashboardColumns.gelirler.map((row, index) => (
+                  <div 
+                    key={`gelir-${row.label}-${index}`} 
+                    className={`py-2 px-3 rounded-md flex justify-between items-center
+                      ${row.isTitle ? `font-bold text-lg ${row.bgColor || 'bg-gray-200'} ${row.textColor || 'text-gray-800'} mt-4 mb-2` : ''}
+                      ${row.bgColor && !row.isTitle ? row.bgColor : ''}
+                      ${row.textColor && !row.isTitle ? row.textColor : 'text-gray-700'}
+                      ${row.isFromPreviousPeriod ? 'border-l-4 border-red-400 pl-1.5' : ''}
+                      ${!row.isTitle && !row.isSubItem && !row.isEmphasized ? 'text-base' : ''}
+                      ${row.isEmphasized ? 'text-lg font-bold' : ''}
+                    `}>
+                    <span className={`
+                      ${row.isSubItem ? 'ml-4' : ''} 
+                      ${row.isSubSubItem ? 'ml-8 text-sm' : ''}
+                      ${row.isBold && !row.isEmphasized ? 'font-semibold' : ''}
+                    `}>
+                      {row.label} {row.isFromPreviousPeriod && <span className="text-red-500 text-xs italic">(Önceki Dönem Verisi)</span>}
+                    </span>
+                    {!row.isTitle && (
+                      <span className={`
+                        ${row.isBold || row.isEmphasized ? 'font-semibold' : ''}
+                        ${row.isEmphasized ? 'text-base' : ''}
+                      `}>
+                        {formatTrCurrencyAdvanced(row.value, 2)}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="w-full">
+              <h3 className="text-lg font-bold mb-4 text-red-800 border-b-2 border-red-200 pb-2">GİDERLER</h3>
+              <div className="space-y-1">
+                {dashboardColumns.giderler.map((row, index) => (
+                  <div 
+                    key={`gider-${row.label}-${index}`} 
+                    className={`py-2 px-3 rounded-md flex justify-between items-center
+                      ${row.isTitle ? `font-bold text-lg ${row.bgColor || 'bg-gray-200'} ${row.textColor || 'text-gray-800'} mt-4 mb-2` : ''}
+                      ${row.bgColor && !row.isTitle ? row.bgColor : ''}
+                      ${row.textColor && !row.isTitle ? row.textColor : 'text-gray-700'}
+                      ${row.isFromPreviousPeriod ? 'border-l-4 border-red-400 pl-1.5' : ''}
+                      ${!row.isTitle && !row.isSubItem && !row.isEmphasized ? 'text-base' : ''}
+                      ${row.isEmphasized ? 'text-lg font-bold' : ''}
+                    `}>
+                    <span className={`
+                      ${row.isSubItem ? 'ml-4' : ''} 
+                      ${row.isSubSubItem ? 'ml-8 text-sm' : ''}
+                      ${row.isBold && !row.isEmphasized ? 'font-semibold' : ''}
+                    `}>
+                      {row.label} {row.isFromPreviousPeriod && <span className="text-red-500 text-xs italic">(Önceki Dönem Verisi)</span>}
+                    </span>
+                    {!row.isTitle && (
+                      <span className={`
+                        ${row.isBold || row.isEmphasized ? 'font-semibold' : ''}
+                        ${row.isEmphasized ? 'text-base' : ''}
+                      `}>
+                        {formatTrCurrencyAdvanced(row.value, 2)}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="w-full">
+              <h3 className="text-lg font-bold mb-4 text-blue-800 border-b-2 border-blue-200 pb-2">ÖZET</h3>
+              <div className="space-y-1">
+                {dashboardColumns.ozet.map((row, index) => (
+                  <div 
+                    key={`ozet-${row.label}-${index}`} 
+                    className={`py-2 px-3 rounded-md flex justify-between items-center
+                      ${row.isTitle ? `font-bold text-lg ${row.bgColor || 'bg-gray-200'} ${row.textColor || 'text-gray-800'} mt-4 mb-2` : ''}
+                      ${row.bgColor && !row.isTitle ? row.bgColor : ''}
+                      ${row.textColor && !row.isTitle ? row.textColor : 'text-gray-700'}
+                      ${row.isFromPreviousPeriod ? 'border-l-4 border-red-400 pl-1.5' : ''}
+                      ${!row.isTitle && !row.isSubItem && !row.isEmphasized ? 'text-base' : ''}
+                      ${row.isEmphasized ? 'text-lg font-bold' : ''}
+                    `}>
+                    <span className={`
+                      ${row.isSubItem ? 'ml-4' : ''} 
+                      ${row.isSubSubItem ? 'ml-8 text-sm' : ''}
+                      ${row.isBold && !row.isEmphasized ? 'font-semibold' : ''}
+                    `}>
+                      {row.label} {row.isFromPreviousPeriod && <span className="text-red-500 text-xs italic">(Önceki Dönem Verisi)</span>}
+                    </span>
+                    {!row.isTitle && (
+                      <span className={`
+                        ${row.isBold || row.isEmphasized ? 'font-semibold' : ''}
+                        ${row.isEmphasized ? 'text-base' : ''}
+                      `}>
+                        {formatTrCurrencyAdvanced(row.value, 2)}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       ) : (
         <p className="text-gray-500">Bu dönem için rapor verisi bulunmamaktadır veya hesaplanıyor.</p>
