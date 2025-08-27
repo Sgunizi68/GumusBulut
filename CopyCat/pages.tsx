@@ -19,7 +19,7 @@ import {
     KULLANICI_ROL_ATAMA_EKRANI_YETKI_ADI, ROL_YETKI_ATAMA_EKRANI_YETKI_ADI, 
     UST_KATEGORI_YONETIMI_EKRANI_YETKI_ADI, KATEGORI_YONETIMI_EKRANI_YETKI_ADI, 
     FATURA_YUKLEME_EKRANI_YETKI_ADI, FATURA_KATEGORI_ATAMA_EKRANI_YETKI_ADI, 
-    B2B_YUKLEME_EKRANI_YETKI_ADI,  
+    B2B_YUKLEME_EKRANI_YETKI_ADI, B2B_KATEGORI_ATAMA_EKRANI_YETKI_ADI,
     DIGER_HARCAMALAR_EKRANI_YETKI_ADI, GELIR_GIRISI_EKRANI_YETKI_ADI, 
     STOK_TANIMLAMA_EKRANI_YETKI_ADI, STOK_FIYAT_TANIMLAMA_EKRANI_YETKI_ADI, 
     STOK_SAYIM_EKRANI_YETKI_ADI, CALISAN_YONETIMI_EKRANI_YETKI_ADI, 
@@ -582,19 +582,6 @@ export const DashboardPage: React.FC = () => {
 
     const wb = XLSX.utils.book_new();
     
-    // Helper function to format currency values for Excel with thousand separators
-    const formatCurrencyForExcelWithSeparators = (value: number) => {
-      if (value === undefined || value === null || isNaN(value)) {
-        return '';
-      }
-      // Use Turkish locale formatting with thousand separators
-      return value.toLocaleString('tr-TR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-        useGrouping: true,
-      });
-    };
-    
     // Helper function to create formatted data with better structure
     const createFormattedData = (data: DashboardRowData[], sectionTitle: string) => {
       const formattedData: any[] = [];
@@ -644,7 +631,7 @@ export const DashboardPage: React.FC = () => {
         formattedData.push({
           'Kategori': category,
           'Kalem Adı': itemName,
-          'Tutar (₺)': row.isTitle ? '' : formatCurrencyForExcelWithSeparators(row.value),
+          'Tutar (₺)': row.isTitle ? '' : typeof row.value === 'number' ? row.value : parseFloat(row.value) || 0,
           'Durum': status
         });
       });
@@ -673,19 +660,78 @@ export const DashboardPage: React.FC = () => {
       { wch: 20 }  // Durum
     ];
     
+    // Ensure numeric values are exported as numbers, not text
+    const mainRange = XLSX.utils.decode_range(mainWs['!ref'] || 'A1');
+    for (let row = mainRange.s.r + 1; row <= mainRange.e.r; ++row) {
+      // Tutar column is column C (index 2)
+      const tutarCell = mainWs[XLSX.utils.encode_cell({ r: row, c: 2 })];
+      if (tutarCell && tutarCell.v !== undefined && tutarCell.v !== '') {
+        const numericValue = typeof tutarCell.v === 'number' ? tutarCell.v : parseFloat(tutarCell.v);
+        if (!isNaN(numericValue)) {
+          tutarCell.t = 'n'; // Set cell type to number
+          tutarCell.v = numericValue;
+        }
+      }
+    }
+    
     XLSX.utils.book_append_sheet(wb, mainWs, 'Tam Rapor');
 
     // Create separate sheets for each section
     const gelirlerWs = XLSX.utils.json_to_sheet(createFormattedData(dashboardColumns.gelirler, 'Gelirler'));
     gelirlerWs['!cols'] = [{ wch: 15 }, { wch: 50 }, { wch: 20 }, { wch: 20 }];
+    
+    // Ensure numeric values are exported as numbers, not text
+    const gelirlerRange = XLSX.utils.decode_range(gelirlerWs['!ref'] || 'A1');
+    for (let row = gelirlerRange.s.r + 1; row <= gelirlerRange.e.r; ++row) {
+      // Tutar column is column C (index 2)
+      const tutarCell = gelirlerWs[XLSX.utils.encode_cell({ r: row, c: 2 })];
+      if (tutarCell && tutarCell.v !== undefined && tutarCell.v !== '') {
+        const numericValue = typeof tutarCell.v === 'number' ? tutarCell.v : parseFloat(tutarCell.v);
+        if (!isNaN(numericValue)) {
+          tutarCell.t = 'n'; // Set cell type to number
+          tutarCell.v = numericValue;
+        }
+      }
+    }
+    
     XLSX.utils.book_append_sheet(wb, gelirlerWs, 'Gelirler');
     
     const giderlerWs = XLSX.utils.json_to_sheet(createFormattedData(dashboardColumns.giderler, 'Giderler'));
     giderlerWs['!cols'] = [{ wch: 15 }, { wch: 50 }, { wch: 20 }, { wch: 20 }];
+    
+    // Ensure numeric values are exported as numbers, not text
+    const giderlerRange = XLSX.utils.decode_range(giderlerWs['!ref'] || 'A1');
+    for (let row = giderlerRange.s.r + 1; row <= giderlerRange.e.r; ++row) {
+      // Tutar column is column C (index 2)
+      const tutarCell = giderlerWs[XLSX.utils.encode_cell({ r: row, c: 2 })];
+      if (tutarCell && tutarCell.v !== undefined && tutarCell.v !== '') {
+        const numericValue = typeof tutarCell.v === 'number' ? tutarCell.v : parseFloat(tutarCell.v);
+        if (!isNaN(numericValue)) {
+          tutarCell.t = 'n'; // Set cell type to number
+          tutarCell.v = numericValue;
+        }
+      }
+    }
+    
     XLSX.utils.book_append_sheet(wb, giderlerWs, 'Giderler');
     
     const ozetWs = XLSX.utils.json_to_sheet(createFormattedData(dashboardColumns.ozet, 'Özet'));
     ozetWs['!cols'] = [{ wch: 15 }, { wch: 50 }, { wch: 20 }, { wch: 20 }];
+    
+    // Ensure numeric values are exported as numbers, not text
+    const ozetRange = XLSX.utils.decode_range(ozetWs['!ref'] || 'A1');
+    for (let row = ozetRange.s.r + 1; row <= ozetRange.e.r; ++row) {
+      // Tutar column is column C (index 2)
+      const tutarCell = ozetWs[XLSX.utils.encode_cell({ r: row, c: 2 })];
+      if (tutarCell && tutarCell.v !== undefined && tutarCell.v !== '') {
+        const numericValue = typeof tutarCell.v === 'number' ? tutarCell.v : parseFloat(tutarCell.v);
+        if (!isNaN(numericValue)) {
+          tutarCell.t = 'n'; // Set cell type to number
+          tutarCell.v = numericValue;
+        }
+      }
+    }
+    
     XLSX.utils.book_append_sheet(wb, ozetWs, 'Özet');
     
     // Create a summary statistics sheet
@@ -707,13 +753,28 @@ export const DashboardPage: React.FC = () => {
       { 'Açıklama': 'Dönem', 'Değer': selectedPeriodForDashboard },
       { 'Açıklama': 'Rapor Tarihi', 'Değer': new Date().toLocaleDateString('tr-TR') },
       { 'Açıklama': '', 'Değer': '' },
-      { 'Açıklama': 'Toplam Gelir', 'Değer': formatCurrencyForExcelWithSeparators(gelirTotal) },
-      { 'Açıklama': 'Toplam Gider', 'Değer': formatCurrencyForExcelWithSeparators(giderTotal) },
-      { 'Açıklama': 'Net Fark (Gelir - Gider)', 'Değer': formatCurrencyForExcelWithSeparators(gelirTotal - giderTotal) }
+      { 'Açıklama': 'Toplam Gelir', 'Değer': typeof gelirTotal === 'number' ? gelirTotal : parseFloat(gelirTotal) || 0 },
+      { 'Açıklama': 'Toplam Gider', 'Değer': typeof giderTotal === 'number' ? giderTotal : parseFloat(giderTotal) || 0 },
+      { 'Açıklama': 'Net Fark (Gelir - Gider)', 'Değer': typeof (gelirTotal - giderTotal) === 'number' ? (gelirTotal - giderTotal) : parseFloat(gelirTotal - giderTotal) || 0 }
     );
     
     const summaryWs = XLSX.utils.json_to_sheet(summaryData);
     summaryWs['!cols'] = [{ wch: 30 }, { wch: 25 }];
+    
+    // Ensure numeric values are exported as numbers, not text
+    const summaryRange = XLSX.utils.decode_range(summaryWs['!ref'] || 'A1');
+    for (let row = summaryRange.s.r + 1; row <= summaryRange.e.r; ++row) {
+      // Değer column is column B (index 1)
+      const degerCell = summaryWs[XLSX.utils.encode_cell({ r: row, c: 1 })];
+      if (degerCell && degerCell.v !== undefined && degerCell.v !== '') {
+        const numericValue = typeof degerCell.v === 'number' ? degerCell.v : parseFloat(degerCell.v);
+        if (!isNaN(numericValue)) {
+          degerCell.t = 'n'; // Set cell type to number
+          degerCell.v = numericValue;
+        }
+      }
+    }
+    
     XLSX.utils.book_append_sheet(wb, summaryWs, 'Özet İstatistik');
 
     XLSX.writeFile(wb, `Dashboard_Raporu_${selectedBranch?.Sube_Adi}_${selectedPeriodForDashboard}.xlsx`);
@@ -794,6 +855,40 @@ export const DashboardPage: React.FC = () => {
                 {dashboardColumns.giderler.map((row, index) => (
                   <div 
                     key={`gider-${row.label}-${index}`} 
+                    className={`py-2 px-3 rounded-md flex justify-between items-center
+                      ${row.isTitle ? `font-bold text-lg ${row.bgColor || 'bg-gray-200'} ${row.textColor || 'text-gray-800'} mt-4 mb-2` : ''}
+                      ${row.bgColor && !row.isTitle ? row.bgColor : ''}
+                      ${row.textColor && !row.isTitle ? row.textColor : 'text-gray-700'}
+                      ${row.isFromPreviousPeriod ? 'border-l-4 border-red-400 pl-1.5' : ''}
+                      ${!row.isTitle && !row.isSubItem && !row.isEmphasized ? 'text-base' : ''}
+                      ${row.isEmphasized ? 'text-lg font-bold' : ''}
+                    `}>
+                    <span className={`
+                      ${row.isSubItem ? 'ml-4' : ''} 
+                      ${row.isSubSubItem ? 'ml-8 text-sm' : ''}
+                      ${row.isBold && !row.isEmphasized ? 'font-semibold' : ''}
+                    `}>
+                      {row.label} {row.isFromPreviousPeriod && <span className="text-red-500 text-xs italic">(Önceki Dönem Verisi)</span>}
+                    </span>
+                    {!row.isTitle && (
+                      <span className={`
+                        ${row.isBold || row.isEmphasized ? 'font-semibold' : ''}
+                        ${row.isEmphasized ? 'text-base' : ''}
+                      `}>
+                        {formatTrCurrencyAdvanced(row.value, 2)}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="w-full">
+              <h3 className="text-lg font-bold mb-4 text-gray-800 border-b-2 border-gray-200 pb-2">ÖZET</h3>
+              <div className="space-y-1">
+                {dashboardColumns.ozet.map((row, index) => (
+                  <div 
+                    key={`ozet-${row.label}-${index}`} 
                     className={`py-2 px-3 rounded-md flex justify-between items-center
                       ${row.isTitle ? `font-bold text-lg ${row.bgColor || 'bg-gray-200'} ${row.textColor || 'text-gray-800'} mt-4 mb-2` : ''}
                       ${row.bgColor && !row.isTitle ? row.bgColor : ''}
@@ -2764,23 +2859,22 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
       </Card>
 
       <div className="overflow-x-auto">
-        <TableLayout headers={tableHeaders} compact={true}>
-            {filteredFaturas.map(fatura => {
-              const rowSpecificPeriods = getRowDropdownPeriods(fatura.Donem);
+        <TableLayout headers={['Fiş No', 'Tarih', 'Açıklama', 'Borç', 'Alacak', 'Fatura No', 'Kategori', 'Dönem']} compact={true}>
+            {filteredEkstreler.map(ekstre => {
+              const rowSpecificPeriods = getRowDropdownPeriodsForB2B(ekstre.Donem);
               return (
-                <tr key={fatura.Fatura_ID} className={`${fatura.Kategori_ID === null ? "bg-yellow-50" : ""}`}>
-                  <td className="px-2 py-1.5 whitespace-nowrap text-xs text-gray-700 w-[150px]">{fatura.Fatura_Numarasi}</td>
-                  <td className="px-2 py-1.5 whitespace-nowrap text-xs text-gray-700 w-[180px]">{fatura.Alici_Unvani}</td>
-                  <td className="px-2 py-1.5 whitespace-nowrap text-xs text-gray-700 w-[100px]">{parseDateString(fatura.Fatura_Tarihi)}</td>
-                  <td className="px-2 py-1.5 whitespace-nowrap text-sm text-right text-gray-600 w-[100px]">{formatTrCurrencyAdvanced(fatura.Tutar)}</td>
+                <tr key={ekstre.Fatura_ID} className={`${ekstre.Kategori_ID === null ? 'bg-yellow-50' : ''}`}>
+                  <td className="px-2 py-1.5 whitespace-nowrap text-xs text-gray-700 w-[180px]">{ekstre.Alici_Unvani}</td>
+                  <td className="px-2 py-1.5 whitespace-nowrap text-xs text-gray-700 w-[100px]">{parseDateString(ekstre.Fatura_Tarihi)}</td>
+                  <td className="px-2 py-1.5 whitespace-nowrap text-sm text-right text-gray-600 w-[100px]">{formatTrCurrencyAdvanced(ekstre.Tutar)}</td>
                   <td className="px-2 py-1.5 text-xs w-[200px]">
                     <Select
-                      value={fatura.Kategori_ID || ""}
-                      onChange={(e) => handleUpdate(fatura.Fatura_ID, "Kategori_ID", e.target.value === "" ? null : parseInt(e.target.value))}
+                      value={ekstre.Kategori_ID || ""}
+                      onChange={(e) => handleUpdate(ekstre.Fatura_ID, "Kategori_ID", e.target.value === "" ? null : parseInt(e.target.value))}
                       className="text-xs p-1 w-full"
                     >
                       <option value="">Seçin...</option>
-                      {(fatura.Giden_Fatura ? gidenFaturaCategories : gelenFaturaCategories).map((kategori) => (
+                      {(ekstre.Giden_Fatura ? gidenFaturaCategories : gelenFaturaCategories).map((kategori) => (
                         <option key={kategori.Kategori_ID} value={kategori.Kategori_ID}>
                           {kategori.Kategori_Adi}
                         </option>
@@ -2789,17 +2883,17 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
                   </td>
                   <td className="px-2 py-1.5 text-xs min-w-[300px]">
                     <InlineEditInput
-                      value={fatura.Aciklama || ""}
-                      onSave={(value) => handleUpdate(fatura.Fatura_ID, "Aciklama", value)}
+                      value={ekstre.Aciklama || ""}
+                      onSave={(value) => handleUpdate(ekstre.Fatura_ID, "Aciklama", value)}
                       placeholder="Açıklama..."
                       className="w-full text-xs"
-                      aria-label={`Fatura ${fatura.Fatura_Numarasi} için açıklama`}
+                      aria-label={`Fatura ${ekstre.Fatura_Numarasi} için açıklama`}
                     />
                   </td>
                   <td className="px-2 py-1.5 text-xs min-w-[120px]">
                     <Select
-                      value={String(fatura.Donem)}
-                      onChange={(e) => handleUpdate(fatura.Fatura_ID, "Donem", e.target.value)}
+                      value={String(ekstre.Donem)}
+                      onChange={(e) => handleUpdate(ekstre.Fatura_ID, "Donem", e.target.value)}
                       className="text-xs p-1 w-full"
                     >
                       {rowSpecificPeriods.map((period) => (
@@ -2810,15 +2904,15 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
                     </Select>
                   </td>
                   <td className="px-2 py-1.5 text-xs text-center">
-                    {fatura.Giden_Fatura ? (
+                    {ekstre.Giden_Fatura ? (
                       <span className="text-gray-600 font-medium">Giden</span>
                     ) : (
                       <input
                         type="checkbox"
-                        checked={fatura.Gunluk_Harcama}
-                        onChange={() => handleUpdate(fatura.Fatura_ID, "Gunluk_Harcama", !fatura.Gunluk_Harcama)}
+                        checked={ekstre.Gunluk_Harcama}
+                        onChange={() => handleUpdate(ekstre.Fatura_ID, "Gunluk_Harcama", !ekstre.Gunluk_Harcama)}
                         className="form-checkbox h-4 w-4 text-blue-500 cursor-pointer"
-                        aria-label={`Fatura ${fatura.Fatura_Numarasi} için günlük harcama`}
+                        aria-label={`Fatura ${ekstre.Fatura_Numarasi} için günlük harcama`}
                       />
                     )}
                   </td>
@@ -2826,11 +2920,11 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
                     <td className="px-2 py-1.5 text-xs text-center">
                       <input
                         type="checkbox"
-                        checked={fatura.Ozel}
-                        onChange={() => handleToggleOzel(fatura.Fatura_ID, fatura.Ozel)}
+                        checked={ekstre.Ozel}
+                        onChange={() => handleToggleOzel(ekstre.Fatura_ID, ekstre.Ozel)}
                         disabled={!canViewAndEditSpecial}
                         className={`form-checkbox h-4 w-4 ${canViewAndEditSpecial ? "text-purple-500 cursor-pointer" : "text-purple-300 cursor-not-allowed"}`}
-                        aria-label={`Fatura ${fatura.Fatura_Numarasi} için özel fatura`}
+                        aria-label={`Fatura ${ekstre.Fatura_Numarasi} için özel fatura`}
                       />
                     </td>
                   )}
@@ -2839,7 +2933,7 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
             })}
         </TableLayout>
       </div>
-      {filteredFaturas.length === 0 && (
+      {filteredEkstreler.length === 0 && (
         <Card>
           <p className="text-center text-gray-500 py-4">Filtre kriterlerine uygun fatura bulunamadı.</p>
         </Card>
@@ -5747,7 +5841,7 @@ export const OdemeKategoriAtamaPage: React.FC = () => {
         'Hesap Adı': odeme.Hesap_Adi,
         'Tarih': parseDateString(odeme.Tarih),
         'Açıklama': odeme.Aciklama,
-        'Tutar': odeme.Tutar,
+        'Tutar': typeof odeme.Tutar === 'number' ? odeme.Tutar : parseFloat(odeme.Tutar) || 0,
         'Kategori': kategori?.Kategori_Adi || '-',
         'Dönem': odeme.Donem || '-'
       };
@@ -5755,6 +5849,21 @@ export const OdemeKategoriAtamaPage: React.FC = () => {
     
     const ws = XLSX.utils.json_to_sheet(ws_data);
     ws['!cols'] = [{ wch: 15 }, { wch: 20 }, { wch: 12 }, { wch: 30 }, { wch: 15 }, { wch: 20 }, { wch: 10 }];
+    
+    // Ensure numeric values are exported as numbers, not text
+    const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
+    for (let row = range.s.r + 1; row <= range.e.r; ++row) {
+      // Tutar column is column E (index 4)
+      const tutarCell = ws[XLSX.utils.encode_cell({ r: row, c: 4 })];
+      if (tutarCell && tutarCell.v !== undefined) {
+        const numericValue = typeof tutarCell.v === 'number' ? tutarCell.v : parseFloat(tutarCell.v);
+        if (!isNaN(numericValue)) {
+          tutarCell.t = 'n'; // Set cell type to number
+          tutarCell.v = numericValue;
+        }
+      }
+    }
+    
     XLSX.utils.book_append_sheet(wb, ws, 'Ödeme Kategori Atama');
     XLSX.writeFile(wb, `Odeme_Kategori_Atama_${selectedBranch?.Sube_Adi}_${viewedPeriod}.xlsx`);
   };

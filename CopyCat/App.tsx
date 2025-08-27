@@ -1,7 +1,7 @@
 import React, { useState, createContext, useContext, useCallback, ReactNode, useEffect, useMemo } from 'react';
 import { HashRouter, Routes, Route, Link, NavLink, Navigate, useLocation } from 'react-router-dom';
 import { AppContextType, Sube, Kullanici, EFatura, InvoiceAssignmentFormData, DataContextType, RolYetki, B2BEkstre, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, Puantaj, PuantajEntry, Gelir, GelirEkstra, AvansIstek, Rol, Yetki, KullaniciRol, Deger, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, Nakit, NakitFormData, EFaturaReferans, EFaturaReferansFormData, OdemeReferans, OdemeReferansFormData, Odeme, OdemeAssignmentFormData } from './types';
-import { LoginPage, DashboardPage, SubePage, UsersPage, RolesPage, PermissionsPage, UserRoleAssignmentPage, RolePermissionAssignmentPage, DegerlerPage, PlaceholderPage, UstKategorilerPage, KategorilerPage, InvoiceUploadPage, InvoiceCategoryAssignmentPage, B2BUploadPage, DigerHarcamalarPage, GelirPage, StokPage, StokFiyatPage, StokSayimPage, CalisanPage, PuantajSecimPage, PuantajPage, AvansPage, NakitPage, OdemeYuklemePage, OdemeReferansPage, OdemeKategoriAtamaPage } from './pages';
+import { LoginPage, DashboardPage, SubePage, UsersPage, RolesPage, PermissionsPage, UserRoleAssignmentPage, RolePermissionAssignmentPage, DegerlerPage, PlaceholderPage, UstKategorilerPage, KategorilerPage, InvoiceUploadPage, InvoiceCategoryAssignmentPage, B2BUploadPage, B2BCategoryAssignmentPage, DigerHarcamalarPage, GelirPage, StokPage, StokFiyatPage, StokSayimPage, CalisanPage, PuantajSecimPage, PuantajPage, AvansPage, NakitPage, OdemeYuklemePage, OdemeReferansPage, OdemeKategoriAtamaPage } from './pages';
 import { MENU_GROUPS, DASHBOARD_ITEM, Icons, DEFAULT_PERIOD, OZEL_FATURA_YETKI_ADI, PUANTAJ_HISTORY_ACCESS_YETKI_ADI, GELIR_GECMISI_YETKI_ADI, DEFAULT_END_DATE, STORAGE_KEYS } from './constants';
 import { ErrorProvider, useErrorContext, classifyError } from './contexts/ErrorContext';
 import { ToastContainer, ConnectionStatusBanner, useToast } from './contexts/ToastContext';
@@ -1620,14 +1620,11 @@ const AppWithToast: React.FC = () => {
                       <Route path="/invoice-upload" element={<InvoiceUploadPage />} />
                       <Route path="/invoice-category-assignment" element={<InvoiceCategoryAssignmentPage />} />
                       <Route path="/b2b-upload" element={<B2BUploadPage />} />
+                      <Route path="/b2b-category-assignment" element={<B2BCategoryAssignmentPage />} />
                       <Route path="/odeme-yukleme" element={<OdemeYuklemePage />} />
                       <Route path="/odeme-kategori-atama" element={<OdemeKategoriAtamaPage />} />
                       
                       <Route path="/other-expenses" element={<DigerHarcamalarPage />} />
-                      <Route path="/gelir" element={<GelirPage />} />
-                      <Route path="/stock-definitions" element={<StokPage />} />
-                      <Route path="/stock-prices" element={<StokFiyatPage />} />
-                      <Route path="/stock-count" element={<StokSayimPage />} />
                       <Route path="/calisanlar" element={<CalisanPage />} />
                       <Route path="/puantaj-secim" element={<PuantajSecimPage />} />
                       <Route path="/puantaj" element={<PuantajPage />} />

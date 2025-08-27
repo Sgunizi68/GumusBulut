@@ -86,6 +86,7 @@ export const KATEGORI_YONETIMI_EKRANI_YETKI_ADI = 'Kategori Yönetimi Ekranı G�
 export const FATURA_YUKLEME_EKRANI_YETKI_ADI = 'Fatura Yükleme Ekranı Görüntüleme';
 export const FATURA_KATEGORI_ATAMA_EKRANI_YETKI_ADI = 'Fatura Kategori Atama Ekranı Görüntüleme';
 export const B2B_YUKLEME_EKRANI_YETKI_ADI = 'B2B Ekstre Yükleme Ekranı Görüntüleme';
+export const B2B_KATEGORI_ATAMA_EKRANI_YETKI_ADI = 'B2B Kategori Atama Ekranı Görüntüleme';
 export const DIGER_HARCAMALAR_EKRANI_YETKI_ADI = 'Diğer Harcamalar Ekranı Görüntüleme';
 export const GELIR_GIRISI_EKRANI_YETKI_ADI = 'Gelir Girişi Ekranı Görüntüleme';
 export const STOK_TANIMLAMA_EKRANI_YETKI_ADI = 'Stok Tanımlama Ekranı Görüntüleme';
@@ -138,6 +139,7 @@ export const MENU_GROUPS = [
             { label: 'Fatura Yükleme', path: '/invoice-upload', icon: Icons.Upload, permission: FATURA_YUKLEME_EKRANI_YETKI_ADI },
             { label: 'Fatura Kategori Atama', path: '/invoice-category-assignment', icon: Icons.Category, permission: FATURA_KATEGORI_ATAMA_EKRANI_YETKI_ADI },
             { label: 'B2B Ekstre Yükleme', path: '/b2b-upload', icon: Icons.ClipboardDocumentList, permission: B2B_YUKLEME_EKRANI_YETKI_ADI },
+            { label: 'B2B Ekstre Kategori Atama', path: '/b2b-category-assignment', icon: Icons.Category, permission: B2B_KATEGORI_ATAMA_EKRANI_YETKI_ADI },
             { label: 'Ödeme Yükleme', path: '/odeme-yukleme', icon: Icons.Upload, permission: ODEME_YUKLEME_EKRANI_YETKI_ADI },
             { label: 'Ödeme Kategori Atama', path: '/odeme-kategori-atama', icon: Icons.Category, permission: ODEME_KATEGORI_ATAMA_EKRANI_YETKI_ADI },
             { label: 'Diğer Harcamalar', path: '/other-expenses', icon: Icons.CreditCard, permission: DIGER_HARCAMALAR_EKRANI_YETKI_ADI },
