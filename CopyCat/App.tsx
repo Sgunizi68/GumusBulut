@@ -10,6 +10,7 @@ import { ToastContainer, ConnectionStatusBanner, useToast } from './contexts/Toa
 import { EFaturaReferansPage } from './pages';
 import { NakitYatirmaRaporuPage } from './pages/NakitYatirmaRaporu';
 import { OdemeRaporPage } from './pages/OdemeRapor';
+import { FaturaRaporuPage } from './pages/FaturaRaporu';
 import { Input, Select } from './components'; 
 
 // --- Helper types for local storage data ---
@@ -1635,6 +1636,7 @@ const AppWithToast: React.FC = () => {
                       <Route path="/odeme-yukleme" element={<OdemeYuklemePage />} />
                       <Route path="/nakit-yatirma-raporu" element={<NakitYatirmaRaporuPage />} />
                       <Route path="/odeme-rapor" element={<OdemeRaporPage />} />
+                      <Route path="/fatura-rapor" element={<FaturaRaporuPage />} />
                       
                       <Route path="*" element={<Navigate to="/" />} /> 
                     </Routes>

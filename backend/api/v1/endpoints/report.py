@@ -6,6 +6,7 @@ from db import crud
 from db.database import get_db
 from schemas.report import NakitYatirmaRaporu
 from schemas.odeme_rapor import OdemeRaporResponse
+from schemas.fatura_rapor import FaturaRaporResponse
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -115,4 +116,57 @@ def get_odeme_rapor(
         raise
     except Exception as e:
         logger.error(f"Error in get_odeme_rapor: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+
+@router.get("/fatura-rapor/", response_model=FaturaRaporResponse)
+def get_fatura_rapor(
+    donem: Optional[List[int]] = Query(None),
+    kategori: Optional[List[int]] = Query(None),
+    sube_id: Optional[int] = None,
+    db: Session = Depends(get_db)
+):
+    """
+    Fatura Rapor endpoint - comprehensive e-Fatura report with grouping
+    
+    Args:
+        donem: Optional list of periods (e.g., [2508, 2509])
+        kategori: Optional list of category IDs
+        sube_id: Branch ID filter
+        
+    Returns:
+        FaturaRaporResponse: Grouped report data with totals
+    """
+    logger.info(f"Getting Fatura Rapor for Sube_ID: {sube_id}, Donem: {donem}, Kategori: {kategori}")
+    
+    try:
+        # Validate inputs
+        if sube_id and sube_id <= 0:
+            raise HTTPException(status_code=400, detail="Invalid sube_id")
+        
+        # Validate period format if provided
+        if donem:
+            for d in donem:
+                donem_str = str(d)
+                if d <= 0 or len(donem_str) not in [4, 6]:
+                    raise HTTPException(
+                        status_code=400, 
+                        detail=f"Invalid donem format. Expected YYMM (4-digit) or YYYYMM (6-digit) format, got: {d}"
+                    )
+        
+        # Get report data using the comprehensive CRUD function
+        report_data = crud.get_fatura_rapor(
+            db=db,
+            donem_list=donem,
+            kategori_list=kategori,
+            sube_id=sube_id
+        )
+        
+        logger.info(f"Successfully generated Fatura report with {len(report_data.data)} period groups, {report_data.total_records} total records")
+        return report_data
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in get_fatura_rapor: {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")

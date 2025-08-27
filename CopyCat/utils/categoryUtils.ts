@@ -35,7 +35,7 @@ export const sortActiveKategoriler = (kategoriler: Kategori[]): Kategori[] => {
  * Used for specific category type filtering with permission-based visibility
  * 
  * @param kategoriler Array of all categories
- * @param tip Category type filter ("Gelir", "Gider", "Bilgi", "Ödeme")
+ * @param tip Category type filter ("Gelir", "Gider", "Bilgi", "Ödeme", "Giden Fatura")
  * @param canViewGizli Whether user can view hidden categories
  * @returns Sorted array of filtered categories
  */
@@ -65,6 +65,21 @@ export const sortKategorilerByType = (
 export const sortPaymentKategoriler = (kategoriler: Kategori[]): Kategori[] => {
   return kategoriler
     .filter(k => k.Aktif_Pasif && (k.Tip === 'Ödeme' || k.Tip === 'Gider'))
+    .sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi, 'tr', { 
+      sensitivity: 'base' 
+    }));
+};
+
+/**
+ * Filter and sort e-Fatura categories (Giden Fatura type)
+ * Specifically for e-Fatura-related category dropdowns
+ * 
+ * @param kategoriler Array of all categories
+ * @returns Sorted array of e-Fatura categories
+ */
+export const sortEFaturaKategoriler = (kategoriler: Kategori[]): Kategori[] => {
+  return kategoriler
+    .filter(k => k.Aktif_Pasif && k.Tip === 'Giden Fatura')
     .sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi, 'tr', { 
       sensitivity: 'base' 
     }));

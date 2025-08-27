@@ -336,12 +336,19 @@ export interface OdemeRaporDetail {
   tutar: number;
 }
 
+export interface OdemeRaporBankaHesabiGroup {
+  hesap_adi: string;
+  hesap_total: number;
+  record_count: number;
+  details: OdemeRaporDetail[];
+}
+
 export interface OdemeRaporKategoriGroup {
   kategori_id: number | null;
   kategori_adi: string;
   kategori_total: number;
   record_count: number;
-  details: OdemeRaporDetail[];
+  banka_hesaplari: OdemeRaporBankaHesabiGroup[];
 }
 
 export interface OdemeRaporDonemGroup {
@@ -361,6 +368,53 @@ export interface OdemeRaporResponse {
   data: OdemeRaporDonemGroup[];
   totals: OdemeRaporTotals;
   filters_applied: OdemeRaporRequest;
+  total_records: number;
+}
+
+// --- FATURA REPORT TYPES ---
+export interface FaturaRaporRequest {
+  donem?: number[];     // Optional array of periods (e.g., [2508, 2509])
+  kategori?: number[];  // Optional array of category IDs
+  sube_id?: number;     // Branch filter (from context)
+}
+
+export interface FaturaRaporDetail {
+  fatura_id: number;
+  fatura_tarihi: string;  // Date in YYYY-MM-DD format
+  fatura_numarasi: string;
+  alici_unvani: string;
+  tutar: number;
+  aciklama?: string;
+  giden_fatura?: boolean;
+  gunluk_harcama?: boolean;
+  ozel?: boolean;
+}
+
+export interface FaturaRaporKategoriGroup {
+  kategori_id: number | null;
+  kategori_adi: string;
+  kategori_total: number;
+  record_count: number;
+  faturalar: FaturaRaporDetail[];
+}
+
+export interface FaturaRaporDonemGroup {
+  donem: number;
+  donem_total: number;
+  record_count: number;
+  kategoriler: FaturaRaporKategoriGroup[];
+}
+
+export interface FaturaRaporTotals {
+  donem_totals: { [donem: number]: number };
+  kategori_totals: { [kategori_id: string]: number };
+  grand_total: number;
+}
+
+export interface FaturaRaporResponse {
+  data: FaturaRaporDonemGroup[];
+  totals: FaturaRaporTotals;
+  filters_applied: FaturaRaporRequest;
   total_records: number;
 }
 

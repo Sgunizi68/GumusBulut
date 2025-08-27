@@ -1,23 +1,273 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useAppContext } from '../App';
 import { Card, Button, Select } from '../components';
-import { Icons, YAZDIRMA_YETKISI_ADI, EXCELE_AKTAR_YETKISI_ADI } from '../constants';
+import { Icons, YAZDIRMA_YETKISI_ADI, EXCELE_AKTAR_YETKISI_ADI, GIZLI_KATEGORI_YETKISI_ADI } from '../constants';
 import { generateDashboardPdf } from '../utils/pdfGenerator';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import * as XLSX from 'xlsx';
 import { 
-    OdemeRaporResponse, 
-    OdemeRaporDonemGroup, 
-    OdemeRaporKategoriGroup, 
-    OdemeRaporBankaHesabiGroup,
-    OdemeRaporDetail,
+    FaturaRaporResponse, 
+    FaturaRaporDonemGroup, 
+    FaturaRaporKategoriGroup, 
+    FaturaRaporDetail,
     Kategori 
 } from '../types';
-import { sortPaymentKategoriler, createKategoriMultiSelectOptions } from '../utils/categoryUtils';
+import { sortEFaturaKategoriler, createKategoriMultiSelectOptions } from '../utils/categoryUtils';
 import { formatNumber } from '../utils/formatNumber';
-import ExpandableBankaHesabiRow from '../components/ExpandableBankaHesabiRow';
 
 // API constants
 const API_BASE_URL = 'http://localhost:8000/api/v1';
+
+// Custom PDF generation function for Fatura Raporu
+const generateFaturaRaporuPdf = async (
+  elementId: string, 
+  filename: string = 'fatura-raporu.pdf',
+  reportData: FaturaRaporResponse | null,
+  expandedDonemler: Set<number>,
+  expandedKategoriler: Set<string>,
+  setExpandedDonemler: React.Dispatch<React.SetStateAction<Set<number>>>,
+  setExpandedKategoriler: React.Dispatch<React.SetStateAction<Set<string>>>
+) => {
+  const input = document.getElementById(elementId);
+  if (!input) {
+    console.error(`Element with ID '${elementId}' not found.`);
+    alert('Rapor bulunamadı. Lütfen tekrar deneyin.');
+    return;
+  }
+
+  // Store original button content
+  let originalButtonContent = '';
+  const printButton = input.querySelector('.print-button');
+  if (printButton) {
+    originalButtonContent = printButton.innerHTML;
+    // Show loading state
+    printButton.innerHTML = '<div class="flex items-center"><div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>PDF Oluşturuluyor...</div>';
+  }
+
+  // Store original expanded states
+  const originalExpandedDonemler = new Set(expandedDonemler);
+  const originalExpandedKategoriler = new Set(expandedKategoriler);
+
+  try {
+    // Expand all periods and categories temporarily
+    const allDonemler = reportData?.data.map(donemGroup => donemGroup.donem) || [];
+    const allKategoriler = new Set<string>();
+    
+    reportData?.data.forEach(donemGroup => {
+      donemGroup.kategoriler.forEach(kategoriGroup => {
+        const key = `${donemGroup.donem}-${kategoriGroup.kategori_id || 'uncategorized'}`;
+        allKategoriler.add(key);
+      });
+    });
+
+    // Update state to expand all periods and categories
+    setExpandedDonemler(new Set(allDonemler));
+    setExpandedKategoriler(allKategoriler);
+
+    // Wait for state updates and re-rendering
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Refresh the input element reference after state changes
+    const updatedInput = document.getElementById(elementId);
+    if (!updatedInput) {
+      throw new Error('Element not found after state update');
+    }
+
+    // Temporarily hide elements that shouldn't appear in PDF
+    const elementsToHide = updatedInput.querySelectorAll('.hide-on-pdf, .print-button, .screen-only-input');
+    elementsToHide.forEach(el => {
+      (el as HTMLElement).style.display = 'none';
+    });
+
+    // Temporarily adjust layout for better PDF rendering
+    const originalStyles: {element: HTMLElement, styles: {[key: string]: string}}[] = [];
+    
+    // Handle overflow containers
+    const overflowContainers = updatedInput.querySelectorAll('.overflow-x-auto, .overflow-hidden, .overflow-auto');
+    overflowContainers.forEach(container => {
+      const el = container as HTMLElement;
+      originalStyles.push({
+        element: el,
+        styles: {
+          overflow: el.style.overflow,
+          width: el.style.width,
+          maxWidth: el.style.maxWidth,
+          maxHeight: el.style.maxHeight
+        }
+      });
+      el.style.overflow = 'visible';
+      el.style.width = 'max-content';
+      el.style.maxWidth = 'none';
+      el.style.maxHeight = 'none';
+    });
+
+    // Handle table layouts
+    const tables = updatedInput.querySelectorAll('table');
+    tables.forEach(table => {
+      const el = table as HTMLElement;
+      originalStyles.push({
+        element: el,
+        styles: {
+          width: el.style.width,
+          tableLayout: el.style.tableLayout
+        }
+      });
+      el.style.width = '100%';
+      el.style.tableLayout = 'auto';
+    });
+
+    // Handle grid layouts
+    const grids = updatedInput.querySelectorAll('.grid');
+    grids.forEach(grid => {
+      const el = grid as HTMLElement;
+      originalStyles.push({
+        element: el,
+        styles: {
+          display: el.style.display,
+          gridTemplateColumns: el.style.gridTemplateColumns
+        }
+      });
+      // Force single column layout for PDF
+      el.style.display = 'block';
+    });
+
+    // Handle flex layouts that might cause issues
+    const flexContainers = updatedInput.querySelectorAll('.flex');
+    flexContainers.forEach(flex => {
+      const el = flex as HTMLElement;
+      originalStyles.push({
+        element: el,
+        styles: {
+          flexWrap: el.style.flexWrap
+        }
+      });
+      // Prevent wrapping for better PDF layout
+      el.style.flexWrap = 'nowrap';
+    });
+
+    // Wait for layout changes to take effect
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    // Calculate the full dimensions of the content
+    const scrollWidth = Math.max(updatedInput.scrollWidth, window.innerWidth);
+    const scrollHeight = Math.max(updatedInput.scrollHeight, window.innerHeight);
+    
+    // Add some padding to ensure all content is captured
+    const padding = 20;
+    const canvasWidth = scrollWidth + padding * 2;
+    const canvasHeight = scrollHeight + padding * 2;
+
+    // Use html2canvas with enhanced options for better quality
+    const canvas = await html2canvas(updatedInput, {
+      scale: 2, // Higher scale for better quality
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
+      scrollX: -padding,
+      scrollY: -padding,
+      width: canvasWidth,
+      height: canvasHeight,
+      windowWidth: canvasWidth,
+      windowHeight: canvasHeight,
+      logging: false, // Reduce console output
+      onclone: (clonedDoc) => {
+        // Additional adjustments in the cloned document
+        const clonedElement = clonedDoc.getElementById(elementId);
+        if (clonedElement) {
+          clonedElement.style.padding = `${padding}px`;
+        }
+      }
+    });
+
+    // Create PDF with proper dimensions
+    const imgData = canvas.toDataURL('image/png', 1.0);
+    
+    // Use landscape orientation for better width handling
+    const pdf = new jsPDF('l', 'mm', 'a4');
+    
+    // If content is very wide, consider using portrait with smaller scale
+    const isVeryWide = canvas.width > canvas.height * 1.5;
+    if (isVeryWide) {
+      // For very wide content, use portrait with adjusted scaling
+      const portraitPdf = new jsPDF('p', 'mm', 'a4');
+      portraitPdf.deletePage(1); // Remove default page
+      pdf.deletePage(1); // Remove landscape page
+      
+      // Add pages with proper scaling
+      const pageWidth = portraitPdf.internal.pageSize.getWidth();
+      const pageHeight = portraitPdf.internal.pageSize.getHeight();
+      const imgWidth = pageWidth - 20; // 10mm margin on each side
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      
+      let position = 10; // 10mm top margin
+      let heightLeft = imgHeight;
+      
+      // Add the first page
+      portraitPdf.addPage();
+      portraitPdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+      heightLeft -= (pageHeight - 20); // Account for top and bottom margins
+      
+      // Add additional pages if needed
+      while (heightLeft > 0) {
+        position = 10 - (imgHeight - heightLeft);
+        portraitPdf.addPage();
+        portraitPdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+        heightLeft -= (pageHeight - 20);
+      }
+      
+      // Save the PDF
+      portraitPdf.save(filename);
+    } else {
+      // Standard landscape handling
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = pdfWidth - 20; // 10mm margin on each side
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      
+      let position = 10; // 10mm top margin
+      let heightLeft = imgHeight;
+      
+      // Add the first page
+      pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+      heightLeft -= (pdfHeight - 20); // Account for top and bottom margins
+      
+      // Add additional pages if needed
+      while (heightLeft > 0) {
+        position = 10 - (imgHeight - heightLeft);
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+        heightLeft -= (pdfHeight - 20);
+      }
+      
+      // Save the PDF
+      pdf.save(filename);
+    }
+
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    alert('PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
+  } finally {
+    // Restore button content immediately
+    if (printButton) {
+      printButton.innerHTML = originalButtonContent;
+    }
+
+    const updatedInput = document.getElementById(elementId);
+    if (updatedInput) {
+      const elementsToHide = updatedInput.querySelectorAll('.hide-on-pdf, .print-button, .screen-only-input');
+      elementsToHide.forEach(el => {
+        (el as HTMLElement).style.display = '';
+      });
+    }
+
+    // Restore original expanded states after a short delay to ensure UI is updated
+    setTimeout(() => {
+      setExpandedDonemler(originalExpandedDonemler);
+      setExpandedKategoriler(originalExpandedKategoriler);
+    }, 100);
+  }
+};
 
 // Multi-select component for filters
 interface MultiSelectProps {
@@ -109,12 +359,11 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 
 // Expandable row component for category groups
 interface ExpandableKategoriRowProps {
-    kategoriGroup: OdemeRaporKategoriGroup;
+    kategoriGroup: FaturaRaporKategoriGroup;
     donem: number;
     isExpanded: boolean;
     onToggle: () => void;
-    expandedBankaHesaplari: Set<string>;
-    onBankaHesabiToggle: (bankaHesabiKey: string) => void;
+    hasGizliKategoriPermission: boolean;
 }
 
 const ExpandableKategoriRow: React.FC<ExpandableKategoriRowProps> = ({
@@ -122,9 +371,15 @@ const ExpandableKategoriRow: React.FC<ExpandableKategoriRowProps> = ({
     donem,
     isExpanded,
     onToggle,
-    expandedBankaHesaplari,
-    onBankaHesabiToggle
+    hasGizliKategoriPermission
 }) => {
+    // Ensure formatNumber receives a valid number
+    const safeFormatNumber = (value: any): string => {
+        const num = typeof value === 'number' ? value : parseFloat(value);
+        if (isNaN(num)) return '0,00';
+        return formatNumber(num);
+    };
+
     return (
         <>
             {/* Category Header Row */}
@@ -148,22 +403,53 @@ const ExpandableKategoriRow: React.FC<ExpandableKategoriRowProps> = ({
                     </span>
                 </td>
                 <td className="px-4 py-3 text-right font-semibold text-blue-700">
-                    {formatNumber(kategoriGroup.kategori_total)}
+                    {safeFormatNumber(kategoriGroup.kategori_total)}
                 </td>
             </tr>
 
-            {/* Bank Account Groups (shown when category is expanded) */}
-            {isExpanded && kategoriGroup.banka_hesaplari.map((bankaHesabiGroup) => {
-                const bankaHesabiKey = `${donem}-${kategoriGroup.kategori_id || 'uncategorized'}-${bankaHesabiGroup.hesap_adi}`;
+            {/* Fatura Details (shown when category is expanded) */}
+            {isExpanded && kategoriGroup.faturalar.map((fatura) => {
+                // Check if the user has permission to see gizli (special) faturas
+                const isGizliFatura = fatura.ozel === true;
+                const showFatura = hasGizliKategoriPermission || !isGizliFatura;
+                
+                if (!showFatura) return null;
+                
                 return (
-                    <ExpandableBankaHesabiRow
-                        key={bankaHesabiKey}
-                        bankaHesabiGroup={bankaHesabiGroup}
-                        donem={donem}
-                        kategoriId={kategoriGroup.kategori_id}
-                        isExpanded={expandedBankaHesaplari.has(bankaHesabiKey)}
-                        onToggle={() => onBankaHesabiToggle(bankaHesabiKey)}
-                    />
+                    <tr key={fatura.fatura_id} className="bg-white border-l-4 border-gray-200 hover:bg-gray-50">
+                        <td colSpan={3} className="px-8 py-2">
+                            <div className="flex flex-wrap items-center justify-between">
+                                <div className="flex items-center space-x-3">
+                                    <Icons.Invoice className="w-4 h-4 text-gray-500 flex-shrink-0" />
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <span className="font-medium text-sm">{fatura.fatura_numarasi}</span>
+                                        <span className="text-xs text-gray-500">{fatura.alici_unvani}</span>
+                                        <span className="text-xs text-gray-400">
+                                            ({fatura.giden_fatura ? 'Giden Fatura' : 'Gelen Fatura'})
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    {hasGizliKategoriPermission && fatura.ozel && (
+                                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                            Gizli
+                                        </span>
+                                    )}
+                                    {fatura.gunluk_harcama && (
+                                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Günlük
+                                        </span>
+                                    )}
+                                    <span className="text-sm text-gray-500 ml-2">
+                                        {new Date(fatura.fatura_tarihi).toLocaleDateString('tr-TR')}
+                                    </span>
+                                    <span className="font-medium">
+                                        {safeFormatNumber(fatura.tutar)}
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
                 );
             })}
         </>
@@ -171,7 +457,7 @@ const ExpandableKategoriRow: React.FC<ExpandableKategoriRowProps> = ({
 };
 
 // Main component
-export const OdemeRaporPage: React.FC = () => {
+export const FaturaRaporuPage: React.FC = () => {
     const { selectedBranch, currentPeriod, hasPermission } = useAppContext();
     
     // Permission checks for export functionality
@@ -179,7 +465,7 @@ export const OdemeRaporPage: React.FC = () => {
     const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
     
     // State
-    const [reportData, setReportData] = useState<OdemeRaporResponse | null>(null);
+    const [reportData, setReportData] = useState<FaturaRaporResponse | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     
@@ -191,7 +477,13 @@ export const OdemeRaporPage: React.FC = () => {
     // Expanded state for groups
     const [expandedDonemler, setExpandedDonemler] = useState<Set<number>>(new Set());
     const [expandedKategoriler, setExpandedKategoriler] = useState<Set<string>>(new Set());
-    const [expandedBankaHesaplari, setExpandedBankaHesaplari] = useState<Set<string>>(new Set());
+
+    // Ensure formatNumber receives a valid number
+    const safeFormatNumber = (value: any): string => {
+        const num = typeof value === 'number' ? value : parseFloat(value);
+        if (isNaN(num)) return '0,00';
+        return formatNumber(num);
+    };
 
     // Generate available periods (last 12 months)
     const availableDonemler = useMemo(() => {
@@ -222,9 +514,9 @@ export const OdemeRaporPage: React.FC = () => {
                 const response = await fetch(`${API_BASE_URL}/kategoriler/`);
                 if (response.ok) {
                     const data = await response.json();
-                    // Filter and sort payment categories using utility function
-                    const sortedPaymentKategoriler = sortPaymentKategoriler(data);
-                    setAvailableKategoriler(sortedPaymentKategoriler);
+                    // Filter and sort e-Fatura categories using utility function
+                    const sortedEFaturaKategoriler = sortEFaturaKategoriler(data);
+                    setAvailableKategoriler(sortedEFaturaKategoriler);
                 }
             } catch (error) {
                 console.error('Error fetching kategoriler:', error);
@@ -264,15 +556,15 @@ export const OdemeRaporPage: React.FC = () => {
             // Add branch filter
             params.append('sube_id', selectedBranch.Sube_ID.toString());
 
-            const url = `${API_BASE_URL}/odeme-rapor/?${params.toString()}`;
-            console.log('Fetching Odeme report from:', url);
+            const url = `${API_BASE_URL}/fatura-rapor/?${params.toString()}`;
+            console.log('Fetching Fatura report from:', url);
 
             const response = await fetch(url);
             
             if (response.ok) {
                 const data = await response.json();
                 setReportData(data);
-                console.log('Odeme report data:', data);
+                console.log('Fatura report data:', data);
             } else {
                 const errorText = await response.text();
                 setError(`Veri alınırken hata oluştu: ${response.status} - ${errorText}`);
@@ -306,31 +598,6 @@ export const OdemeRaporPage: React.FC = () => {
             newExpanded.add(key);
         }
         setExpandedKategoriler(newExpanded);
-        
-        // Also collapse all bank accounts under this category
-        const bankaHesabiKeysToRemove: string[] = [];
-        expandedBankaHesaplari.forEach((bankaHesabiKey) => {
-            if (bankaHesabiKey.startsWith(`${donem}-${kategoriId || 'uncategorized'}-`)) {
-                bankaHesabiKeysToRemove.push(bankaHesabiKey);
-            }
-        });
-        
-        if (bankaHesabiKeysToRemove.length > 0) {
-            const updatedBankaHesaplari = new Set(expandedBankaHesaplari);
-            bankaHesabiKeysToRemove.forEach(key => updatedBankaHesaplari.delete(key));
-            setExpandedBankaHesaplari(updatedBankaHesaplari);
-        }
-    };
-
-    // Toggle expanded state for bank accounts
-    const toggleBankaHesabi = (bankaHesabiKey: string) => {
-        const newExpanded = new Set(expandedBankaHesaplari);
-        if (newExpanded.has(bankaHesabiKey)) {
-            newExpanded.delete(bankaHesabiKey);
-        } else {
-            newExpanded.add(bankaHesabiKey);
-        }
-        setExpandedBankaHesaplari(newExpanded);
     };
 
     // Filter options for multi-select
@@ -345,9 +612,14 @@ export const OdemeRaporPage: React.FC = () => {
 
     // Export Functions
     const handleGeneratePdf = () => {
-        generateDashboardPdf(
-            'odeme-rapor-content',
-            `Odeme_Rapor_${selectedBranch?.Sube_Adi}_${selectedDonemler.join('_')}.pdf`
+        generateFaturaRaporuPdf(
+            'fatura-rapor-content',
+            `Fatura_Rapor_${selectedBranch?.Sube_Adi}_${selectedDonemler.join('_')}.pdf`,
+            reportData,
+            expandedDonemler,
+            expandedKategoriler,
+            setExpandedDonemler,
+            setExpandedKategoriler
         );
     };
     
@@ -376,7 +648,7 @@ export const OdemeRaporPage: React.FC = () => {
             {
                 'Kategori': 'Toplam Kayıt',
                 'Değer': reportData.total_records,
-                'Açıklama': 'Toplam ödeme kayıt sayısı'
+                'Açıklama': 'Toplam fatura kayıt sayısı'
             },
             {
                 'Kategori': 'Dönem Sayısı',
@@ -386,7 +658,7 @@ export const OdemeRaporPage: React.FC = () => {
             {
                 'Kategori': 'Genel Toplam',
                 'Değer': reportData.totals.grand_total,
-                'Açıklama': 'Tüm ödemelerin toplam tutarı'
+                'Açıklama': 'Tüm faturaların toplam tutarı'
             }
         ];
         
@@ -409,8 +681,8 @@ export const OdemeRaporPage: React.FC = () => {
                 'Dönem': donemGroup.donem,
                 'Kategori': 'DÖNEM TOPLAMI',
                 'Kategori Adı': '',
-                'Banka Hesabı': '',
-                'Tip': '',
+                'Fatura Numarası': '',
+                'Alıcı Ünvanı': '',
                 'Tarih': '',
                 'Açıklama': '',
                 'Tutar': donemGroup.donem_total,
@@ -424,43 +696,27 @@ export const OdemeRaporPage: React.FC = () => {
                     'Dönem': donemGroup.donem,
                     'Kategori': 'KATEGORİ TOPLAMI',
                     'Kategori Adı': kategoriGroup.kategori_adi,
-                    'Banka Hesabı': '',
-                    'Tip': '',
+                    'Fatura Numarası': '',
+                    'Alıcı Ünvanı': '',
                     'Tarih': '',
                     'Açıklama': '',
                     'Tutar': kategoriGroup.kategori_total,
                     'Kayıt Sayısı': kategoriGroup.record_count
                 });
                 
-                kategoriGroup.banka_hesaplari.forEach((bankaHesabiGroup) => {
-                    // Bank account header
+                // Detail records
+                kategoriGroup.faturalar.forEach((detail) => {
                     detailedData.push({
                         'Sıra': rowIndex++,
                         'Dönem': donemGroup.donem,
-                        'Kategori': 'BANKA HESABI TOPLAMI',
+                        'Kategori': 'DETAY',
                         'Kategori Adı': kategoriGroup.kategori_adi,
-                        'Banka Hesabı': bankaHesabiGroup.hesap_adi,
-                        'Tip': '',
-                        'Tarih': '',
-                        'Açıklama': '',
-                        'Tutar': bankaHesabiGroup.hesap_total,
-                        'Kayıt Sayısı': bankaHesabiGroup.record_count
-                    });
-                    
-                    // Detail records
-                    bankaHesabiGroup.details.forEach((detail) => {
-                        detailedData.push({
-                            'Sıra': rowIndex++,
-                            'Dönem': donemGroup.donem,
-                            'Kategori': 'DETAY',
-                            'Kategori Adı': kategoriGroup.kategori_adi,
-                            'Banka Hesabı': bankaHesabiGroup.hesap_adi,
-                            'Tip': detail.tip,
-                            'Tarih': new Date(detail.tarih).toLocaleDateString('tr-TR'),
-                            'Açıklama': detail.aciklama,
-                            'Tutar': detail.tutar,
-                            'Kayıt Sayısı': 1
-                        });
+                        'Fatura Numarası': detail.fatura_numarasi,
+                        'Alıcı Ünvanı': detail.alici_unvani,
+                        'Tarih': new Date(detail.fatura_tarihi).toLocaleDateString('tr-TR'),
+                        'Açıklama': detail.aciklama || '',
+                        'Tutar': detail.tutar,
+                        'Kayıt Sayısı': 1
                     });
                 });
             });
@@ -472,8 +728,8 @@ export const OdemeRaporPage: React.FC = () => {
             { wch: 10 }, // Dönem
             { wch: 15 }, // Kategori
             { wch: 25 }, // Kategori Adı
-            { wch: 20 }, // Banka Hesabı
-            { wch: 15 }, // Tip
+            { wch: 20 }, // Fatura Numarası
+            { wch: 30 }, // Alıcı Ünvanı
             { wch: 12 }, // Tarih
             { wch: 30 }, // Açıklama
             { wch: 15 }, // Tutar
@@ -482,14 +738,14 @@ export const OdemeRaporPage: React.FC = () => {
         XLSX.utils.book_append_sheet(wb, wsDetailed, 'Detaylı Rapor');
         
         // Save the file
-        const fileName = `Odeme_Rapor_${selectedBranch.Sube_Adi}_${selectedDonemler.join('_')}.xlsx`;
+        const fileName = `Fatura_Rapor_${selectedBranch.Sube_Adi}_${selectedDonemler.join('_')}.xlsx`;
         XLSX.writeFile(wb, fileName);
     };
 
     return (
-        <div className="space-y-6" id="odeme-rapor-content">
+        <div className="space-y-6" id="fatura-rapor-content">
             <Card 
-                title={`Ödeme Rapor (Şube: ${selectedBranch?.Sube_Adi})`}
+                title={`Fatura Rapor (Şube: ${selectedBranch?.Sube_Adi})`}
                 actions={
                     <div className="flex items-center space-x-2 hide-on-pdf">
                         {canPrint && (
@@ -547,7 +803,6 @@ export const OdemeRaporPage: React.FC = () => {
                                 setSelectedKategoriler([]);
                                 setExpandedDonemler(new Set());
                                 setExpandedKategoriler(new Set());
-                                setExpandedBankaHesaplari(new Set());
                             }}
                             variant="outline"
                             className="w-full"
@@ -600,7 +855,7 @@ export const OdemeRaporPage: React.FC = () => {
                                 </div>
                                 <div className="bg-white bg-opacity-10 p-4 rounded-lg text-center">
                                     <div className="text-sm opacity-90 mb-1">Genel Toplam</div>
-                                    <div className="text-xl font-bold">{formatNumber(reportData.totals.grand_total)}</div>
+                                    <div className="text-xl font-bold">{safeFormatNumber(reportData.totals.grand_total)}</div>
                                 </div>
                             </div>
                         </div>
@@ -613,7 +868,7 @@ export const OdemeRaporPage: React.FC = () => {
                                         <thead className="bg-gray-50">
                                             <tr>
                                                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Kategori / Banka Hesabı / Detay
+                                                    Kategori / Fatura Detay
                                                 </th>
                                                 <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                     Kayıt Sayısı
@@ -647,7 +902,7 @@ export const OdemeRaporPage: React.FC = () => {
                                                             </span>
                                                         </td>
                                                         <td className="px-4 py-4 text-right font-bold">
-                                                            {formatNumber(donemGroup.donem_total)}
+                                                            {safeFormatNumber(donemGroup.donem_total)}
                                                         </td>
                                                     </tr>
 
@@ -660,8 +915,7 @@ export const OdemeRaporPage: React.FC = () => {
                                                                 donem={donemGroup.donem}
                                                                 isExpanded={expandedKategoriler.has(`${donemGroup.donem}-${kategoriGroup.kategori_id || 'uncategorized'}`)}
                                                                 onToggle={() => toggleKategori(donemGroup.donem, kategoriGroup.kategori_id)}
-                                                                expandedBankaHesaplari={expandedBankaHesaplari}
-                                                                onBankaHesabiToggle={toggleBankaHesabi}
+                                                                hasGizliKategoriPermission={hasPermission(GIZLI_KATEGORI_YETKISI_ADI)}
                                                             />
                                                         ))
                                                     }
@@ -678,7 +932,7 @@ export const OdemeRaporPage: React.FC = () => {
                                 </div>
                                 <p className="text-gray-600 font-medium mb-2">Veri Bulunamadı</p>
                                 <p className="text-sm text-gray-500 mb-4">
-                                    Seçilen filtrelere uygun ödeme verisi bulunamadı.
+                                    Seçilen filtrelere uygun fatura verisi bulunamadı.
                                 </p>
                             </div>
                         )}

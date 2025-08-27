@@ -25,7 +25,7 @@ import {
     STOK_SAYIM_EKRANI_YETKI_ADI, CALISAN_YONETIMI_EKRANI_YETKI_ADI, 
     PUANTAJ_SECIM_YONETIMI_EKRANI_YETKI_ADI, PUANTAJ_GIRISI_EKRANI_YETKI_ADI, 
     AVANS_TALEBI_EKRANI_YETKI_ADI, NAKIT_GIRISI_EKRANI_YETKI_ADI, FINANSAL_OZET_YETKI_ADI,
-    ODEME_YUKLEME_EKRANI_YETKI_ADI, ODEME_KATEGORI_ATAMA_EKRANI_YETKI_ADI, ODEME_REFERANS_YONETIMI_EKRANI_YETKI_ADI, NAKIT_YATIRMA_RAPORU_YETKI_ADI, ODEME_RAPOR_YETKI_ADI // Explicitly add it here
+    ODEME_YUKLEME_EKRANI_YETKI_ADI, ODEME_KATEGORI_ATAMA_EKRANI_YETKI_ADI, ODEME_REFERANS_YONETIMI_EKRANI_YETKI_ADI, NAKIT_YATIRMA_RAPORU_YETKI_ADI, ODEME_RAPOR_YETKI_ADI, FATURA_RAPOR_YETKI_ADI // Explicitly add it here
 } from './constants';
 import { Kullanici, Rol, Yetki, KullaniciRol, RolYetki, KullaniciFormData, RolFormData, YetkiFormData, Sube, SubeFormData, Deger, DegerFormData, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, EFatura, EFaturaExcelRow, InvoiceAssignmentFormData, B2BEkstre, B2BEkstreExcelRow, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, PuantajEntry, HarcamaTipi, Gelir, GelirEkstra, KategoriTip, AvansIstek, AvansIstekFormData, OdemeReferans, OdemeReferansFormData, Odeme, OdemeAssignmentFormData } from './types'; 
 
@@ -582,9 +582,17 @@ export const DashboardPage: React.FC = () => {
 
     const wb = XLSX.utils.book_new();
     
-    // Helper function to format currency values for Excel
-    const formatCurrencyForExcel = (value: number) => {
-      return value; // Keep as number for Excel calculations
+    // Helper function to format currency values for Excel with thousand separators
+    const formatCurrencyForExcelWithSeparators = (value: number) => {
+      if (value === undefined || value === null || isNaN(value)) {
+        return '';
+      }
+      // Use Turkish locale formatting with thousand separators
+      return value.toLocaleString('tr-TR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+        useGrouping: true,
+      });
     };
     
     // Helper function to create formatted data with better structure
@@ -636,7 +644,7 @@ export const DashboardPage: React.FC = () => {
         formattedData.push({
           'Kategori': category,
           'Kalem Adı': itemName,
-          'Tutar (₺)': row.isTitle ? '' : formatCurrencyForExcel(row.value),
+          'Tutar (₺)': row.isTitle ? '' : formatCurrencyForExcelWithSeparators(row.value),
           'Durum': status
         });
       });
@@ -699,9 +707,9 @@ export const DashboardPage: React.FC = () => {
       { 'Açıklama': 'Dönem', 'Değer': selectedPeriodForDashboard },
       { 'Açıklama': 'Rapor Tarihi', 'Değer': new Date().toLocaleDateString('tr-TR') },
       { 'Açıklama': '', 'Değer': '' },
-      { 'Açıklama': 'Toplam Gelir', 'Değer': gelirTotal },
-      { 'Açıklama': 'Toplam Gider', 'Değer': giderTotal },
-      { 'Açıklama': 'Net Fark (Gelir - Gider)', 'Değer': gelirTotal - giderTotal }
+      { 'Açıklama': 'Toplam Gelir', 'Değer': formatCurrencyForExcelWithSeparators(gelirTotal) },
+      { 'Açıklama': 'Toplam Gider', 'Değer': formatCurrencyForExcelWithSeparators(giderTotal) },
+      { 'Açıklama': 'Net Fark (Gelir - Gider)', 'Değer': formatCurrencyForExcelWithSeparators(gelirTotal - giderTotal) }
     );
     
     const summaryWs = XLSX.utils.json_to_sheet(summaryData);
