@@ -1,5 +1,4 @@
 import React, { useState, createContext, useContext, useCallback, ReactNode, useEffect, useMemo } from 'react';
-import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from 'react';
 import { HashRouter, Routes, Route, Link, NavLink, Navigate, useLocation } from 'react-router-dom';
 import { AppContextType, Sube, Kullanici, EFatura, InvoiceAssignmentFormData, DataContextType, RolYetki, B2BEkstre, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, Puantaj, PuantajEntry, Gelir, GelirEkstra, AvansIstek, Rol, Yetki, KullaniciRol, Deger, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, Nakit, NakitFormData, EFaturaReferans, EFaturaReferansFormData, OdemeReferans, OdemeReferansFormData, Odeme, OdemeAssignmentFormData } from './types';
 import { LoginPage, DashboardPage, SubePage, UsersPage, RolesPage, PermissionsPage, UserRoleAssignmentPage, RolePermissionAssignmentPage, DegerlerPage, PlaceholderPage, UstKategorilerPage, KategorilerPage, InvoiceUploadPage, InvoiceCategoryAssignmentPage, B2BUploadPage, DigerHarcamalarPage, GelirPage, StokPage, StokFiyatPage, StokSayimPage, CalisanPage, PuantajSecimPage, PuantajPage, AvansPage, NakitPage, OdemeYuklemePage, OdemeReferansPage, OdemeKategoriAtamaPage } from './pages';
@@ -11,6 +10,7 @@ import { EFaturaReferansPage } from './pages';
 import { NakitYatirmaRaporuPage } from './pages/NakitYatirmaRaporu';
 import { OdemeRaporPage } from './pages/OdemeRapor';
 import { FaturaRaporuPage } from './pages/FaturaRaporu';
+import { FaturaDigerHarcamaRaporuPage } from './pages/FaturaDigerHarcamaRaporu';
 import { Input, Select } from './components'; 
 
 // --- Helper types for local storage data ---
@@ -1637,8 +1637,9 @@ const AppWithToast: React.FC = () => {
                       <Route path="/nakit-yatirma-raporu" element={<NakitYatirmaRaporuPage />} />
                       <Route path="/odeme-rapor" element={<OdemeRaporPage />} />
                       <Route path="/fatura-rapor" element={<FaturaRaporuPage />} />
+                      <Route path="/fatura-diger-harcama-rapor" element={<FaturaDigerHarcamaRaporuPage />} />
                       
-                      <Route path="*" element={<Navigate to="/" />} /> 
+                      <Route path="*" element={<Navigate to="/" />} />
                     </Routes>
                   </MainLayout>
                 </ProtectedRoute>

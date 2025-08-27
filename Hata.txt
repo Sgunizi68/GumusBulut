@@ -1,76 +1,58 @@
-react-dom_client.js?v=fdffb896:3216 Uncaught Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+[plugin:vite:esbuild] Transform failed with 5 errors:
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:1643:14: ERROR: The character "}" is not valid inside a JSX element
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:1644:13: ERROR: The character ">" is not valid inside a JSX element
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:1646:10: ERROR: Unexpected closing "HashRouter" tag does not match opening "MainLayout" tag
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:1648:8: ERROR: Unexpected closing "DataProvider" tag does not match opening "ProtectedRoute" tag
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:1649:26: ERROR: Unterminated regular expression
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:1643:14
+The character "}" is not valid inside a JSX element
+1641|                        
+1642|                        <Route path="*" element={<Navigate to="/" />} /> 
+1643|                }
+   |                ^
+1644|              />
+1645|            </Routes>
 
-Check the render method of `OdemeKategoriAtamaPage`.
-    at createFiberFromTypeAndProps (react-dom_client.js?v=fdffb896:3216:30)
-    at createFiberFromElement (react-dom_client.js?v=fdffb896:3229:16)
-    at createChild (react-dom_client.js?v=fdffb896:5571:32)
-    at reconcileChildrenArray (react-dom_client.js?v=fdffb896:5789:26)
-    at reconcileChildFibersImpl (react-dom_client.js?v=fdffb896:5995:88)
-    at react-dom_client.js?v=fdffb896:6061:35
-    at reconcileChildren (react-dom_client.js?v=fdffb896:6444:53)
-    at beginWork (react-dom_client.js?v=fdffb896:7830:104)
-    at runWithFiberInDEV (react-dom_client.js?v=fdffb896:1485:72)
-    at performUnitOfWork (react-dom_client.js?v=fdffb896:10874:82)
-createFiberFromTypeAndProps @ react-dom_client.js?v=fdffb896:3216
-createFiberFromElement @ react-dom_client.js?v=fdffb896:3229
-createChild @ react-dom_client.js?v=fdffb896:5571
-reconcileChildrenArray @ react-dom_client.js?v=fdffb896:5789
-reconcileChildFibersImpl @ react-dom_client.js?v=fdffb896:5995
-(anonymous) @ react-dom_client.js?v=fdffb896:6061
-reconcileChildren @ react-dom_client.js?v=fdffb896:6444
-beginWork @ react-dom_client.js?v=fdffb896:7830
-runWithFiberInDEV @ react-dom_client.js?v=fdffb896:1485
-performUnitOfWork @ react-dom_client.js?v=fdffb896:10874
-workLoopSync @ react-dom_client.js?v=fdffb896:10728
-renderRootSync @ react-dom_client.js?v=fdffb896:10711
-performWorkOnRoot @ react-dom_client.js?v=fdffb896:10359
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=fdffb896:11623
-performWorkUntilDeadline @ react-dom_client.js?v=fdffb896:36
-<button>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=fdffb896:250
-Button @ components.tsx:78
-react-stack-bottom-frame @ react-dom_client.js?v=fdffb896:17424
-renderWithHooksAgain @ react-dom_client.js?v=fdffb896:4281
-renderWithHooks @ react-dom_client.js?v=fdffb896:4217
-updateFunctionComponent @ react-dom_client.js?v=fdffb896:6619
-beginWork @ react-dom_client.js?v=fdffb896:7654
-runWithFiberInDEV @ react-dom_client.js?v=fdffb896:1485
-performUnitOfWork @ react-dom_client.js?v=fdffb896:10874
-workLoopSync @ react-dom_client.js?v=fdffb896:10728
-renderRootSync @ react-dom_client.js?v=fdffb896:10711
-performWorkOnRoot @ react-dom_client.js?v=fdffb896:10359
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=fdffb896:11623
-performWorkUntilDeadline @ react-dom_client.js?v=fdffb896:36
-<Button>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=fdffb896:250
-OdemeKategoriAtamaPage @ pages.tsx:5546
-react-stack-bottom-frame @ react-dom_client.js?v=fdffb896:17424
-renderWithHooksAgain @ react-dom_client.js?v=fdffb896:4281
-renderWithHooks @ react-dom_client.js?v=fdffb896:4217
-updateFunctionComponent @ react-dom_client.js?v=fdffb896:6619
-beginWork @ react-dom_client.js?v=fdffb896:7654
-runWithFiberInDEV @ react-dom_client.js?v=fdffb896:1485
-performUnitOfWork @ react-dom_client.js?v=fdffb896:10874
-workLoopSync @ react-dom_client.js?v=fdffb896:10728
-renderRootSync @ react-dom_client.js?v=fdffb896:10711
-performWorkOnRoot @ react-dom_client.js?v=fdffb896:10359
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=fdffb896:11623
-performWorkUntilDeadline @ react-dom_client.js?v=fdffb896:36
-<OdemeKategoriAtamaPage>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=fdffb896:250
-App @ App.tsx:1591
-react-stack-bottom-frame @ react-dom_client.js?v=fdffb896:17424
-renderWithHooksAgain @ react-dom_client.js?v=fdffb896:4281
-renderWithHooks @ react-dom_client.js?v=fdffb896:4217
-updateFunctionComponent @ react-dom_client.js?v=fdffb896:6619
-beginWork @ react-dom_client.js?v=fdffb896:7654
-runWithFiberInDEV @ react-dom_client.js?v=fdffb896:1485
-performUnitOfWork @ react-dom_client.js?v=fdffb896:10874
-workLoopSync @ react-dom_client.js?v=fdffb896:10728
-renderRootSync @ react-dom_client.js?v=fdffb896:10711
-performWorkOnRoot @ react-dom_client.js?v=fdffb896:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=fdffb896:11623
-performWorkUntilDeadline @ react-dom_client.js?v=fdffb896:36
-<App>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=fdffb896:250
-(anonymous) @ index.tsx:14
+The character ">" is not valid inside a JSX element
+1642|                        <Route path="*" element={<Navigate to="/" />} /> 
+1643|                }
+1644|              />
+   |               ^
+1645|            </Routes>
+1646|          </HashRouter>
+
+Unexpected closing "HashRouter" tag does not match opening "MainLayout" tag
+1644|              />
+1645|            </Routes>
+1646|          </HashRouter>
+   |            ^
+1647|          <ToastContainer />
+1648|        </DataProvider>
+
+Unexpected closing "DataProvider" tag does not match opening "ProtectedRoute" tag
+1646|          </HashRouter>
+1647|          <ToastContainer />
+1648|        </DataProvider>
+   |          ^
+1649|      </AppContext.Provider>
+1650|    );
+
+Unterminated regular expression
+1647|          <ToastContainer />
+1648|        </DataProvider>
+1649|      </AppContext.Provider>
+   |                            ^
+1650|    );
+1651|  };
+    at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+    at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+    at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+    at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+    at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+    at Socket.emit (node:events:518:28)
+    at addChunk (node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    at Readable.push (node:internal/streams/readable:392:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23
+Click outside, press Esc key, or fix the code to dismiss.
+You can also disable this overlay by setting server.hmr.overlay to false in vite.config.ts.

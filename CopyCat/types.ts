@@ -371,6 +371,53 @@ export interface OdemeRaporResponse {
   total_records: number;
 }
 
+// --- FATURA & DİĞER HARCAMA REPORT TYPES ---
+export interface FaturaDigerHarcamaRaporRequest {
+  donem?: number[];     // Optional array of periods (e.g., [2508, 2509])
+  kategori?: number[];  // Optional array of category IDs
+  sube_id?: number;     // Branch filter (from context)
+}
+
+export interface FaturaDigerHarcamaRaporDetail {
+  id: number;
+  tarih: string;  // Date in YYYY-MM-DD format
+  belge_numarasi: string;
+  karsi_taraf_adi: string;
+  tutar: number;
+  aciklama?: string;
+  etiket: string;  // "Gelen Fatura", "Giden Fatura", or "Diğer Harcama"
+  gunluk_harcama?: boolean;
+  ozel?: boolean;
+}
+
+export interface FaturaDigerHarcamaRaporKategoriGroup {
+  kategori_id: number | null;
+  kategori_adi: string;
+  kategori_total: number;
+  record_count: number;
+  kayitlar: FaturaDigerHarcamaRaporDetail[];
+}
+
+export interface FaturaDigerHarcamaRaporDonemGroup {
+  donem: number;
+  donem_total: number;
+  record_count: number;
+  kategoriler: FaturaDigerHarcamaRaporKategoriGroup[];
+}
+
+export interface FaturaDigerHarcamaRaporTotals {
+  donem_totals: { [donem: number]: number };
+  kategori_totals: { [kategori_id: string]: number };
+  grand_total: number;
+}
+
+export interface FaturaDigerHarcamaRaporResponse {
+  data: FaturaDigerHarcamaRaporDonemGroup[];
+  totals: FaturaDigerHarcamaRaporTotals;
+  filters_applied: FaturaDigerHarcamaRaporRequest;
+  total_records: number;
+}
+
 // --- FATURA REPORT TYPES ---
 export interface FaturaRaporRequest {
   donem?: number[];     // Optional array of periods (e.g., [2508, 2509])

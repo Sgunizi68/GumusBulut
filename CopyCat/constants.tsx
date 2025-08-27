@@ -104,6 +104,7 @@ export const FINANSAL_OZET_YETKI_ADI = "Finansal Özet Görme Yetkisi";
 export const NAKIT_YATIRMA_RAPORU_YETKI_ADI = 'Nakit Yatırma Kontrol Raporu Görüntüleme';
 export const ODEME_RAPOR_YETKI_ADI = 'Ödeme Rapor Görüntüleme';
 export const FATURA_RAPOR_YETKI_ADI = 'Fatura Rapor Görüntüleme';
+export const FATURA_DIGER_HARCAMA_RAPOR_YETKI_ADI = 'Fatura & Diğer Harcama Rapor Görüntüleme';
 
 
 // --- MENU STRUCTURE ---
@@ -172,6 +173,7 @@ export const MENU_GROUPS = [
             { label: 'Nakit Yatırma Kontrol Raporu', path: '/nakit-yatirma-raporu', icon: Icons.Report, permission: NAKIT_YATIRMA_RAPORU_YETKI_ADI },
             { label: 'Ödeme Rapor', path: '/odeme-rapor', icon: Icons.Report, permission: ODEME_RAPOR_YETKI_ADI },
             { label: 'Fatura Rapor', path: '/fatura-rapor', icon: Icons.Report, permission: FATURA_RAPOR_YETKI_ADI },
+            { label: 'Fatura & Diğer Harcama Raporu', path: '/fatura-diger-harcama-rapor', icon: Icons.Report, permission: FATURA_DIGER_HARCAMA_RAPOR_YETKI_ADI },
         ]
     }
 ];

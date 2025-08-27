@@ -1389,6 +1389,259 @@ def get_fatura_rapor(db: Session, donem_list: Optional[List[int]] = None, katego
         )
         return empty_response
 
+# --- Fatura & Diğer Harcama Report CRUD Functions ---
+def get_fatura_diger_harcama_rapor(db: Session, donem_list: Optional[List[int]] = None, kategori_list: Optional[List[int]] = None, sube_id: Optional[int] = None):
+    """
+    Get comprehensive report combining both EFatura and DigerHarcama records with grouping by Donem and Kategori
+    """
+    import logging
+    from collections import defaultdict
+    from decimal import Decimal
+    from sqlalchemy import or_
+    from schemas.fatura_diger_harcama_rapor import FaturaDigerHarcamaRaporResponse, DonemGroup, KategoriGroup, KayitDetail, FaturaDigerHarcamaRaporTotals, FaturaRaporRequest
+    
+    logger = logging.getLogger(__name__)
+    
+    try:
+        # Build queries for both tables
+        efatura_query = db.query(models.EFatura)
+        diger_harcama_query = db.query(models.DigerHarcama)
+        
+        # Apply filters to both queries
+        if sube_id:
+            efatura_query = efatura_query.filter(models.EFatura.Sube_ID == sube_id)
+            diger_harcama_query = diger_harcama_query.filter(models.DigerHarcama.Sube_ID == sube_id)
+            
+        if donem_list:
+            # Handle period format conversion if needed
+            converted_donem_list = []
+            for donem in donem_list:
+                if len(str(donem)) == 6:
+                    converted_donem_list.append(donem - 200000)  # Convert 202508 to 2508
+                else:
+                    converted_donem_list.append(donem)
+            efatura_query = efatura_query.filter(models.EFatura.Donem.in_(converted_donem_list))
+            diger_harcama_query = diger_harcama_query.filter(models.DigerHarcama.Donem.in_(converted_donem_list))
+            
+        if kategori_list:
+            # Include specified categories or uncategorized if requested
+            if -1 in kategori_list:  # -1 represents uncategorized
+                kategori_list_clean = [k for k in kategori_list if k != -1]
+                if kategori_list_clean:
+                    efatura_query = efatura_query.filter(
+                        or_(
+                            models.EFatura.Kategori_ID.in_(kategori_list_clean),
+                            models.EFatura.Kategori_ID.is_(None)
+                        )
+                    )
+                    diger_harcama_query = diger_harcama_query.filter(
+                        or_(
+                            models.DigerHarcama.Kategori_ID.in_(kategori_list_clean),
+                            models.DigerHarcama.Kategori_ID.is_(None)
+                        )
+                    )
+                else:
+                    efatura_query = efatura_query.filter(models.EFatura.Kategori_ID.is_(None))
+                    diger_harcama_query = diger_harcama_query.filter(models.DigerHarcama.Kategori_ID.is_(None))
+            else:
+                efatura_query = efatura_query.filter(models.EFatura.Kategori_ID.in_(kategori_list))
+                diger_harcama_query = diger_harcama_query.filter(models.DigerHarcama.Kategori_ID.in_(kategori_list))
+        
+        # Join with Kategori to get category names
+        efatura_query = efatura_query.outerjoin(models.Kategori, models.EFatura.Kategori_ID == models.Kategori.Kategori_ID)
+        diger_harcama_query = diger_harcama_query.outerjoin(models.Kategori, models.DigerHarcama.Kategori_ID == models.Kategori.Kategori_ID)
+        
+        # Order by Donem, Kategori, Tarih
+        efatura_query = efatura_query.order_by(models.EFatura.Donem.desc(), models.EFatura.Kategori_ID, models.EFatura.Fatura_Tarihi.desc())
+        diger_harcama_query = diger_harcama_query.order_by(models.DigerHarcama.Donem.desc(), models.DigerHarcama.Kategori_ID, models.DigerHarcama.Belge_Tarihi.desc())
+        
+        efatura_records = efatura_query.all()
+        diger_harcama_records = diger_harcama_query.all()
+        
+        logger.info(f"Found {len(efatura_records)} EFatura records and {len(diger_harcama_records)} DigerHarcama records for report")
+        
+        # Group data by Donem and Kategori
+        donem_groups = defaultdict(lambda: {
+            'donem_total': Decimal('0'),
+            'record_count': 0,
+            'kategoriler': defaultdict(lambda: {
+                'kategori_adi': 'Kategorilendirilmemiş',
+                'kategori_total': Decimal('0'),
+                'record_count': 0,
+                'kayitlar': []
+            })
+        })
+        
+        # Collect all category names
+        kategori_names = {}
+        if kategori_list:
+            kategoriler = db.query(models.Kategori).filter(models.Kategori.Kategori_ID.in_(kategori_list)).all()
+            for kat in kategoriler:
+                kategori_names[kat.Kategori_ID] = kat.Kategori_Adi
+        
+        # Process EFatura records
+        total_records = 0
+        grand_total = Decimal('0')
+        donem_totals = defaultdict(lambda: Decimal('0'))
+        kategori_totals = defaultdict(lambda: Decimal('0'))
+        
+        for record in efatura_records:
+            donem = record.Donem
+            kategori_id = record.Kategori_ID or 'uncategorized'
+            kategori_adi = 'Kategorilendirilmemiş'
+            
+            # Get category name
+            if record.Kategori_ID and hasattr(record, 'kategori') and record.kategori:
+                kategori_adi = record.kategori.Kategori_Adi
+            elif record.Kategori_ID in kategori_names:
+                kategori_adi = kategori_names[record.Kategori_ID]
+            
+            # Set category name
+            donem_groups[donem]['kategoriler'][kategori_id]['kategori_adi'] = kategori_adi
+            
+            # Create detail record with appropriate tag
+            etiket = "Giden Fatura" if record.Giden_Fatura else "Gelen Fatura"
+            
+            detail = KayitDetail(
+                id=record.Fatura_ID,
+                tarih=record.Fatura_Tarihi,
+                belge_numarasi=record.Fatura_Numarasi,
+                karsi_taraf_adi=record.Alici_Unvani,
+                tutar=record.Tutar,
+                aciklama=record.Aciklama,
+                etiket=etiket,
+                gunluk_harcama=record.Gunluk_Harcama,
+                ozel=record.Ozel
+            )
+            
+            # Add to collections
+            donem_groups[donem]['kategoriler'][kategori_id]['kayitlar'].append(detail)
+            donem_groups[donem]['kategoriler'][kategori_id]['kategori_total'] += record.Tutar
+            donem_groups[donem]['kategoriler'][kategori_id]['record_count'] += 1
+            donem_groups[donem]['donem_total'] += record.Tutar
+            donem_groups[donem]['record_count'] += 1
+            
+            # Update totals
+            donem_totals[donem] += record.Tutar
+            kategori_totals[str(kategori_id)] += record.Tutar
+            grand_total += record.Tutar
+            total_records += 1
+        
+        # Process DigerHarcama records
+        for record in diger_harcama_records:
+            donem = record.Donem
+            kategori_id = record.Kategori_ID or 'uncategorized'
+            kategori_adi = 'Kategorilendirilmemiş'
+            
+            # Get category name
+            if record.Kategori_ID and hasattr(record, 'kategori') and record.kategori:
+                kategori_adi = record.kategori.Kategori_Adi
+            elif record.Kategori_ID in kategori_names:
+                kategori_adi = kategori_names[record.Kategori_ID]
+            
+            # Set category name
+            donem_groups[donem]['kategoriler'][kategori_id]['kategori_adi'] = kategori_adi
+            
+            # Create detail record with "Diğer Harcama" tag
+            detail = KayitDetail(
+                id=record.Harcama_ID,
+                tarih=record.Belge_Tarihi,
+                belge_numarasi=record.Belge_Numarasi or "",
+                karsi_taraf_adi=record.Alici_Adi,
+                tutar=record.Tutar,
+                aciklama=record.Açıklama,
+                etiket="Diğer Harcama",
+                gunluk_harcama=record.Gunluk_Harcama,
+                ozel=None  # Not applicable for DigerHarcama
+            )
+            
+            # Add to collections
+            donem_groups[donem]['kategoriler'][kategori_id]['kayitlar'].append(detail)
+            donem_groups[donem]['kategoriler'][kategori_id]['kategori_total'] += record.Tutar
+            donem_groups[donem]['kategoriler'][kategori_id]['record_count'] += 1
+            donem_groups[donem]['donem_total'] += record.Tutar
+            donem_groups[donem]['record_count'] += 1
+            
+            # Update totals
+            donem_totals[donem] += record.Tutar
+            kategori_totals[str(kategori_id)] += record.Tutar
+            grand_total += record.Tutar
+            total_records += 1
+        
+        # Convert to response format
+        result_data = []
+        for donem in sorted(donem_groups.keys(), reverse=True):
+            donem_data = donem_groups[donem]
+            
+            kategori_groups = []
+            for kategori_id in sorted(donem_data['kategoriler'].keys(), 
+                                    key=lambda x: (x == 'uncategorized', x)):
+                kategori_data = donem_data['kategoriler'][kategori_id]
+                
+                # Sort records by date
+                sorted_kayitlar = sorted(kategori_data['kayitlar'], key=lambda x: x.tarih, reverse=True)
+                
+                kategori_group = KategoriGroup(
+                    kategori_id=None if kategori_id == 'uncategorized' else kategori_id,
+                    kategori_adi=kategori_data['kategori_adi'],
+                    kategori_total=kategori_data['kategori_total'],
+                    record_count=kategori_data['record_count'],
+                    kayitlar=sorted_kayitlar
+                )
+                kategori_groups.append(kategori_group)
+            
+            donem_group = DonemGroup(
+                donem=donem,
+                donem_total=donem_data['donem_total'],
+                record_count=donem_data['record_count'],
+                kategoriler=kategori_groups
+            )
+            result_data.append(donem_group)
+        
+        # Create totals
+        totals = FaturaDigerHarcamaRaporTotals(
+            donem_totals=dict(donem_totals),
+            kategori_totals=dict(kategori_totals),
+            grand_total=grand_total
+        )
+        
+        # Create filters applied
+        filters_applied = FaturaRaporRequest(
+            donem=donem_list,
+            kategori=kategori_list,
+            sube_id=sube_id
+        )
+        
+        # Create final response
+        response = FaturaDigerHarcamaRaporResponse(
+            data=result_data,
+            totals=totals,
+            filters_applied=filters_applied,
+            total_records=total_records
+        )
+        
+        logger.info(f"Successfully generated Fatura & Diğer Harcama report with {len(result_data)} period groups, {total_records} total records")
+        return response
+        
+    except Exception as e:
+        logger.error(f"Error in get_fatura_diger_harcama_rapor: {e}")
+        # Return empty response on error
+        empty_response = FaturaDigerHarcamaRaporResponse(
+            data=[],
+            totals=FaturaDigerHarcamaRaporTotals(
+                donem_totals={},
+                kategori_totals={},
+                grand_total=Decimal('0')
+            ),
+            filters_applied=FaturaRaporRequest(
+                donem=donem_list,
+                kategori=kategori_list,
+                sube_id=sube_id
+            ),
+            total_records=0
+        )
+        return empty_response
+
 # --- Odeme Report CRUD Functions ---
 def get_odeme_rapor(db: Session, donem_list: Optional[List[int]] = None, kategori_list: Optional[List[int]] = None, sube_id: Optional[int] = None):
     """
