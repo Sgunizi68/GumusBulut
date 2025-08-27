@@ -511,9 +511,10 @@ export const FaturaDigerHarcamaRaporuPage: React.FC = () => {
                 const response = await fetch(`${API_BASE_URL}/kategoriler/`);
                 if (response.ok) {
                     const data = await response.json();
-                    // Filter and sort e-Fatura categories using utility function
-                    const sortedEFaturaKategoriler = sortEFaturaKategoriler(data);
-                    setAvailableKategoriler(sortedEFaturaKategoriler);
+                    // For Fatura & Diğer Harcama Raporu, we need all active categories
+                    // since it combines both EFatura (Giden Fatura) and DigerHarcama records
+                    const allActiveKategoriler = data.filter((k: Kategori) => k.Aktif_Pasif);
+                    setAvailableKategoriler(allActiveKategoriler);
                 }
             } catch (error) {
                 console.error('Error fetching kategoriler:', error);
@@ -644,17 +645,17 @@ export const FaturaDigerHarcamaRaporuPage: React.FC = () => {
             },
             {
                 'Kategori': 'Toplam Kayıt',
-                'Değer': reportData.total_records,
+                'Değer': typeof reportData.total_records === 'number' ? reportData.total_records : parseFloat(reportData.total_records) || 0,
                 'Açıklama': 'Toplam kayıt sayısı'
             },
             {
                 'Kategori': 'Dönem Sayısı',
-                'Değer': reportData.data.length,
+                'Değer': typeof reportData.data.length === 'number' ? reportData.data.length : parseFloat(reportData.data.length) || 0,
                 'Açıklama': 'Rapordaki dönem sayısı'
             },
             {
                 'Kategori': 'Genel Toplam',
-                'Değer': reportData.totals.grand_total,
+                'Değer': typeof reportData.totals.grand_total === 'number' ? reportData.totals.grand_total : parseFloat(reportData.totals.grand_total) || 0,
                 'Açıklama': 'Tüm kayıtların toplam tutarı'
             }
         ];
@@ -665,6 +666,24 @@ export const FaturaDigerHarcamaRaporuPage: React.FC = () => {
             { wch: 20 }, // Değer
             { wch: 30 }  // Açıklama
         ];
+        
+        // Ensure numeric values in summary sheet are exported as numbers
+        const summaryRange = XLSX.utils.decode_range(wsSummary['!ref'] || 'A1');
+        for (let row = summaryRange.s.r + 1; row <= summaryRange.e.r; ++row) {
+            // "Değer" column is column B (index 1)
+            const degerCell = wsSummary[XLSX.utils.encode_cell({ r: row, c: 1 })];
+            if (degerCell && degerCell.v !== undefined) {
+                // Skip non-numeric values like branch name and periods string
+                if (row >= 4) { // Only process numeric rows (Toplam Kayıt, Dönem Sayısı, Genel Toplam)
+                    const numericValue = typeof degerCell.v === 'number' ? degerCell.v : parseFloat(degerCell.v);
+                    if (!isNaN(numericValue)) {
+                        degerCell.t = 'n'; // Set cell type to number
+                        degerCell.v = numericValue;
+                    }
+                }
+            }
+        }
+        
         XLSX.utils.book_append_sheet(wb, wsSummary, 'Özet');
         
         // Sheet 2: Detailed Data by Period
@@ -683,7 +702,7 @@ export const FaturaDigerHarcamaRaporuPage: React.FC = () => {
                 'Tarih': '',
                 'Açıklama': '',
                 'Etiket': '',
-                'Tutar': donemGroup.donem_total,
+                'Tutar': typeof donemGroup.donem_total === 'number' ? donemGroup.donem_total : parseFloat(donemGroup.donem_total) || 0,
                 'Kayıt Sayısı': donemGroup.record_count
             });
             
@@ -699,7 +718,7 @@ export const FaturaDigerHarcamaRaporuPage: React.FC = () => {
                     'Tarih': '',
                     'Açıklama': '',
                     'Etiket': '',
-                    'Tutar': kategoriGroup.kategori_total,
+                    'Tutar': typeof kategoriGroup.kategori_total === 'number' ? kategoriGroup.kategori_total : parseFloat(kategoriGroup.kategori_total) || 0,
                     'Kayıt Sayısı': kategoriGroup.record_count
                 });
                 
@@ -715,7 +734,7 @@ export const FaturaDigerHarcamaRaporuPage: React.FC = () => {
                         'Tarih': new Date(detail.tarih).toLocaleDateString('tr-TR'),
                         'Açıklama': detail.aciklama || '',
                         'Etiket': detail.etiket,
-                        'Tutar': detail.tutar,
+                        'Tutar': typeof detail.tutar === 'number' ? detail.tutar : parseFloat(detail.tutar) || 0,
                         'Kayıt Sayısı': 1
                     });
                 });
@@ -736,6 +755,31 @@ export const FaturaDigerHarcamaRaporuPage: React.FC = () => {
             { wch: 15 }, // Tutar
             { wch: 12 }  // Kayıt Sayısı
         ];
+        
+        // Ensure numeric values are exported as numbers, not text
+        const range = XLSX.utils.decode_range(wsDetailed['!ref'] || 'A1');
+        for (let row = range.s.r + 1; row <= range.e.r; ++row) {
+            // Tutar column is column J (index 9)
+            const tutarCell = wsDetailed[XLSX.utils.encode_cell({ r: row, c: 9 })];
+            if (tutarCell && tutarCell.v !== undefined) {
+                const numericValue = typeof tutarCell.v === 'number' ? tutarCell.v : parseFloat(tutarCell.v);
+                if (!isNaN(numericValue)) {
+                    tutarCell.t = 'n'; // Set cell type to number
+                    tutarCell.v = numericValue;
+                }
+            }
+            
+            // Also ensure Kayıt Sayısı values are properly typed as numbers
+            const kayitSayisiCell = wsDetailed[XLSX.utils.encode_cell({ r: row, c: 10 })]; // Kayıt Sayısı column
+            if (kayitSayisiCell && kayitSayisiCell.v !== undefined) {
+                const numericValue = typeof kayitSayisiCell.v === 'number' ? kayitSayisiCell.v : parseFloat(kayitSayisiCell.v);
+                if (!isNaN(numericValue)) {
+                    kayitSayisiCell.t = 'n';
+                    kayitSayisiCell.v = numericValue;
+                }
+            }
+        }
+        
         XLSX.utils.book_append_sheet(wb, wsDetailed, 'Detaylı Rapor');
         
         // Save the file
@@ -759,13 +803,6 @@ export const FaturaDigerHarcamaRaporuPage: React.FC = () => {
                                 <Icons.Download className="w-5 h-5" />
                             </Button>
                         )}
-                        <Button 
-                            onClick={fetchReportData}
-                            disabled={loading || selectedDonemler.length === 0}
-                            variant="primary"
-                        >
-                            {loading ? 'Yükleniyor...' : 'Raporu Getir'}
-                        </Button>
                     </div>
                 }
             >
