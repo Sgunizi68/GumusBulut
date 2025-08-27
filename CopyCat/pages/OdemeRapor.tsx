@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useAppContext } from '../App';
+import { useAppContext, API_BASE_URL } from '../App';
 import { Card, Button, Select } from '../components';
 import { Icons, YAZDIRMA_YETKISI_ADI, EXCELE_AKTAR_YETKISI_ADI } from '../constants';
 import { generateDashboardPdf } from '../utils/pdfGenerator';
@@ -17,7 +17,6 @@ import { formatNumber } from '../utils/formatNumber';
 import ExpandableBankaHesabiRow from '../components/ExpandableBankaHesabiRow';
 
 // API constants
-const API_BASE_URL = 'http://localhost:8000/api/v1';
 
 // Multi-select component for filters
 interface MultiSelectProps {

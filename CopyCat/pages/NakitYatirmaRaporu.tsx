@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useAppContext, useDataContext } from '../App';
+import { useAppContext, useDataContext, API_BASE_URL } from '../App';
 import { Button, Card, Select, TableLayout } from '../components';
 import { Icons, YAZDIRMA_YETKISI_ADI, EXCELE_AKTAR_YETKISI_ADI } from '../constants';
 import { generateDashboardPdf } from '../utils/pdfGenerator';
@@ -27,8 +27,6 @@ const formatNumber = (value: number) => {
 const formatCurrency = (value: number) => {
     return `₺${formatNumber(value)}`;
 };
-
-const API_BASE_URL = "https://gumusbulut.onrender.com/api/v1";
 
 export const NakitYatirmaRaporuPage: React.FC = () => {
     const { selectedBranch, currentPeriod, hasPermission } = useAppContext();
