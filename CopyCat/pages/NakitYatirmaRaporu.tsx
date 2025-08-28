@@ -107,19 +107,36 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
 
         const wb = XLSX.utils.book_new();
         
+        // Custom formatter for Turkish locale (dot as thousand separator, comma as decimal separator)
+        const formatTurkishNumber = (value: number): string => {
+            return value.toLocaleString('tr-TR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).replace(/\./g, '#').replace(/,/g, '.').replace(/#/g, ',');
+        };
+        
         // Helper function to check if a record is matched
         const isMatched = (index: number, type: 'bankaya' | 'nakit') => {
             return matchingResults.matched.some(match => match.index[type] === index);
         };
         
-        // Sheet 1: Bankaya Yatan (Bank Deposits)
-        const bankayaData = reportData.bankaya_yatan.map((item, index) => ({
-            'Sıra': index + 1,
-            'Tarih': new Date(item.Tarih).toLocaleDateString('tr-TR'),
-            'Dönem': item.Donem,
-            'Tutar': item.Tutar,
-            'Durum': isMatched(index, 'bankaya') ? 'Eşleşti' : 'Eşleşmedi'
-        }));
+        // Sheet 1: Bankaya Yatan (Bank Deposits) - using sorted data
+        const bankayaData = sortedBankayaYatan.map((item, index) => {
+            // Find the original index for matching purposes
+            const originalIndex = reportData?.bankaya_yatan.findIndex(
+                (originalItem) => originalItem.Tarih === item.Tarih && 
+                originalItem.Donem === item.Donem && 
+                originalItem.Tutar === item.Tutar
+            ) ?? index;
+            
+            return {
+                'Sıra': index + 1,
+                'Tarih': new Date(item.Tarih).toLocaleDateString('tr-TR'),
+                'Dönem': item.Donem,
+                'Tutar': formatTurkishNumber(item.Tutar),
+                'Durum': isMatched(originalIndex, 'bankaya') ? 'Eşleşti' : 'Eşleşmedi'
+            };
+        });
         
         const wsBankaya = XLSX.utils.json_to_sheet(bankayaData);
         wsBankaya['!cols'] = [
@@ -131,14 +148,23 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
         ];
         XLSX.utils.book_append_sheet(wb, wsBankaya, 'Bankaya Yatan');
         
-        // Sheet 2: Nakit Girişi (Cash Entries)
-        const nakitData = reportData.nakit_girisi.map((item, index) => ({
-            'Sıra': index + 1,
-            'Tarih': new Date(item.Tarih).toLocaleDateString('tr-TR'),
-            'Dönem': item.Donem,
-            'Tutar': item.Tutar,
-            'Durum': isMatched(index, 'nakit') ? 'Eşleşti' : 'Eşleşmedi'
-        }));
+        // Sheet 2: Nakit Girişi (Cash Entries) - using sorted data
+        const nakitData = sortedNakitGiris.map((item, index) => {
+            // Find the original index for matching purposes
+            const originalIndex = reportData?.nakit_girisi.findIndex(
+                (originalItem) => originalItem.Tarih === item.Tarih && 
+                originalItem.Donem === item.Donem && 
+                originalItem.Tutar === item.Tutar
+            ) ?? index;
+            
+            return {
+                'Sıra': index + 1,
+                'Tarih': new Date(item.Tarih).toLocaleDateString('tr-TR'),
+                'Dönem': item.Donem,
+                'Tutar': formatTurkishNumber(item.Tutar),
+                'Durum': isMatched(originalIndex, 'nakit') ? 'Eşleşti' : 'Eşleşmedi'
+            };
+        });
         
         const wsNakit = XLSX.utils.json_to_sheet(nakitData);
         wsNakit['!cols'] = [
@@ -150,25 +176,25 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
         ];
         XLSX.utils.book_append_sheet(wb, wsNakit, 'Nakit Girişi');
         
-        // Sheet 3: Özet Rapor (Summary Report)
+        // Sheet 3: Özet Rapor (Summary Report) - unchanged except for formatting
         const ozet = [
             {
                 'Kategori': 'Bankaya Yatan',
-                'Toplam Tutar': bankayaYatanTotal,
+                'Toplam Tutar': formatTurkishNumber(bankayaYatanTotal),
                 'Kayıt Sayısı': reportData.bankaya_yatan.length,
                 'Eşleşen': matchingResults.matched.length,
                 'Eşleşmeyen': matchingResults.unmatchedBankaya.length
             },
             {
                 'Kategori': 'Nakit Girişi',
-                'Toplam Tutar': nakitGirisiTotal,
+                'Toplam Tutar': formatTurkishNumber(nakitGirisiTotal),
                 'Kayıt Sayısı': reportData.nakit_girisi.length,
                 'Eşleşen': matchingResults.matched.length,
                 'Eşleşmeyen': matchingResults.unmatchedNakit.length
             },
             {
                 'Kategori': 'Fark',
-                'Toplam Tutar': farkTutar,
+                'Toplam Tutar': formatTurkishNumber(farkTutar),
                 'Kayıt Sayısı': '',
                 'Eşleşen': '',
                 'Eşleşmeyen': ''
@@ -185,12 +211,12 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
         ];
         XLSX.utils.book_append_sheet(wb, wsOzet, 'Özet Rapor');
         
-        // Sheet 4: Eşleşme Analizi (Matching Analysis)
+        // Sheet 4: Eşleşme Analizi (Matching Analysis) - unchanged except for formatting
         const eslesmeler = matchingResults.matched.map((match, index) => ({
             'Sıra': index + 1,
-            'Bankaya Yatan Tutar': match.bankaya.Tutar,
-            'Nakit Girişi Tutar': match.nakit.Tutar,
-            'Fark': Math.abs(match.bankaya.Tutar - match.nakit.Tutar),
+            'Bankaya Yatan Tutar': formatTurkishNumber(match.bankaya.Tutar),
+            'Nakit Girişi Tutar': formatTurkishNumber(match.nakit.Tutar),
+            'Fark': formatTurkishNumber(Math.abs(match.bankaya.Tutar - match.nakit.Tutar)),
             'Bankaya Yatan Dönem': match.bankaya.Donem,
             'Nakit Girişi Dönem': match.nakit.Donem,
             'Durum': 'Eşleşti'
@@ -236,6 +262,22 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
         return bankayaYatanTotal - nakitGirisiTotal;
     }, [bankayaYatanTotal, nakitGirisiTotal]);
 
+    // Date sorting for Bankaya Yatan records
+    const sortedBankayaYatan = useMemo(() => {
+        if (!reportData?.bankaya_yatan) return [];
+        return [...reportData.bankaya_yatan].sort((a, b) => 
+            new Date(a.Tarih).getTime() - new Date(b.Tarih).getTime()
+        );
+    }, [reportData?.bankaya_yatan]);
+
+    // Date sorting for Nakit Giriş records
+    const sortedNakitGiris = useMemo(() => {
+        if (!reportData?.nakit_girisi) return [];
+        return [...reportData.nakit_girisi].sort((a, b) => 
+            new Date(a.Tarih).getTime() - new Date(b.Tarih).getTime()
+        );
+    }, [reportData?.nakit_girisi]);
+
     // Enhanced matching logic with better tolerance and detailed matching info
     const matchingResults = useMemo(() => {
         if (!reportData) return { matched: [], unmatchedBankaya: [], unmatchedNakit: [] };
@@ -245,39 +287,42 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
         const unmatchedBankaya: Array<{item: ReportDataItem, index: number}> = [];
         const unmatchedNakit: Array<{item: ReportDataItem, index: number}> = [];
         
-        const usedNakitIndices = new Set<number>();
+        // Create boolean arrays to track matched status for both sections
+        const bankayaYatanMatched = new Array(reportData.bankaya_yatan.length).fill(false);
+        const nakitGirisMatched = new Array(reportData.nakit_girisi.length).fill(false);
         
         // Find matches for Bankaya Yatan records
         reportData.bankaya_yatan.forEach((bankayaItem, bankayaIndex) => {
-            let matchFound = false;
+            // Skip if already matched
+            if (bankayaYatanMatched[bankayaIndex]) return;
             
-            reportData.nakit_girisi.forEach((nakitItem, nakitIndex) => {
-                if (usedNakitIndices.has(nakitIndex)) return;
-                
-                // Match criteria: same period and amount within tolerance (ignoring date)
-                const samePeriod = bankayaItem.Donem === nakitItem.Donem;
-                const sameAmount = Math.abs(bankayaItem.Tutar - nakitItem.Tutar) < tolerance;
-                
-                if (samePeriod && sameAmount) {
-                    matched.push({
-                        bankaya: bankayaItem,
-                        nakit: nakitItem,
-                        index: { bankaya: bankayaIndex, nakit: nakitIndex }
-                    });
-                    usedNakitIndices.add(nakitIndex);
-                    matchFound = true;
-                    return;
-                }
-            });
+            // Find first unmatched Nakit Girişi record with same period and amount
+            const matchingNakitIndex = reportData.nakit_girisi.findIndex((nakitItem, nakitIndex) => 
+                !nakitGirisMatched[nakitIndex] &&
+                bankayaItem.Donem === nakitItem.Donem &&
+                Math.abs(bankayaItem.Tutar - nakitItem.Tutar) < tolerance
+            );
             
-            if (!matchFound) {
+            if (matchingNakitIndex !== -1) {
+                // Mark both records as matched
+                bankayaYatanMatched[bankayaIndex] = true;
+                nakitGirisMatched[matchingNakitIndex] = true;
+                
+                // Add to matched results
+                matched.push({
+                    bankaya: bankayaItem,
+                    nakit: reportData.nakit_girisi[matchingNakitIndex],
+                    index: { bankaya: bankayaIndex, nakit: matchingNakitIndex }
+                });
+            } else {
+                // No match found
                 unmatchedBankaya.push({ item: bankayaItem, index: bankayaIndex });
             }
         });
         
         // Find unmatched Nakit Girişi records
         reportData.nakit_girisi.forEach((nakitItem, nakitIndex) => {
-            if (!usedNakitIndices.has(nakitIndex)) {
+            if (!nakitGirisMatched[nakitIndex]) {
                 unmatchedNakit.push({ item: nakitItem, index: nakitIndex });
             }
         });
@@ -399,11 +444,18 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
                                             </tr>
                                         </thead>
                                         <tbody className="bg-white divide-y divide-gray-200">
-                                            {reportData.bankaya_yatan.map((item, index) => {
+                                            {sortedBankayaYatan.map((item, index) => {
+                                                // Find the original index for matching purposes
+                                                const originalIndex = reportData?.bankaya_yatan.findIndex(
+                                                    (originalItem) => originalItem.Tarih === item.Tarih && 
+                                                    originalItem.Donem === item.Donem && 
+                                                    originalItem.Tutar === item.Tutar
+                                                ) ?? index;
+                                                
                                                 return (
-                                                    <tr key={index} className={getRowStyling(index, 'bankaya')}>
+                                                    <tr key={index} className={getRowStyling(originalIndex, 'bankaya')}>
                                                         <td className="px-4 py-3 text-sm text-center">
-                                                            {getStatusIcon(index, 'bankaya')}
+                                                            {getStatusIcon(originalIndex, 'bankaya')}
                                                         </td>
                                                         <td className="px-4 py-3 text-sm text-gray-700">
                                                             {new Date(item.Tarih).toLocaleDateString('tr-TR')}
@@ -437,11 +489,18 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
                                             </tr>
                                         </thead>
                                         <tbody className="bg-white divide-y divide-gray-200">
-                                            {reportData.nakit_girisi.map((item, index) => {
+                                            {sortedNakitGiris.map((item, index) => {
+                                                // Find the original index for matching purposes
+                                                const originalIndex = reportData?.nakit_girisi.findIndex(
+                                                    (originalItem) => originalItem.Tarih === item.Tarih && 
+                                                    originalItem.Donem === item.Donem && 
+                                                    originalItem.Tutar === item.Tutar
+                                                ) ?? index;
+                                                
                                                 return (
-                                                    <tr key={index} className={getRowStyling(index, 'nakit')}>
+                                                    <tr key={index} className={getRowStyling(originalIndex, 'nakit')}>
                                                         <td className="px-4 py-3 text-sm text-center">
-                                                            {getStatusIcon(index, 'nakit')}
+                                                            {getStatusIcon(originalIndex, 'nakit')}
                                                         </td>
                                                         <td className="px-4 py-3 text-sm text-gray-700">
                                                             {new Date(item.Tarih).toLocaleDateString('tr-TR')}
