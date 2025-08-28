@@ -2860,7 +2860,7 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
 
       <div className="overflow-x-auto">
         <TableLayout headers={['Fiş No', 'Tarih', 'Açıklama', 'Borç', 'Alacak', 'Fatura No', 'Kategori', 'Dönem']} compact={true}>
-            {filteredEkstreler.map(ekstre => {
+            {filteredFaturas.map(ekstre => {
               const rowSpecificPeriods = getRowDropdownPeriodsForB2B(ekstre.Donem);
               return (
                 <tr key={ekstre.Fatura_ID} className={`${ekstre.Kategori_ID === null ? 'bg-yellow-50' : ''}`}>
@@ -2933,7 +2933,7 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
             })}
         </TableLayout>
       </div>
-      {filteredEkstreler.length === 0 && (
+      {filteredFaturas.length === 0 && (
         <Card>
           <p className="text-center text-gray-500 py-4">Filtre kriterlerine uygun fatura bulunamadı.</p>
         </Card>
