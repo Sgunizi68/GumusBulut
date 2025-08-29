@@ -2861,7 +2861,7 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
       <div className="overflow-x-auto">
         <TableLayout headers={['Fiş No', 'Tarih', 'Açıklama', 'Borç', 'Alacak', 'Fatura No', 'Kategori', 'Dönem']} compact={true}>
             {filteredFaturas.map(ekstre => {
-              const rowSpecificPeriods = getRowDropdownPeriodsForB2B(ekstre.Donem);
+              const rowSpecificPeriods = getRowDropdownPeriods(ekstre.Donem);
               return (
                 <tr key={ekstre.Fatura_ID} className={`${ekstre.Kategori_ID === null ? 'bg-yellow-50' : ''}`}>
                   <td className="px-2 py-1.5 whitespace-nowrap text-xs text-gray-700 w-[180px]">{ekstre.Alici_Unvani}</td>
@@ -3182,7 +3182,7 @@ export const B2BCategoryAssignmentPage: React.FC = () => {
       <div className="overflow-x-auto">
         <TableLayout headers={['Fiş No', 'Tarih', 'Açıklama', 'Borç', 'Alacak', 'Fatura No', 'Kategori', 'Dönem']} compact={true}>
             {filteredEkstreler.map(ekstre => {
-              const rowSpecificPeriods = getRowDropdownPeriodsForB2B(ekstre.Donem, currentAppContextPeriod || DEFAULT_PERIOD);
+              const rowSpecificPeriods = getRowDropdownPeriodsForB2B(ekstre.Donem);
               return (
                 <tr key={ekstre.Ekstre_ID} className={`${ekstre.Kategori_ID === null ? 'bg-yellow-50' : ''}`}>
                     <td className="px-2 py-1.5 whitespace-nowrap text-xs text-gray-700">{ekstre.Fis_No}</td>

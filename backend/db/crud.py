@@ -3,16 +3,9 @@ from passlib.context import CryptContext
 from typing import List
 
 from db import models
-from schemas import sube, user, role, permission, kullanici_rol, rol_yetki, e_fatura, b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, stok_fiyat, stok_sayim, calisan, puantaj_secimi, puantaj, avans_istek, ust_kategori, kategori, deger, e_fatura_referans, nakit, odeme, odeme_referans
+from schemas import sube, user, role, permission, kullanici_rol, rol_yetki, e_fatura, b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, stok_fiyat, stok_sayim, calisan, puantaj_secimi, puantaj, avans_istek, ust_kategori, kategori, deger, e_fatura_referans, nakit, odeme, odeme_referans, pos_hareketleri
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-def get_password_hash(password):
-    return pwd_context.hash(password)
-
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
-
 def authenticate_user(db: Session, username: str, password: str):
     user = get_user_by_username(db, username)
     if not user:
@@ -1054,7 +1047,184 @@ def update_odeme(db: Session, odeme_id: int, odeme: odeme.OdemeUpdate):
         db.refresh(db_odeme)
     return db_odeme
 
+def get_odeme_rapor(db: Session, donem_list: List[int], kategori_list: List[int], sube_id: Optional[int] = None):
+    """
+    Get Odeme records for specific donem, kategori, and optionally sube_id
+    """
+    import logging
+    from schemas.report import OdemeRaporResponse, OdemeRaporTotals, OdemeRaporRequest
+    from decimal import Decimal
+    
+    logger = logging.getLogger(__name__)
+    
+    logger.info(f"Fetching Odeme records for Donem: {donem_list}, Kategori: {kategori_list}, Sube_ID: {sube_id}")
+    
+    try:
+        # Query with debug info
+        query = db.query(models.Odeme).filter(
+            models.Odeme.Donem.in_(donem_list),
+            models.Odeme.Kategori_ID.in_(kategori_list)
+        )
+        if sube_id:
+            query = query.filter(models.Odeme.Sube_ID == sube_id)
+        
+        logger.info(f"Query SQL: {str(query)}")
+        records = query.all()
+        logger.info(f"Found {len(records)} Odeme records")
+        
+        result = []
+        donem_totals = {}
+        kategori_totals = {}
+        grand_total = Decimal('0')
+        
+        for record in records:
+            try:
+                result.append({
+                    "Tarih": record.Tarih.strftime('%Y-%m-%d'),
+                    "Donem": record.Donem,
+                    "Kategori_ID": record.Kategori_ID,
+                    "Tutar": float(record.Tutar)
+                })
+                
+                # Update totals
+                donem_totals[record.Donem] = donem_totals.get(record.Donem, Decimal('0')) + record.Tutar
+                kategori_totals[record.Kategori_ID] = kategori_totals.get(record.Kategori_ID, Decimal('0')) + record.Tutar
+                grand_total += record.Tutar
+                
+            except Exception as e:
+                logger.error(f"Error processing record {record.Odeme_ID}: {e}")
+                continue
+        
+        logger.info(f"Successfully processed {len(result)} Odeme records")
+        return OdemeRaporResponse(
+            data=result,
+            totals=OdemeRaporTotals(
+                donem_totals=donem_totals,
+                kategori_totals=kategori_totals,
+                grand_total=grand_total
+            ),
+            filters_applied=OdemeRaporRequest(
+                donem=donem_list,
+                kategori=kategori_list,
+                sube_id=sube_id
+            ),
+            total_records=len(records)
+        )
+        
+    except Exception as e:
+        logger.error(f"Error in get_odeme_rapor: {e}")
+        # Return empty response on error
+        empty_response = OdemeRaporResponse(
+            data=[],
+            totals=OdemeRaporTotals(
+                donem_totals={},
+                kategori_totals={},
+                grand_total=Decimal('0')
+            ),
+            filters_applied=OdemeRaporRequest(
+                donem=donem_list,
+                kategori=kategori_list,
+                sube_id=sube_id
+            ),
+            total_records=0
+        )
+        return empty_response
 
+# --- POS Hareketleri CRUD ---
+def get_pos_hareket(db: Session, pos_id: int):
+    return db.query(models.POSHareketleri).filter(models.POSHareketleri.ID == pos_id).first()
+
+def get_pos_hareketleri(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.POSHareketleri).offset(skip).limit(limit).all()
+
+def create_pos_hareket(db: Session, pos_hareket: pos_hareketleri.POSHareketleriCreate):
+    # Calculate Net_Tutar if not provided
+    net_tutar = pos_hareket.Net_Tutar
+    if net_tutar is None:
+        net_tutar = pos_hareket.Islem_Tutari - pos_hareket.Kesinti_Tutari
+    
+    # Validate that Islem_Tutari >= Kesinti_Tutari
+    if pos_hareket.Islem_Tutari < pos_hareket.Kesinti_Tutari:
+        raise ValueError("Islem_Tutari must be greater than or equal to Kesinti_Tutari")
+    
+    db_pos_hareket = models.POSHareketleri(
+        Islem_Tarihi=pos_hareket.Islem_Tarihi,
+        Hesaba_Gecis=pos_hareket.Hesaba_Gecis,
+        Para_Birimi=pos_hareket.Para_Birimi,
+        Islem_Tutari=pos_hareket.Islem_Tutari,
+        Kesinti_Tutari=pos_hareket.Kesinti_Tutari,
+        Net_Tutar=net_tutar,
+        Sube_ID=pos_hareket.Sube_ID
+    )
+    db.add(db_pos_hareket)
+    db.commit()
+    db.refresh(db_pos_hareket)
+    return db_pos_hareket
+
+def update_pos_hareket(db: Session, pos_id: int, pos_hareket: pos_hareketleri.POSHareketleriUpdate):
+    db_pos = db.query(models.POSHareketleri).filter(models.POSHareketleri.ID == pos_id).first()
+    if db_pos:
+        update_data = pos_hareket.dict(exclude_unset=True)
+        
+        # Calculate Net_Tutar if not provided but Islem_Tutari and Kesinti_Tutari are provided
+        if "Net_Tutar" not in update_data:
+            islem_tutari = update_data.get("Islem_Tutari", db_pos.Islem_Tutari)
+            kesinti_tutari = update_data.get("Kesinti_Tutari", db_pos.Kesinti_Tutari)
+            if "Islem_Tutari" in update_data or "Kesinti_Tutari" in update_data:
+                update_data["Net_Tutar"] = islem_tutari - kesinti_tutari
+        
+        # Validate that Islem_Tutari >= Kesinti_Tutari if both are provided
+        islem_tutari = update_data.get("Islem_Tutari", db_pos.Islem_Tutari)
+        kesinti_tutari = update_data.get("Kesinti_Tutari", db_pos.Kesinti_Tutari)
+        if islem_tutari < kesinti_tutari:
+            raise ValueError("Islem_Tutari must be greater than or equal to Kesinti_Tutari")
+        
+        for key, value in update_data.items():
+            setattr(db_pos, key, value)
+        db.commit()
+        db.refresh(db_pos)
+    return db_pos
+
+def delete_pos_hareket(db: Session, pos_id: int):
+    db_pos = db.query(models.POSHareketleri).filter(models.POSHareketleri.ID == pos_id).first()
+    if db_pos:
+        db.delete(db_pos)
+        db.commit()
+    return db_pos
+
+def create_pos_hareketleri_bulk(db: Session, pos_hareketleri_list: List[pos_hareketleri.POSHareketleriCreate]):
+    added_count = 0
+    skipped_count = 0
+    
+    for pos_hareket in pos_hareketleri_list:
+        try:
+            # Calculate Net_Tutar if not provided
+            net_tutar = pos_hareket.Net_Tutar
+            if net_tutar is None:
+                net_tutar = pos_hareket.Islem_Tutari - pos_hareket.Kesinti_Tutari
+            
+            # Validate that Islem_Tutari >= Kesinti_Tutari
+            if pos_hareket.Islem_Tutari < pos_hareket.Kesinti_Tutari:
+                skipped_count += 1
+                continue
+            
+            db_pos_hareket = models.POSHareketleri(
+                Islem_Tarihi=pos_hareket.Islem_Tarihi,
+                Hesaba_Gecis=pos_hareket.Hesaba_Gecis,
+                Para_Birimi=pos_hareket.Para_Birimi,
+                Islem_Tutari=pos_hareket.Islem_Tutari,
+                Kesinti_Tutari=pos_hareket.Kesinti_Tutari,
+                Net_Tutar=net_tutar,
+                Sube_ID=pos_hareket.Sube_ID
+            )
+            db.add(db_pos_hareket)
+            added_count += 1
+        except Exception as e:
+            skipped_count += 1
+            continue
+    
+    db.commit()
+    return {"added": added_count, "skipped": skipped_count}
 
 # --- OdemeReferans CRUD ---
 def get_odeme_referans(db: Session, referans_id: int):

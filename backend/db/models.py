@@ -24,6 +24,7 @@ class Sube(Base):
     avans_istekler = relationship("AvansIstek", back_populates="sube")
     nakitler = relationship("Nakit", back_populates="sube")
     odemeler = relationship("Odeme", back_populates="sube")
+    pos_hareketleri = relationship("POSHareketleri", back_populates="sube")
 
 class Kullanici(Base):
     __tablename__ = "Kullanici"
@@ -359,3 +360,18 @@ class OdemeReferans(Base):
     Kayit_Tarihi = Column(DateTime, default=func.now())
 
     kategori = relationship("Kategori", back_populates="odeme_referanslar")
+
+class POSHareketleri(Base):
+    __tablename__ = "POS_Hareketleri"
+
+    ID = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    Islem_Tarihi = Column(Date, nullable=False)
+    Hesaba_Gecis = Column(Date, nullable=False)
+    Para_Birimi = Column(String(5), nullable=False)
+    Islem_Tutari = Column(DECIMAL(15, 2), nullable=False)
+    Kesinti_Tutari = Column(DECIMAL(15, 2), default=0.00)
+    Net_Tutar = Column(DECIMAL(15, 2), nullable=True)
+    Kayit_Tarihi = Column(DateTime, default=func.now())
+    Sube_ID = Column(Integer, ForeignKey("Sube.Sube_ID"), nullable=True)
+
+    sube = relationship("Sube", back_populates="pos_hareketleri")
