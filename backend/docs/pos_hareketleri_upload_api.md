@@ -1,99 +1,106 @@
-# POS Hareketleri Excel Upload API
+# POS_Hareketleri Excel Upload API
 
-## Endpoint
+## Overview
+
+This document describes the implementation of the Excel upload feature for the POS_Hareketleri table. The feature allows users to upload Excel files containing POS transaction data, which will then be parsed and inserted into the database with duplicate detection.
+
+## API Endpoint
 
 ```
 POST /api/v1/pos-hareketleri/upload/
 ```
 
-## Description
+### Parameters
 
-This endpoint allows uploading POS transaction data in Excel format (.xlsx or .xls). The uploaded data will be parsed and inserted into the database, with duplicate records being skipped automatically.
+- `sube_id` (Form Data): Integer - Branch ID for the records
+- `file` (Form Data): File - Excel file containing POS transaction data (.xls or .xlsx)
 
-## Request
-
-### Headers
+### Request Format
 
 ```
 Content-Type: multipart/form-data
 ```
 
-### Form Data
+### Response Format
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| sube_id | integer | Yes | The branch ID to associate with the uploaded records |
-| file | file | Yes | The Excel file containing POS transaction data |
-
-### Excel File Format
-
-The Excel file should contain the following columns:
-
-| Column Name | Required | Data Type | Description |
-|-------------|----------|-----------|-------------|
-| Islem_Tarihi | Yes | Date | Transaction date (format: DD.MM.YYYY) |
-| Hesaba_Gecis | Yes | Date | Account transfer date (format: DD.MM.YYYY) |
-| Para_Birimi | Yes | String (5 chars max) | Currency code (e.g., "TRY", "USD") |
-| Islem_Tutari | Yes | Decimal | Transaction amount |
-| Kesinti_Tutari | No | Decimal | Deduction amount (default: 0.00) |
-| Net_Tutar | No | Decimal | Net amount |
-
-## Response
-
-### Success (200 OK)
-
+Success (201 Created):
 ```json
 {
   "message": "POS transactions file processed successfully.",
-  "added": 0,
-  "skipped": 0
+  "added": <number_of_records_added>,
+  "skipped": <number_of_records_skipped>
 }
 ```
 
 ### Error Responses
 
-| Status Code | Description |
-|-------------|-------------|
-| 400 Bad Request | Invalid file type or missing parameters |
-| 400 Bad Request | Error reading Excel file |
-| 500 Internal Server Error | Processing error |
+- 400 Bad Request: Invalid file type or missing parameters
+- 500 Internal Server Error: Processing error
 
-## Example Usage
+## Data Model
 
-### cURL
+### POS_Hareketleri Table
 
-```bash
-curl -X POST "http://localhost:8000/api/v1/pos-hareketleri/upload/" \
-  -H "accept: application/json" \
-  -H "Content-Type: multipart/form-data" \
-  -F "sube_id=1" \
-  -F "file=@pos_transactions.xlsx"
-```
+| Column | Type | Required | Description |
+|--------|------|----------|-------------|
+| ID | Integer | Auto | Primary key |
+| Islem_Tarihi | Date | Yes | Transaction date |
+| Hesaba_Gecis | Date | Yes | Account transfer date |
+| Para_Birimi | String(5) | Yes | Currency code |
+| Islem_Tutari | DECIMAL(15,2) | Yes | Transaction amount |
+| Kesinti_Tutari | DECIMAL(15,2) | No | Deduction amount |
+| Net_Tutar | DECIMAL(15,2) | No | Net amount |
+| Sube_ID | Integer | Yes | Branch ID (Foreign Key) |
+| Kayit_Tarihi | DateTime | No | Record creation timestamp |
 
-### Python (requests)
+### Excel Data Mapping
 
-```python
-import requests
+The Excel file should contain columns that map to the POS_Hareketleri fields:
 
-url = "http://localhost:8000/api/v1/pos-hareketleri/upload/"
-files = {'file': open('pos_transactions.xlsx', 'rb')}
-data = {'sube_id': 1}
+| Excel Column | Database Field | Required | Format |
+|--------------|----------------|----------|--------|
+| Islem_Tarihi | Islem_Tarihi | Yes | Date |
+| Hesaba_Gecis | Hesaba_Gecis | Yes | Date |
+| Para_Birimi | Para_Birimi | Yes | String (e.g., "TRY") |
+| Islem_Tutari | Islem_Tutari | Yes | Numeric |
+| Kesinti_Tutari | Kesinti_Tutari | No | Numeric |
+| Net_Tutar | Net_Tutar | No | Numeric |
 
-response = requests.post(url, files=files, data=data)
-print(response.json())
-```
+## Duplicate Detection Logic
 
-## Duplicate Detection
-
-The system prevents duplicate uploads by checking for existing records with the same:
+To prevent duplicate uploads, the system checks for existing records with the same:
 - Islem_Tarihi
 - Hesaba_Gecis
 - Para_Birimi
 - Islem_Tutari
 - Sube_ID
 
-Duplicate records are skipped and counted in the response.
+If a record with these matching fields is found, the new record is skipped.
 
-## Authentication
+## Implementation Details
 
-This endpoint requires the same authentication as other POS_Hareketleri endpoints, using JWT tokens.
+### Backend Implementation
+
+1. **File Validation**: Only .xls and .xlsx files are accepted
+2. **Excel Parsing**: Uses pandas with openpyxl engine for parsing
+3. **Data Validation**: Validates required fields and data types
+4. **Duplicate Detection**: Checks for existing records before insertion
+5. **Bulk Insert**: Uses optimized bulk insert operations
+
+### Key Functions
+
+- `is_duplicate_pos_hareket()`: Checks if a POS_Hareketleri record is a duplicate
+- `create_pos_hareket()`: Creates a single POS_Hareketleri record with duplicate checking
+- `create_pos_hareketleri_bulk()`: Creates multiple POS_Hareketleri records with duplicate checking
+
+## Security Considerations
+
+- File type validation to ensure only Excel files are processed
+- Authentication required (same as other POS_Hareketleri endpoints)
+- Role-based access control enforced
+
+## Performance Considerations
+
+- Processes Excel files row by row to manage memory usage
+- Uses database indexing for efficient duplicate detection
+- Provides progress feedback for long-running operations

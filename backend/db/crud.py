@@ -1137,7 +1137,29 @@ def get_pos_hareket(db: Session, pos_id: int):
 def get_pos_hareketleri(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.POSHareketleri).offset(skip).limit(limit).all()
 
+def is_duplicate_pos_hareket(db: Session, pos_hareket: pos_hareketleri.POSHareketleriCreate):
+    """
+    Check if a POS_Hareketleri record is a duplicate based on:
+    - Islem_Tarihi
+    - Hesaba_Gecis
+    - Para_Birimi
+    - Islem_Tutari
+    - Sube_ID
+    """
+    existing = db.query(models.POSHareketleri).filter(
+        models.POSHareketleri.Islem_Tarihi == pos_hareket.Islem_Tarihi,
+        models.POSHareketleri.Hesaba_Gecis == pos_hareket.Hesaba_Gecis,
+        models.POSHareketleri.Para_Birimi == pos_hareket.Para_Birimi,
+        models.POSHareketleri.Islem_Tutari == pos_hareket.Islem_Tutari,
+        models.POSHareketleri.Sube_ID == pos_hareket.Sube_ID
+    ).first()
+    return existing is not None
+
 def create_pos_hareket(db: Session, pos_hareket: pos_hareketleri.POSHareketleriCreate):
+    # Check for duplicates
+    if is_duplicate_pos_hareket(db, pos_hareket):
+        return None  # Return None to indicate duplicate
+    
     # Calculate Net_Tutar if not provided
     net_tutar = pos_hareket.Net_Tutar
     if net_tutar is None:
@@ -1198,6 +1220,11 @@ def create_pos_hareketleri_bulk(db: Session, pos_hareketleri_list: List[pos_hare
     
     for pos_hareket in pos_hareketleri_list:
         try:
+            # Check for duplicates
+            if is_duplicate_pos_hareket(db, pos_hareket):
+                skipped_count += 1
+                continue
+            
             # Calculate Net_Tutar if not provided
             net_tutar = pos_hareket.Net_Tutar
             if net_tutar is None:

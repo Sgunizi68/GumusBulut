@@ -579,6 +579,7 @@ export interface DataContextType {
   odemeList: Odeme[];
   updateOdeme: (odemeId: number, data: OdemeAssignmentFormData) => Promise<void>;
   uploadOdeme: (formData: FormData) => Promise<{ added: number; skipped: number } | null>;
+  uploadPosHareketleri: (formData: FormData) => Promise<{ added: number; skipped: number } | null>;
 }
 
   }

@@ -47,14 +47,24 @@ async def upload_pos_hareketleri(
     for index, row in df.iterrows():
         rows_read += 1
         try:
+            # Handle potential missing or NaN values
+            islem_tutari = row.get("Islem_Tutari")
+            kesinti_tutari = row.get("Kesinti_Tutari", 0.00)
+            net_tutar = row.get("Net_Tutar")
+            
+            # Skip rows with missing required fields
+            if pd.isna(row.get("Islem_Tarihi")) or pd.isna(row.get("Hesaba_Gecis")) or pd.isna(row.get("Para_Birimi")) or pd.isna(islem_tutari):
+                logger.warning(f"Skipping row {rows_read} due to missing required fields")
+                continue
+            
             # Create POS_Hareketleri object
             pos_hareket_data = pos_hareketleri.POSHareketleriCreate(
                 Islem_Tarihi=row["Islem_Tarihi"],
                 Hesaba_Gecis=row["Hesaba_Gecis"],
-                Para_Birimi=row["Para_Birimi"],
-                Islem_Tutari=row["Islem_Tutari"],
-                Kesinti_Tutari=row.get("Kesinti_Tutari", 0.00),
-                Net_Tutar=row.get("Net_Tutar"),
+                Para_Birimi=str(row["Para_Birimi"]),
+                Islem_Tutari=islem_tutari,
+                Kesinti_Tutari=kesinti_tutari if not pd.isna(kesinti_tutari) else 0.00,
+                Net_Tutar=net_tutar if not pd.isna(net_tutar) else None,
                 Sube_ID=sube_id,
             )
             pos_hareketleri_to_create.append(pos_hareket_data)
@@ -83,7 +93,10 @@ def create_pos_hareket(
     pos_hareket: pos_hareketleri.POSHareketleriCreate,
     db: Session = Depends(database.get_db)
 ):
-    return crud.create_pos_hareket(db=db, pos_hareket=pos_hareket)
+    db_pos = crud.create_pos_hareket(db=db, pos_hareket=pos_hareket)
+    if db_pos is None:
+        raise HTTPException(status_code=400, detail="Duplicate record detected.")
+    return db_pos
 
 @router.post("/pos-hareketleri/bulk/", response_model=List[pos_hareketleri.POSHareketleriInDB], status_code=status.HTTP_201_CREATED, dependencies=[Depends(get_current_active_user), Depends(check_permission("pos_write"))])
 def create_pos_hareketleri_bulk(
@@ -92,8 +105,9 @@ def create_pos_hareketleri_bulk(
 ):
     created_pos_hareketleri = []
     for pos_hareket in pos_hareketleri_list:
-        created_pos = crud.create_pos_hareket(db=db, pos_hareket=pos_hareket)
-        created_pos_hareketleri.append(created_pos)
+        db_pos = crud.create_pos_hareket(db=db, pos_hareket=pos_hareket)
+        if db_pos is not None:  # Only add if not a duplicate
+            created_pos_hareketleri.append(db_pos)
     return created_pos_hareketleri
 
 @router.get("/pos-hareketleri/", response_model=List[pos_hareketleri.POSHareketleriInDB], dependencies=[Depends(get_current_active_user), Depends(check_permission("pos_read"))])

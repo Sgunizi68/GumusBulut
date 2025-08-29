@@ -5988,3 +5988,5 @@ export const OdemeKategoriAtamaPage: React.FC = () => {
     </div>
   );
 };
+
+export { default as POSHareketleriYuklemePage } from "./pages/POSHareketleriYukleme";

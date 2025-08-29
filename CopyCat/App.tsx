@@ -1,7 +1,7 @@
 import React, { useState, createContext, useContext, useCallback, ReactNode, useEffect, useMemo } from 'react';
 import { HashRouter, Routes, Route, Link, NavLink, Navigate, useLocation } from 'react-router-dom';
 import { AppContextType, Sube, Kullanici, EFatura, InvoiceAssignmentFormData, DataContextType, RolYetki, B2BEkstre, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, Puantaj, PuantajEntry, Gelir, GelirEkstra, AvansIstek, Rol, Yetki, KullaniciRol, Deger, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, Nakit, NakitFormData, EFaturaReferans, EFaturaReferansFormData, OdemeReferans, OdemeReferansFormData, Odeme, OdemeAssignmentFormData } from './types';
-import { LoginPage, DashboardPage, SubePage, UsersPage, RolesPage, PermissionsPage, UserRoleAssignmentPage, RolePermissionAssignmentPage, DegerlerPage, PlaceholderPage, UstKategorilerPage, KategorilerPage, InvoiceUploadPage, InvoiceCategoryAssignmentPage, B2BUploadPage, B2BCategoryAssignmentPage, DigerHarcamalarPage, GelirPage, StokPage, StokFiyatPage, StokSayimPage, CalisanPage, PuantajSecimPage, PuantajPage, AvansPage, NakitPage, OdemeYuklemePage, OdemeReferansPage, OdemeKategoriAtamaPage } from './pages';
+import { LoginPage, DashboardPage, SubePage, UsersPage, RolesPage, PermissionsPage, UserRoleAssignmentPage, RolePermissionAssignmentPage, DegerlerPage, PlaceholderPage, UstKategorilerPage, KategorilerPage, InvoiceUploadPage, InvoiceCategoryAssignmentPage, B2BUploadPage, B2BCategoryAssignmentPage, DigerHarcamalarPage, GelirPage, StokPage, StokFiyatPage, StokSayimPage, CalisanPage, PuantajSecimPage, PuantajPage, AvansPage, NakitPage, OdemeYuklemePage, OdemeReferansPage, OdemeKategoriAtamaPage, POSHareketleriYuklemePage } from './pages';
 import { MENU_GROUPS, DASHBOARD_ITEM, Icons, DEFAULT_PERIOD, OZEL_FATURA_YETKI_ADI, PUANTAJ_HISTORY_ACCESS_YETKI_ADI, GELIR_GECMISI_YETKI_ADI, DEFAULT_END_DATE, STORAGE_KEYS } from './constants';
 import { ErrorProvider, useErrorContext, classifyError } from './contexts/ErrorContext';
 import { ToastContainer, ConnectionStatusBanner, useToast } from './contexts/ToastContext';
@@ -11,6 +11,7 @@ import { NakitYatirmaRaporuPage } from './pages/NakitYatirmaRaporu';
 import { OdemeRaporPage } from './pages/OdemeRapor';
 import { FaturaRaporuPage } from './pages/FaturaRaporu';
 import { FaturaDigerHarcamaRaporuPage } from './pages/FaturaDigerHarcamaRaporu';
+
 import { Input, Select } from './components'; 
 
 // --- Helper types for local storage data ---
@@ -589,7 +590,15 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     });
     return result;
   }, []);
-  
+
+  const uploadPosHareketleri = useCallback(async (formData: FormData) => {
+    const result = await fetchData<any>(`${API_BASE_URL}/pos-hareketleri/upload/`, {
+        method: 'POST',
+        body: formData,
+    });
+    return result;
+  }, []);
+
   const addDigerHarcama = useCallback(async (data: DigerHarcamaFormData) => {
     const formData = new FormData();
     Object.keys(data).forEach(key => {
@@ -1454,7 +1463,8 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     odemeList,
     updateOdeme,
     uploadOdeme,
-  }), [subeList, eFaturaList, b2bEkstreList, digerHarcamaList, stokList, stokFiyatList, stokSayimList, calisanList, puantajSecimiList, puantajList, gelirList, gelirEkstraList, avansIstekList, ustKategoriList, kategoriList, degerList, userList, rolesList, permissionsList, userRolesList, rolePermissionsList, eFaturaReferansList, odemeReferansList, nakitList, odemeList, addSube, updateSube, addEFaturas, updateEFatura, addB2BEkstreler, updateB2BEkstre, addDigerHarcama, updateDigerHarcama, deleteDigerHarcama, addStok, updateStok, addStokFiyat, updateStokFiyat, addOrUpdateStokSayim, addCalisan, updateCalisan, addUser, updateUser, addPuantajSecimi, updatePuantajSecimi, addOrUpdatePuantajEntry, getPuantajEntry, deletePuantajEntry, addOrUpdateGelirEntry, getGelirEntry, addOrUpdateGelirEkstraEntry, getGelirEkstraEntry, addOrUpdateAvansIstek, deleteAvansIstek, getAvansIstek, addUstKategori, updateUstKategori, addKategori, updateKategori, fetchDegerler, addDeger, updateDeger, addRole, updateRole, deleteRole, addPermission, updatePermission, deletePermission, addUserRole, updateUserRole, deleteUserRole, addRolePermission, updateRolePermission, deleteRolePermission, addEFaturaReferans, updateEFaturaReferans, deleteEFaturaReferans, addOdemeReferans, updateOdemeReferans, deleteOdemeReferans, addNakit, updateNakit, deleteNakit, updateOdeme]);
+    uploadPosHareketleri,
+  }), [subeList, eFaturaList, b2bEkstreList, digerHarcamaList, stokList, stokFiyatList, stokSayimList, calisanList, puantajSecimiList, puantajList, gelirList, gelirEkstraList, avansIstekList, ustKategoriList, kategoriList, degerList, userList, rolesList, permissionsList, userRolesList, rolePermissionsList, eFaturaReferansList, odemeReferansList, nakitList, odemeList, addSube, updateSube, addEFaturas, updateEFatura, addB2BEkstreler, updateB2BEkstre, addDigerHarcama, updateDigerHarcama, deleteDigerHarcama, addStok, updateStok, addStokFiyat, updateStokFiyat, addOrUpdateStokSayim, addCalisan, updateCalisan, addUser, updateUser, addPuantajSecimi, updatePuantajSecimi, addOrUpdatePuantajEntry, getPuantajEntry, deletePuantajEntry, addOrUpdateGelirEntry, getGelirEntry, addOrUpdateGelirEkstraEntry, getGelirEkstraEntry, addOrUpdateAvansIstek, deleteAvansIstek, getAvansIstek, addUstKategori, updateUstKategori, addKategori, updateKategori, fetchDegerler, addDeger, updateDeger, addRole, updateRole, deleteRole, addPermission, updatePermission, deletePermission, addUserRole, updateUserRole, deleteUserRole, addRolePermission, updateRolePermission, deleteRolePermission, addEFaturaReferans, updateEFaturaReferans, deleteEFaturaReferans, addOdemeReferans, updateOdemeReferans, deleteOdemeReferans, addNakit, updateNakit, deleteNakit, updateOdeme, uploadOdeme, uploadPosHareketleri]);
 
   return <DataContext.Provider value={dataContextValue}>{children}</DataContext.Provider>;
 };
@@ -1625,6 +1635,7 @@ const AppWithToast: React.FC = () => {
                       <Route path="/odeme-kategori-atama" element={<OdemeKategoriAtamaPage />} />
                       
                       <Route path="/other-expenses" element={<DigerHarcamalarPage />} />
+                      <Route path="/pos-hareketleri-yukleme" element={<POSHareketleriYuklemePage />} />
                       <Route path="/calisanlar" element={<CalisanPage />} />
                       <Route path="/puantaj-secim" element={<PuantajSecimPage />} />
                       <Route path="/puantaj" element={<PuantajPage />} />
