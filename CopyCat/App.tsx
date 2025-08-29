@@ -266,6 +266,15 @@ const fetchData = async <T,>(url: string, options: RequestInit = {}): Promise<T 
         };
     }
 
+    // Add authentication token if available
+    const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
+    if (token) {
+        options.headers = {
+            'Authorization': `Bearer ${token}`,
+            ...options.headers,
+        };
+    }
+
     const response = await fetch(url, options);
 
     if (!response.ok) {
@@ -469,7 +478,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       body: JSON.stringify(subeData),
     });
     if (updatedSube) {
-      setSubeList(prevList =>
+      setSubeList(prevList => 
         prevList.map(s => (s.Sube_ID === subeId ? updatedSube : s))
       );
       return { success: true };
@@ -477,12 +486,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     return { success: false, message: "Şube güncellenirken bir hata oluştu." };
   }, []);
 
-
   const addEFaturas = useCallback(async (newFaturas: EFatura[]) => {
-    const response = await fetchData<any>(`${API_BASE_URL}/e-faturalar/`, {
-      method: 'POST',
-      body: JSON.stringify(newFaturas),
-    });
 
     if (response && response.added_invoices) {
       setEFaturaList(prevList => [...prevList, ...response.added_invoices]);
@@ -1569,7 +1573,8 @@ const AppWithToast: React.FC = () => {
     setIsAuthenticated(false);
     setCurrentUser(null);
     setSelectedBranch(null);
-    localStorage.removeItem('silvercloud_appState');
+    localStorage.removeItem(STORAGE_KEYS.APP_STATE);
+    localStorage.removeItem(STORAGE_KEYS.TOKEN);
   }, []);
   
   const selectBranch = useCallback((branch: Sube) => {

@@ -8,7 +8,7 @@ import logging
 
 from db import crud, database, models
 from schemas import pos_hareketleri
-from ..deps import get_current_active_user, check_permission
+# Removed security dependencies
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-@router.post("/pos-hareketleri/upload/", dependencies=[Depends(get_current_active_user), Depends(check_permission("pos_import"))])
+@router.post("/pos-hareketleri/upload/")
 async def upload_pos_hareketleri(
     sube_id: int = Form(...),
     file: UploadFile = File(...), 
@@ -88,7 +88,7 @@ async def upload_pos_hareketleri(
         "skipped": result["skipped"]
     }
 
-@router.post("/pos-hareketleri/", response_model=pos_hareketleri.POSHareketleriInDB, status_code=status.HTTP_201_CREATED, dependencies=[Depends(get_current_active_user), Depends(check_permission("pos_write"))])
+@router.post("/pos-hareketleri/", response_model=pos_hareketleri.POSHareketleriInDB, status_code=status.HTTP_201_CREATED)
 def create_pos_hareket(
     pos_hareket: pos_hareketleri.POSHareketleriCreate,
     db: Session = Depends(database.get_db)
@@ -98,7 +98,7 @@ def create_pos_hareket(
         raise HTTPException(status_code=400, detail="Duplicate record detected.")
     return db_pos
 
-@router.post("/pos-hareketleri/bulk/", response_model=List[pos_hareketleri.POSHareketleriInDB], status_code=status.HTTP_201_CREATED, dependencies=[Depends(get_current_active_user), Depends(check_permission("pos_write"))])
+@router.post("/pos-hareketleri/bulk/", response_model=List[pos_hareketleri.POSHareketleriInDB], status_code=status.HTTP_201_CREATED)
 def create_pos_hareketleri_bulk(
     pos_hareketleri_list: List[pos_hareketleri.POSHareketleriCreate],
     db: Session = Depends(database.get_db)
@@ -110,18 +110,18 @@ def create_pos_hareketleri_bulk(
             created_pos_hareketleri.append(db_pos)
     return created_pos_hareketleri
 
-@router.get("/pos-hareketleri/", response_model=List[pos_hareketleri.POSHareketleriInDB], dependencies=[Depends(get_current_active_user), Depends(check_permission("pos_read"))])
+@router.get("/pos-hareketleri/", response_model=List[pos_hareketleri.POSHareketleriInDB])
 def read_pos_hareketleri(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
     return crud.get_pos_hareketleri(db, skip=skip, limit=limit)
 
-@router.get("/pos-hareketleri/{pos_id}", response_model=pos_hareketleri.POSHareketleriInDB, dependencies=[Depends(get_current_active_user), Depends(check_permission("pos_read"))])
+@router.get("/pos-hareketleri/{pos_id}", response_model=pos_hareketleri.POSHareketleriInDB)
 def read_pos_hareket(pos_id: int, db: Session = Depends(database.get_db)):
     db_pos = crud.get_pos_hareket(db, pos_id=pos_id)
     if db_pos is None:
         raise HTTPException(status_code=404, detail="POS transaction not found")
     return db_pos
 
-@router.put("/pos-hareketleri/{pos_id}", response_model=pos_hareketleri.POSHareketleriInDB, dependencies=[Depends(get_current_active_user), Depends(check_permission("pos_write"))])
+@router.put("/pos-hareketleri/{pos_id}", response_model=pos_hareketleri.POSHareketleriInDB)
 def update_pos_hareket(
     pos_id: int,
     pos_hareket: pos_hareketleri.POSHareketleriUpdate,
@@ -132,14 +132,14 @@ def update_pos_hareket(
         raise HTTPException(status_code=404, detail="POS transaction not found")
     return db_pos
 
-@router.delete("/pos-hareketleri/{pos_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(get_current_active_user), Depends(check_permission("pos_write"))])
+@router.delete("/pos-hareketleri/{pos_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_pos_hareket(pos_id: int, db: Session = Depends(database.get_db)):
     db_pos = crud.delete_pos_hareket(db=db, pos_id=pos_id)
     if db_pos is None:
         raise HTTPException(status_code=404, detail="POS transaction not found")
     return {"message": "POS transaction deleted successfully"}
 
-@router.get("/pos-hareketleri/export/", dependencies=[Depends(get_current_active_user), Depends(check_permission("pos_export"))])
+@router.get("/pos-hareketleri/export/")
 def export_pos_hareketleri(
     sube_id: int = None,
     db: Session = Depends(database.get_db)

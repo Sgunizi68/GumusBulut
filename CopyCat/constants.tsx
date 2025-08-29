@@ -331,4 +331,5 @@ export const MOCK_AVANS_DATA: AvansIstek[] = [];
 export const STORAGE_KEYS = {
   APP_STATE: 'silvercloud_appState',
   DATA_STATE: 'silvercloud_dataState',
+  TOKEN: 'silvercloud_token',
 };
