@@ -262,19 +262,19 @@ export const NakitYatirmaRaporuPage: React.FC = () => {
         return bankayaYatanTotal - nakitGirisiTotal;
     }, [bankayaYatanTotal, nakitGirisiTotal]);
 
-    // Date sorting for Bankaya Yatan records
+    // Date sorting for Bankaya Yatan records (newest to oldest)
     const sortedBankayaYatan = useMemo(() => {
         if (!reportData?.bankaya_yatan) return [];
         return [...reportData.bankaya_yatan].sort((a, b) => 
-            new Date(a.Tarih).getTime() - new Date(b.Tarih).getTime()
+            new Date(b.Tarih).getTime() - new Date(a.Tarih).getTime()
         );
     }, [reportData?.bankaya_yatan]);
 
-    // Date sorting for Nakit Giriş records
+    // Date sorting for Nakit Giriş records (newest to oldest)
     const sortedNakitGiris = useMemo(() => {
         if (!reportData?.nakit_girisi) return [];
         return [...reportData.nakit_girisi].sort((a, b) => 
-            new Date(a.Tarih).getTime() - new Date(b.Tarih).getTime()
+            new Date(b.Tarih).getTime() - new Date(a.Tarih).getTime()
         );
     }, [reportData?.nakit_girisi]);
 

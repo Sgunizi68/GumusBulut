@@ -110,7 +110,7 @@ describe('NakitYatirmaRaporuPage', () => {
     expect(screen.getByText('3')).toBeInTheDocument(); // Should show 3 matched records
   });
 
-  test('correctly sorts records by date', async () => {
+  test('correctly sorts records by date (newest to oldest)', async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
@@ -154,11 +154,11 @@ describe('NakitYatirmaRaporuPage', () => {
       expect(screen.getByText('Bankaya Yatan')).toBeInTheDocument();
     });
     
-    // Check that records are sorted by date (ascending)
-    // For Bankaya Yatan: 2025-08-01 should come before 2025-08-03
+    // Check that records are sorted by date (descending - newest first)
+    // For Bankaya Yatan: 2025-08-03 should come before 2025-08-01
     const bankayaYatanRows = screen.getAllByText(/2025/);
-    expect(bankayaYatanRows[0]).toHaveTextContent('01.08.2025');
-    expect(bankayaYatanRows[1]).toHaveTextContent('03.08.2025');
+    expect(bankayaYatanRows[0]).toHaveTextContent('03.08.2025');
+    expect(bankayaYatanRows[1]).toHaveTextContent('01.08.2025');
   });
 
   test('shows correct visual indicators for matched/unmatched records', async () => {

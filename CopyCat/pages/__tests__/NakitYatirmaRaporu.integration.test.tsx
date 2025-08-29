@@ -105,20 +105,20 @@ describe('NakitYatirmaRaporuPage Integration Tests', () => {
     expect(XLSX.utils.book_append_sheet).toHaveBeenCalledTimes(4); // 4 sheets
     expect(XLSX.utils.writeFile).toHaveBeenCalled();
     
-    // Verify that the data is sorted correctly in the export
+    // Verify that the data is sorted correctly in the export (newest to oldest)
     const jsonToSheetCalls = (XLSX.utils.json_to_sheet as jest.Mock).mock.calls;
     
-    // First sheet (Bankaya Yatan) should be sorted by date
+    // First sheet (Bankaya Yatan) should be sorted by date (newest first)
     const bankayaSheetData = jsonToSheetCalls[0][0];
-    expect(bankayaSheetData[0].Tarih).toBe('01.08.2025');
+    expect(bankayaSheetData[0].Tarih).toBe('03.08.2025');
     expect(bankayaSheetData[1].Tarih).toBe('02.08.2025');
-    expect(bankayaSheetData[2].Tarih).toBe('03.08.2025');
+    expect(bankayaSheetData[2].Tarih).toBe('01.08.2025');
     
-    // Second sheet (Nakit Girişi) should be sorted by date
+    // Second sheet (Nakit Girişi) should be sorted by date (newest first)
     const nakitSheetData = jsonToSheetCalls[1][0];
-    expect(nakitSheetData[0].Tarih).toBe('01.08.2025');
+    expect(nakitSheetData[0].Tarih).toBe('03.08.2025');
     expect(nakitSheetData[1].Tarih).toBe('02.08.2025');
-    expect(nakitSheetData[2].Tarih).toBe('03.08.2025');
+    expect(nakitSheetData[2].Tarih).toBe('01.08.2025');
     
     // Verify matching status is correctly indicated
     // The matching should be:
