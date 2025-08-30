@@ -11,6 +11,7 @@ import { NakitYatirmaRaporuPage } from './pages/NakitYatirmaRaporu';
 import { OdemeRaporPage } from './pages/OdemeRapor';
 import { FaturaRaporuPage } from './pages/FaturaRaporu';
 import { FaturaDigerHarcamaRaporuPage } from './pages/FaturaDigerHarcamaRaporu';
+import { POSKontrolDashboardPage } from './pages/POSKontrolDashboard';
 
 import { Input, Select } from './components'; 
 
@@ -1639,7 +1640,6 @@ const AppWithToast: React.FC = () => {
                       <Route path="/b2b-upload" element={<B2BUploadPage />} />
                       <Route path="/b2b-category-assignment" element={<B2BCategoryAssignmentPage />} />
                       <Route path="/odeme-yukleme" element={<OdemeYuklemePage />} />
-                      <Route path="/odeme-kategori-atama" element={<OdemeKategoriAtamaPage />} />
                       
                       <Route path="/other-expenses" element={<DigerHarcamalarPage />} />
                       <Route path="/pos-hareketleri-yukleme" element={<POSHareketleriYuklemePage />} />
@@ -1654,6 +1654,7 @@ const AppWithToast: React.FC = () => {
                       <Route path="/odeme-rapor" element={<OdemeRaporPage />} />
                       <Route path="/fatura-rapor" element={<FaturaRaporuPage />} />
                       <Route path="/fatura-diger-harcama-rapor" element={<FaturaDigerHarcamaRaporuPage />} />
+                      <Route path="/pos-kontrol-dashboard" element={<POSKontrolDashboardPage />} />
                       
                       <Route path="*" element={<Navigate to="/" />} />
                     </Routes>

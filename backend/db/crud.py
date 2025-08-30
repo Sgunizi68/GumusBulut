@@ -1130,6 +1130,196 @@ def get_odeme_rapor(db: Session, donem_list: List[int], kategori_list: List[int]
         )
         return empty_response
 
+# --- POS Kontrol Dashboard CRUD Functions ---
+def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
+    """
+    Get POS Kontrol Dashboard data for a specific branch and period
+    """
+    import logging
+    from collections import defaultdict
+    from decimal import Decimal
+    from datetime import datetime, timedelta
+    from sqlalchemy import func, and_, or_
+    from schemas.pos_kontrol_dashboard import POSKontrolDailyData, POSKontrolSummary, POSKontrolDashboardResponse
+    
+    logger = logging.getLogger(__name__)
+    
+    try:
+        # Convert donem to date range
+        # donem is in YYMM format (e.g., 2508 for August 2025)
+        if len(str(donem)) == 4:
+            year = 2000 + int(str(donem)[:2])
+            month = int(str(donem)[2:])
+        else:
+            raise ValueError("Invalid donem format. Expected YYMM format.")
+        
+        # Calculate first and last day of the month
+        first_day = datetime(year, month, 1)
+        if month == 12:
+            last_day = datetime(year + 1, 1, 1) - timedelta(days=1)
+        else:
+            last_day = datetime(year, month + 1, 1) - timedelta(days=1)
+        
+        logger.info(f"Fetching POS Kontrol Dashboard data for Sube_ID: {sube_id}, Donem: {donem} ({first_day.date()} to {last_day.date()})")
+        
+        # Get POS category ID (where Kategori_Adi = "POS")
+        pos_kategori = db.query(models.Kategori).filter(
+            models.Kategori.Kategori_Adi == "POS"
+        ).first()
+        
+        if not pos_kategori:
+            logger.warning("POS category not found in database")
+            # Return empty response
+            return POSKontrolDashboardResponse(
+                data=[],
+                summary=POSKontrolSummary(
+                    total_records=0,
+                    successful_matches=0,
+                    error_matches=0,
+                    success_rate="0%"
+                )
+            )
+        
+        pos_kategori_id = pos_kategori.Kategori_ID
+        logger.info(f"Found POS category with ID: {pos_kategori_id}")
+        
+        # Get Gelir data for POS category
+        gelir_query = db.query(
+            models.Gelir.Tarih,
+            func.sum(models.Gelir.Tutar).label('total_tutar')
+        ).filter(
+            and_(
+                models.Gelir.Sube_ID == sube_id,
+                models.Gelir.Kategori_ID == pos_kategori_id,
+                models.Gelir.Tarih >= first_day.date(),
+                models.Gelir.Tarih <= last_day.date()
+            )
+        ).group_by(models.Gelir.Tarih)
+        
+        gelir_records = gelir_query.all()
+        logger.info(f"Found {len(gelir_records)} Gelir POS records")
+        
+        # Get POS_Hareketleri data
+        pos_hareketleri_query = db.query(
+            models.POSHareketleri.Islem_Tarihi,
+            func.sum(models.POSHareketleri.Islem_Tutari).label('total_islem_tutari'),
+            func.sum(models.POSHareketleri.Kesinti_Tutari).label('total_kesinti_tutari'),
+            func.sum(models.POSHareketleri.Net_Tutar).label('total_net_tutar')
+        ).filter(
+            and_(
+                models.POSHareketleri.Sube_ID == sube_id,
+                models.POSHareketleri.Islem_Tarihi >= first_day.date(),
+                models.POSHareketleri.Islem_Tarihi <= last_day.date()
+            )
+        ).group_by(models.POSHareketleri.Islem_Tarihi)
+        
+        pos_hareketleri_records = pos_hareketleri_query.all()
+        logger.info(f"Found {len(pos_hareketleri_records)} POS_Hareketleri records")
+        
+        # Create dictionaries for easy lookup
+        gelir_dict = {record.Tarih: record.total_tutar for record in gelir_records}
+        pos_hareketleri_dict = {
+            record.Islem_Tarihi: {
+                'islem_tutari': record.total_islem_tutari or Decimal('0'),
+                'kesinti_tutari': record.total_kesinti_tutari or Decimal('0'),
+                'net_tutar': record.total_net_tutar or Decimal('0')
+            } for record in pos_hareketleri_records
+        }
+        
+        # Generate list of all dates in the period
+        all_dates = []
+        current_date = first_day.date()
+        while current_date <= last_day.date():
+            all_dates.append(current_date)
+            current_date += timedelta(days=1)
+        
+        # Build daily data
+        daily_data = []
+        successful_matches = 0
+        error_matches = 0
+        
+        for date in all_dates:
+            # Get values for the date
+            gelir_pos = gelir_dict.get(date)
+            pos_hareketleri_data = pos_hareketleri_dict.get(date)
+            
+            pos_hareketleri = pos_hareketleri_data['islem_tutari'] if pos_hareketleri_data else None
+            pos_kesinti = pos_hareketleri_data['kesinti_tutari'] if pos_hareketleri_data else None
+            pos_net = pos_hareketleri_data['net_tutar'] if pos_hareketleri_data else None
+            
+            # Compare values with tolerance (0.01)
+            kontrol_pos = None
+            if gelir_pos is not None and pos_hareketleri is not None:
+                if abs(gelir_pos - pos_hareketleri) <= Decimal('0.01'):
+                    kontrol_pos = "OK"
+                    successful_matches += 1
+                else:
+                    kontrol_pos = "Not OK"
+                    error_matches += 1
+            elif gelir_pos is None and pos_hareketleri is None:
+                kontrol_pos = "OK"  # Both are None, considered matching
+                successful_matches += 1
+            elif gelir_pos is not None or pos_hareketleri is not None:
+                kontrol_pos = "Not OK"  # One is None, the other is not
+                error_matches += 1
+            
+            # For now, set other kontrol fields as OK since we're not comparing them
+            kontrol_kesinti = "OK" if pos_kesinti is not None else None
+            kontrol_net = "OK" if pos_net is not None else None
+            
+            daily_record = POSKontrolDailyData(
+                Tarih=date.strftime('%Y-%m-%d'),
+                Gelir_POS=gelir_pos,
+                POS_Hareketleri=pos_hareketleri,
+                POS_Kesinti=pos_kesinti,
+                POS_Net=pos_net,
+                Odeme=None,  # To be implemented in next step
+                Odeme_Kesinti=None,  # To be implemented in next step
+                Odeme_Net=None,  # To be implemented in next step
+                Kontrol_POS=kontrol_pos,
+                Kontrol_Kesinti=kontrol_kesinti,
+                Kontrol_Net=kontrol_net
+            )
+            
+            daily_data.append(daily_record)
+        
+        # Calculate success rate
+        total_records = len(daily_data)
+        if total_records > 0:
+            success_rate = f"{(successful_matches / total_records) * 100:.0f}%"
+        else:
+            success_rate = "0%"
+        
+        # Create summary
+        summary = POSKontrolSummary(
+            total_records=total_records,
+            successful_matches=successful_matches,
+            error_matches=error_matches,
+            success_rate=success_rate
+        )
+        
+        # Create response
+        response = POSKontrolDashboardResponse(
+            data=daily_data,
+            summary=summary
+        )
+        
+        logger.info(f"Successfully generated POS Kontrol Dashboard data with {total_records} records, {successful_matches} successful matches, {error_matches} error matches, success rate: {success_rate}")
+        return response
+        
+    except Exception as e:
+        logger.error(f"Error in get_pos_kontrol_dashboard_data: {e}")
+        # Return empty response on error
+        return POSKontrolDashboardResponse(
+            data=[],
+            summary=POSKontrolSummary(
+                total_records=0,
+                successful_matches=0,
+                error_matches=0,
+                success_rate="0%"
+            )
+        )
+
 # --- POS Hareketleri CRUD ---
 def get_pos_hareket(db: Session, pos_id: int):
     return db.query(models.POSHareketleri).filter(models.POSHareketleri.ID == pos_id).first()

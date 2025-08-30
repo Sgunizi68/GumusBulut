@@ -7,6 +7,7 @@ from db.database import get_db
 from schemas.report import NakitYatirmaRaporu
 from schemas.odeme_rapor import OdemeRaporResponse
 from schemas.fatura_rapor import FaturaRaporResponse
+from schemas.pos_kontrol_dashboard import POSKontrolDashboardResponse
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -169,4 +170,44 @@ def get_fatura_rapor(
         raise
     except Exception as e:
         logger.error(f"Error in get_fatura_rapor: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+
+@router.get("/pos-kontrol/{sube_id}/{donem}", response_model=POSKontrolDashboardResponse)
+def get_pos_kontrol_dashboard(sube_id: int, donem: int, db: Session = Depends(get_db)):
+    """
+    POS Kontrol Dashboard endpoint - compares Gelir POS data with POS_Hareketleri data
+    
+    Args:
+        sube_id: Branch ID
+        donem: Period in YYMM format (e.g., 2508 for August 2025)
+        
+    Returns:
+        POSKontrolDashboardResponse: Daily comparison data and summary statistics
+    """
+    logger.info(f"Getting POS Kontrol Dashboard for Sube_ID: {sube_id}, Donem: {donem}")
+    
+    try:
+        # Validate inputs
+        if sube_id <= 0:
+            raise HTTPException(status_code=400, detail="Invalid sube_id")
+        
+        donem_str = str(donem)
+        if donem <= 0 or len(donem_str) != 4:
+            raise HTTPException(status_code=400, detail=f"Invalid donem format. Expected YYMM (4-digit) format, got: {donem} (length: {len(donem_str)})")
+        
+        # Get report data using the comprehensive CRUD function
+        report_data = crud.get_pos_kontrol_dashboard_data(
+            db=db,
+            sube_id=sube_id,
+            donem=donem
+        )
+        
+        logger.info(f"Successfully generated POS Kontrol Dashboard with {len(report_data.data)} daily records, success rate: {report_data.summary.success_rate}")
+        return report_data
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in get_pos_kontrol_dashboard: {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
