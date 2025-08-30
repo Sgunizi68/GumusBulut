@@ -256,7 +256,7 @@ const ProtectedRoute: React.FC<{ children: ReactNode }> = ({ children }) => {
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://gumusbulut.onrender.com/api/v1";
 
 // Enhanced fetchData with error classification and suppression
-const fetchData = async <T,>(url: string, options: RequestInit = {}): Promise<T | null> => {
+const fetchData = async <T,>(url: string, options: RequestInit = {}, skipAuth: boolean = false): Promise<T | null> => {
   try {
     // Automatically set Content-Type for JSON, unless it's FormData
     if (options.body && !(options.body instanceof FormData)) {
@@ -266,13 +266,15 @@ const fetchData = async <T,>(url: string, options: RequestInit = {}): Promise<T 
         };
     }
 
-    // Add authentication token if available
-    const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
-    if (token) {
-        options.headers = {
-            'Authorization': `Bearer ${token}`,
-            ...options.headers,
-        };
+    // Add authentication token if available and not skipped
+    if (!skipAuth) {
+        const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
+        if (token) {
+            options.headers = {
+                'Authorization': `Bearer ${token}`,
+                ...options.headers,
+            };
+        }
     }
 
     const response = await fetch(url, options);
@@ -599,7 +601,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const result = await fetchData<any>(`${API_BASE_URL}/pos-hareketleri/upload/`, {
         method: 'POST',
         body: formData,
-    });
+    }, true);
     return result;
   }, []);
 
