@@ -1650,6 +1650,9 @@ const AppWithToast: React.FC = () => {
                       <Route path="/stock-prices" element={<StokFiyatPage />} />
                       <Route path="/stock-count" element={<StokSayimPage />} />
                       <Route path="/calisanlar" element={<CalisanPage />} />
+                      <Route path="/puantaj-secim" element={<PuantajSecimPage />} />
+                      <Route path="/puantaj" element={<PuantajPage />} />
+                      <Route path="/avans" element={<AvansPage />} />
                       <Route path="/nakit-yatirma-raporu" element={<NakitYatirmaRaporuPage />} />
                       <Route path="/odeme-rapor" element={<OdemeRaporPage />} />
                       <Route path="/fatura-rapor" element={<FaturaRaporuPage />} />
