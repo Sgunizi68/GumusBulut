@@ -1199,49 +1199,85 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
         gelir_records = gelir_query.all()
         logger.info(f"Found {len(gelir_records)} Gelir POS records")
         
-        # Get POS_Hareketleri data
-        pos_hareketleri_query = db.query(
-            models.POSHareketleri.Islem_Tarihi,
-            func.sum(models.POSHareketleri.Islem_Tutari).label('total_islem_tutari'),
-            func.sum(models.POSHareketleri.Kesinti_Tutari).label('total_kesinti_tutari'),
-            func.sum(models.POSHareketleri.Net_Tutar).label('total_net_tutar')
-        ).filter(
+        # Find the "Kredi Kartı Ödemesi" category
+        kredi_karti_kategori = db.query(models.Kategori).filter(
+            models.Kategori.Kategori_Adi == "Kredi Kartı Ödemesi"
+        ).first()
+        
+        # Get all POS_Hareketleri records for the period
+        pos_hareketleri_records = db.query(models.POSHareketleri).filter(
             and_(
                 models.POSHareketleri.Sube_ID == sube_id,
                 models.POSHareketleri.Islem_Tarihi >= first_day.date(),
                 models.POSHareketleri.Islem_Tarihi <= last_day.date()
             )
-        ).group_by(models.POSHareketleri.Islem_Tarihi)
-        
-        pos_hareketleri_records = pos_hareketleri_query.all()
+        ).all()
         logger.info(f"Found {len(pos_hareketleri_records)} POS_Hareketleri records")
         
-        # Get Odeme data for the period
-        # We need to get Odeme records that match the date range
-        odeme_query = db.query(
-            models.Odeme.Tarih,
-            func.sum(models.Odeme.Tutar).label('total_tutar')
-        ).filter(
+        # Get all Odeme records for the period with Kredi Kartı Ödemesi category
+        odeme_query = db.query(models.Odeme).filter(
             and_(
                 models.Odeme.Sube_ID == sube_id,
                 models.Odeme.Tarih >= first_day.date(),
                 models.Odeme.Tarih <= last_day.date()
             )
-        ).group_by(models.Odeme.Tarih)
+        )
+        
+        # Filter by Kredi Kartı Ödemesi category if found
+        if kredi_karti_kategori:
+            odeme_query = odeme_query.filter(models.Odeme.Kategori_ID == kredi_karti_kategori.Kategori_ID)
         
         odeme_records = odeme_query.all()
-        logger.info(f"Found {len(odeme_records)} Odeme records")
+        logger.info(f"Found {len(odeme_records)} Odeme records with Kredi Kartı Ödemesi category")
+        
+        # Create a lookup dictionary for Odeme records by (Tarih, Tutar) for matching
+        odeme_lookup = {(record.Tarih, record.Tutar): record for record in odeme_records}
+        
+        # Group POS_Hareketleri by Islem_Tarihi and calculate sums
+        pos_hareketleri_by_date = defaultdict(lambda: {
+            'total_islem_tutari': Decimal('0'),
+            'total_kesinti_tutari': Decimal('0'),
+            'total_net_tutar': Decimal('0'),
+            'matched_odeme_total': Decimal('0')  # For the correct Ödeme calculation
+        })
+        
+        # Process each POS_Hareketleri record
+        for record in pos_hareketleri_records:
+            islem_tutari = record.Islem_Tutari or Decimal('0')
+            kesinti_tutari = record.Kesinti_Tutari or Decimal('0')
+            net_tutar = record.Net_Tutar or Decimal('0')
+            
+            # Add to date group totals
+            pos_hareketleri_by_date[record.Islem_Tarihi]['total_islem_tutari'] += islem_tutari
+            pos_hareketleri_by_date[record.Islem_Tarihi]['total_kesinti_tutari'] += kesinti_tutari
+            pos_hareketleri_by_date[record.Islem_Tarihi]['total_net_tutar'] += net_tutar
+            
+            # Check if there's a matching Odeme record
+            # Match criteria: Hesaba_Gecis = Odeme.Tarih AND Islem_Tutari = Odeme.Tutar
+            if (record.Hesaba_Gecis, record.Islem_Tutari) in odeme_lookup:
+                pos_hareketleri_by_date[record.Islem_Tarihi]['matched_odeme_total'] += record.Islem_Tutari
+        
+        # Get Gelir data for POS category grouped by date
+        gelir_records = db.query(
+            models.Gelir.Tarih,
+            func.sum(models.Gelir.Tutar).label('total_tutar')
+        ).filter(
+            and_(
+                models.Gelir.Sube_ID == sube_id,
+                models.Gelir.Kategori_ID == pos_kategori_id,
+                models.Gelir.Tarih >= first_day.date(),
+                models.Gelir.Tarih <= last_day.date()
+            )
+        ).group_by(models.Gelir.Tarih).all()
+        logger.info(f"Found {len(gelir_records)} Gelir POS records")
         
         # Create dictionaries for easy lookup
         gelir_dict = {record.Tarih: record.total_tutar for record in gelir_records}
         pos_hareketleri_dict = {
-            record.Islem_Tarihi: {
-                'islem_tutari': record.total_islem_tutari or Decimal('0'),
-                'kesinti_tutari': record.total_kesinti_tutari or Decimal('0'),
-                'net_tutar': record.total_net_tutar or Decimal('0')
-            } for record in pos_hareketleri_records
+            date: data for date, data in pos_hareketleri_by_date.items()
         }
-        odeme_dict = {record.Tarih: record.total_tutar for record in odeme_records}
+        # For the Ödeme field, we now use the matched_odeme_total instead of a simple sum of all Odeme records
+        odeme_dict = {date: data['matched_odeme_total'] for date, data in pos_hareketleri_by_date.items()}
         
         # Generate list of all dates in the period
         all_dates = []
@@ -1261,9 +1297,10 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
             pos_hareketleri_data = pos_hareketleri_dict.get(date)
             odeme = odeme_dict.get(date)
             
-            pos_hareketleri = pos_hareketleri_data['islem_tutari'] if pos_hareketleri_data else None
-            pos_kesinti = pos_hareketleri_data['kesinti_tutari'] if pos_hareketleri_data else None
-            pos_net = pos_hareketleri_data['net_tutar'] if pos_hareketleri_data else None
+            pos_hareketleri = pos_hareketleri_data['total_islem_tutari'] if pos_hareketleri_data else None
+            pos_kesinti = pos_hareketleri_data['total_kesinti_tutari'] if pos_hareketleri_data else None
+            pos_net = pos_hareketleri_data['total_net_tutar'] if pos_hareketleri_data else None
+            odeme = odeme_dict.get(date)  # This is now the matched total, not a simple lookup
             
             # Compare values with tolerance (0.01) for Kontrol POS
             kontrol_pos = None
@@ -1281,30 +1318,41 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
                 kontrol_pos = "Not OK"  # One is None, the other is not
                 error_matches += 1
             
-            # For Kontrol Kesinti: Compare POS Kesinti with Odeme
+            # For Kontrol Kesinti: Compare POS Kesinti with actual Odeme value for that date
+            # We need to get the actual Odeme value for comparison, not the matched POS total
+            actual_odeme_for_date = None
+            odeme_records_for_date = [r for r in odeme_records if r.Tarih == date]
+            if odeme_records_for_date:
+                actual_odeme_for_date = sum(r.Tutar for r in odeme_records_for_date) or Decimal('0')
+            
             kontrol_kesinti = None
-            if pos_kesinti is not None and odeme is not None:
-                if abs(pos_kesinti - odeme) <= Decimal('0.01'):
+            if pos_kesinti is not None and actual_odeme_for_date is not None:
+                if abs(pos_kesinti - actual_odeme_for_date) <= Decimal('0.01'):
                     kontrol_kesinti = "OK"
                 else:
                     kontrol_kesinti = "Not OK"
-            elif pos_kesinti is None and odeme is None:
+            elif pos_kesinti is None and actual_odeme_for_date is None:
                 kontrol_kesinti = "OK"  # Both are None, considered matching
-            elif pos_kesinti is not None or odeme is not None:
+            elif pos_kesinti is not None or actual_odeme_for_date is not None:
                 kontrol_kesinti = "Not OK"  # One is None, the other is not
             
-            # For Kontrol Net: Compare POS Net with Odeme
-            # This is a placeholder - we might need to clarify what exactly should be compared
+            # For Kontrol Net: Compare POS Net with actual Odeme value for that date
             kontrol_net = None
-            if pos_net is not None and odeme is not None:
-                if abs(pos_net - odeme) <= Decimal('0.01'):
+            if pos_net is not None and actual_odeme_for_date is not None:
+                if abs(pos_net - actual_odeme_for_date) <= Decimal('0.01'):
                     kontrol_net = "OK"
                 else:
                     kontrol_net = "Not OK"
-            elif pos_net is None and odeme is None:
+            elif pos_net is None and actual_odeme_for_date is None:
                 kontrol_net = "OK"  # Both are None, considered matching
-            elif pos_net is not None or odeme is not None:
+            elif pos_net is not None or actual_odeme_for_date is not None:
                 kontrol_net = "Not OK"  # One is None, the other is not
+            
+            # Set Odeme_Kesinti and Odeme_Net to actual Odeme values for proper comparison
+            actual_odeme_for_date = None
+            odeme_records_for_date = [r for r in odeme_records if r.Tarih == date]
+            if odeme_records_for_date:
+                actual_odeme_for_date = sum(r.Tutar for r in odeme_records_for_date) or Decimal('0')
             
             daily_record = POSKontrolDailyData(
                 Tarih=date.strftime('%Y-%m-%d'),
@@ -1312,9 +1360,9 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
                 POS_Hareketleri=pos_hareketleri,
                 POS_Kesinti=pos_kesinti,
                 POS_Net=pos_net,
-                Odeme=odeme,
-                Odeme_Kesinti=odeme,  # Using Odeme as Odeme_Kesinti for now
-                Odeme_Net=odeme,  # Using Odeme as Odeme_Net for now
+                Odeme=odeme,  # This is the matched POS transactions total
+                Odeme_Kesinti=actual_odeme_for_date,  # Actual Odeme value for comparison
+                Odeme_Net=actual_odeme_for_date,  # Actual Odeme value for comparison
                 Kontrol_POS=kontrol_pos,
                 Kontrol_Kesinti=kontrol_kesinti,
                 Kontrol_Net=kontrol_net
