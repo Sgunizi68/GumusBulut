@@ -7,16 +7,26 @@ import * as XLSX from 'xlsx';
 
 interface POSKontrolDailyData {
     Tarih: string;
-    Gelir_POS: number | null;
-    POS_Hareketleri: number | null;
-    POS_Kesinti: number | null;
-    POS_Net: number | null;
-    Odeme: number | null;
-    Odeme_Kesinti: number | null;
-    Odeme_Net: number | null;
+    Gelir_POS: number | string | null;
+    POS_Hareketleri: number | string | null;
+    POS_Kesinti: number | string | null;
+    POS_Net: number | string | null;
+    Odeme: number | string | null;
+    Odeme_Kesinti: number | string | null;
+    Odeme_Net: number | string | null;
     Kontrol_POS: string | null;
     Kontrol_Kesinti: string | null;
     Kontrol_Net: string | null;
+}
+
+interface GrandTotals {
+    Gelir_POS: number;
+    POS_Hareketleri: number;
+    POS_Kesinti: number;
+    POS_Net: number;
+    Odeme: number;
+    Odeme_Kesinti: number;
+    Odeme_Net: number;
 }
 
 interface POSKontrolSummary {
@@ -43,12 +53,22 @@ const formatCurrency = (value: number) => {
     return `₺${formatNumber(value)}`;
 };
 
-const formatDecimal = (value: number | null) => {
-    if (value === null) return '-';
+const formatDecimal = (value: number | string | null) => {
+    if (value === null || value === undefined) return '-';
+    
+    // Convert string to number if needed
+    let numericValue: number;
+    if (typeof value === 'string') {
+        numericValue = parseFloat(value);
+        if (isNaN(numericValue)) return '-';
+    } else {
+        numericValue = value;
+    }
+    
     return new Intl.NumberFormat('tr-TR', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-    }).format(value);
+    }).format(numericValue);
 };
 
 export const POSKontrolDashboardPage: React.FC = () => {
@@ -84,13 +104,11 @@ export const POSKontrolDashboardPage: React.FC = () => {
                 
                 try {
                     const url = `${API_BASE_URL}/pos-kontrol/${selectedBranch.Sube_ID}/${selectedPeriod}`;
-                    console.log('🔍 Fetching POS kontrol dashboard data from:', url);
                     
                     const response = await fetch(url);
                     
                     if (response.ok) {
                         const data = await response.json();
-                        console.log('✅ POS kontrol dashboard data received:', data);
                         setReportData(data);
                         
                         if (data.data.length === 0) {
@@ -98,11 +116,9 @@ export const POSKontrolDashboardPage: React.FC = () => {
                         }
                     } else {
                         const errorText = await response.text();
-                        console.error('❌ Error response:', response.status, errorText);
                         setError(`Veri alınırken hata oluştu: ${response.status} - ${errorText}`);
                     }
                 } catch (error) {
-                    console.error('❌ Network error:', error);
                     setError(`Bağlantı hatası: ${error instanceof Error ? error.message : 'Bilinmeyen hata'}`);
                 }
                 setLoading(false);
@@ -121,30 +137,21 @@ export const POSKontrolDashboardPage: React.FC = () => {
     };
     
     const handleExportToExcel = () => {
-        if (!reportData || !selectedBranch) return;
+        if (!filteredReportData || !selectedBranch) return;
 
         const wb = XLSX.utils.book_new();
         
-        // Custom formatter for Turkish locale
-        const formatTurkishNumber = (value: number | null): string => {
-            if (value === null) return '-';
-            return value.toLocaleString('tr-TR', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }).replace(/\./g, '#').replace(/,/g, '.').replace(/#/g, ',');
-        };
-        
-        // Main data sheet
-        const mainData = reportData.data.map((item, index) => ({
+        // Main data sheet with numeric values
+        const mainData = filteredReportData.data.map((item, index) => ({
             'Sıra': index + 1,
             'Tarih': new Date(item.Tarih).toLocaleDateString('tr-TR'),
-            'Gelir POS': formatTurkishNumber(item.Gelir_POS),
-            'POS Hareketleri': formatTurkishNumber(item.POS_Hareketleri),
-            'POS Kesinti': formatTurkishNumber(item.POS_Kesinti),
-            'POS Net': formatTurkishNumber(item.POS_Net),
-            'Ödeme': formatTurkishNumber(item.Odeme),
-            'Ödeme Kesinti': formatTurkishNumber(item.Odeme_Kesinti),
-            'Ödeme Net': formatTurkishNumber(item.Odeme_Net),
+            'Gelir POS': item.Gelir_POS,
+            'POS Hareketleri': item.POS_Hareketleri,
+            'POS Kesinti': item.POS_Kesinti,
+            'POS Net': item.POS_Net,
+            'Ödeme': item.Odeme,
+            'Ödeme Kesinti': item.Odeme_Kesinti,
+            'Ödeme Net': item.Odeme_Net,
             'Kontrol POS': item.Kontrol_POS || '-',
             'Kontrol Kesinti': item.Kontrol_Kesinti || '-',
             'Kontrol Net': item.Kontrol_Net || '-'
@@ -167,13 +174,29 @@ export const POSKontrolDashboardPage: React.FC = () => {
         ];
         XLSX.utils.book_append_sheet(wb, wsMain, 'POS Kontrol Verileri');
         
+        // Calculate statistics for filtered data
+        const totalRecords = filteredReportData.data.length;
+        const successfulMatches = filteredReportData.data.filter(item => 
+            item.Kontrol_POS === 'OK' || 
+            item.Kontrol_Kesinti === 'OK' || 
+            item.Kontrol_Net === 'OK'
+        ).length;
+        const errorMatches = filteredReportData.data.filter(item => 
+            item.Kontrol_POS === 'Not OK' || 
+            item.Kontrol_Kesinti === 'Not OK' || 
+            item.Kontrol_Net === 'Not OK'
+        ).length;
+        const successRate = totalRecords ? 
+            `${Math.round((successfulMatches / totalRecords) * 100)}%` : 
+            '0%';
+
         // Summary sheet
         const summary = [
             {
-                'Toplam Kayıt': reportData.summary.total_records,
-                'Başarılı Eşleşmeler': reportData.summary.successful_matches,
-                'Hatalı Eşleşmeler': reportData.summary.error_matches,
-                'Başarı Oranı': reportData.summary.success_rate
+                'Toplam Kayıt': totalRecords,
+                'Başarılı Eşleşmeler': successfulMatches,
+                'Hatalı Eşleşmeler': errorMatches,
+                'Başarı Oranı': successRate
             }
         ];
         
@@ -202,6 +225,62 @@ export const POSKontrolDashboardPage: React.FC = () => {
         return Array.from(periods).sort((a,b) => b.localeCompare(a));
     }, [currentPeriod]);
 
+    // Filter data to only show dates up to today
+    const filteredReportData = useMemo(() => {
+        if (!reportData || !reportData.data) return null;
+        
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set to start of day for comparison
+        
+        const filteredData = reportData.data.filter(item => {
+            const itemDate = new Date(item.Tarih);
+            itemDate.setHours(0, 0, 0, 0); // Set to start of day for comparison
+            return itemDate <= today;
+        });
+        
+        return {
+            ...reportData,
+            data: filteredData
+        };
+    }, [reportData]);
+    
+    // Calculate grand totals for numeric columns based on filtered data
+    const calculateGrandTotals = useMemo(() => {
+        if (!filteredReportData || !filteredReportData.data) return null;
+        
+        return filteredReportData.data.reduce(
+            (totals, item) => {
+                // Convert string values to numbers if needed
+                const gelirPos = typeof item.Gelir_POS === 'string' ? parseFloat(item.Gelir_POS) : item.Gelir_POS;
+                const posHareketleri = typeof item.POS_Hareketleri === 'string' ? parseFloat(item.POS_Hareketleri) : item.POS_Hareketleri;
+                const posKesinti = typeof item.POS_Kesinti === 'string' ? parseFloat(item.POS_Kesinti) : item.POS_Kesinti;
+                const posNet = typeof item.POS_Net === 'string' ? parseFloat(item.POS_Net) : item.POS_Net;
+                const odeme = typeof item.Odeme === 'string' ? parseFloat(item.Odeme) : item.Odeme;
+                const odemeKesinti = typeof item.Odeme_Kesinti === 'string' ? parseFloat(item.Odeme_Kesinti) : item.Odeme_Kesinti;
+                const odemeNet = typeof item.Odeme_Net === 'string' ? parseFloat(item.Odeme_Net) : item.Odeme_Net;
+                
+                return {
+                    Gelir_POS: totals.Gelir_POS + (gelirPos || 0),
+                    POS_Hareketleri: totals.POS_Hareketleri + (posHareketleri || 0),
+                    POS_Kesinti: totals.POS_Kesinti + (posKesinti || 0),
+                    POS_Net: totals.POS_Net + (posNet || 0),
+                    Odeme: totals.Odeme + (odeme || 0),
+                    Odeme_Kesinti: totals.Odeme_Kesinti + (odemeKesinti || 0),
+                    Odeme_Net: totals.Odeme_Net + (odemeNet || 0),
+                };
+            },
+            {
+                Gelir_POS: 0,
+                POS_Hareketleri: 0,
+                POS_Kesinti: 0,
+                POS_Net: 0,
+                Odeme: 0,
+                Odeme_Kesinti: 0,
+                Odeme_Net: 0,
+            }
+        );
+    }, [filteredReportData]);
+
     // Helper function to get row styling based on matching status
     const getRowStyling = (kontrolStatus: string | null) => {
         if (kontrolStatus === 'OK') {
@@ -217,19 +296,19 @@ export const POSKontrolDashboardPage: React.FC = () => {
     const getStatusIcon = (kontrolStatus: string | null) => {
         if (kontrolStatus === 'OK') {
             return (
-                <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-green-600 mx-auto" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
             );
         } else if (kontrolStatus === 'Not OK') {
             return (
-                <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                <svg className="w-5 h-5 text-red-500 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414z" clipRule="evenodd" />
                 </svg>
             );
         } else {
             return (
-                <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-gray-400 mx-auto" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-.464 5.535a1 1 0 10-1.415-1.414 3 3 0 01-4.242 0 1 1 0 00-1.415 1.414 5 5 0 007.072 0z" clipRule="evenodd" />
                 </svg>
             );
@@ -318,7 +397,7 @@ export const POSKontrolDashboardPage: React.FC = () => {
                                         </tr>
                                     </thead>
                                     <tbody className="bg-white divide-y divide-gray-200">
-                                        {reportData.data.map((item, index) => (
+                                        {filteredReportData && filteredReportData.data.map((item, index) => (
                                             <tr key={index} className={getRowStyling(item.Kontrol_POS)}>
                                                 <td className="px-4 py-3 text-sm text-center">
                                                     {getStatusIcon(item.Kontrol_POS)}
@@ -348,34 +427,45 @@ export const POSKontrolDashboardPage: React.FC = () => {
                                                     {formatDecimal(item.Odeme_Net)}
                                                 </td>
                                                 <td className="px-4 py-3 text-sm text-center font-semibold">
-                                                    <span className={`px-2 py-1 rounded-full text-xs ${
-                                                        item.Kontrol_POS === 'OK' ? 'bg-green-100 text-green-800' :
-                                                        item.Kontrol_POS === 'Not OK' ? 'bg-red-100 text-red-800' :
-                                                        'bg-gray-100 text-gray-800'
-                                                    }`}>
-                                                        {item.Kontrol_POS || '-'}
-                                                    </span>
+                                                    {getStatusIcon(item.Kontrol_POS)}
                                                 </td>
                                                 <td className="px-4 py-3 text-sm text-center font-semibold">
-                                                    <span className={`px-2 py-1 rounded-full text-xs ${
-                                                        item.Kontrol_Kesinti === 'OK' ? 'bg-green-100 text-green-800' :
-                                                        item.Kontrol_Kesinti === 'Not OK' ? 'bg-red-100 text-red-800' :
-                                                        'bg-gray-100 text-gray-800'
-                                                    }`}>
-                                                        {item.Kontrol_Kesinti || '-'}
-                                                    </span>
+                                                    {getStatusIcon(item.Kontrol_Kesinti)}
                                                 </td>
                                                 <td className="px-4 py-3 text-sm text-center font-semibold">
-                                                    <span className={`px-2 py-1 rounded-full text-xs ${
-                                                        item.Kontrol_Net === 'OK' ? 'bg-green-100 text-green-800' :
-                                                        item.Kontrol_Net === 'Not OK' ? 'bg-red-100 text-red-800' :
-                                                        'bg-gray-100 text-gray-800'
-                                                    }`}>
-                                                        {item.Kontrol_Net || '-'}
-                                                    </span>
+                                                    {getStatusIcon(item.Kontrol_Net)}
                                                 </td>
                                             </tr>
                                         ))}
+                                        {/* Grand Totals Row */}
+                                        <tr className="bg-gray-100 font-bold border-t-2 border-gray-300">
+                                            <td className="px-4 py-3 text-sm text-center">Toplam</td>
+                                            <td className="px-4 py-3 text-sm"></td>
+                                            <td className="px-4 py-3 text-sm text-right">
+                                                {calculateGrandTotals ? formatDecimal(calculateGrandTotals.Gelir_POS) : '-'}
+                                            </td>
+                                            <td className="px-4 py-3 text-sm text-right">
+                                                {calculateGrandTotals ? formatDecimal(calculateGrandTotals.POS_Hareketleri) : '-'}
+                                            </td>
+                                            <td className="px-4 py-3 text-sm text-right">
+                                                {calculateGrandTotals ? formatDecimal(calculateGrandTotals.POS_Kesinti) : '-'}
+                                            </td>
+                                            <td className="px-4 py-3 text-sm text-right">
+                                                {calculateGrandTotals ? formatDecimal(calculateGrandTotals.POS_Net) : '-'}
+                                            </td>
+                                            <td className="px-4 py-3 text-sm text-right">
+                                                {calculateGrandTotals ? formatDecimal(calculateGrandTotals.Odeme) : '-'}
+                                            </td>
+                                            <td className="px-4 py-3 text-sm text-right">
+                                                {calculateGrandTotals ? formatDecimal(calculateGrandTotals.Odeme_Kesinti) : '-'}
+                                            </td>
+                                            <td className="px-4 py-3 text-sm text-right">
+                                                {calculateGrandTotals ? formatDecimal(calculateGrandTotals.Odeme_Net) : '-'}
+                                            </td>
+                                            <td className="px-4 py-3 text-sm text-center"></td>
+                                            <td className="px-4 py-3 text-sm text-center"></td>
+                                            <td className="px-4 py-3 text-sm text-center"></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -387,19 +477,39 @@ export const POSKontrolDashboardPage: React.FC = () => {
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
                                 <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg text-center">
                                     <div className="text-blue-800 font-medium mb-1">Toplam Kayıt</div>
-                                    <div className="text-2xl font-bold text-blue-700">{reportData.summary.total_records}</div>
+                                    <div className="text-2xl font-bold text-blue-700">{filteredReportData?.data?.length || 0}</div>
                                 </div>
                                 <div className="bg-green-50 border border-green-200 p-3 rounded-lg text-center">
                                     <div className="text-green-800 font-medium mb-1">Başarılı Eşleşmeler</div>
-                                    <div className="text-2xl font-bold text-green-700">{reportData.summary.successful_matches}</div>
+                                    <div className="text-2xl font-bold text-green-700">{
+                                        filteredReportData?.data?.filter(item => 
+                                            item.Kontrol_POS === 'OK' || 
+                                            item.Kontrol_Kesinti === 'OK' || 
+                                            item.Kontrol_Net === 'OK'
+                                        ).length || 0
+                                    }</div>
                                 </div>
                                 <div className="bg-red-50 border border-red-200 p-3 rounded-lg text-center">
                                     <div className="text-red-800 font-medium mb-1">Hatalı Eşleşmeler</div>
-                                    <div className="text-2xl font-bold text-red-700">{reportData.summary.error_matches}</div>
+                                    <div className="text-2xl font-bold text-red-700">{
+                                        filteredReportData?.data?.filter(item => 
+                                            item.Kontrol_POS === 'Not OK' || 
+                                            item.Kontrol_Kesinti === 'Not OK' || 
+                                            item.Kontrol_Net === 'Not OK'
+                                        ).length || 0
+                                    }</div>
                                 </div>
                                 <div className="bg-purple-50 border border-purple-200 p-3 rounded-lg text-center">
                                     <div className="text-purple-800 font-medium mb-1">Başarı Oranı</div>
-                                    <div className="text-2xl font-bold text-purple-700">{reportData.summary.success_rate}</div>
+                                    <div className="text-2xl font-bold text-purple-700">{
+                                        filteredReportData?.data?.length ? 
+                                            `${Math.round((filteredReportData.data.filter(item => 
+                                                item.Kontrol_POS === 'OK' || 
+                                                item.Kontrol_Kesinti === 'OK' || 
+                                                item.Kontrol_Net === 'OK'
+                                            ).length / filteredReportData.data.length) * 100)}%` : 
+                                            '0%'
+                                    }</div>
                                 </div>
                             </div>
                         </div>

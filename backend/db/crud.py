@@ -1216,6 +1216,22 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
         pos_hareketleri_records = pos_hareketleri_query.all()
         logger.info(f"Found {len(pos_hareketleri_records)} POS_Hareketleri records")
         
+        # Get Odeme data for the period
+        # We need to get Odeme records that match the date range
+        odeme_query = db.query(
+            models.Odeme.Tarih,
+            func.sum(models.Odeme.Tutar).label('total_tutar')
+        ).filter(
+            and_(
+                models.Odeme.Sube_ID == sube_id,
+                models.Odeme.Tarih >= first_day.date(),
+                models.Odeme.Tarih <= last_day.date()
+            )
+        ).group_by(models.Odeme.Tarih)
+        
+        odeme_records = odeme_query.all()
+        logger.info(f"Found {len(odeme_records)} Odeme records")
+        
         # Create dictionaries for easy lookup
         gelir_dict = {record.Tarih: record.total_tutar for record in gelir_records}
         pos_hareketleri_dict = {
@@ -1225,6 +1241,7 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
                 'net_tutar': record.total_net_tutar or Decimal('0')
             } for record in pos_hareketleri_records
         }
+        odeme_dict = {record.Tarih: record.total_tutar for record in odeme_records}
         
         # Generate list of all dates in the period
         all_dates = []
@@ -1242,12 +1259,13 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
             # Get values for the date
             gelir_pos = gelir_dict.get(date)
             pos_hareketleri_data = pos_hareketleri_dict.get(date)
+            odeme = odeme_dict.get(date)
             
             pos_hareketleri = pos_hareketleri_data['islem_tutari'] if pos_hareketleri_data else None
             pos_kesinti = pos_hareketleri_data['kesinti_tutari'] if pos_hareketleri_data else None
             pos_net = pos_hareketleri_data['net_tutar'] if pos_hareketleri_data else None
             
-            # Compare values with tolerance (0.01)
+            # Compare values with tolerance (0.01) for Kontrol POS
             kontrol_pos = None
             if gelir_pos is not None and pos_hareketleri is not None:
                 if abs(gelir_pos - pos_hareketleri) <= Decimal('0.01'):
@@ -1263,9 +1281,30 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
                 kontrol_pos = "Not OK"  # One is None, the other is not
                 error_matches += 1
             
-            # For now, set other kontrol fields as OK since we're not comparing them
-            kontrol_kesinti = "OK" if pos_kesinti is not None else None
-            kontrol_net = "OK" if pos_net is not None else None
+            # For Kontrol Kesinti: Compare POS Kesinti with Odeme
+            kontrol_kesinti = None
+            if pos_kesinti is not None and odeme is not None:
+                if abs(pos_kesinti - odeme) <= Decimal('0.01'):
+                    kontrol_kesinti = "OK"
+                else:
+                    kontrol_kesinti = "Not OK"
+            elif pos_kesinti is None and odeme is None:
+                kontrol_kesinti = "OK"  # Both are None, considered matching
+            elif pos_kesinti is not None or odeme is not None:
+                kontrol_kesinti = "Not OK"  # One is None, the other is not
+            
+            # For Kontrol Net: Compare POS Net with Odeme
+            # This is a placeholder - we might need to clarify what exactly should be compared
+            kontrol_net = None
+            if pos_net is not None and odeme is not None:
+                if abs(pos_net - odeme) <= Decimal('0.01'):
+                    kontrol_net = "OK"
+                else:
+                    kontrol_net = "Not OK"
+            elif pos_net is None and odeme is None:
+                kontrol_net = "OK"  # Both are None, considered matching
+            elif pos_net is not None or odeme is not None:
+                kontrol_net = "Not OK"  # One is None, the other is not
             
             daily_record = POSKontrolDailyData(
                 Tarih=date.strftime('%Y-%m-%d'),
@@ -1273,9 +1312,9 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
                 POS_Hareketleri=pos_hareketleri,
                 POS_Kesinti=pos_kesinti,
                 POS_Net=pos_net,
-                Odeme=None,  # To be implemented in next step
-                Odeme_Kesinti=None,  # To be implemented in next step
-                Odeme_Net=None,  # To be implemented in next step
+                Odeme=odeme,
+                Odeme_Kesinti=odeme,  # Using Odeme as Odeme_Kesinti for now
+                Odeme_Net=odeme,  # Using Odeme as Odeme_Net for now
                 Kontrol_POS=kontrol_pos,
                 Kontrol_Kesinti=kontrol_kesinti,
                 Kontrol_Net=kontrol_net

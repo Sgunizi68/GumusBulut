@@ -270,6 +270,71 @@ class TestPOSKontrolComparisonLogic(unittest.TestCase):
         self.assertEqual(result.summary.error_matches, 2)  # 2 non-matching
         self.assertEqual(result.summary.success_rate, "94%")  # 29/31 ≈ 94%
 
+    def test_kontrol_kesinti_and_net_comparison_logic(self):
+        # Test the new Kontrol Kesinti and Kontrol Net comparison logic
+        from db.models import Odeme
+        
+        test_date = date(2025, 8, 15)
+        
+        # Create POS_Hareketleri record with specific Kesinti and Net values
+        pos_hareket = POSHareketleri(
+            Islem_Tarihi=test_date,
+            Hesaba_Gecis=test_date,
+            Para_Birimi="TRY",
+            Islem_Tutari=Decimal("1000.00"),
+            Kesinti_Tutari=Decimal("50.00"),  # POS Kesinti
+            Net_Tutar=Decimal("950.00"),      # POS Net
+            Sube_ID=self.sube.Sube_ID,
+            Kayit_Tarihi=datetime.now()
+        )
+        self.db.add(pos_hareket)
+        
+        # Create Odeme record with matching values
+        odeme = Odeme(
+            Tip="POS Kesinti",
+            Hesap_Adi="POS Hesabı",
+            Tarih=test_date,
+            Aciklama="POS Kesinti",
+            Tutar=Decimal("50.00"),  # Same as POS Kesinti
+            Donem=2508,
+            Sube_ID=self.sube.Sube_ID,
+            Kayit_Tarihi=datetime.now()
+        )
+        self.db.add(odeme)
+        self.db.commit()
+
+        # Test the dashboard data
+        result = crud.get_pos_kontrol_dashboard_data(self.db, self.sube.Sube_ID, 2508)  # August 2025
+
+        # Find the record for our test date
+        test_record = None
+        for record in result.data:
+            if record.Tarih == "2025-08-15":
+                test_record = record
+                break
+
+        self.assertIsNotNone(test_record)
+        self.assertEqual(test_record.POS_Kesinti, Decimal("50.00"))
+        self.assertEqual(test_record.Odeme, Decimal("50.00"))
+        self.assertEqual(test_record.Kontrol_Kesinti, "OK")  # Should be OK as they match
+        
+        # Test with non-matching values
+        # Update Odeme record with different value
+        odeme.Tutar = Decimal("45.00")  # Different from POS Kesinti (50.00)
+        self.db.commit()
+        
+        # Test the dashboard data again
+        result = crud.get_pos_kontrol_dashboard_data(self.db, self.sube.Sube_ID, 2508)  # August 2025
+
+        # Find the record for our test date
+        test_record = None
+        for record in result.data:
+            if record.Tarih == "2025-08-15":
+                test_record = record
+                break
+
+        self.assertIsNotNone(test_record)
+        self.assertEqual(test_record.Kontrol_Kesinti, "Not OK")  # Should be Not OK as they don't match
 
 if __name__ == "__main__":
     unittest.main()

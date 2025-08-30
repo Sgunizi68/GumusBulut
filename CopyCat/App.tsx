@@ -1640,16 +1640,11 @@ const AppWithToast: React.FC = () => {
                       <Route path="/b2b-upload" element={<B2BUploadPage />} />
                       <Route path="/b2b-category-assignment" element={<B2BCategoryAssignmentPage />} />
                       <Route path="/odeme-yukleme" element={<OdemeYuklemePage />} />
+                      <Route path="/odeme-kategori-atama" element={<OdemeKategoriAtamaPage />} />
                       
                       <Route path="/other-expenses" element={<DigerHarcamalarPage />} />
                       <Route path="/pos-hareketleri-yukleme" element={<POSHareketleriYuklemePage />} />
                       <Route path="/calisanlar" element={<CalisanPage />} />
-                      <Route path="/puantaj-secim" element={<PuantajSecimPage />} />
-                      <Route path="/puantaj" element={<PuantajPage />} />
-                      <Route path="/avans" element={<AvansPage />} />
-                      <Route path="/gelir" element={<GelirPage />} />
-                      <Route path="/nakit-girisi" element={<NakitPage />} />
-                      <Route path="/odeme-yukleme" element={<OdemeYuklemePage />} />
                       <Route path="/nakit-yatirma-raporu" element={<NakitYatirmaRaporuPage />} />
                       <Route path="/odeme-rapor" element={<OdemeRaporPage />} />
                       <Route path="/fatura-rapor" element={<FaturaRaporuPage />} />
