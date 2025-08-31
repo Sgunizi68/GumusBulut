@@ -1,6 +1,8 @@
 import React from 'react';
 import { Sube, Kullanici, Rol, Yetki, KullaniciRol, RolYetki, Deger, UstKategori, Kategori, EFatura, EFaturaExcelRow, B2BEkstre, B2BEkstreExcelRow, DigerHarcama, HarcamaTipi, Stok, StokFiyat, StokSayim, Calisan, PuantajSecimi, Puantaj, Gelir, GelirEkstra, AvansIstek } from './types';
 
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+
 // Heroicons (Outline)
 // Updated to accept className prop
 export const Icons = {

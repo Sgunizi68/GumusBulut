@@ -1,49 +1,49 @@
 [plugin:vite:esbuild] Transform failed with 5 errors:
-C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:1643:14: ERROR: The character "}" is not valid inside a JSX element
-C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:1644:13: ERROR: The character ">" is not valid inside a JSX element
-C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:1646:10: ERROR: Unexpected closing "HashRouter" tag does not match opening "MainLayout" tag
-C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:1648:8: ERROR: Unexpected closing "DataProvider" tag does not match opening "ProtectedRoute" tag
-C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:1649:26: ERROR: Unterminated regular expression
-C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:1643:14
-The character "}" is not valid inside a JSX element
-1641|                        
-1642|                        <Route path="*" element={<Navigate to="/" />} /> 
-1643|                }
-   |                ^
-1644|              />
-1645|            </Routes>
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:363:9: ERROR: The symbol "yemekCekiList" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:363:24: ERROR: The symbol "setYemekCekiList" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:1413:8: ERROR: The symbol "addYemekCeki" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:1425:8: ERROR: The symbol "updateYemekCeki" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:1439:8: ERROR: The symbol "deleteYemekCeki" has already been declared
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:363:9
+The symbol "yemekCekiList" has already been declared
+361|    const [odemeList, setOdemeList] = useState<Odeme[]>([]);
+362|    const [yemekCekiList, setYemekCekiList] = useState<YemekCeki[]>([]);
+363|    const [yemekCekiList, setYemekCekiList] = useState<YemekCeki[]>([]);
+   |           ^
+364|
+365|    // Initial data fetching for all lists
 
-The character ">" is not valid inside a JSX element
-1642|                        <Route path="*" element={<Navigate to="/" />} /> 
-1643|                }
-1644|              />
-   |               ^
-1645|            </Routes>
-1646|          </HashRouter>
+The symbol "setYemekCekiList" has already been declared
+361|    const [odemeList, setOdemeList] = useState<Odeme[]>([]);
+362|    const [yemekCekiList, setYemekCekiList] = useState<YemekCeki[]>([]);
+363|    const [yemekCekiList, setYemekCekiList] = useState<YemekCeki[]>([]);
+   |                          ^
+364|
+365|    // Initial data fetching for all lists
 
-Unexpected closing "HashRouter" tag does not match opening "MainLayout" tag
-1644|              />
-1645|            </Routes>
-1646|          </HashRouter>
-   |            ^
-1647|          <ToastContainer />
-1648|        </DataProvider>
-
-Unexpected closing "DataProvider" tag does not match opening "ProtectedRoute" tag
-1646|          </HashRouter>
-1647|          <ToastContainer />
-1648|        </DataProvider>
+The symbol "addYemekCeki" has already been declared
+1411|    }, []);
+1412|
+1413|    const addYemekCeki = useCallback(async (yemekCekiData: YemekCekiFormData) => {
    |          ^
-1649|      </AppContext.Provider>
-1650|    );
+1414|      const newYemekCeki = await fetchData<YemekCeki>(`${API_BASE_URL}/yemek-cekiler/`, {
+1415|        method: 'POST',
 
-Unterminated regular expression
-1647|          <ToastContainer />
-1648|        </DataProvider>
-1649|      </AppContext.Provider>
-   |                            ^
-1650|    );
-1651|  };
+The symbol "updateYemekCeki" has already been declared
+1423|    }, []);
+1424|
+1425|    const updateYemekCeki = useCallback(async (yemekCekiId: number, yemekCekiData: YemekCekiFormData) => {
+   |          ^
+1426|      const updatedYemekCeki = await fetchData<YemekCeki>(`${API_BASE_URL}/yemek-cekiler/${yemekCekiId}`, {
+1427|        method: 'PUT',
+
+The symbol "deleteYemekCeki" has already been declared
+1437|    }, []);
+1438|
+1439|    const deleteYemekCeki = useCallback(async (yemekCekiId: number) => {
+   |          ^
+1440|      const result = await fetchData<any>(`${API_BASE_URL}/yemek-cekiler/${yemekCekiId}`, {
+1441|        method: 'DELETE',
     at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
     at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
     at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)

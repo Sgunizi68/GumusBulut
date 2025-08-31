@@ -481,6 +481,11 @@ export interface AppContextType {
 }
 
 export interface DataContextType {
+  yemekCekiList: YemekCeki[];
+  addYemekCeki: (yemekCekiData: YemekCekiFormData) => Promise<{ success: boolean; message?: string }>;
+  updateYemekCeki: (yemekCekiId: number, yemekCekiData: YemekCekiFormData) => Promise<{ success: boolean; message?: string }>;
+  deleteYemekCeki: (yemekCekiId: number) => Promise<{ success: boolean; message?: string }>;
+
   subeList: Sube[];
   addSube: (subeData: Omit<Sube, 'Sube_ID'>) => Promise<{ success: boolean; message?: string }>;
   updateSube: (subeId: number, subeData: Omit<Sube, 'Sube_ID'>) => Promise<{ success: boolean; message?: string }>;
