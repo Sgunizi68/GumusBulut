@@ -1,85 +1,169 @@
-
-(venv) C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend>uvicorn main:app --reload  --env-file "..\.env.local"
-←[32mINFO←[0m:     Will watch for changes in these directories: ['C:\\Users\\Gokova\\OneDrive - CELEBI HAVACILIK HOLDING A.S\\Personel\\Programming\\Python\\backend']
-←[32mINFO←[0m:     Loading environment from '..\.env.local'
-←[32mINFO←[0m:     Uvicorn running on ←[1mhttp://127.0.0.1:8000←[0m (Press CTRL+C to quit)
-←[32mINFO←[0m:     Started reloader process [←[36m←[1m15092←[0m] using ←[36m←[1mWatchFiles←[0m
-C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_config.py:373: UserWarning: Valid config keys have changed in V2:
-* 'orm_mode' has been renamed to 'from_attributes'
-  warnings.warn(message, UserWarning)
-←[32mINFO←[0m:     Started server process [←[36m26232←[0m]
-←[32mINFO←[0m:     Waiting for application startup.
-←[32mINFO←[0m:     Application startup complete.
-←[32mINFO←[0m:     127.0.0.1:53612 - "←[1mPUT /api/v1/yemek-cekiler/1 HTTP/1.1←[0m" ←[91m500 Internal Server Error←[0m
-←[31mERROR←[0m:    Exception in ASGI application
-Traceback (most recent call last):
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\protocols\http\httptools_impl.py", line 409, in run_asgi
-    result = await app(  # type: ignore[func-returns-value]
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        self.scope, self.receive, self.send
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\middleware\proxy_headers.py", line 60, in __call__
-    return await self.app(scope, receive, send)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\fastapi\applications.py", line 1054, in __call__
-    await super().__call__(scope, receive, send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\applications.py", line 112, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\middleware\errors.py", line 187, in __call__
-    raise exc
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\middleware\errors.py", line 165, in __call__
-    await self.app(scope, receive, _send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\middleware\cors.py", line 93, in __call__
-    await self.simple_response(scope, receive, send, request_headers=headers)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\middleware\cors.py", line 144, in simple_response
-    await self.app(scope, receive, send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
-    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
-    raise exc
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
-    await app(scope, receive, sender)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\routing.py", line 714, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\routing.py", line 734, in app
-    await route.handle(scope, receive, send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\routing.py", line 288, in handle
-    await self.app(scope, receive, send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\routing.py", line 76, in app
-    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
-    raise exc
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
-    await app(scope, receive, sender)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\routing.py", line 73, in app
-    response = await f(request)
-               ^^^^^^^^^^^^^^^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\fastapi\routing.py", line 301, in app
-    raw_response = await run_endpoint_function(
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ...<3 lines>...
-    )
-    ^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\fastapi\routing.py", line 214, in run_endpoint_function
-    return await run_in_threadpool(dependant.call, **values)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\starlette\concurrency.py", line 37, in run_in_threadpool
-    return await anyio.to_thread.run_sync(func)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\anyio\to_thread.py", line 56, in run_sync
-    return await get_async_backend().run_sync_in_worker_thread(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2470, in run_sync_in_worker_thread
-    return await future
-           ^^^^^^^^^^^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 967, in run
-    result = context.run(func, *args)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\api\v1\endpoints\yemek_ceki.py", line 32, in update_yemek_ceki
-    db_yemek_ceki = crud.update_yemek_ceki(db=db, yemek_ceki_id=yemek_ceki_id, yemek_ceki=yemek_ceki_data)
-TypeError: update_yemek_ceki() got an unexpected keyword argument 'yemek_ceki'. Did you mean 'yemek_ceki_id'?
+react-dom_client.js?v=e3641bb1:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+App.tsx:427 DataProvider - nakitList after setting: (23) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+App.tsx:428 DataProvider - odemeList after setting: (814) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+App.tsx:427 DataProvider - nakitList after setting: (23) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+App.tsx:428 DataProvider - odemeList after setting: (814) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+pages.tsx:2557 e-Fatura dosyası işlenirken hata: ReferenceError: setIsLoading is not defined
+    at handleUpload (pages.tsx:2455:7)
+    at executeDispatch (react-dom_client.js?v=e3641bb1:11736:11)
+    at runWithFiberInDEV (react-dom_client.js?v=e3641bb1:1485:72)
+    at processDispatchQueue (react-dom_client.js?v=e3641bb1:11772:37)
+    at react-dom_client.js?v=e3641bb1:12182:11
+    at batchedUpdates$1 (react-dom_client.js?v=e3641bb1:2628:42)
+    at dispatchEventForPluginEventSystem (react-dom_client.js?v=e3641bb1:11877:9)
+    at dispatchEvent (react-dom_client.js?v=e3641bb1:14792:13)
+    at dispatchDiscreteEvent (react-dom_client.js?v=e3641bb1:14773:62)
+handleUpload @ pages.tsx:2557
+executeDispatch @ react-dom_client.js?v=e3641bb1:11736
+runWithFiberInDEV @ react-dom_client.js?v=e3641bb1:1485
+processDispatchQueue @ react-dom_client.js?v=e3641bb1:11772
+(anonymous) @ react-dom_client.js?v=e3641bb1:12182
+batchedUpdates$1 @ react-dom_client.js?v=e3641bb1:2628
+dispatchEventForPluginEventSystem @ react-dom_client.js?v=e3641bb1:11877
+dispatchEvent @ react-dom_client.js?v=e3641bb1:14792
+dispatchDiscreteEvent @ react-dom_client.js?v=e3641bb1:14773
+<button>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=e3641bb1:250
+Button @ components.tsx:78
+react-stack-bottom-frame @ react-dom_client.js?v=e3641bb1:17424
+renderWithHooksAgain @ react-dom_client.js?v=e3641bb1:4281
+renderWithHooks @ react-dom_client.js?v=e3641bb1:4217
+updateFunctionComponent @ react-dom_client.js?v=e3641bb1:6619
+beginWork @ react-dom_client.js?v=e3641bb1:7654
+runWithFiberInDEV @ react-dom_client.js?v=e3641bb1:1485
+performUnitOfWork @ react-dom_client.js?v=e3641bb1:10874
+workLoopSync @ react-dom_client.js?v=e3641bb1:10728
+renderRootSync @ react-dom_client.js?v=e3641bb1:10711
+performWorkOnRoot @ react-dom_client.js?v=e3641bb1:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e3641bb1:11623
+performWorkUntilDeadline @ react-dom_client.js?v=e3641bb1:36
+<Button>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=e3641bb1:250
+InvoiceUploadPage @ pages.tsx:2590
+react-stack-bottom-frame @ react-dom_client.js?v=e3641bb1:17424
+renderWithHooksAgain @ react-dom_client.js?v=e3641bb1:4281
+renderWithHooks @ react-dom_client.js?v=e3641bb1:4217
+updateFunctionComponent @ react-dom_client.js?v=e3641bb1:6619
+beginWork @ react-dom_client.js?v=e3641bb1:7654
+runWithFiberInDEV @ react-dom_client.js?v=e3641bb1:1485
+performUnitOfWork @ react-dom_client.js?v=e3641bb1:10874
+workLoopSync @ react-dom_client.js?v=e3641bb1:10728
+renderRootSync @ react-dom_client.js?v=e3641bb1:10711
+performWorkOnRoot @ react-dom_client.js?v=e3641bb1:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e3641bb1:11623
+performWorkUntilDeadline @ react-dom_client.js?v=e3641bb1:36
+<InvoiceUploadPage>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=e3641bb1:250
+AppWithToast @ App.tsx:1698
+react-stack-bottom-frame @ react-dom_client.js?v=e3641bb1:17424
+renderWithHooksAgain @ react-dom_client.js?v=e3641bb1:4281
+renderWithHooks @ react-dom_client.js?v=e3641bb1:4217
+updateFunctionComponent @ react-dom_client.js?v=e3641bb1:6619
+beginWork @ react-dom_client.js?v=e3641bb1:7654
+runWithFiberInDEV @ react-dom_client.js?v=e3641bb1:1485
+performUnitOfWork @ react-dom_client.js?v=e3641bb1:10874
+workLoopSync @ react-dom_client.js?v=e3641bb1:10728
+renderRootSync @ react-dom_client.js?v=e3641bb1:10711
+performWorkOnRoot @ react-dom_client.js?v=e3641bb1:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e3641bb1:11623
+performWorkUntilDeadline @ react-dom_client.js?v=e3641bb1:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=e3641bb1:250
+App @ App.tsx:1741
+react-stack-bottom-frame @ react-dom_client.js?v=e3641bb1:17424
+renderWithHooksAgain @ react-dom_client.js?v=e3641bb1:4281
+renderWithHooks @ react-dom_client.js?v=e3641bb1:4217
+updateFunctionComponent @ react-dom_client.js?v=e3641bb1:6619
+beginWork @ react-dom_client.js?v=e3641bb1:7654
+runWithFiberInDEV @ react-dom_client.js?v=e3641bb1:1485
+performUnitOfWork @ react-dom_client.js?v=e3641bb1:10874
+workLoopSync @ react-dom_client.js?v=e3641bb1:10728
+renderRootSync @ react-dom_client.js?v=e3641bb1:10711
+performWorkOnRoot @ react-dom_client.js?v=e3641bb1:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e3641bb1:11623
+performWorkUntilDeadline @ react-dom_client.js?v=e3641bb1:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=e3641bb1:250
+(anonymous) @ index.tsx:14
+pages.tsx:2563 Uncaught (in promise) ReferenceError: setIsLoading is not defined
+    at handleUpload (pages.tsx:2563:7)
+    at executeDispatch (react-dom_client.js?v=e3641bb1:11736:11)
+    at runWithFiberInDEV (react-dom_client.js?v=e3641bb1:1485:72)
+    at processDispatchQueue (react-dom_client.js?v=e3641bb1:11772:37)
+    at react-dom_client.js?v=e3641bb1:12182:11
+    at batchedUpdates$1 (react-dom_client.js?v=e3641bb1:2628:42)
+    at dispatchEventForPluginEventSystem (react-dom_client.js?v=e3641bb1:11877:9)
+    at dispatchEvent (react-dom_client.js?v=e3641bb1:14792:13)
+    at dispatchDiscreteEvent (react-dom_client.js?v=e3641bb1:14773:62)
+handleUpload @ pages.tsx:2563
+executeDispatch @ react-dom_client.js?v=e3641bb1:11736
+runWithFiberInDEV @ react-dom_client.js?v=e3641bb1:1485
+processDispatchQueue @ react-dom_client.js?v=e3641bb1:11772
+(anonymous) @ react-dom_client.js?v=e3641bb1:12182
+batchedUpdates$1 @ react-dom_client.js?v=e3641bb1:2628
+dispatchEventForPluginEventSystem @ react-dom_client.js?v=e3641bb1:11877
+dispatchEvent @ react-dom_client.js?v=e3641bb1:14792
+dispatchDiscreteEvent @ react-dom_client.js?v=e3641bb1:14773
+<button>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=e3641bb1:250
+Button @ components.tsx:78
+react-stack-bottom-frame @ react-dom_client.js?v=e3641bb1:17424
+renderWithHooksAgain @ react-dom_client.js?v=e3641bb1:4281
+renderWithHooks @ react-dom_client.js?v=e3641bb1:4217
+updateFunctionComponent @ react-dom_client.js?v=e3641bb1:6619
+beginWork @ react-dom_client.js?v=e3641bb1:7654
+runWithFiberInDEV @ react-dom_client.js?v=e3641bb1:1485
+performUnitOfWork @ react-dom_client.js?v=e3641bb1:10874
+workLoopSync @ react-dom_client.js?v=e3641bb1:10728
+renderRootSync @ react-dom_client.js?v=e3641bb1:10711
+performWorkOnRoot @ react-dom_client.js?v=e3641bb1:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e3641bb1:11623
+performWorkUntilDeadline @ react-dom_client.js?v=e3641bb1:36
+<Button>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=e3641bb1:250
+InvoiceUploadPage @ pages.tsx:2590
+react-stack-bottom-frame @ react-dom_client.js?v=e3641bb1:17424
+renderWithHooksAgain @ react-dom_client.js?v=e3641bb1:4281
+renderWithHooks @ react-dom_client.js?v=e3641bb1:4217
+updateFunctionComponent @ react-dom_client.js?v=e3641bb1:6619
+beginWork @ react-dom_client.js?v=e3641bb1:7654
+runWithFiberInDEV @ react-dom_client.js?v=e3641bb1:1485
+performUnitOfWork @ react-dom_client.js?v=e3641bb1:10874
+workLoopSync @ react-dom_client.js?v=e3641bb1:10728
+renderRootSync @ react-dom_client.js?v=e3641bb1:10711
+performWorkOnRoot @ react-dom_client.js?v=e3641bb1:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e3641bb1:11623
+performWorkUntilDeadline @ react-dom_client.js?v=e3641bb1:36
+<InvoiceUploadPage>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=e3641bb1:250
+AppWithToast @ App.tsx:1698
+react-stack-bottom-frame @ react-dom_client.js?v=e3641bb1:17424
+renderWithHooksAgain @ react-dom_client.js?v=e3641bb1:4281
+renderWithHooks @ react-dom_client.js?v=e3641bb1:4217
+updateFunctionComponent @ react-dom_client.js?v=e3641bb1:6619
+beginWork @ react-dom_client.js?v=e3641bb1:7654
+runWithFiberInDEV @ react-dom_client.js?v=e3641bb1:1485
+performUnitOfWork @ react-dom_client.js?v=e3641bb1:10874
+workLoopSync @ react-dom_client.js?v=e3641bb1:10728
+renderRootSync @ react-dom_client.js?v=e3641bb1:10711
+performWorkOnRoot @ react-dom_client.js?v=e3641bb1:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e3641bb1:11623
+performWorkUntilDeadline @ react-dom_client.js?v=e3641bb1:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=e3641bb1:250
+App @ App.tsx:1741
+react-stack-bottom-frame @ react-dom_client.js?v=e3641bb1:17424
+renderWithHooksAgain @ react-dom_client.js?v=e3641bb1:4281
+renderWithHooks @ react-dom_client.js?v=e3641bb1:4217
+updateFunctionComponent @ react-dom_client.js?v=e3641bb1:6619
+beginWork @ react-dom_client.js?v=e3641bb1:7654
+runWithFiberInDEV @ react-dom_client.js?v=e3641bb1:1485
+performUnitOfWork @ react-dom_client.js?v=e3641bb1:10874
+workLoopSync @ react-dom_client.js?v=e3641bb1:10728
+renderRootSync @ react-dom_client.js?v=e3641bb1:10711
+performWorkOnRoot @ react-dom_client.js?v=e3641bb1:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e3641bb1:11623
+performWorkUntilDeadline @ react-dom_client.js?v=e3641bb1:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=e3641bb1:250
+(anonymous) @ index.tsx:14

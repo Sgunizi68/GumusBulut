@@ -997,11 +997,19 @@ def get_yemek_ceki(db: Session, yemek_ceki_id: int):
     return yemek_ceki
 
 def get_yemek_cekiler(db: Session, skip: int = 0, limit: int = 100):
-    yemek_cekiler = db.query(models.YemekCeki).offset(skip).limit(limit).all()
-    for yc in yemek_cekiler:
-        if yc.Imaj is not None:
-            yc.Imaj = base64.b64encode(yc.Imaj).decode('utf-8')
-    return yemek_cekiler
+    results = db.query(
+        models.YemekCeki.ID,
+        models.YemekCeki.Kategori_ID,
+        models.YemekCeki.Tarih,
+        models.YemekCeki.Tutar,
+        models.YemekCeki.Odeme_Tarih,
+        models.YemekCeki.Ilk_Tarih,
+        models.YemekCeki.Son_Tarih,
+        models.YemekCeki.Sube_ID,
+        models.YemekCeki.Imaj_Adi,
+        (models.YemekCeki.Imaj != None).label('has_imaj')
+    ).offset(skip).limit(limit).all()
+    return results
 
 async def create_yemek_ceki(db: Session, yemek_ceki_data: yemek_ceki.YemekCekiCreate):
     yemek_ceki_dict = yemek_ceki_data.dict(exclude_unset=True)

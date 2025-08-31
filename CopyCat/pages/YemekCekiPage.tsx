@@ -5,6 +5,21 @@ import { Card, Button, Input, Select, TableLayout, Modal } from '../components';
 import { Icons } from '../constants';
 import { YemekCeki, YemekCekiFormData } from '../types';
 
+const getMimeType = (imageName?: string | null): string => {
+    if (!imageName) return 'image/jpeg'; // Default
+    const extension = imageName.split('.').pop()?.toLowerCase();
+    switch (extension) {
+        case 'png': return 'image/png';
+        case 'gif': return 'image/gif';
+        case 'svg': return 'image/svg+xml';
+        case 'webp': return 'image/webp';
+        case 'jpg':
+        case 'jpeg':
+        default:
+            return 'image/jpeg';
+    }
+};
+
 const YemekCekiPage: React.FC = () => {
   const { selectedBranch, currentPeriod } = useAppContext();
   const {
@@ -14,6 +29,10 @@ const YemekCekiPage: React.FC = () => {
     updateYemekCeki,
     deleteYemekCeki,
   } = useDataContext();
+
+  useEffect(() => {
+    console.log("YemekCekiList updated in component:", yemekCekiList);
+  }, [yemekCekiList]);
   const { showSuccess, showError } = useToast();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -130,6 +149,7 @@ const YemekCekiPage: React.FC = () => {
     setIsSubmitting(true);
 
     const data = new FormData();
+    // Append all fields from formData to the FormData object
     Object.keys(formData).forEach(key => {
         const value = formData[key as keyof typeof formData];
         if (key === 'Imaj' && value instanceof File) {
@@ -198,7 +218,8 @@ const YemekCekiPage: React.FC = () => {
       Imaj: null, // Will not re-upload file, just show existing
       Imaj_Adi: yemekCeki.Imaj_Adi,
     });
-    setImagePreview(yemekCeki.Imaj ? `data:image/jpeg;base64,${yemekCeki.Imaj}` : null);
+    const mimeType = getMimeType(yemekCeki.Imaj_Adi);
+    setImagePreview(yemekCeki.Imaj ? `data:${mimeType};base64,${yemekCeki.Imaj}` : null);
     setIsModalOpen(true);
   };
 
@@ -252,6 +273,7 @@ const YemekCekiPage: React.FC = () => {
         >
           {filteredYemekCekiList.map(y => {
             const kategoriAdi = kategoriList.find(k => k.Kategori_ID === y.Kategori_ID)?.Kategori_Adi || 'N/A';
+            const mimeType = getMimeType(y.Imaj_Adi);
             return (
               <tr key={y.ID}>
                 <td className="px-4 py-2 text-sm text-gray-900">{kategoriAdi}</td>
@@ -264,7 +286,7 @@ const YemekCekiPage: React.FC = () => {
                 <td className="px-4 py-2 text-sm text-gray-500">{y.Son_Tarih}</td>
                 <td className="px-4 py-2 text-sm text-gray-500">
                     {y.Imaj && (
-                        <a href={`data:image/jpeg;base64,${y.Imaj}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+                        <a href={`data:${mimeType};base64,${y.Imaj}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
                             Görüntüle
                         </a>
                     )}

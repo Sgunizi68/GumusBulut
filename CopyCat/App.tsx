@@ -493,16 +493,32 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const addEFaturas = useCallback(async (newFaturas: EFatura[]) => {
+    try {
+      const response = await fetchData<{ 
+        message: string; 
+        added: number; 
+        skipped: number; 
+        errors: number; 
+        added_invoices: EFatura[] 
+      }>(`${API_BASE_URL}/e-faturalar/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newFaturas),
+      });
 
-    if (response && response.added_invoices) {
-      setEFaturaList(prevList => [...prevList, ...response.added_invoices]);
-      return { 
-        successfullyAdded: response.added, 
-        skippedRecords: response.skipped, 
-        errorRecords: response.errors 
-      };
+      if (response && response.added_invoices) {
+        setEFaturaList(prevList => [...prevList, ...response.added_invoices]);
+        return { 
+          successfullyAdded: response.added, 
+          skippedRecords: response.skipped, 
+          errorRecords: response.errors 
+        };
+      }
+      return { successfullyAdded: 0, skippedRecords: newFaturas.length, errorRecords: 0 };
+    } catch (error) {
+      console.error("Error in addEFaturas:", error);
+      return { successfullyAdded: 0, skippedRecords: 0, errorRecords: newFaturas.length };
     }
-    return { successfullyAdded: 0, skippedRecords: newFaturas.length, errorRecords: 0 };
   }, []);
 
   const updateEFatura = useCallback(async (faturaId: number, data: Partial<EFatura>) => {

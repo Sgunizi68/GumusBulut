@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, Response
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import date
+import mimetypes
 
 from db import crud, database, models
 from schemas import yemek_ceki
@@ -37,7 +38,7 @@ async def create_yemek_ceki(
     
     return await crud.create_yemek_ceki(db=db, yemek_ceki_data=yemek_ceki_data)
 
-@router.get("/yemek-cekiler/", response_model=List[yemek_ceki.YemekCekiInDB])
+@router.get("/yemek-cekiler/", response_model=List[yemek_ceki.YemekCekiList])
 def read_yemek_cekiler(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
     yemek_cekiler = crud.get_yemek_cekiler(db, skip=skip, limit=limit)
     return yemek_cekiler
@@ -48,6 +49,21 @@ def read_yemek_ceki(yemek_ceki_id: int, db: Session = Depends(database.get_db)):
     if db_yemek_ceki is None:
         raise HTTPException(status_code=404, detail="Yemek Çeki not found")
     return db_yemek_ceki
+
+@router.get("/yemek-cekiler/{yemek_ceki_id}/image")
+def get_yemek_ceki_image(yemek_ceki_id: int, db: Session = Depends(database.get_db)):
+    # We query the raw model to get the bytes
+    db_yemek_ceki_raw = db.query(models.YemekCeki).filter(models.YemekCeki.ID == yemek_ceki_id).first()
+    
+    if db_yemek_ceki_raw is None or db_yemek_ceki_raw.Imaj is None:
+        raise HTTPException(status_code=404, detail="Image not found")
+
+    media_type, _ = mimetypes.guess_type(db_yemek_ceki_raw.Imaj_Adi)
+    if media_type is None:
+        media_type = "application/octet-stream"
+
+    return Response(content=db_yemek_ceki_raw.Imaj, media_type=media_type)
+
 
 @router.put("/yemek-cekiler/{yemek_ceki_id}", response_model=yemek_ceki.YemekCekiInDB)
 async def update_yemek_ceki(

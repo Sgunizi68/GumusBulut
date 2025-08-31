@@ -2421,10 +2421,11 @@ export const KategorilerPage: React.FC = () => {
 
 // --- E-FATURA YUKLEME PAGE ---
 export const InvoiceUploadPage: React.FC = () => {
-  const { selectedBranch, hasPermission } = useAppContext();
+  const { selectedBranch, hasPermission, currentPeriod } = useAppContext();
   const { addEFaturas, eFaturaReferansList } = useDataContext();
   const [file, setFile] = useState<File | null>(null);
-  const [feedback, setFeedback] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
+  const [feedback, setFeedback] = useState<{ message: string, type: 'success' | 'error' | 'warning' } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   if (!hasPermission(FATURA_YUKLEME_EKRANI_YETKI_ADI)) {
@@ -2446,78 +2447,103 @@ export const InvoiceUploadPage: React.FC = () => {
   };
 
   const handleUpload = async () => {
-    if (!file || !selectedBranch) {
-      setFeedback({ message: "Lütfen bir dosya seçin ve şubenin seçili olduğundan emin olun.", type: 'error' });
+    if (!file) {
+      setFeedback({ message: "Lütfen bir dosya seçin.", type: 'error' });
       return;
     }
 
-    setFeedback({ message: `"${file.name}" dosyası yükleniyor ve işleniyor...`, type: 'success' });
-
     try {
-      const data = await file.arrayBuffer();
-      const workbook = XLSX.read(data, { type: 'array', cellDates: true });
-      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet);
+      setIsLoading(true);
+      setFeedback(null);
 
+      const arrayBuffer = await file.arrayBuffer();
+      const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+      const firstSheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[firstSheetName];
+      
+      const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
       console.log("Raw JSON data from Excel:", jsonData);
 
-      if (!Array.isArray(jsonData) || jsonData.length === 0) {
-        setFeedback({ message: "Excel dosyasında işlenecek veri bulunamadı veya dosya formatı hatalı.", type: 'error' });
+      if (jsonData.length === 0) {
+        setFeedback({ message: "Excel dosyası boş veya okunamadı.", type: 'error' });
         return;
       }
 
+      const requiredColumns = ["Fatura Tarihi", "Fatura Numarası", "Tutar"];
+      // Special handling for "Alıcı Ünvanı" or "Alıcı Adı"
+      const hasAliciUnvani = Object.keys(jsonData[0]).some(key => key.includes("Alıcı Ünvanı"));
+      const hasAliciAdi = Object.keys(jsonData[0]).some(key => key.includes("Alıcı Adı"));
+      const missingColumns = requiredColumns.filter(col => 
+        !Object.keys(jsonData[0]).some(key => key.includes(col))
+      );
+
+      // Add "Alıcı Ünvanı veya Alıcı Adı" to missing columns if neither is found
+      if (!hasAliciUnvani && !hasAliciAdi) {
+        missingColumns.push("Alıcı Ünvanı veya Alıcı Adı");
+      }
+
+      if (missingColumns.length > 0) {
+        setFeedback({ 
+          message: `Gerekli sütunlar eksik: ${missingColumns.join(', ')}. Lütfen şablonu kullanın.`, 
+          type: 'error' 
+        });
+        return;
+      }
+
+      const period = currentPeriod || DEFAULT_PERIOD;
       const newInvoices: EFatura[] = jsonData
         .map((row, index) => {
           try {
-            const dateValue = row["Fatura Tarihi"];
-            let dateStr: string;
+            // Find the actual column names (they might have extra characters)
+            const dateKey = Object.keys(row).find(key => key.includes("Fatura Tarihi")) || "Fatura Tarihi";
+            const numberKey = Object.keys(row).find(key => key.includes("Fatura Numarası")) || "Fatura Numarası";
+            // Look for either "Alıcı Ünvanı" or "Alıcı Adı"
+            const aliciUnvaniKey = Object.keys(row).find(key => key.includes("Alıcı Ünvanı") || key.includes("Alıcı Adı")) || "Alıcı Ünvanı";
+            const tutarKey = Object.keys(row).find(key => key.includes("Tutar")) || "Tutar";
 
-            if (dateValue instanceof Date) {
-              dateStr = dateValue.toISOString().split('T')[0]; // YYYY-MM-DD
-            } else if (typeof dateValue === 'string') {
-              dateStr = parseDateString(dateValue); // Handles DD.MM.YYYY
-               if (!dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) { // Validate format
-                 throw new Error(`Geçersiz tarih formatı. Beklenen GG.AA.YYYY`);
-               }
-            } else if (typeof dateValue === 'number') {
-              // Handle Excel serial date number
-              const excelDate = new Date(Math.round((dateValue - 25569) * 86400 * 1000));
-              dateStr = excelDate.toISOString().split('T')[0];
-            } else {
-              throw new Error(`Geçersiz tarih formatı.`);
+            const dateStr = parseDateString(row[dateKey]);
+            if (!dateStr) {
+              throw new Error(`Geçersiz tarih formatı: ${row[dateKey]}`);
             }
-            
-            const period = calculatePeriod(dateStr);
-            const aliciUnvani = String(row["Alıcı Adı"] || '');
-            const matchingReferans = eFaturaReferansList.find(ref => ref.Alici_Unvani === aliciUnvani);
-            
-            // Process Durum field for Giden_Fatura
-            const durumValue = String(row["Durum"] || '');
-            const gidenFatura = durumValue.toLowerCase().trim() === 'gönderildi';
+
+            const faturaNumarasi = String(row[numberKey] || "").trim();
+            if (!faturaNumarasi) {
+              throw new Error("Fatura numarası boş olamaz");
+            }
+
+            const aliciUnvani = String(row[aliciUnvaniKey] || "").trim();
+            if (!aliciUnvani) {
+              throw new Error("Alıcı ünvanı boş olamaz");
+            }
+
+            // Try to find a matching referans
+            const matchingReferans = eFaturaReferansList.find(
+              ref => ref.Fatura_Numarasi_Prefix && 
+                     faturaNumarasi.startsWith(ref.Fatura_Numarasi_Prefix) && 
+                     ref.Sube_ID === selectedBranch?.Sube_ID
+            );
 
             return {
-              Sube_ID: selectedBranch.Sube_ID,
-              Fatura_Numarasi: String(row["Fatura Numarası"] || ''),
+              Sube_ID: selectedBranch?.Sube_ID || 0,
+              Fatura_Numarasi: faturaNumarasi,
               Alici_Unvani: aliciUnvani,
               Fatura_Tarihi: dateStr,
-              Tutar: parseCurrencyValue(row["Tutar"]),
+              Tutar: parseCurrencyValue(row[tutarKey]),
               Donem: period,
               Ozel: false,
               Gunluk_Harcama: false,
-              Giden_Fatura: gidenFatura,
+              Giden_Fatura: false, // Default to incoming invoice
               Kategori_ID: matchingReferans ? matchingReferans.Kategori_ID : null, // Assign Kategori_ID if match found
             };
           } catch (e: any) {
             console.error(`Satır ${index + 2} işlenirken hata:`, row, e);
-            setFeedback({ message: `Hata (Satır ${index + 2}): ${e.message}`, type: 'error' });
-            return null;
+            throw new Error(`Satır ${index + 2}: ${e.message}`);
           }
-        })
-        .filter((invoice): invoice is EFatura => invoice !== null);
+        });
 
       if (newInvoices.length === 0) {
-          setFeedback({ message: "İşlenecek fatura bulunamadı. Lütfen dosya içeriğini kontrol edin.", type: 'error' });
-          return;
+        setFeedback({ message: "İşlenecek fatura bulunamadı. Lütfen dosya içeriğini kontrol edin.", type: 'error' });
+        return;
       }
 
       const result = await addEFaturas(newInvoices);
@@ -2526,17 +2552,25 @@ export const InvoiceUploadPage: React.FC = () => {
       if (result.skippedRecords > 0) {
         feedbackMessage += ` ${result.skippedRecords} fatura zaten mevcut olduğu veya fatura numarası boş olduğu için atlandı.`;
       }
-       if (result.errorRecords > 0) {
+      if (result.errorRecords > 0) {
         feedbackMessage += ` ${result.errorRecords} faturada hata oluştu.`;
       }
 
-      setFeedback({ message: feedbackMessage, type: 'success' });
+      setFeedback({ 
+        message: feedbackMessage, 
+        type: result.errorRecords > 0 || result.skippedRecords > 0 ? 'warning' : 'success' 
+      });
       setFile(null);
       if(fileInputRef.current) fileInputRef.current.value = "";
 
-    } catch (error) {
+    } catch (error: any) {
       console.error("e-Fatura dosyası işlenirken hata:", error);
-      setFeedback({ message: "Dosya işlenirken bir hata oluştu. Detaylar için konsolu kontrol edin.", type: 'error' });
+      setFeedback({ 
+        message: `Dosya işlenirken bir hata oluştu: ${error.message || "Bilinmeyen hata"}`, 
+        type: 'error' 
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -2562,16 +2596,25 @@ export const InvoiceUploadPage: React.FC = () => {
               accept=".xlsx, .xls"
               onChange={handleFileChange} 
               className="flex-grow"
+              disabled={isLoading}
             />
-            <Button onClick={handleUpload} disabled={!file} variant="primary">
-              <Icons.Upload className="mr-2 w-4 h-4" /> Yükle
+            <Button onClick={handleUpload} disabled={!file || isLoading} variant="primary">
+              {isLoading ? (
+                <>
+                  <Icons.Loading className="mr-2 w-4 h-4" /> İşleniyor...
+                </>
+              ) : (
+                <>
+                  <Icons.Upload className="mr-2 w-4 h-4" /> Yükle
+                </>
+              )}
             </Button>
           </div>
           {file && <p className="text-sm text-gray-500 mt-1">Seçilen dosya: {file.name}</p>}
         </div>
 
         {feedback && (
-          <div className={`p-3 rounded-md text-sm ${feedback.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+          <div className={`p-3 rounded-md text-sm ${feedback.type === 'success' ? 'bg-green-50 text-green-700' : feedback.type === 'warning' ? 'bg-yellow-50 text-yellow-700' : 'bg-red-50 text-red-700'}`}>
             {feedback.message}
           </div>
         )}
@@ -5595,31 +5638,33 @@ export const OdemeYuklemePage: React.FC = () => {
               type="file" 
               id="odeme-file-upload"
               ref={fileInputRef}
-              accept=".csv"
+              accept=".xlsx, .xls"
               onChange={handleFileChange} 
               className="flex-grow"
+              disabled={isLoading}
             />
-            <Button onClick={handleUpload} disabled={!file} variant="primary">
-              <Icons.Upload className="mr-2 w-4 h-4" /> Yükle
+            <Button onClick={handleUpload} disabled={!file || isLoading} variant="primary">
+              {isLoading ? (
+                <>
+                  <Icons.Loading className="mr-2 w-4 h-4 animate-spin" /> İşleniyor...
+                </>
+              ) : (
+                <>
+                  <Icons.Upload className="mr-2 w-4 h-4" /> Yükle
+                </>
+              )}
             </Button>
           </div>
           {file && <p className="text-sm text-gray-500 mt-1">Seçilen dosya: {file.name}</p>}
         </div>
 
         {feedback && (
-          <div className={`p-3 rounded-md text-sm ${feedback.type === 'success' ? 'bg-green-50 text-green-700' : feedback.type === 'info' ? 'bg-blue-50 text-blue-700' : 'bg-red-50 text-red-700'}`}>
+          <div className={`p-3 rounded-md text-sm ${feedback.type === 'success' ? 'bg-green-50 text-green-700' : feedback.type === 'warning' ? 'bg-yellow-50 text-yellow-700' : 'bg-red-50 text-red-700'}`}>
             {feedback.message}
           </div>
         )}
 
-        <div>
-          <Button onClick={handleDownloadTemplate} variant="secondary" size="sm" leftIcon={<Icons.Download className="w-4 h-4" />}>
-            Örnek Şablon İndir
-          </Button>
-           <p className="text-xs text-gray-500 mt-1">
-             Yüklenecek CSV dosyasının sütunları: "Tip", "Hesap_Adi", "Tarih" (GG/AA/YYYY), "Açıklama", "Tutar".
-          </p>
-        </div>
+        
       </div>
     </Card>
   );

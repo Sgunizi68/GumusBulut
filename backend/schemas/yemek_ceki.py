@@ -33,3 +33,10 @@ class YemekCekiInDB(YemekCekiBase):
 
     class Config:
         from_attributes = True
+
+class YemekCekiList(YemekCekiBase):
+    ID: int
+    has_imaj: bool
+
+    class Config:
+        from_attributes = True
