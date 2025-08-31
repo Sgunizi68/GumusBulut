@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from db import models
-from schemas import sube, user, role, permission, kullanici_rol, rol_yetki, e_fatura, b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, stok_fiyat, stok_sayim, calisan, puantaj_secimi, puantaj, avans_istek, ust_kategori, kategori, deger, e_fatura_referans, nakit, odeme, odeme_referans, pos_hareketleri
+from schemas import sube, user, role, permission, kullanici_rol, rol_yetki, e_fatura, b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, stok_fiyat, stok_sayim, calisan, puantaj_secimi, puantaj, avans_istek, ust_kategori, kategori, deger, e_fatura_referans, nakit, odeme, odeme_referans, pos_hareketleri, yemek_ceki
 from core.security import verify_password, get_password_hash
 
 def authenticate_user(db: Session, username: str, password: str):
@@ -988,6 +988,37 @@ def delete_nakit(db: Session, nakit_id: int):
         db.delete(db_nakit)
         db.commit()
     return db_nakit
+
+# --- YemekCeki CRUD ---
+def get_yemek_ceki(db: Session, yemek_ceki_id: int):
+    return db.query(models.YemekCeki).filter(models.YemekCeki.ID == yemek_ceki_id).first()
+
+def get_yemek_cekiler(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.YemekCeki).offset(skip).limit(limit).all()
+
+def create_yemek_ceki(db: Session, yemek_ceki_data: yemek_ceki.YemekCekiCreate):
+    db_yemek_ceki = models.YemekCeki(**yemek_ceki_data.dict())
+    db.add(db_yemek_ceki)
+    db.commit()
+    db.refresh(db_yemek_ceki)
+    return db_yemek_ceki
+
+def update_yemek_ceki(db: Session, yemek_ceki_id: int, yemek_ceki_data: yemek_ceki.YemekCekiUpdate):
+    db_yemek_ceki = db.query(models.YemekCeki).filter(models.YemekCeki.ID == yemek_ceki_id).first()
+    if db_yemek_ceki:
+        update_data = yemek_ceki_data.dict(exclude_unset=True)
+        for key, value in update_data.items():
+            setattr(db_yemek_ceki, key, value)
+        db.commit()
+        db.refresh(db_yemek_ceki)
+    return db_yemek_ceki
+
+def delete_yemek_ceki(db: Session, yemek_ceki_id: int):
+    db_yemek_ceki = db.query(models.YemekCeki).filter(models.YemekCeki.ID == yemek_ceki_id).first()
+    if db_yemek_ceki:
+        db.delete(db_yemek_ceki)
+        db.commit()
+    return db_yemek_ceki
 
 # --- Odeme CRUD ---
 def get_odeme(db: Session, odeme_id: int):

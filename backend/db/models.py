@@ -375,3 +375,19 @@ class POSHareketleri(Base):
     Sube_ID = Column(Integer, ForeignKey("Sube.Sube_ID"), nullable=True)
 
     sube = relationship("Sube", back_populates="pos_hareketleri")
+
+class YemekCeki(Base):
+    __tablename__ = "Yemek_Ceki"
+
+    ID = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    Kategori_ID = Column(Integer, ForeignKey("Kategori.Kategori_ID"), nullable=False)
+    Tarih = Column(Date, nullable=False)
+    Tutar = Column(DECIMAL(15, 2), nullable=False)
+    Odeme_Tarih = Column(Date, nullable=False)
+    Ilk_Tarih = Column(Date, nullable=False)
+    Son_Tarih = Column(Date, nullable=False)
+    Sube_ID = Column(Integer, ForeignKey("Sube.Sube_ID"), nullable=False, default=1)
+    Kayit_Tarihi = Column(DateTime, default=func.now())
+
+    kategori = relationship("Kategori")
+    sube = relationship("Sube")

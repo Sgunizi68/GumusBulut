@@ -594,3 +594,18 @@ export enum PermissionOperation {
   DOSYA_YUKLEME = "D",
   RAPOR = "R",
 }
+
+export interface YemekCeki {
+  ID: number;
+  Kategori_ID: number;
+  Tarih: string; // DATE
+  Tutar: number; // DECIMAL(15,2)
+  Odeme_Tarih: string; // DATE
+  Ilk_Tarih: string; // DATE
+  Son_Tarih: string; // DATE
+  Sube_ID: number;
+  Kayit_Tarihi?: string; // TIMESTAMP
+}
+
+// YemekCekiFormData can be used for form submissions
+export type YemekCekiFormData = Omit<YemekCeki, 'ID' | 'Kayit_Tarihi' | 'Sube_ID'> & { Sube_ID?: number; };
