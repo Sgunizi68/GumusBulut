@@ -29,9 +29,12 @@ const YemekCekiPage: React.FC = () => {
     Ilk_Tarih: new Date().toISOString().split('T')[0],
     Son_Tarih: new Date().toISOString().split('T')[0],
     Sube_ID: selectedBranch?.Sube_ID,
+    Imaj: null,
+    Imaj_Adi: null,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
     setFilterPeriod(currentPeriod || '');
@@ -88,7 +91,19 @@ const YemekCekiPage: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     
-    if (type === 'checkbox') {
+    if (type === 'file') {
+        const file = (e.target as HTMLInputElement).files?.[0] || null;
+        setFormData(prev => ({ ...prev, Imaj: file, Imaj_Adi: file ? file.name : null }));
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            setImagePreview(null);
+        }
+    } else if (type === 'checkbox') {
       const { checked } = e.target as HTMLInputElement;
       setFormData(prev => ({ ...prev, [name]: checked }));
     } else if (type === 'number') {
@@ -114,13 +129,18 @@ const YemekCekiPage: React.FC = () => {
 
     setIsSubmitting(true);
 
-    const dataToSubmit: YemekCekiFormData = {
-        ...formData,
-        Sube_ID: selectedBranch.Sube_ID
-    };
+    const data = new FormData();
+    Object.keys(formData).forEach(key => {
+        const value = formData[key as keyof typeof formData];
+        if (key === 'Imaj' && value instanceof File) {
+            data.append('image', value, value.name);
+        } else if (value !== null && value !== undefined) {
+            data.append(key, String(value));
+        }
+    });
 
     try {
-      if (new Date(dataToSubmit.Ilk_Tarih) > new Date(dataToSubmit.Son_Tarih)) {
+      if (new Date(formData.Ilk_Tarih) > new Date(formData.Son_Tarih)) {
         showError("Tarih Hatası", "İlk tarih, son tarihten sonra olamaz");
         setIsSubmitting(false);
         return;
@@ -128,9 +148,9 @@ const YemekCekiPage: React.FC = () => {
 
       let result;
       if (editingYemekCeki) {
-        result = await updateYemekCeki(editingYemekCeki.ID, dataToSubmit);
+        result = await updateYemekCeki(editingYemekCeki.ID, data);
       } else {
-        result = await addYemekCeki(dataToSubmit);
+        result = await addYemekCeki(data);
       }
 
       if (result.success) {
@@ -158,7 +178,10 @@ const YemekCekiPage: React.FC = () => {
       Ilk_Tarih: new Date().toISOString().split('T')[0],
       Son_Tarih: new Date().toISOString().split('T')[0],
       Sube_ID: selectedBranch?.Sube_ID,
+      Imaj: null,
+      Imaj_Adi: null,
     });
+    setImagePreview(null);
     setIsModalOpen(true);
   };
 
@@ -172,7 +195,10 @@ const YemekCekiPage: React.FC = () => {
       Ilk_Tarih: yemekCeki.Ilk_Tarih,
       Son_Tarih: yemekCeki.Son_Tarih,
       Sube_ID: yemekCeki.Sube_ID,
+      Imaj: null, // Will not re-upload file, just show existing
+      Imaj_Adi: yemekCeki.Imaj_Adi,
     });
+    setImagePreview(yemekCeki.Imaj ? `data:image/jpeg;base64,${yemekCeki.Imaj}` : null);
     setIsModalOpen(true);
   };
 
@@ -186,6 +212,11 @@ const YemekCekiPage: React.FC = () => {
         }
     }
   };
+
+  const handleRemoveImage = () => {
+      setFormData(prev => ({ ...prev, Imaj: null, Imaj_Adi: "" })); // Set Imaj_Adi to empty to signal removal
+      setImagePreview(null);
+  }
 
   if (!selectedBranch) {
     return <Card title="Yemek Çeki"><p className="text-red-500">Lütfen önce bir şube seçin.</p></Card>;
@@ -216,7 +247,7 @@ const YemekCekiPage: React.FC = () => {
           </div>
         }>
         <TableLayout
-          headers={['Kategori', 'Tarih', 'Tutar', 'Ödeme Tarihi', 'İlk Tarih', 'Son Tarih', 'İşlemler']}
+          headers={['Kategori', 'Tarih', 'Tutar', 'Ödeme Tarihi', 'İlk Tarih', 'Son Tarih', 'Resim', 'İşlemler']}
           compact={true}
         >
           {filteredYemekCekiList.map(y => {
@@ -231,6 +262,13 @@ const YemekCekiPage: React.FC = () => {
                 <td className="px-4 py-2 text-sm text-gray-500">{y.Odeme_Tarih}</td>
                 <td className="px-4 py-2 text-sm text-gray-500">{y.Ilk_Tarih}</td>
                 <td className="px-4 py-2 text-sm text-gray-500">{y.Son_Tarih}</td>
+                <td className="px-4 py-2 text-sm text-gray-500">
+                    {y.Imaj && (
+                        <a href={`data:image/jpeg;base64,${y.Imaj}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+                            Görüntüle
+                        </a>
+                    )}
+                </td>
                 <td className="px-4 py-2 text-sm font-medium flex space-x-2">
                   <Button
                     variant="ghost"
@@ -315,6 +353,28 @@ const YemekCekiPage: React.FC = () => {
             onChange={handleInputChange}
             required
           />
+          <Input 
+            label="Resim"
+            name="Imaj"
+            type="file"
+            onChange={handleInputChange}
+            accept="image/*"
+          />
+          {imagePreview && (
+            <div className="mt-2 relative">
+                <img src={imagePreview} alt="Önizleme" className="max-h-40 rounded-md" />
+                <Button 
+                    type="button"
+                    variant="danger"
+                    size="sm"
+                    className="absolute top-1 right-1"
+                    onClick={handleRemoveImage}
+                    title="Resmi Kaldır"
+                >
+                    <Icons.Close className="w-4 h-4" />
+                </Button>
+            </div>
+          )}
 
           <div className="flex justify-end space-x-3 pt-4">
             <Button type="button" variant="secondary" onClick={() => setIsModalOpen(false)}>

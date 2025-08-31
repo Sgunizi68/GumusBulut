@@ -387,6 +387,8 @@ class YemekCeki(Base):
     Ilk_Tarih = Column(Date, nullable=False)
     Son_Tarih = Column(Date, nullable=False)
     Sube_ID = Column(Integer, ForeignKey("Sube.Sube_ID"), nullable=False, default=1)
+    Imaj = Column(LargeBinary, nullable=True)
+    Imaj_Adi = Column(String(255), nullable=True)
     Kayit_Tarihi = Column(DateTime, default=func.now())
 
     kategori = relationship("Kategori")

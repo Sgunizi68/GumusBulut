@@ -1371,10 +1371,10 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     return { success: false, message: "Nakit girişi silinirken bir hata oluştu." };
   }, []);
 
-  const addYemekCeki = useCallback(async (yemekCekiData: YemekCekiFormData) => {
+  const addYemekCeki = useCallback(async (formData: FormData) => {
     const newYemekCeki = await fetchData<YemekCeki>(`${API_BASE_URL}/yemek-cekiler/`, {
       method: 'POST',
-      body: JSON.stringify(yemekCekiData),
+      body: formData,
     });
     if (newYemekCeki) {
       setYemekCekiList(prev => [...prev, newYemekCeki]);
@@ -1383,10 +1383,10 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     return { success: false, message: "Yemek çeki eklenirken bir hata oluştu." };
   }, []);
 
-  const updateYemekCeki = useCallback(async (yemekCekiId: number, yemekCekiData: YemekCekiFormData) => {
+  const updateYemekCeki = useCallback(async (yemekCekiId: number, formData: FormData) => {
     const updatedYemekCeki = await fetchData<YemekCeki>(`${API_BASE_URL}/yemek-cekiler/${yemekCekiId}`, {
       method: 'PUT',
-      body: JSON.stringify(yemekCekiData),
+      body: formData,
     });
     if (updatedYemekCeki) {
       setYemekCekiList(prev =>

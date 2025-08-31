@@ -1,8 +1,3 @@
-API Endpoints Available:
-The Yemek Çeki feature is fully functional with the following API endpoints:
-•	POST /api/v1/yemek-cekiler/ - Create a new Yemek Çeki record
-•	GET /api/v1/yemek-cekiler/ - Get all Yemek Çeki records
-•	GET /api/v1/yemek-cekiler/{id} - Get a specific Yemek Çeki record
-•	PUT /api/v1/yemek-cekiler/{id} - Update a Yemek Çeki record
-•	DELETE /api/v1/yemek-cekiler/{id} - Delete a Yemek Çeki record
-
+ALTER TABLE Yemek_Ceki
+ADD COLUMN Imaj LONGBLOB AFTER Sube_ID,
+ADD COLUMN Imaj_Adi VARCHAR(255) AFTER Imaj;

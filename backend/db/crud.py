@@ -991,26 +991,54 @@ def delete_nakit(db: Session, nakit_id: int):
 
 # --- YemekCeki CRUD ---
 def get_yemek_ceki(db: Session, yemek_ceki_id: int):
-    return db.query(models.YemekCeki).filter(models.YemekCeki.ID == yemek_ceki_id).first()
+    yemek_ceki = db.query(models.YemekCeki).filter(models.YemekCeki.ID == yemek_ceki_id).first()
+    if yemek_ceki and yemek_ceki.Imaj is not None:
+        yemek_ceki.Imaj = base64.b64encode(yemek_ceki.Imaj).decode('utf-8')
+    return yemek_ceki
 
 def get_yemek_cekiler(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.YemekCeki).offset(skip).limit(limit).all()
+    yemek_cekiler = db.query(models.YemekCeki).offset(skip).limit(limit).all()
+    for yc in yemek_cekiler:
+        if yc.Imaj is not None:
+            yc.Imaj = base64.b64encode(yc.Imaj).decode('utf-8')
+    return yemek_cekiler
 
-def create_yemek_ceki(db: Session, yemek_ceki_data: yemek_ceki.YemekCekiCreate):
-    db_yemek_ceki = models.YemekCeki(**yemek_ceki_data.dict())
+async def create_yemek_ceki(db: Session, yemek_ceki_data: yemek_ceki.YemekCekiCreate):
+    yemek_ceki_dict = yemek_ceki_data.dict(exclude_unset=True)
+    
+    db_yemek_ceki = models.YemekCeki(**yemek_ceki_dict)
     db.add(db_yemek_ceki)
     db.commit()
     db.refresh(db_yemek_ceki)
+    
+    if db_yemek_ceki.Imaj is not None:
+        db_yemek_ceki.Imaj = base64.b64encode(db_yemek_ceki.Imaj).decode('utf-8')
+        
     return db_yemek_ceki
 
-def update_yemek_ceki(db: Session, yemek_ceki_id: int, yemek_ceki_data: yemek_ceki.YemekCekiUpdate):
+async def update_yemek_ceki(db: Session, yemek_ceki_id: int, yemek_ceki_data: yemek_ceki.YemekCekiUpdate):
     db_yemek_ceki = db.query(models.YemekCeki).filter(models.YemekCeki.ID == yemek_ceki_id).first()
     if db_yemek_ceki:
         update_data = yemek_ceki_data.dict(exclude_unset=True)
+        
+        if 'Imaj' in update_data and isinstance(update_data['Imaj'], bytes):
+            db_yemek_ceki.Imaj = update_data['Imaj']
+            del update_data['Imaj']
+        
+        # If Imaj_Adi is an empty string, it means clear the image
+        if 'Imaj_Adi' in update_data and update_data['Imaj_Adi'] == "":
+            db_yemek_ceki.Imaj = None
+            db_yemek_ceki.Imaj_Adi = None
+
         for key, value in update_data.items():
             setattr(db_yemek_ceki, key, value)
+            
         db.commit()
         db.refresh(db_yemek_ceki)
+        
+        if db_yemek_ceki.Imaj is not None:
+            db_yemek_ceki.Imaj = base64.b64encode(db_yemek_ceki.Imaj).decode('utf-8')
+            
     return db_yemek_ceki
 
 def delete_yemek_ceki(db: Session, yemek_ceki_id: int):

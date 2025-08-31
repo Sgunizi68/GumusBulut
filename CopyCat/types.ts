@@ -482,8 +482,8 @@ export interface AppContextType {
 
 export interface DataContextType {
   yemekCekiList: YemekCeki[];
-  addYemekCeki: (yemekCekiData: YemekCekiFormData) => Promise<{ success: boolean; message?: string }>;
-  updateYemekCeki: (yemekCekiId: number, yemekCekiData: YemekCekiFormData) => Promise<{ success: boolean; message?: string }>;
+  addYemekCeki: (formData: FormData) => Promise<{ success: boolean; message?: string }>;
+  updateYemekCeki: (yemekCekiId: number, formData: FormData) => Promise<{ success: boolean; message?: string }>;
   deleteYemekCeki: (yemekCekiId: number) => Promise<{ success: boolean; message?: string }>;
 
   subeList: Sube[];
@@ -609,8 +609,10 @@ export interface YemekCeki {
   Ilk_Tarih: string; // DATE
   Son_Tarih: string; // DATE
   Sube_ID: number;
+  Imaj?: string; // Base64 encoded image
+  Imaj_Adi?: string; // Image filename
   Kayit_Tarihi?: string; // TIMESTAMP
 }
 
 // YemekCekiFormData can be used for form submissions
-export type YemekCekiFormData = Omit<YemekCeki, 'ID' | 'Kayit_Tarihi' | 'Sube_ID'> & { Sube_ID?: number; };
+export type YemekCekiFormData = Omit<YemekCeki, 'ID' | 'Kayit_Tarihi' | 'Sube_ID' | 'Imaj' | 'Imaj_Adi'> & { Sube_ID?: number; Imaj?: File | null; Imaj_Adi?: string | null; };
