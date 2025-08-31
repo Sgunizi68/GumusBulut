@@ -1,17 +1,17 @@
 from sqlalchemy.orm import Session
-from passlib.context import CryptContext
 from typing import List
 
 from db import models
 from schemas import sube, user, role, permission, kullanici_rol, rol_yetki, e_fatura, b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, stok_fiyat, stok_sayim, calisan, puantaj_secimi, puantaj, avans_istek, ust_kategori, kategori, deger, e_fatura_referans, nakit, odeme, odeme_referans, pos_hareketleri
+from core.security import verify_password, get_password_hash
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 def authenticate_user(db: Session, username: str, password: str):
     user = get_user_by_username(db, username)
     if not user:
         return False
     if not verify_password(password, user.Password):
         return False
+    return user
     return user
 
 # --- Sube CRUD ---
