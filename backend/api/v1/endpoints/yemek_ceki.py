@@ -9,7 +9,7 @@ router = APIRouter()
 
 @router.post("/yemek-cekiler/", response_model=yemek_ceki.YemekCekiInDB, status_code=status.HTTP_201_CREATED)
 def create_yemek_ceki(yemek_ceki_data: yemek_ceki.YemekCekiCreate, db: Session = Depends(database.get_db)):
-    return crud.create_yemek_ceki(db=db, yemek_ceki=yemek_ceki_data)
+    return crud.create_yemek_ceki(db=db, yemek_ceki_data=yemek_ceki_data)
 
 @router.get("/yemek-cekiler/", response_model=List[yemek_ceki.YemekCekiInDB])
 def read_yemek_cekiler(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
@@ -29,7 +29,7 @@ def update_yemek_ceki(
     yemek_ceki_data: yemek_ceki.YemekCekiUpdate,
     db: Session = Depends(database.get_db)
 ):
-    db_yemek_ceki = crud.update_yemek_ceki(db=db, yemek_ceki_id=yemek_ceki_id, yemek_ceki=yemek_ceki_data)
+    db_yemek_ceki = crud.update_yemek_ceki(db=db, yemek_ceki_id=yemek_ceki_id, yemek_ceki_data=yemek_ceki_data)
     if db_yemek_ceki is None:
         raise HTTPException(status_code=404, detail="Yemek Çeki not found")
     return db_yemek_ceki
