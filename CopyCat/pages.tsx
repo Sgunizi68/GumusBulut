@@ -2904,22 +2904,23 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
       </Card>
 
       <div className="overflow-x-auto">
-        <TableLayout headers={['Fiş No', 'Tarih', 'Açıklama', 'Borç', 'Alacak', 'Fatura No', 'Kategori', 'Dönem']} compact={true}>
-            {filteredFaturas.map(ekstre => {
-              const rowSpecificPeriods = getRowDropdownPeriods(ekstre.Donem);
+        <TableLayout headers={tableHeaders} compact={true}>
+            {filteredFaturas.map(fatura => {
+              const rowSpecificPeriods = getRowDropdownPeriods(String(fatura.Donem));
               return (
-                <tr key={ekstre.Fatura_ID} className={`${ekstre.Kategori_ID === null ? 'bg-yellow-50' : ''}`}>
-                  <td className="px-2 py-1.5 whitespace-nowrap text-xs text-gray-700 w-[180px]">{ekstre.Alici_Unvani}</td>
-                  <td className="px-2 py-1.5 whitespace-nowrap text-xs text-gray-700 w-[100px]">{parseDateString(ekstre.Fatura_Tarihi)}</td>
-                  <td className="px-2 py-1.5 whitespace-nowrap text-sm text-right text-gray-600 w-[100px]">{formatTrCurrencyAdvanced(ekstre.Tutar)}</td>
+                <tr key={fatura.Fatura_ID} className={`${fatura.Kategori_ID === null ? 'bg-yellow-50' : ''}`}>
+                  <td className="px-2 py-1.5 whitespace-nowrap text-xs text-gray-700 w-[150px]">{fatura.Fatura_Numarasi}</td>
+                  <td className="px-2 py-1.5 whitespace-nowrap text-xs text-gray-700 w-[180px]">{fatura.Alici_Unvani}</td>
+                  <td className="px-2 py-1.5 whitespace-nowrap text-xs text-gray-700 w-[100px]">{parseDateString(fatura.Fatura_Tarihi)}</td>
+                  <td className="px-2 py-1.5 whitespace-nowrap text-sm text-right text-gray-600 w-[100px]">{formatTrCurrencyAdvanced(fatura.Tutar)}</td>
                   <td className="px-2 py-1.5 text-xs w-[200px]">
                     <Select
-                      value={ekstre.Kategori_ID || ""}
-                      onChange={(e) => handleUpdate(ekstre.Fatura_ID, "Kategori_ID", e.target.value === "" ? null : parseInt(e.target.value))}
+                      value={fatura.Kategori_ID || ""}
+                      onChange={(e) => handleUpdate(fatura.Fatura_ID, "Kategori_ID", e.target.value === "" ? null : parseInt(e.target.value))}
                       className="text-xs p-1 w-full"
                     >
                       <option value="">Seçin...</option>
-                      {(ekstre.Giden_Fatura ? gidenFaturaCategories : gelenFaturaCategories).map((kategori) => (
+                      {(fatura.Giden_Fatura ? gidenFaturaCategories : gelenFaturaCategories).map((kategori) => (
                         <option key={kategori.Kategori_ID} value={kategori.Kategori_ID}>
                           {kategori.Kategori_Adi}
                         </option>
@@ -2928,17 +2929,17 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
                   </td>
                   <td className="px-2 py-1.5 text-xs min-w-[300px]">
                     <InlineEditInput
-                      value={ekstre.Aciklama || ""}
-                      onSave={(value) => handleUpdate(ekstre.Fatura_ID, "Aciklama", value)}
+                      value={fatura.Aciklama || ""}
+                      onSave={(value) => handleUpdate(fatura.Fatura_ID, "Aciklama", value)}
                       placeholder="Açıklama..."
                       className="w-full text-xs"
-                      aria-label={`Fatura ${ekstre.Fatura_Numarasi} için açıklama`}
+                      aria-label={`Fatura ${fatura.Fatura_Numarasi} için açıklama`}
                     />
                   </td>
                   <td className="px-2 py-1.5 text-xs min-w-[120px]">
                     <Select
-                      value={String(ekstre.Donem)}
-                      onChange={(e) => handleUpdate(ekstre.Fatura_ID, "Donem", e.target.value)}
+                      value={String(fatura.Donem)}
+                      onChange={(e) => handleUpdate(fatura.Fatura_ID, "Donem", e.target.value)}
                       className="text-xs p-1 w-full"
                     >
                       {rowSpecificPeriods.map((period) => (
@@ -2949,15 +2950,15 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
                     </Select>
                   </td>
                   <td className="px-2 py-1.5 text-xs text-center">
-                    {ekstre.Giden_Fatura ? (
+                    {fatura.Giden_Fatura ? (
                       <span className="text-gray-600 font-medium">Giden</span>
                     ) : (
                       <input
                         type="checkbox"
-                        checked={ekstre.Gunluk_Harcama}
-                        onChange={() => handleUpdate(ekstre.Fatura_ID, "Gunluk_Harcama", !ekstre.Gunluk_Harcama)}
+                        checked={fatura.Gunluk_Harcama}
+                        onChange={() => handleUpdate(fatura.Fatura_ID, "Gunluk_Harcama", !fatura.Gunluk_Harcama)}
                         className="form-checkbox h-4 w-4 text-blue-500 cursor-pointer"
-                        aria-label={`Fatura ${ekstre.Fatura_Numarasi} için günlük harcama`}
+                        aria-label={`Fatura ${fatura.Fatura_Numarasi} için günlük harcama`}
                       />
                     )}
                   </td>
@@ -2965,11 +2966,11 @@ export const InvoiceCategoryAssignmentPage: React.FC = () => {
                     <td className="px-2 py-1.5 text-xs text-center">
                       <input
                         type="checkbox"
-                        checked={ekstre.Ozel}
-                        onChange={() => handleToggleOzel(ekstre.Fatura_ID, ekstre.Ozel)}
+                        checked={fatura.Ozel}
+                        onChange={() => handleToggleOzel(fatura.Fatura_ID, fatura.Ozel)}
                         disabled={!canViewAndEditSpecial}
                         className={`form-checkbox h-4 w-4 ${canViewAndEditSpecial ? "text-purple-500 cursor-pointer" : "text-purple-300 cursor-not-allowed"}`}
-                        aria-label={`Fatura ${ekstre.Fatura_Numarasi} için özel fatura`}
+                        aria-label={`Fatura ${fatura.Fatura_Numarasi} için özel fatura`}
                       />
                     </td>
                   )}
