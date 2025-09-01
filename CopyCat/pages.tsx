@@ -2521,6 +2521,10 @@ export const InvoiceUploadPage: React.FC = () => {
               ref => ref.Alici_Unvani.toLowerCase() === aliciUnvani.toLowerCase()
             );
 
+            const durumKey = Object.keys(row).find(key => key.includes("Durum")) || "Durum";
+            const durum = String(row[durumKey] || "").trim();
+            const isGidenFatura = durum === "Gönderildi" || durum === "Alıcı Kabul Etti (Otomatik)";
+
             return {
               Sube_ID: selectedBranch?.Sube_ID || 0,
               Fatura_Numarasi: faturaNumarasi,
@@ -2530,8 +2534,8 @@ export const InvoiceUploadPage: React.FC = () => {
               Donem: period,
               Ozel: false,
               Gunluk_Harcama: false,
-              Giden_Fatura: false, // Default to incoming invoice
-              Kategori_ID: matchingReferans ? matchingReferans.Kategori_ID : null, // Assign Kategori_ID if match found
+              Giden_Fatura: isGidenFatura,
+              Kategori_ID: isGidenFatura ? null : (matchingReferans ? matchingReferans.Kategori_ID : null),
             };
           } catch (e: any) {
             console.error(`Satır ${index + 2} işlenirken hata:`, row, e);
