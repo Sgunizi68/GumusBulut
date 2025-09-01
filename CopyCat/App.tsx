@@ -1548,9 +1548,13 @@ const AppWithToast: React.FC = () => {
   });
   const [currentPeriod, setCurrentPeriod] = useState<string>(() => {
     const storedState = loadFromLocalStorage<Partial<StoredAppState>>(STORAGE_KEYS.APP_STATE, {});
-    return storedState.currentPeriod || '2508';
+    return storedState.currentPeriod || DEFAULT_PERIOD;
   });
   const [currentUserPermissions, setCurrentUserPermissions] = useState<string[]>([]);
+
+  useEffect(() => {
+    setCurrentPeriod(DEFAULT_PERIOD);
+  }, []);
 
   // Persist App state to localStorage
   const appState = useMemo(() => ({ isAuthenticated, currentUser, selectedBranch, currentPeriod }), [isAuthenticated, currentUser, selectedBranch, currentPeriod]);
