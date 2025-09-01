@@ -2490,7 +2490,6 @@ export const InvoiceUploadPage: React.FC = () => {
         return;
       }
 
-      const period = currentPeriod || DEFAULT_PERIOD;
       const newInvoices: EFatura[] = jsonData
         .map((row, index) => {
           try {
@@ -2505,6 +2504,8 @@ export const InvoiceUploadPage: React.FC = () => {
             if (!dateStr) {
               throw new Error(`Geçersiz tarih formatı: ${row[dateKey]}`);
             }
+
+            const period = calculatePeriod(dateStr); // Calculate period from invoice date
 
             const faturaNumarasi = String(row[numberKey] || "").trim();
             if (!faturaNumarasi) {
