@@ -2516,11 +2516,9 @@ export const InvoiceUploadPage: React.FC = () => {
               throw new Error("Alıcı ünvanı boş olamaz");
             }
 
-            // Try to find a matching referans
+            // Try to find a matching referans by Alici_Unvani
             const matchingReferans = eFaturaReferansList.find(
-              ref => ref.Fatura_Numarasi_Prefix && 
-                     faturaNumarasi.startsWith(ref.Fatura_Numarasi_Prefix) && 
-                     ref.Sube_ID === selectedBranch?.Sube_ID
+              ref => ref.Alici_Unvani.toLowerCase() === aliciUnvani.toLowerCase()
             );
 
             return {
@@ -2578,7 +2576,7 @@ export const InvoiceUploadPage: React.FC = () => {
     // In a real app, this would trigger a download of an Excel template file.
     // For this mockup, we'll just log it.
     alert("Excel şablonu indirme işlemi simüle edildi. Konsolu kontrol edin.");
-    console.log("Excel Şablon İndirme İsteği:", MOCK_B2B_EKSTRE_EXCEL_SAMPLE[0]); // Show headers basically
+    console.log("Excel Şablon İndirme İsteği:", MOCK_E_FATURA_EXCEL_SAMPLE[0]); // Show headers basically
   };
 
   return (
@@ -3101,7 +3099,7 @@ export const B2BUploadPage: React.FC = () => {
             Örnek Şablon İndir
           </Button>
            <p className="text-xs text-gray-500 mt-1">
-             Yüklenecek Excel dosyasının sütunları: "Tarih" (GG.AA.YYYY), "Fiş No", "Fiş Türü", "Açıklama", "Borç", "Alacak", "Toplam Bakiye", "Fatura No", "Fatura Metni".
+             Yüklenecek Excel dosyasının sütunları: "Fatura Tarihi", "Fatura Numarası", "Alıcı Ünvanı", "Tutar".
           </p>
         </div>
       </div>
