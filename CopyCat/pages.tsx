@@ -5570,6 +5570,7 @@ export const OdemeYuklemePage: React.FC = () => {
   const { uploadOdeme } = useDataContext();
   const [file, setFile] = useState<File | null>(null);
   const [feedback, setFeedback] = useState<{ message: string, type: 'success' | 'error' | 'info' } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   if (!hasPermission(ODEME_YUKLEME_EKRANI_YETKI_ADI)) {
@@ -5597,6 +5598,7 @@ export const OdemeYuklemePage: React.FC = () => {
     }
 
     setFeedback({ message: `Dosya yükleniyor ve işleniyor...`, type: 'info' });
+    setIsLoading(true); // Set loading to true
 
     try {
         const formData = new FormData();
@@ -5619,6 +5621,8 @@ export const OdemeYuklemePage: React.FC = () => {
     } catch (error: any) {
         console.error("File processing error:", error);
         setFeedback({ message: `Dosya işlenirken bir hata oluştu: ${error.message || error}. Lütfen dosyanın formatını kontrol edin.`, type: 'error' });
+    } finally {
+        setIsLoading(false); // Set loading to false
     }
 
     setFile(null);
