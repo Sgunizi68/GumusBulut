@@ -1404,6 +1404,10 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
                 kontrol_pos = "Not OK"  # One is None, the other is not
                 error_matches += 1
             
+            # New calculation for Odeme_Kesinti
+            next_day = date + timedelta(days=1)
+            odeme_kesinti_for_date = abs(kesinti_odeme_by_date.get(next_day, Decimal('0')))
+
             # For Kontrol Kesinti: Compare POS Kesinti with the new Odeme_Kesinti calculation
             kontrol_kesinti = None
             if pos_kesinti is not None and odeme_kesinti_for_date is not None:
@@ -1421,10 +1425,6 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
             odeme_records_for_date = [r for r in odeme_records if r.Tarih == date]
             if odeme_records_for_date:
                 actual_odeme_for_date = sum(r.Tutar for r in odeme_records_for_date) or Decimal('0')
-
-            # New calculation for Odeme_Kesinti
-            next_day = date + timedelta(days=1)
-            odeme_kesinti_for_date = abs(kesinti_odeme_by_date.get(next_day, Decimal('0')))
 
             # New calculation for Odeme_Net
             odeme_net_for_date = (odeme or Decimal('0')) - odeme_kesinti_for_date
