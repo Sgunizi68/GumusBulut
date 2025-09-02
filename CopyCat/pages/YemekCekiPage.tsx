@@ -102,9 +102,15 @@ const YemekCekiPage: React.FC = () => {
   }, [yemekCekiList, selectedBranch, searchTerm, filterPeriod, kategoriList]);
 
   const activeKategoriler = useMemo(() => {
-    return kategoriList
-      .filter(k => k.Aktif_Pasif && k.Tip === 'Gider')
-      .sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi, 'tr', { sensitivity: 'base' }));
+    // Using the provided ID directly is more robust.
+    const yemekCekiUstKategoriID = 3; 
+
+    const filtered = kategoriList
+      .filter(k => k.Aktif_Pasif && k.Ust_Kategori_ID === yemekCekiUstKategoriID && k.Tip === 'Gelir');
+    
+    console.log("Yemek Çeki kategorileri (ID ile filtrelendi):", filtered);
+
+    return filtered.sort((a, b) => a.Kategori_Adi.localeCompare(b.Kategori_Adi, 'tr', { sensitivity: 'base' }));
   }, [kategoriList]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

@@ -1404,23 +1404,17 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
                 kontrol_pos = "Not OK"  # One is None, the other is not
                 error_matches += 1
             
-            # For Kontrol Kesinti: Compare POS Kesinti with actual Odeme value for that date
-            # We need to get the actual Odeme value for comparison, not the matched POS total
-            actual_odeme_for_date = None
-            odeme_records_for_date = [r for r in odeme_records if r.Tarih == date]
-            if odeme_records_for_date:
-                actual_odeme_for_date = sum(r.Tutar for r in odeme_records_for_date) or Decimal('0')
-            
+            # For Kontrol Kesinti: Compare POS Kesinti with the new Odeme_Kesinti calculation
             kontrol_kesinti = None
-            if pos_kesinti is not None and actual_odeme_for_date is not None:
-                if abs(pos_kesinti - actual_odeme_for_date) <= Decimal('0.01'):
+            if pos_kesinti is not None and odeme_kesinti_for_date is not None:
+                if abs(pos_kesinti - odeme_kesinti_for_date) <= Decimal('0.01'):
                     kontrol_kesinti = "OK"
                 else:
                     kontrol_kesinti = "Not OK"
-            elif pos_kesinti is None and actual_odeme_for_date is None:
-                kontrol_kesinti = "OK"  # Both are None, considered matching
-            elif pos_kesinti is not None or actual_odeme_for_date is not None:
-                kontrol_kesinti = "Not OK"  # One is None, the other is not
+            elif pos_kesinti is None and odeme_kesinti_for_date == Decimal('0'): # If pos_kesinti is None, check if odeme_kesinti is also zero
+                kontrol_kesinti = "OK"
+            elif pos_kesinti is not None or odeme_kesinti_for_date != Decimal('0'):
+                kontrol_kesinti = "Not OK"
             
             # Set Odeme_Kesinti and Odeme_Net to actual Odeme values for proper comparison
             actual_odeme_for_date = None
