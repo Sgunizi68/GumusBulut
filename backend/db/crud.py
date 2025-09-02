@@ -1298,6 +1298,23 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
         
         odeme_records = odeme_query.all()
         logger.info(f"Found {len(odeme_records)} Odeme records with Kredi Kartı Ödemesi category")
+
+        # Get all Odeme records for Kesinti calculation (Kategori_ID = 81 and Tutar < 0)
+        kesinti_odeme_records = db.query(models.Odeme).filter(
+            and_(
+                models.Odeme.Sube_ID == sube_id,
+                models.Odeme.Kategori_ID == 81,
+                models.Odeme.Tutar < 0,
+                models.Odeme.Tarih >= first_day.date(),
+                models.Odeme.Tarih <= last_day.date() + timedelta(days=1) # Fetch one extra day for the calculation
+            )
+        ).all()
+        logger.info(f"Found {len(kesinti_odeme_records)} Odeme records for Kesinti calculation (Kategori_ID=81 and Tutar < 0)")
+
+        # Group kesinti odeme records by date for easy lookup
+        kesinti_odeme_by_date = defaultdict(Decimal)
+        for record in kesinti_odeme_records:
+            kesinti_odeme_by_date[record.Tarih] += record.Tutar # Sum of negative numbers
         
         # Create a lookup dictionary for Odeme records by (Tarih, Tutar) for matching
         odeme_lookup = {(record.Tarih, record.Tutar): record for record in odeme_records}
@@ -1405,23 +1422,18 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
             elif pos_kesinti is not None or actual_odeme_for_date is not None:
                 kontrol_kesinti = "Not OK"  # One is None, the other is not
             
-            # For Kontrol Net: Compare POS Net with actual Odeme value for that date
-            kontrol_net = None
-            if pos_net is not None and actual_odeme_for_date is not None:
-                if abs(pos_net - actual_odeme_for_date) <= Decimal('0.01'):
-                    kontrol_net = "OK"
-                else:
-                    kontrol_net = "Not OK"
-            elif pos_net is None and actual_odeme_for_date is None:
-                kontrol_net = "OK"  # Both are None, considered matching
-            elif pos_net is not None or actual_odeme_for_date is not None:
-                kontrol_net = "Not OK"  # One is None, the other is not
-            
             # Set Odeme_Kesinti and Odeme_Net to actual Odeme values for proper comparison
             actual_odeme_for_date = None
             odeme_records_for_date = [r for r in odeme_records if r.Tarih == date]
             if odeme_records_for_date:
                 actual_odeme_for_date = sum(r.Tutar for r in odeme_records_for_date) or Decimal('0')
+
+            # New calculation for Odeme_Kesinti
+            next_day = date + timedelta(days=1)
+            odeme_kesinti_for_date = abs(kesinti_odeme_by_date.get(next_day, Decimal('0')))
+
+            # New calculation for Odeme_Net
+            odeme_net_for_date = (odeme or Decimal('0')) - odeme_kesinti_for_date
             
             daily_record = POSKontrolDailyData(
                 Tarih=date.strftime('%Y-%m-%d'),
@@ -1430,11 +1442,10 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
                 POS_Kesinti=pos_kesinti,
                 POS_Net=pos_net,
                 Odeme=odeme,  # This is the matched POS transactions total
-                Odeme_Kesinti=actual_odeme_for_date,  # Actual Odeme value for comparison
-                Odeme_Net=actual_odeme_for_date,  # Actual Odeme value for comparison
+                Odeme_Kesinti=odeme_kesinti_for_date,  # Use new value
+                Odeme_Net=odeme_net_for_date,  # Use new value
                 Kontrol_POS=kontrol_pos,
-                Kontrol_Kesinti=kontrol_kesinti,
-                Kontrol_Net=kontrol_net
+                Kontrol_Kesinti=kontrol_kesinti
             )
             
             daily_data.append(daily_record)

@@ -60,8 +60,20 @@ async def upload_odeme_csv(
                 continue
 
             # Clean and parse Tutar
-            tutar_str = row_normalized.get("tutar", "0.0").replace('.', '').replace(',', '.')
-            tutar = Decimal(tutar_str) if tutar_str else Decimal('0.0') # Changed to Decimal
+            tutar_str = row_normalized.get("tutar", "0.0").strip()
+            
+            # Check which separator is last, if any
+            last_comma = tutar_str.rfind(',')
+            last_period = tutar_str.rfind('.')
+
+            if last_comma > last_period:
+                # Comma is the decimal separator (e.g., "1.234,56")
+                tutar_str = tutar_str.replace('.', '').replace(',', '.')
+            elif last_period > last_comma:
+                # Period is the decimal separator (e.g., "1,234.56")
+                tutar_str = tutar_str.replace(',', '')
+            
+            tutar = Decimal(tutar_str) if tutar_str else Decimal('0.0')
 
             tarih_dt = datetime.strptime(tarih_str, '%d/%m/%Y')
             donem = int(f"{tarih_dt.year % 100:02d}{tarih_dt.month:02d}")

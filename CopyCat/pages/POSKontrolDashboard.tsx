@@ -16,7 +16,6 @@ interface POSKontrolDailyData {
     Odeme_Net: number | string | null;
     Kontrol_POS: string | null;
     Kontrol_Kesinti: string | null;
-    Kontrol_Net: string | null;
 }
 
 interface GrandTotals {
@@ -153,8 +152,7 @@ export const POSKontrolDashboardPage: React.FC = () => {
             'Ödeme Kesinti': item.Odeme_Kesinti,
             'Ödeme Net': item.Odeme_Net,
             'Kontrol POS': item.Kontrol_POS || '-',
-            'Kontrol Kesinti': item.Kontrol_Kesinti || '-',
-            'Kontrol Net': item.Kontrol_Net || '-'
+            'Kontrol Kesinti': item.Kontrol_Kesinti || '-'
         }));
         
         const wsMain = XLSX.utils.json_to_sheet(mainData);
@@ -170,7 +168,6 @@ export const POSKontrolDashboardPage: React.FC = () => {
             { wch: 15 },  // Ödeme Net
             { wch: 12 },  // Kontrol POS
             { wch: 15 },  // Kontrol Kesinti
-            { wch: 12 }   // Kontrol Net
         ];
         XLSX.utils.book_append_sheet(wb, wsMain, 'POS Kontrol Verileri');
         
@@ -178,13 +175,11 @@ export const POSKontrolDashboardPage: React.FC = () => {
         const totalRecords = filteredReportData.data.length;
         const successfulMatches = filteredReportData.data.filter(item => 
             item.Kontrol_POS === 'OK' || 
-            item.Kontrol_Kesinti === 'OK' || 
-            item.Kontrol_Net === 'OK'
+            item.Kontrol_Kesinti === 'OK'
         ).length;
         const errorMatches = filteredReportData.data.filter(item => 
             item.Kontrol_POS === 'Not OK' || 
-            item.Kontrol_Kesinti === 'Not OK' || 
-            item.Kontrol_Net === 'Not OK'
+            item.Kontrol_Kesinti === 'Not OK'
         ).length;
         const successRate = totalRecords ? 
             `${Math.round((successfulMatches / totalRecords) * 100)}%` : 
@@ -393,7 +388,6 @@ export const POSKontrolDashboardPage: React.FC = () => {
                                             <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ödeme Net</th>
                                             <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Kontrol POS</th>
                                             <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Kontrol Kesinti</th>
-                                            <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Kontrol Net</th>
                                         </tr>
                                     </thead>
                                     <tbody className="bg-white divide-y divide-gray-200">
@@ -431,9 +425,6 @@ export const POSKontrolDashboardPage: React.FC = () => {
                                                 </td>
                                                 <td className="px-4 py-3 text-sm text-center font-semibold">
                                                     {getStatusIcon(item.Kontrol_Kesinti)}
-                                                </td>
-                                                <td className="px-4 py-3 text-sm text-center font-semibold">
-                                                    {getStatusIcon(item.Kontrol_Net)}
                                                 </td>
                                             </tr>
                                         ))}
@@ -484,8 +475,7 @@ export const POSKontrolDashboardPage: React.FC = () => {
                                     <div className="text-2xl font-bold text-green-700">{
                                         filteredReportData?.data?.filter(item => 
                                             item.Kontrol_POS === 'OK' || 
-                                            item.Kontrol_Kesinti === 'OK' || 
-                                            item.Kontrol_Net === 'OK'
+                                            item.Kontrol_Kesinti === 'OK'
                                         ).length || 0
                                     }</div>
                                 </div>
@@ -494,8 +484,7 @@ export const POSKontrolDashboardPage: React.FC = () => {
                                     <div className="text-2xl font-bold text-red-700">{
                                         filteredReportData?.data?.filter(item => 
                                             item.Kontrol_POS === 'Not OK' || 
-                                            item.Kontrol_Kesinti === 'Not OK' || 
-                                            item.Kontrol_Net === 'Not OK'
+                                            item.Kontrol_Kesinti === 'Not OK'
                                         ).length || 0
                                     }</div>
                                 </div>
@@ -505,8 +494,7 @@ export const POSKontrolDashboardPage: React.FC = () => {
                                         filteredReportData?.data?.length ? 
                                             `${Math.round((filteredReportData.data.filter(item => 
                                                 item.Kontrol_POS === 'OK' || 
-                                                item.Kontrol_Kesinti === 'OK' || 
-                                                item.Kontrol_Net === 'OK'
+                                                item.Kontrol_Kesinti === 'OK'
                                             ).length / filteredReportData.data.length) * 100)}%` : 
                                             '0%'
                                     }</div>

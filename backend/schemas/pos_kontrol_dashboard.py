@@ -13,7 +13,6 @@ class POSKontrolDailyData(BaseModel):
     Odeme_Net: Optional[Decimal] = None
     Kontrol_POS: Optional[str] = None  # "OK" or "Not OK"
     Kontrol_Kesinti: Optional[str] = None  # "OK" or "Not OK"
-    Kontrol_Net: Optional[str] = None  # "OK" or "Not OK"
 
 class POSKontrolSummary(BaseModel):
     total_records: int

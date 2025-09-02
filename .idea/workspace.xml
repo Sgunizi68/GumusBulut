@@ -6,10 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="364c7c9f-f57e-4db9-a56f-92c279098407" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1ScreenShot.png" beforeDir="false" afterPath="$PROJECT_DIR$/1ScreenShot.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/2ScreenShot.png" beforeDir="false" afterPath="$PROJECT_DIR$/2ScreenShot.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/api/v1/endpoints/b2b_ekstre.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/v1/endpoints/b2b_ekstre.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CopyCat/pages/POSKontrolDashboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/pages/POSKontrolDashboard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/api/v1/endpoints/odeme.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/v1/endpoints/odeme.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/db/crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db/crud.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/schemas/pos_kontrol_dashboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/schemas/pos_kontrol_dashboard.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
