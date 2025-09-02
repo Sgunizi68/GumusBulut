@@ -115,8 +115,8 @@ def create_new_b2b_ekstre(ekstre: b2b_ekstre.B2BEkstreCreate, db: Session = Depe
     return crud.create_b2b_ekstre(db=db, ekstre=ekstre)
 
 @router.get("/b2b-ekstreler/", response_model=List[b2b_ekstre.B2BEkstreInDB])
-def read_b2b_ekstreler(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
-    ekstreler = crud.get_b2b_ekstreler(db, skip=skip, limit=limit)
+def read_b2b_ekstreler(skip: int = 0, db: Session = Depends(database.get_db)):
+    ekstreler = crud.get_b2b_ekstreler(db, skip=skip)
     return ekstreler
 
 @router.get("/b2b-ekstreler/{ekstre_id}", response_model=b2b_ekstre.B2BEkstreInDB)

@@ -306,8 +306,8 @@ def get_b2b_ekstre(db: Session, ekstre_id: int):
     if ekstre: ekstre.Donem = str(ekstre.Donem)
     return ekstre
 
-def get_b2b_ekstreler(db: Session, skip: int = 0, limit: int = 100):
-    ekstreler = db.query(models.B2BEkstre).offset(skip).limit(limit).all()
+def get_b2b_ekstreler(db: Session, skip: int = 0):
+    ekstreler = db.query(models.B2BEkstre).offset(skip).all()
     for ekstre in ekstreler:
         ekstre.Donem = str(ekstre.Donem)
     return ekstreler
@@ -362,7 +362,8 @@ def create_b2b_ekstre_bulk(db: Session, ekstreler: List[b2b_ekstre.B2BEkstreCrea
     added_count = 0
     skipped_count = 0
     logger.info(f"Starting bulk create of B2B Ekstre for {len(ekstreler)} records.")
-    
+
+    new_ekstreler_mappings = []
     for ekstre_data in ekstreler:
         existing_ekstre = get_b2b_ekstre_by_unique_fields(db, ekstre_data)
         if existing_ekstre:
@@ -372,17 +373,18 @@ def create_b2b_ekstre_bulk(db: Session, ekstreler: List[b2b_ekstre.B2BEkstreCrea
         
         ekstre_dict = ekstre_data.dict()
         ekstre_dict['Donem'] = int(ekstre_dict['Donem'])
-        db_ekstre = models.B2BEkstre(**ekstre_dict)
-        db.add(db_ekstre)
+        new_ekstreler_mappings.append(ekstre_dict)
         added_count += 1
-    
-    try:
-        db.commit()
-        logger.info(f"Successfully committed {added_count} new B2B Ekstre records.")
-    except Exception as e:
-        logger.error(f"Error committing B2B Ekstre records: {e}")
-        db.rollback()
-        raise
+
+    if new_ekstreler_mappings:
+        try:
+            db.bulk_insert_mappings(models.B2BEkstre, new_ekstreler_mappings)
+            db.commit()
+            logger.info(f"Successfully committed {added_count} new B2B Ekstre records.")
+        except Exception as e:
+            logger.error(f"Error committing B2B Ekstre records: {e}")
+            db.rollback()
+            raise
         
     return {"added": added_count, "skipped": skipped_count}
 
