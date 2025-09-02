@@ -55,6 +55,42 @@ const parseDateString = (dateStr: string): string => {
   return dateStr; 
 };
 
+const parseDMYDateString = (dateStr: string): string => {
+  if (!dateStr) return '';
+  // Handles DD-MM-YY, DD.MM.YY, DD/MM/YY
+  const parts = dateStr.split(/[-./]/);
+  if (parts.length === 3) {
+    let [day, month, year] = parts;
+    if (day && month && year) {
+        if (year.length === 2) {
+            const currentYear = new Date().getFullYear();
+            const currentCentury = Math.floor(currentYear / 100) * 100;
+            let fullYear = currentCentury + parseInt(year, 10);
+            // If the resulting year is more than, say, 20 years in the future, assume it's from the previous century
+            if (fullYear > currentYear + 20) {
+                fullYear -= 100;
+            }
+            year = String(fullYear);
+        }
+        if (year.length === 4) {
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        }
+    }
+  }
+  // Also handle Excel's integer date format
+  if (!isNaN(Number(dateStr))) {
+      const excelEpoch = new Date(1899, 11, 30);
+      const excelDate = new Date(excelEpoch.getTime() + Number(dateStr) * 24 * 60 * 60 * 1000);
+      if (!isNaN(excelDate.getTime())) {
+          const year = excelDate.getFullYear();
+          const month = (excelDate.getMonth() + 1).toString().padStart(2, '0');
+          const day = excelDate.getDate().toString().padStart(2, '0');
+          return `${year}-${month}-${day}`;
+      }
+  }
+  return dateStr; // Return original if format is not recognized
+};
+
 // Helper function to parse currency values that might be strings or numbers
 const parseCurrencyValue = (value: string | number | undefined | null): number => {
     console.log(`Parsing currency value: ${value} (Type: ${typeof value})`);
@@ -5580,11 +5616,11 @@ export const OdemeYuklemePage: React.FC = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const selectedFile = event.target.files[0];
-      if (selectedFile.name.endsWith('.csv')) {
+      if (selectedFile.name.endsWith('.csv') || selectedFile.name.endsWith('.xlsx') || selectedFile.name.endsWith('.xls')) {
         setFile(selectedFile);
         setFeedback(null);
       } else {
-        setFeedback({ message: "Lütfen geçerli bir CSV dosyası seçin.", type: 'error' });
+        setFeedback({ message: "Lütfen geçerli bir CSV veya Excel dosyası seçin.", type: 'error' });
         setFile(null);
         if(fileInputRef.current) fileInputRef.current.value = "";
       }
@@ -5598,11 +5634,52 @@ export const OdemeYuklemePage: React.FC = () => {
     }
 
     setFeedback({ message: `Dosya yükleniyor ve işleniyor...`, type: 'info' });
-    setIsLoading(true); // Set loading to true
+    setIsLoading(true);
 
     try {
+        let fileToUpload: File = file;
+
+        if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+            const data = await file.arrayBuffer();
+            const workbook = XLSX.read(data, { type: 'array' });
+            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+            const jsonData: any[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+            if (jsonData.length > 1) {
+                const header = jsonData[0];
+                const dateColumnIndex = header.findIndex((h: string) => h.toLowerCase().includes('tarih'));
+
+                if (dateColumnIndex !== -1) {
+                    for (let i = 1; i < jsonData.length; i++) {
+                        const row = jsonData[i];
+                        const dateValue = row[dateColumnIndex];
+                        if (dateValue) {
+                            // Convert Excel date number to JS date, then format, or parse string
+                            if (typeof dateValue === 'number') {
+                                const jsDate = XLSX.SSF.parse_date_code(dateValue);
+                                row[dateColumnIndex] = `${jsDate.d.toString().padStart(2, '0')}/${jsDate.m.toString().padStart(2, '0')}/${jsDate.y}`;
+                            } else {
+                                // Assuming string format DD-MM-YY or similar
+                                const dateParts = String(dateValue).split(/[-./]/);
+                                if (dateParts.length === 3) {
+                                    let [day, month, year] = dateParts;
+                                    if (year.length === 2) year = `20${year}`;
+                                    row[dateColumnIndex] = `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            const newWs = XLSX.utils.aoa_to_sheet(jsonData);
+            const csvData = XLSX.utils.sheet_to_csv(newWs, { FS: ';' });
+            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+            fileToUpload = new File([blob], file.name.replace(/\.(xlsx|xls)$/, '.csv'), { type: 'text/csv;charset=utf-8;' });
+        }
+
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append('file', fileToUpload);
 
         const result = await uploadOdeme(formData);
 
@@ -5622,7 +5699,7 @@ export const OdemeYuklemePage: React.FC = () => {
         console.error("File processing error:", error);
         setFeedback({ message: `Dosya işlenirken bir hata oluştu: ${error.message || error}. Lütfen dosyanın formatını kontrol edin.`, type: 'error' });
     } finally {
-        setIsLoading(false); // Set loading to false
+        setIsLoading(false);
     }
 
     setFile(null);
@@ -5646,7 +5723,7 @@ export const OdemeYuklemePage: React.FC = () => {
               type="file" 
               id="odeme-file-upload"
               ref={fileInputRef}
-              accept=".xlsx, .xls"
+              accept=".csv, .xlsx, .xls"
               onChange={handleFileChange} 
               className="flex-grow"
               disabled={isLoading}
