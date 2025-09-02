@@ -1,13 +1,7 @@
-GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/stok-fiyatlar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
-:8000/api/v1/stok-fiyatlar/:1  Failed to load resource: net::ERR_FAILED
-App.tsx:310 Error in fetchData: Object
-fetchData @ App.tsx:310
-GumusBulut/:1 Access to fetch at 'http://localhost:8000/api/v1/subeler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
-:8000/api/v1/subeler/:1  Failed to load resource: net::ERR_FAILED
-App.tsx:310 Error in fetchData: Object
-fetchData @ App.tsx:310
-pages.tsx:5648 Uncaught ReferenceError: isLoading is not defined
-    at OdemeYuklemePage (pages.tsx:5648:25)
+YemekCekiPage.tsx:305 Uncaught ReferenceError: API_BASE_URL is not defined
+    at YemekCekiPage.tsx:305:37
+    at Array.map (<anonymous>)
+    at YemekCekiPage (YemekCekiPage.tsx:290:34)
     at react-stack-bottom-frame (react-dom_client.js?v=c10a09cd:17424:20)
     at renderWithHooks (react-dom_client.js?v=c10a09cd:4206:24)
     at updateFunctionComponent (react-dom_client.js?v=c10a09cd:6619:21)
@@ -15,5 +9,3 @@ pages.tsx:5648 Uncaught ReferenceError: isLoading is not defined
     at runWithFiberInDEV (react-dom_client.js?v=c10a09cd:1485:72)
     at performUnitOfWork (react-dom_client.js?v=c10a09cd:10874:82)
     at workLoopSync (react-dom_client.js?v=c10a09cd:10728:43)
-    at renderRootSync (react-dom_client.js?v=c10a09cd:10711:13)
-    at performWorkOnRoot (react-dom_client.js?v=c10a09cd:10359:46)

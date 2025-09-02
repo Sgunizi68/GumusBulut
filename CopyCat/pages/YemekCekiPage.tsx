@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useAppContext, useDataContext } from '../App';
+import { useAppContext, useDataContext, API_BASE_URL } from '../App';
 import { useToast } from '../contexts/ToastContext';
 import { Card, Button, Input, Select, TableLayout, Modal } from '../components';
 import { Icons } from '../constants';
@@ -211,22 +211,32 @@ const YemekCekiPage: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleEdit = (yemekCeki: YemekCeki) => {
-    setEditingYemekCeki(yemekCeki);
-    setFormData({
-      Kategori_ID: yemekCeki.Kategori_ID,
-      Tarih: yemekCeki.Tarih,
-      Tutar: yemekCeki.Tutar,
-      Odeme_Tarih: yemekCeki.Odeme_Tarih,
-      Ilk_Tarih: yemekCeki.Ilk_Tarih,
-      Son_Tarih: yemekCeki.Son_Tarih,
-      Sube_ID: yemekCeki.Sube_ID,
-      Imaj: null, // Will not re-upload file, just show existing
-      Imaj_Adi: yemekCeki.Imaj_Adi,
-    });
-    const mimeType = getMimeType(yemekCeki.Imaj_Adi);
-    setImagePreview(yemekCeki.Imaj ? `data:${mimeType};base64,${yemekCeki.Imaj}` : null);
-    setIsModalOpen(true);
+  const handleEdit = async (yemekCekiId: number) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/yemek-cekiler/${yemekCekiId}`);
+        if (!response.ok) {
+            throw new Error("Yemek çeki detayı alınamadı.");
+        }
+        const yemekCeki: YemekCeki = await response.json();
+        
+        setEditingYemekCeki(yemekCeki);
+        setFormData({
+          Kategori_ID: yemekCeki.Kategori_ID,
+          Tarih: yemekCeki.Tarih,
+          Tutar: yemekCeki.Tutar,
+          Odeme_Tarih: yemekCeki.Odeme_Tarih,
+          Ilk_Tarih: yemekCeki.Ilk_Tarih,
+          Son_Tarih: yemekCeki.Son_Tarih,
+          Sube_ID: yemekCeki.Sube_ID,
+          Imaj: null, // Will not re-upload file, just show existing
+          Imaj_Adi: yemekCeki.Imaj_Adi,
+        });
+        const mimeType = getMimeType(yemekCeki.Imaj_Adi);
+        setImagePreview(yemekCeki.Imaj ? `data:${mimeType};base64,${yemekCeki.Imaj}` : null);
+        setIsModalOpen(true);
+    } catch (error) {
+        showError("Hata", error instanceof Error ? error.message : "Bilinmeyen bir hata oluştu.");
+    }
   };
 
   const handleDelete = async (yemekCekiId: number) => {
@@ -291,8 +301,8 @@ const YemekCekiPage: React.FC = () => {
                 <td className="px-4 py-2 text-sm text-gray-500">{y.Ilk_Tarih}</td>
                 <td className="px-4 py-2 text-sm text-gray-500">{y.Son_Tarih}</td>
                 <td className="px-4 py-2 text-sm text-gray-500">
-                    {y.Imaj && (
-                        <a href={`data:${mimeType};base64,${y.Imaj}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+                    {y.has_imaj && (
+                        <a href={`${API_BASE_URL}/yemek-cekiler/${y.ID}/image`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
                             Görüntüle
                         </a>
                     )}
@@ -301,7 +311,7 @@ const YemekCekiPage: React.FC = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => handleEdit(y)}
+                    onClick={() => handleEdit(y.ID)}
                     leftIcon={<Icons.Edit className="w-4 h-4" />}
                     title="Düzenle"
                   />
