@@ -334,102 +334,130 @@ const fetchData = async <T,>(url: string, options: RequestInit = {}, skipAuth: b
 
 // DataProvider Component
 const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [subeList, setSubeList] = useState<Sube[]>([]);
-  const [eFaturaList, setEFaturaList] = useState<EFatura[]>([]);
-  const [b2bEkstreList, setB2BEkstreList] = useState<B2BEkstre[]>([]);
-  const [digerHarcamaList, setDigerHarcamaList] = useState<DigerHarcama[]>([]);
-  const [stokList, setStokList] = useState<Stok[]>([]);
-  const [stokFiyatList, setStokFiyatList] = useState<StokFiyat[]>([]);
-  const [stokSayimList, setStokSayimList] = useState<StokSayim[]>([]);
-  const [calisanList, setCalisanList] = useState<Calisan[]>([]);
-  const [puantajSecimiList, setPuantajSecimiList] = useState<PuantajSecimi[]>([]);
-  const [puantajList, setPuantajList] = useState<Puantaj[]>([]);
-  const [gelirList, setGelirList] = useState<Gelir[]>([]);
-  const [gelirEkstraList, setGelirEkstraList] = useState<GelirEkstra[]>([]);
-  const [avansIstekList, setAvansIstekList] = useState<AvansIstek[]>([]);
-  const [ustKategoriList, setUstKategoriList] = useState<UstKategori[]>([]);
-  const [kategoriList, setKategoriList] = useState<Kategori[]>([]);
-  const [degerList, setDegerList] = useState<Deger[]>([]);
-  const [userList, setUserList] = useState<Kullanici[]>([]);
-  const [rolesList, setRolesList] = useState<Rol[]>([]);
-  const [permissionsList, setPermissionsList] = useState<Yetki[]>([]);
-  const [userRolesList, setUserRolesList] = useState<KullaniciRol[]>([]);
-  const [rolePermissionsList, setRolePermissionsList] = useState<RolYetki[]>([]);
-  const [eFaturaReferansList, setEFaturaReferansList] = useState<EFaturaReferans[]>([]);
-  const [odemeReferansList, setOdemeReferansList] = useState<OdemeReferans[]>([]);
-  const [nakitList, setNakitList] = useState<Nakit[]>([]);
-  const [odemeList, setOdemeList] = useState<Odeme[]>([]);
-  const [yemekCekiList, setYemekCekiList] = useState<YemekCeki[]>([]);
+    const [subeList, setSubeList] = useState<Sube[]>([]);
+    const [eFaturaList, setEFaturaList] = useState<EFatura[]>([]);
+    const [b2bEkstreList, setB2BEkstreList] = useState<B2BEkstre[]>([]);
+    const [digerHarcamaList, setDigerHarcamaList] = useState<DigerHarcama[]>([]);
+    const [stokList, setStokList] = useState<Stok[]>([]);
+    const [stokFiyatList, setStokFiyatList] = useState<StokFiyat[]>([]);
+    const [stokSayimList, setStokSayimList] = useState<StokSayim[]>([]);
+    const [calisanList, setCalisanList] = useState<Calisan[]>([]);
+    const [puantajSecimiList, setPuantajSecimiList] = useState<PuantajSecimi[]>([]);
+    const [puantajList, setPuantajList] = useState<Puantaj[]>([]);
+    const [gelirList, setGelirList] = useState<Gelir[]>([]);
+    const [gelirEkstraList, setGelirEkstraList] = useState<GelirEkstra[]>([]);
+    const [avansIstekList, setAvansIstekList] = useState<AvansIstek[]>([]);
+    const [ustKategoriList, setUstKategoriList] = useState<UstKategori[]>([]);
+    const [kategoriList, setKategoriList] = useState<Kategori[]>([]);
+    const [degerList, setDegerList] = useState<Deger[]>([]);
+    const [userList, setUserList] = useState<Kullanici[]>([]);
+    const [rolesList, setRolesList] = useState<Rol[]>([]);
+    const [permissionsList, setPermissionsList] = useState<Yetki[]>([]);
+    const [userRolesList, setUserRolesList] = useState<KullaniciRol[]>([]);
+    const [rolePermissionsList, setRolePermissionsList] = useState<RolYetki[]>([]);
+    const [eFaturaReferansList, setEFaturaReferansList] = useState<EFaturaReferans[]>([]);
+    const [odemeReferansList, setOdemeReferansList] = useState<OdemeReferans[]>([]);
+    const [nakitList, setNakitList] = useState<Nakit[]>([]);
+    const [odemeList, setOdemeList] = useState<Odeme[]>([]);
+    const [yemekCekiList, setYemekCekiList] = useState<YemekCeki[]>([]);
 
-  // Initial data fetching for all lists
-  useEffect(() => {
-    const fetchAllData = async () => {
-      const [
-        subeler, eFaturalar, b2bEkstreler, digerHarcamalar, stoklar, stokFiyatlar,
-        stokSayimlar, calisanlar, puantajSecimleri, puantajlar, gelirler,
-        gelirEkstralar, avansIstekler, ustKategoriler, kategoriler, degerler,
-        users, roles, permissions, userRoles, rolePermissions, eFaturaReferanslar, odemeReferanslar, nakitler, odemeler, yemekCekiler
-      ] = await Promise.all([
-        fetchData<Sube[]>(`${API_BASE_URL}/subeler/`),
-        fetchData<EFatura[]>(`${API_BASE_URL}/e-faturalar/`),
-        fetchData<B2BEkstre[]>(`${API_BASE_URL}/b2b-ekstreler/`),
-        fetchData<DigerHarcama[]>(`${API_BASE_URL}/diger-harcamalar/`),
-        fetchData<Stok[]>(`${API_BASE_URL}/stoklar/`),
-        fetchData<StokFiyat[]>(`${API_BASE_URL}/stok-fiyatlar/`),
-        fetchData<StokSayim[]>(`${API_BASE_URL}/stok-sayimlar/`),
-        fetchData<Calisan[]>(`${API_BASE_URL}/calisanlar/`),
-        fetchData<PuantajSecimi[]>(`${API_BASE_URL}/puantaj-secimi/`),
-        fetchData<Puantaj[]>(`${API_BASE_URL}/puantajlar/`),
-        fetchData<Gelir[]>(`${API_BASE_URL}/gelirler/`),
-        fetchData<GelirEkstra[]>(`${API_BASE_URL}/gelir-ekstra/`),
-        fetchData<AvansIstek[]>(`${API_BASE_URL}/avans-istekler/`),
-        fetchData<UstKategori[]>(`${API_BASE_URL}/ust-kategoriler/`),
-        fetchData<Kategori[]>(`${API_BASE_URL}/kategoriler/`),
-        fetchData<Deger[]>(`${API_BASE_URL}/degerler/`),
-        fetchData<Kullanici[]>(`${API_BASE_URL}/users/`),
-        fetchData<Rol[]>(`${API_BASE_URL}/roles/`),
-        fetchData<Yetki[]>(`${API_BASE_URL}/yetkiler/`),
-        fetchData<KullaniciRol[]>(`${API_BASE_URL}/kullanici-rolleri/`),
-        fetchData<RolYetki[]>(`${API_BASE_URL}/rol-yetkileri/`),
-        fetchData<EFaturaReferans[]>(`${API_BASE_URL}/e-fatura-referans/`),
-        fetchData<OdemeReferans[]>(`${API_BASE_URL}/Odeme_Referans/`),
-        fetchData<Nakit[]>(`${API_BASE_URL}/nakit/`),
-        fetchData<Odeme[]>(`${API_BASE_URL}/Odeme/`),
-        fetchData<YemekCeki[]>(`${API_BASE_URL}/yemek-cekiler/`),
-      ]);
+    // Initial data fetching with caching
+    useEffect(() => {
+        const loadAndFetchData = async () => {
+            // 1. Load from cache first
+            const cachedData = loadFromLocalStorage<Partial<StoredDataState>>(STORAGE_KEYS.DATA_STATE, {});
+            if (cachedData.subeList) setSubeList(cachedData.subeList);
+            if (cachedData.eFaturaList) setEFaturaList(cachedData.eFaturaList);
+            if (cachedData.b2bEkstreList) setB2BEkstreList(cachedData.b2bEkstreList);
+            if (cachedData.digerHarcamaList) setDigerHarcamaList(cachedData.digerHarcamaList);
+            if (cachedData.stokList) setStokList(cachedData.stokList);
+            if (cachedData.stokFiyatList) setStokFiyatList(cachedData.stokFiyatList);
+            if (cachedData.stokSayimList) setStokSayimList(cachedData.stokSayimList);
+            if (cachedData.calisanList) setCalisanList(cachedData.calisanList);
+            if (cachedData.puantajSecimiList) setPuantajSecimiList(cachedData.puantajSecimiList);
+            if (cachedData.puantajList) setPuantajList(cachedData.puantajList);
+            if (cachedData.gelirList) setGelirList(cachedData.gelirList);
+            if (cachedData.gelirEkstraList) setGelirEkstraList(cachedData.gelirEkstraList);
+            if (cachedData.avansIstekList) setAvansIstekList(cachedData.avansIstekList);
+            if (cachedData.ustKategoriList) setUstKategoriList(cachedData.ustKategoriList);
+            if (cachedData.kategoriList) setKategoriList(cachedData.kategoriList);
+            if (cachedData.rolesList) setRolesList(cachedData.rolesList);
+            if (cachedData.eFaturaReferansList) setEFaturaReferansList(cachedData.eFaturaReferansList);
+            if (cachedData.nakitList) setNakitList(cachedData.nakitList);
+            if (cachedData.odemeList) setOdemeList(cachedData.odemeList);
 
-      if (subeler) setSubeList(subeler);
-      if (eFaturalar) setEFaturaList(eFaturalar);
-      if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
-      if (digerHarcamalar) setDigerHarcamaList(digerHarcamalar);
-      if (stoklar) setStokList(stoklar);
-      if (stokFiyatlar) setStokFiyatList(stokFiyatlar);
-      if (stokSayimlar) setStokSayimList(stokSayimlar);
-      if (calisanlar) setCalisanList(calisanlar);
-      if (puantajSecimleri) setPuantajSecimiList(puantajSecimleri);
-      if (puantajlar) setPuantajList(puantajlar);
-      if (gelirler) setGelirList(gelirler);
-      if (gelirEkstralar) setGelirEkstraList(gelirEkstralar);
-      if (avansIstekler) setAvansIstekList(avansIstekler);
-      if (ustKategoriler) setUstKategoriList(ustKategoriler);
-      if (kategoriler) setKategoriList(kategoriler);
-      if (degerler) setDegerList(degerler);
-      if (users) setUserList(users);
-      if (roles) setRolesList(roles);
-      if (permissions) setPermissionsList(permissions);
-      if (userRoles) setUserRolesList(userRoles);
-      if (rolePermissions) setRolePermissionsList(rolePermissions);
-      if (eFaturaReferanslar) setEFaturaReferansList(eFaturaReferanslar);
-      if (odemeReferanslar) setOdemeReferansList(odemeReferanslar);
-      setNakitList(nakitler || []);
-      setOdemeList(odemeler || []);
-      if (yemekCekiler) setYemekCekiList(yemekCekiler);
-      console.log("DataProvider - nakitList after setting:", nakitler || []);
-      console.log("DataProvider - odemeList after setting:", odemeler || []);
-    };
+            // 2. Then fetch from API
+            const [
+                subeler, eFaturalar, b2bEkstreler, digerHarcamalar, stoklar, stokFiyatlar,
+                stokSayimlar, calisanlar, puantajSecimleri, puantajlar, gelirler,
+                gelirEkstralar, avansIstekler, ustKategoriler, kategoriler, degerler,
+                users, roles, permissions, userRoles, rolePermissions, eFaturaReferanslar, odemeReferanslar, nakitler, odemeler, yemekCekiler
+            ] = await Promise.all([
+                fetchData<Sube[]>(`${API_BASE_URL}/subeler/`),
+                fetchData<EFatura[]>(`${API_BASE_URL}/e-faturalar/`),
+                fetchData<B2BEkstre[]>(`${API_BASE_URL}/b2b-ekstreler/`),
+                fetchData<DigerHarcama[]>(`${API_BASE_URL}/diger-harcamalar/`),
+                fetchData<Stok[]>(`${API_BASE_URL}/stoklar/`),
+                fetchData<StokFiyat[]>(`${API_BASE_URL}/stok-fiyatlar/`),
+                fetchData<StokSayim[]>(`${API_BASE_URL}/stok-sayimlar/`),
+                fetchData<Calisan[]>(`${API_BASE_URL}/calisanlar/`),
+                fetchData<PuantajSecimi[]>(`${API_BASE_URL}/puantaj-secimi/`),
+                fetchData<Puantaj[]>(`${API_BASE_URL}/puantajlar/`),
+                fetchData<Gelir[]>(`${API_BASE_URL}/gelirler/`),
+                fetchData<GelirEkstra[]>(`${API_BASE_URL}/gelir-ekstra/`),
+                fetchData<AvansIstek[]>(`${API_BASE_URL}/avans-istekler/`),
+                fetchData<UstKategori[]>(`${API_BASE_URL}/ust-kategoriler/`),
+                fetchData<Kategori[]>(`${API_BASE_URL}/kategoriler/`),
+                fetchData<Deger[]>(`${API_BASE_URL}/degerler/`),
+                fetchData<Kullanici[]>(`${API_BASE_URL}/users/`),
+                fetchData<Rol[]>(`${API_BASE_URL}/roles/`),
+                fetchData<Yetki[]>(`${API_BASE_URL}/yetkiler/`),
+                fetchData<KullaniciRol[]>(`${API_BASE_URL}/kullanici-rolleri/`),
+                fetchData<RolYetki[]>(`${API_BASE_URL}/rol-yetkileri/`),
+                fetchData<EFaturaReferans[]>(`${API_BASE_URL}/e-fatura-referans/`),
+                fetchData<OdemeReferans[]>(`${API_BASE_URL}/Odeme_Referans/`),
+                fetchData<Nakit[]>(`${API_BASE_URL}/nakit/`),
+                fetchData<Odeme[]>(`${API_BASE_URL}/Odeme/`),
+                fetchData<YemekCeki[]>(`${API_BASE_URL}/yemek-cekiler/`),
+            ]);
 
-    fetchAllData();
-  }, []);
+            // 3. Update state and cache
+            const newDataToCache: StoredDataState = {} as StoredDataState;
+
+            if (subeler) { setSubeList(subeler); newDataToCache.subeList = subeler; }
+            if (eFaturalar) { setEFaturaList(eFaturalar); newDataToCache.eFaturaList = eFaturalar; }
+            if (b2bEkstreler) { setB2BEkstreList(b2bEkstreler); newDataToCache.b2bEkstreList = b2bEkstreler; }
+            if (digerHarcamalar) { setDigerHarcamaList(digerHarcamalar); newDataToCache.digerHarcamaList = digerHarcamalar; }
+            if (stoklar) { setStokList(stoklar); newDataToCache.stokList = stoklar; }
+            if (stokFiyatlar) { setStokFiyatList(stokFiyatlar); newDataToCache.stokFiyatList = stokFiyatlar; }
+            if (stokSayimlar) { setStokSayimList(stokSayimlar); newDataToCache.stokSayimList = stokSayimlar; }
+            if (calisanlar) { setCalisanList(calisanlar); newDataToCache.calisanList = calisanlar; }
+            if (puantajSecimleri) { setPuantajSecimiList(puantajSecimleri); newDataToCache.puantajSecimiList = puantajSecimleri; }
+            if (puantajlar) { setPuantajList(puantajlar); newDataToCache.puantajList = puantajlar; }
+            if (gelirler) { setGelirList(gelirler); newDataToCache.gelirList = gelirler; }
+            if (gelirEkstralar) { setGelirEkstraList(gelirEkstralar); newDataToCache.gelirEkstraList = gelirEkstralar; }
+            if (avansIstekler) { setAvansIstekList(avansIstekler); newDataToCache.avansIstekList = avansIstekler; }
+            if (ustKategoriler) { setUstKategoriList(ustKategoriler); newDataToCache.ustKategoriList = ustKategoriler; }
+            if (kategoriler) { setKategoriList(kategoriler); newDataToCache.kategoriList = kategoriler; }
+            if (degerler) setDegerList(degerler);
+            if (users) setUserList(users);
+            if (roles) { setRolesList(roles); newDataToCache.rolesList = roles; }
+            if (permissions) setPermissionsList(permissions);
+            if (userRoles) setUserRolesList(userRoles);
+            if (rolePermissions) setRolePermissionsList(rolePermissions);
+            if (eFaturaReferanslar) { setEFaturaReferansList(eFaturaReferanslar); newDataToCache.eFaturaReferansList = eFaturaReferanslar; }
+            if (odemeReferanslar) setOdemeReferansList(odemeReferanslar);
+            setNakitList(nakitler || []); 
+            if (nakitler) newDataToCache.nakitList = nakitler;
+            setOdemeList(odemeler || []);
+            if (odemeler) newDataToCache.odemeList = odemeler;
+            if (yemekCekiler) setYemekCekiList(yemekCekiler);
+
+            localStorage.setItem(STORAGE_KEYS.DATA_STATE, JSON.stringify(newDataToCache));
+        };
+
+        loadAndFetchData();
+    }, []);
 
   const fetchDegerler = useCallback(async () => {
     const degerler = await fetchData<Deger[]>(`${API_BASE_URL}/degerler/`);
