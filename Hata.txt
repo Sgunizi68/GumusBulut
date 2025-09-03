@@ -1,11 +1,11 @@
-YemekCekiPage.tsx:305 Uncaught ReferenceError: API_BASE_URL is not defined
-    at YemekCekiPage.tsx:305:37
-    at Array.map (<anonymous>)
-    at YemekCekiPage (YemekCekiPage.tsx:290:34)
-    at react-stack-bottom-frame (react-dom_client.js?v=c10a09cd:17424:20)
-    at renderWithHooks (react-dom_client.js?v=c10a09cd:4206:24)
-    at updateFunctionComponent (react-dom_client.js?v=c10a09cd:6619:21)
-    at beginWork (react-dom_client.js?v=c10a09cd:7654:20)
-    at runWithFiberInDEV (react-dom_client.js?v=c10a09cd:1485:72)
-    at performUnitOfWork (react-dom_client.js?v=c10a09cd:10874:82)
-    at workLoopSync (react-dom_client.js?v=c10a09cd:10728:43)
+App.tsx:1753 Uncaught ReferenceError: OnlineKontrolDashboardPage is not defined
+    at AppWithToast (App.tsx:1753:73)
+    at react-stack-bottom-frame (react-dom_client.js?v=5d475cb7:17424:20)
+    at renderWithHooks (react-dom_client.js?v=5d475cb7:4206:24)
+    at updateFunctionComponent (react-dom_client.js?v=5d475cb7:6619:21)
+    at beginWork (react-dom_client.js?v=5d475cb7:7654:20)
+    at runWithFiberInDEV (react-dom_client.js?v=5d475cb7:1485:72)
+    at performUnitOfWork (react-dom_client.js?v=5d475cb7:10874:82)
+    at workLoopSync (react-dom_client.js?v=5d475cb7:10728:43)
+    at renderRootSync (react-dom_client.js?v=5d475cb7:10711:13)
+    at performWorkOnRoot (react-dom_client.js?v=5d475cb7:10359:46)

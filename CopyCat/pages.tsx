@@ -3156,7 +3156,7 @@ export const B2BCategoryAssignmentPage: React.FC = () => {
   const { selectedBranch, currentPeriod: currentAppContextPeriod, hasPermission } = useAppContext();
   
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterPeriod, setFilterPeriod] = useState(""); // Default to "Tüm Dönemler"
+  const [filterPeriod, setFilterPeriod] = useState(currentAppContextPeriod || ""); // Default to "Tüm Dönemler"
   const [filterUncategorized, setFilterUncategorized] = useState(true);
 
   if (!hasPermission(B2B_KATEGORI_ATAMA_EKRANI_YETKI_ADI)) {
@@ -6121,3 +6121,106 @@ export const OdemeKategoriAtamaPage: React.FC = () => {
 
 export { default as POSHareketleriYuklemePage } from "./pages/POSHareketleriYukleme";
 export { default as YemekCekiPage } from "./pages/YemekCekiPage";
+
+// --- ONLINE KONTROL DASHBOARD PAGE ---
+export const OnlineKontrolDashboardPage: React.FC = () => {
+  const { selectedBranch, currentPeriod, hasPermission } = useAppContext();
+  const { kategoriList, ustKategoriList } = useDataContext();
+
+  const [viewedPeriod, setViewedPeriod] = useState(currentPeriod);
+
+  const platforms = useMemo(() => {
+    return kategoriList.filter(k => k.Ust_Kategori_ID === 1 && k.Aktif_Pasif);
+  }, [kategoriList]);
+
+  const monthNames = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+
+  const weeklyHeaders = useMemo(() => {
+    if (!viewedPeriod) return [];
+    const year = 2000 + parseInt(viewedPeriod.substring(0, 2));
+    const month = parseInt(viewedPeriod.substring(2, 4));
+    const monthName = monthNames[month - 1];
+    const daysInMonth = new Date(year, month, 0).getDate();
+
+    const headers = [
+      `1-7 ${monthName}`,
+      `8-14 ${monthName}`,
+      `15-21 ${monthName}`,
+      `22-28 ${monthName}`,
+    ];
+
+    if (daysInMonth > 28) {
+      headers.push(`29-${daysInMonth} ${monthName}`);
+    }
+
+    return headers;
+  }, [viewedPeriod]);
+
+  if (!hasPermission('Online Kontrol Dashboard Görüntüleme')) {
+      return <AccessDenied title="Online Kontrol Dashboard" />;
+  }
+
+  return (
+    <Card title="Online Kontrol Dashboard" actions={
+        <div className="flex items-center space-x-2">
+            <label htmlFor="period-select" className="text-sm font-medium">Dönem:</label>
+            <Select id="period-select" value={viewedPeriod} onChange={e => setViewedPeriod(e.target.value)}>
+                <option value="2508">2508 - Ağustos 2025</option>
+                <option value="2507">2507 - Temmuz 2025</option>
+                <option value="2506">2506 - Haziran 2025</option>
+            </Select>
+        </div>
+    }>
+        <div className="overflow-x-auto">
+            <table className="min-w-full border-collapse">
+                <thead>
+                    <tr>
+                        <th rowSpan={2} className="border p-2 bg-gray-700 text-white">Platform</th>
+                        {weeklyHeaders.map(header => (
+                            <th key={header} colSpan={3} className="border p-2 bg-blue-600 text-white">{header}</th>
+                        ))}
+                        <th rowSpan={2} className="border p-2 bg-green-600 text-white">Toplam</th>
+                    </tr>
+                    <tr>
+                        {weeklyHeaders.map((_, index) => (
+                            <React.Fragment key={index}>
+                                <th className="border p-1 bg-blue-100 text-xs">Gelir</th>
+                                <th className="border p-1 bg-orange-100 text-xs">Virman</th>
+                                <th className="border p-1 bg-indigo-100 text-xs">Komisyon</th>
+                            </React.Fragment>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {platforms.map(platform => (
+                        <tr key={platform.Kategori_ID}>
+                            <td className="border p-2 font-bold bg-red-100 text-red-800 text-left">{platform.Kategori_Adi}</td>
+                            {weeklyHeaders.map((_, weekIndex) => (
+                                <React.Fragment key={weekIndex}>
+                                    <td className="border p-2 text-right">0.00</td>
+                                    <td className="border p-2 text-right">0.00</td>
+                                    <td className="border p-2 text-right">0.00</td>
+                                </React.Fragment>
+                            ))}
+                            <td className="border p-2 text-right font-bold bg-green-100">0.00</td>
+                        </tr>
+                    ))}
+                </tbody>
+                <tfoot>
+                    <tr className="bg-gray-700 text-white font-bold">
+                        <td className="border p-2 text-left">GENEL TOPLAM</td>
+                        {weeklyHeaders.map((_, weekIndex) => (
+                            <React.Fragment key={weekIndex}>
+                                <td className="border p-2 text-right">0.00</td>
+                                <td className="border p-2 text-right">0.00</td>
+                                <td className="border p-2 text-right">0.00</td>
+                            </React.Fragment>
+                        ))}
+                        <td className="border p-2 text-right">0.00</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </Card>
+  );
+};
