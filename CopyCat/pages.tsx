@@ -6143,8 +6143,8 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
     const daysInMonth = new Date(year, month, 0).getDate();
 
     const headers = [
-      `1-7 ${monthName}`,
-      `8-14 ${monthName}`,
+      `01-07 ${monthName}`,
+      `08-14 ${monthName}`,
       `15-21 ${monthName}`,
       `22-28 ${monthName}`,
     ];

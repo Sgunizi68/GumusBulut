@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="364c7c9f-f57e-4db9-a56f-92c279098407" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1ScreenShot.png" beforeDir="false" afterPath="$PROJECT_DIR$/1ScreenShot.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Hata.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Hata.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3ScreenShot.png" beforeDir="false" afterPath="$PROJECT_DIR$/3ScreenShot.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CopyCat/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CopyCat/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
