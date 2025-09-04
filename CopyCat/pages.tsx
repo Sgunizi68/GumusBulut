@@ -6125,7 +6125,7 @@ export { default as YemekCekiPage } from "./pages/YemekCekiPage";
 // --- ONLINE KONTROL DASHBOARD PAGE ---
 export const OnlineKontrolDashboardPage: React.FC = () => {
   const { selectedBranch, currentPeriod, hasPermission } = useAppContext();
-  const { kategoriList, ustKategoriList } = useDataContext();
+  const { kategoriList, ustKategoriList, b2bEkstreList } = useDataContext();
 
   const [viewedPeriod, setViewedPeriod] = useState(currentPeriod);
 
@@ -6155,6 +6155,21 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
 
     return headers;
   }, [viewedPeriod]);
+
+  const calculateVirman = (platformName: string, weekHeader: string) => {
+    if (!viewedPeriod || !b2bEkstreList) return 0;
+  
+    const aramaYapilacakText = `${weekHeader} ${platformName} Alacak Virmanlar`;
+  
+    const virman = b2bEkstreList
+      .filter(ekstre => 
+        ekstre.Donem === viewedPeriod &&
+        ekstre.Aciklama.includes(aramaYapilacakText)
+      )
+      .reduce((total, ekstre) => total + Math.abs(ekstre.Alacak), 0);
+  
+    return virman;
+  };
 
   if (!hasPermission('Online Kontrol Dashboard Görüntüleme')) {
       return <AccessDenied title="Online Kontrol Dashboard" />;
@@ -6195,10 +6210,10 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                     {platforms.map(platform => (
                         <tr key={platform.Kategori_ID}>
                             <td className="border p-2 font-bold bg-red-100 text-red-800 text-left">{platform.Kategori_Adi}</td>
-                            {weeklyHeaders.map((_, weekIndex) => (
+                            {weeklyHeaders.map((header, weekIndex) => (
                                 <React.Fragment key={weekIndex}>
                                     <td className="border p-2 text-right">0.00</td>
-                                    <td className="border p-2 text-right">0.00</td>
+                                    <td className="border p-2 text-right">{formatTrCurrencyAdvanced(calculateVirman(platform.Kategori_Adi, header), 2)}</td>
                                     <td className="border p-2 text-right">0.00</td>
                                 </React.Fragment>
                             ))}
