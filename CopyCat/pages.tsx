@@ -6193,16 +6193,16 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                     <tr>
                         <th rowSpan={2} className="border p-2 bg-gray-700 text-white">Platform</th>
                         {weeklyHeaders.map(header => (
-                            <th key={header} colSpan={3} className="border p-2 bg-blue-600 text-white">{header}</th>
+                            <th key={header} colSpan={2} className="border p-2 bg-blue-600 text-white">{header}</th>
                         ))}
                         <th rowSpan={2} className="border p-2 bg-green-600 text-white">Toplam</th>
+                        <th rowSpan={2} className="border p-2 bg-purple-600 text-white">Komisyon Toplam</th>
                     </tr>
                     <tr>
                         {weeklyHeaders.map((_, index) => (
                             <React.Fragment key={index}>
                                 <th className="border p-1 bg-blue-100 text-xs">Gelir</th>
                                 <th className="border p-1 bg-orange-100 text-xs">Virman</th>
-                                <th className="border p-1 bg-indigo-100 text-xs">Komisyon</th>
                             </React.Fragment>
                         ))}
                     </tr>
@@ -6215,10 +6215,10 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                                 <React.Fragment key={weekIndex}>
                                     <td className="border p-2 text-right">0.00</td>
                                     <td className="border p-2 text-right">{formatTrCurrencyAdvanced(calculateVirman(platform.Kategori_Adi, header), 2)}</td>
-                                    <td className="border p-2 text-right">0.00</td>
                                 </React.Fragment>
                             ))}
                             <td className="border p-2 text-right font-bold bg-green-100">0.00</td>
+                            <td className="border p-2 text-right font-bold bg-purple-100">0.00</td>
                         </tr>
                     ))}
                 </tbody>
@@ -6229,9 +6229,9 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                             <React.Fragment key={weekIndex}>
                                 <td className="border p-2 text-right">0.00</td>
                                 <td className="border p-2 text-right">0.00</td>
-                                <td className="border p-2 text-right">0.00</td>
                             </React.Fragment>
                         ))}
+                        <td className="border p-2 text-right">0.00</td>
                         <td className="border p-2 text-right">0.00</td>
                     </tr>
                 </tfoot>
