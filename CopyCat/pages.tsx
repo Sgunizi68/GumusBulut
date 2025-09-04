@@ -6158,9 +6158,19 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
 
   const calculateVirman = (platformName: string, weekHeader: string) => {
     if (!viewedPeriod || !b2bEkstreList) return 0;
-  
-    const aramaYapilacakText = `${weekHeader} ${platformName} Alacak Virmanlar`.replace(/\s/g, '').toLowerCase();
-  
+
+    let aramaYapilacakText = '';
+
+    if (platformName === 'Getir Online' && weekHeader.startsWith('22-28')) {
+        const year = 2000 + parseInt(viewedPeriod.substring(0, 2));
+        const month = parseInt(viewedPeriod.substring(2, 4));
+        const lastDayOfMonth = new Date(year, month, 0).getDate();
+        const monthName = monthNames[month - 1];
+        aramaYapilacakText = `22-${lastDayOfMonth} ${monthName} Getir Online Alacak Virmanlar`.replace(/\s/g, '').toLowerCase();
+    } else {
+        aramaYapilacakText = `${weekHeader} ${platformName} Alacak Virmanlar`.replace(/\s/g, '').toLowerCase();
+    }
+    
     const virman = b2bEkstreList
       .filter(ekstre => {
         const ekstreDonem = String(ekstre.Donem).trim();
