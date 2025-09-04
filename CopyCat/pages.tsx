@@ -6159,13 +6159,14 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
   const calculateVirman = (platformName: string, weekHeader: string) => {
     if (!viewedPeriod || !b2bEkstreList) return 0;
   
-    const aramaYapilacakText = `${weekHeader} ${platformName} Alacak Virmanlar`;
+    const aramaYapilacakText = `${weekHeader} ${platformName} Alacak Virmanlar`.replace(/\s/g, '').toLowerCase();
   
     const virman = b2bEkstreList
-      .filter(ekstre => 
-        ekstre.Donem === viewedPeriod &&
-        ekstre.Aciklama.includes(aramaYapilacakText)
-      )
+      .filter(ekstre => {
+        const ekstreDonem = String(ekstre.Donem).trim();
+        const ekstreAciklama = ekstre.Aciklama ? ekstre.Aciklama.replace(/\s/g, '').toLowerCase() : '';
+        return ekstreDonem === viewedPeriod && ekstreAciklama.includes(aramaYapilacakText);
+      })
       .reduce((total, ekstre) => total + Math.abs(ekstre.Alacak), 0);
   
     return virman;
