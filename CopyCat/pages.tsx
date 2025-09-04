@@ -6125,7 +6125,7 @@ export { default as YemekCekiPage } from "./pages/YemekCekiPage";
 // --- ONLINE KONTROL DASHBOARD PAGE ---
 export const OnlineKontrolDashboardPage: React.FC = () => {
   const { selectedBranch, currentPeriod, hasPermission } = useAppContext();
-  const { kategoriList, ustKategoriList, b2bEkstreList } = useDataContext();
+  const { kategoriList, ustKategoriList, b2bEkstreList, gelirList } = useDataContext();
 
   const [viewedPeriod, setViewedPeriod] = useState(currentPeriod);
 
@@ -6182,6 +6182,48 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
     return virman;
   };
 
+  const calculateMonthlyKomisyon = (platformName: string) => {
+    if (!viewedPeriod || !b2bEkstreList) return 0;
+
+    const month = parseInt(viewedPeriod.substring(2, 4));
+    const monthName = monthNames[month - 1];
+
+    const platformNameWithoutOnline = platformName.replace(' Online', '');
+    const aramaYapilacakText = `${monthName} ${platformNameWithoutOnline} Komisyon Yansıtma`.toLowerCase();
+
+    const komisyon = b2bEkstreList
+      .filter(ekstre => {
+        const ekstreDonem = String(ekstre.Donem);
+        const ekstreAciklama = ekstre.Aciklama ? ekstre.Aciklama.toLowerCase() : '';
+        return ekstreDonem === viewedPeriod && ekstreAciklama.includes(aramaYapilacakText);
+      })
+      .reduce((total, ekstre) => total + Math.abs(ekstre.Alacak), 0);
+
+    return komisyon;
+  };
+
+  const calculateWeeklyGelir = (platformId: number, weekHeader: string) => {
+    if (!viewedPeriod || !gelirList) return 0;
+
+    const year = 2000 + parseInt(viewedPeriod.substring(0, 2));
+    const month = parseInt(viewedPeriod.substring(2, 4));
+    
+    const dayParts = weekHeader.split(' ')[0].split('-');
+    const startDate = new Date(year, month - 1, parseInt(dayParts[0]));
+    const endDate = new Date(year, month - 1, parseInt(dayParts[1]));
+
+    const gelir = gelirList
+      .filter(g => {
+        const gelirTarih = new Date(g.Tarih);
+        return g.Kategori_ID === platformId &&
+               gelirTarih >= startDate &&
+               gelirTarih <= endDate;
+      })
+      .reduce((total, g) => total + g.Tutar, 0);
+
+    return gelir;
+  };
+
   if (!hasPermission('Online Kontrol Dashboard Görüntüleme')) {
       return <AccessDenied title="Online Kontrol Dashboard" />;
   }
@@ -6223,12 +6265,12 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                             <td className="border p-2 font-bold bg-red-100 text-red-800 text-left">{platform.Kategori_Adi}</td>
                             {weeklyHeaders.map((header, weekIndex) => (
                                 <React.Fragment key={weekIndex}>
-                                    <td className="border p-2 text-right">0.00</td>
+                                    <td className="border p-2 text-right">{formatTrCurrencyAdvanced(calculateWeeklyGelir(platform.Kategori_ID, header), 2)}</td>
                                     <td className="border p-2 text-right">{formatTrCurrencyAdvanced(calculateVirman(platform.Kategori_Adi, header), 2)}</td>
                                 </React.Fragment>
                             ))}
                             <td className="border p-2 text-right font-bold bg-green-100">0.00</td>
-                            <td className="border p-2 text-right font-bold bg-purple-100">0.00</td>
+                            <td className="border p-2 text-right font-bold bg-purple-100">{formatTrCurrencyAdvanced(calculateMonthlyKomisyon(platform.Kategori_Adi), 2)}</td>
                         </tr>
                     ))}
                 </tbody>
