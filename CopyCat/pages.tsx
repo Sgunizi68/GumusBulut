@@ -6209,12 +6209,19 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
     const month = parseInt(viewedPeriod.substring(2, 4));
     
     const dayParts = weekHeader.split(' ')[0].split('-');
-    const startDate = new Date(year, month - 1, parseInt(dayParts[0]));
-    const endDate = new Date(year, month - 1, parseInt(dayParts[1]));
+    const startDay = parseInt(dayParts[0]);
+    const endDay = parseInt(dayParts[1]);
+
+    const startDate = new Date(year, month - 1, startDay);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(year, month - 1, endDay);
+    endDate.setHours(23, 59, 59, 999);
 
     const gelir = gelirList
       .filter(g => {
-        const gelirTarih = new Date(g.Tarih);
+        const [gYear, gMonth, gDay] = g.Tarih.split('-').map(Number);
+        const gelirTarih = new Date(gYear, gMonth - 1, gDay);
+        
         return g.Kategori_ID === platformId &&
                gelirTarih >= startDate &&
                gelirTarih <= endDate;
@@ -6247,7 +6254,8 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                         {weeklyHeaders.map(header => (
                             <th key={header} colSpan={2} className="border p-2 bg-blue-600 text-white">{header}</th>
                         ))}
-                        <th rowSpan={2} className="border p-2 bg-green-600 text-white">Toplam</th>
+                        <th rowSpan={2} className="border p-2 bg-green-600 text-white">Gelir Toplam</th>
+                        <th rowSpan={2} className="border p-2 bg-orange-600 text-white">Virman Toplam</th>
                         <th rowSpan={2} className="border p-2 bg-purple-600 text-white">Komisyon Toplam</th>
                     </tr>
                     <tr>
@@ -6260,19 +6268,24 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {platforms.map(platform => (
-                        <tr key={platform.Kategori_ID}>
-                            <td className="border p-2 font-bold bg-red-100 text-red-800 text-left">{platform.Kategori_Adi}</td>
-                            {weeklyHeaders.map((header, weekIndex) => (
-                                <React.Fragment key={weekIndex}>
-                                    <td className="border p-2 text-right">{formatTrCurrencyAdvanced(calculateWeeklyGelir(platform.Kategori_ID, header), 2)}</td>
-                                    <td className="border p-2 text-right">{formatTrCurrencyAdvanced(calculateVirman(platform.Kategori_Adi, header), 2)}</td>
-                                </React.Fragment>
-                            ))}
-                            <td className="border p-2 text-right font-bold bg-green-100">0.00</td>
-                            <td className="border p-2 text-right font-bold bg-purple-100">{formatTrCurrencyAdvanced(calculateMonthlyKomisyon(platform.Kategori_Adi), 2)}</td>
-                        </tr>
-                    ))}
+                    {platforms.map(platform => {
+                        const totalGelir = weeklyHeaders.reduce((sum, header) => sum + calculateWeeklyGelir(platform.Kategori_ID, header), 0);
+                        const totalVirman = weeklyHeaders.reduce((sum, header) => sum + calculateVirman(platform.Kategori_Adi, header), 0);
+                        return (
+                            <tr key={platform.Kategori_ID}>
+                                <td className="border p-2 font-bold bg-red-100 text-red-800 text-left">{platform.Kategori_Adi}</td>
+                                {weeklyHeaders.map((header, weekIndex) => (
+                                    <React.Fragment key={weekIndex}>
+                                        <td className="border p-2 text-right">{formatTrCurrencyAdvanced(calculateWeeklyGelir(platform.Kategori_ID, header), 2)}</td>
+                                        <td className="border p-2 text-right">{formatTrCurrencyAdvanced(calculateVirman(platform.Kategori_Adi, header), 2)}</td>
+                                    </React.Fragment>
+                                ))}
+                                <td className="border p-2 text-right font-bold bg-green-100">{formatTrCurrencyAdvanced(totalGelir, 2)}</td>
+                                <td className="border p-2 text-right font-bold bg-orange-100">{formatTrCurrencyAdvanced(totalVirman, 2)}</td>
+                                <td className="border p-2 text-right font-bold bg-purple-100">{formatTrCurrencyAdvanced(calculateMonthlyKomisyon(platform.Kategori_Adi), 2)}</td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
                 <tfoot>
                     <tr className="bg-gray-700 text-white font-bold">
@@ -6283,6 +6296,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                                 <td className="border p-2 text-right">0.00</td>
                             </React.Fragment>
                         ))}
+                        <td className="border p-2 text-right">0.00</td>
                         <td className="border p-2 text-right">0.00</td>
                         <td className="border p-2 text-right">0.00</td>
                     </tr>
