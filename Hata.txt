@@ -117,7 +117,13 @@ renderWithHooks @ react-dom_client.js?v=5d475cb7:4217
 updateFunctionComponent @ react-dom_client.js?v=5d475cb7:6619
 beginWork @ react-dom_client.js?v=5d475cb7:7654
 runWithFiberInDEV @ react-dom_client.js?v=5d475cb7:1485
-performUnitOfWork @ react-dom_client.js?v=5d475cb7:10874
+performUnitOfWork @ reac
+
+
+
+
+
+t-dom_client.js?v=5d475cb7:10874
 workLoopSync @ react-dom_client.js?v=5d475cb7:10728
 renderRootSync @ react-dom_client.js?v=5d475cb7:10711
 performWorkOnRoot @ react-dom_client.js?v=5d475cb7:10330
