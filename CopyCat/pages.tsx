@@ -6231,6 +6231,16 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
     return gelir;
   };
 
+  const availablePeriods = useMemo(() => {
+    const periods = [];
+    let period = currentPeriod;
+    for (let i = 0; i < 6; i++) {
+      periods.push(period);
+      period = getPreviousPeriod(period);
+    }
+    return periods;
+  }, [currentPeriod]);
+
   if (!hasPermission('Online Kontrol Dashboard Görüntüleme')) {
       return <AccessDenied title="Online Kontrol Dashboard" />;
   }
@@ -6240,9 +6250,12 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
         <div className="flex items-center space-x-2">
             <label htmlFor="period-select" className="text-sm font-medium">Dönem:</label>
             <Select id="period-select" value={viewedPeriod} onChange={e => setViewedPeriod(e.target.value)}>
-                <option value="2508">2508 - Ağustos 2025</option>
-                <option value="2507">2507 - Temmuz 2025</option>
-                <option value="2506">2506 - Haziran 2025</option>
+                {availablePeriods.map(p => {
+                    const year = 2000 + parseInt(p.substring(0, 2));
+                    const month = parseInt(p.substring(2, 4));
+                    const monthName = monthNames[month - 1];
+                    return <option key={p} value={p}>{`${p} - ${monthName} ${year}`}</option>
+                })}
             </Select>
         </div>
     }>
