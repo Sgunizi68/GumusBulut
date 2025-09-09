@@ -1431,13 +1431,13 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
             
             daily_record = POSKontrolDailyData(
                 Tarih=date.strftime('%Y-%m-%d'),
-                Gelir_POS=gelir_pos,
-                POS_Hareketleri=pos_hareketleri,
-                POS_Kesinti=pos_kesinti,
-                POS_Net=pos_net,
-                Odeme=odeme,  # This is the matched POS transactions total
-                Odeme_Kesinti=odeme_kesinti_for_date,  # Use new value
-                Odeme_Net=odeme_net_for_date,  # Use new value
+                Gelir_POS=float(gelir_pos) if gelir_pos is not None else None,
+                POS_Hareketleri=float(pos_hareketleri) if pos_hareketleri is not None else None,
+                POS_Kesinti=float(pos_kesinti) if pos_kesinti is not None else None,
+                POS_Net=float(pos_net) if pos_net is not None else None,
+                Odeme=float(odeme) if odeme is not None else None,
+                Odeme_Kesinti=float(odeme_kesinti_for_date) if odeme_kesinti_for_date is not None else None,
+                Odeme_Net=float(odeme_net_for_date) if odeme_net_for_date is not None else None,
                 Kontrol_POS=kontrol_pos,
                 Kontrol_Kesinti=kontrol_kesinti
             )

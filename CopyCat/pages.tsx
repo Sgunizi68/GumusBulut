@@ -6241,6 +6241,31 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
     return periods;
   }, [currentPeriod]);
 
+  const weeklyGelirTotals = useMemo(() => {
+    return weeklyHeaders.map(header =>
+      platforms.reduce((sum, platform) => sum + calculateWeeklyGelir(platform.Kategori_ID, header), 0)
+    );
+  }, [weeklyHeaders, platforms, calculateWeeklyGelir]);
+
+  const weeklyVirmanTotals = useMemo(() => {
+    return weeklyHeaders.map(header =>
+      platforms.reduce((sum, platform) => sum + calculateVirman(platform.Kategori_Adi, header), 0)
+    );
+  }, [weeklyHeaders, platforms, calculateVirman]);
+
+  const grandTotalGelir = useMemo(() => {
+    return weeklyGelirTotals.reduce((sum, total) => sum + total, 0);
+  }, [weeklyGelirTotals]);
+
+  const grandTotalVirman = useMemo(() => {
+    return weeklyVirmanTotals.reduce((sum, total) => sum + total, 0);
+  }, [weeklyVirmanTotals]);
+
+  const grandTotalKomisyon = useMemo(() => {
+    return platforms.reduce((sum, platform) => sum + calculateMonthlyKomisyon(platform.Kategori_Adi), 0);
+  }, [platforms, calculateMonthlyKomisyon]);
+
+
   if (!hasPermission('Online Kontrol Dashboard Görüntüleme')) {
       return <AccessDenied title="Online Kontrol Dashboard" />;
   }
@@ -6305,13 +6330,13 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                         <td className="border p-2 text-left">GENEL TOPLAM</td>
                         {weeklyHeaders.map((_, weekIndex) => (
                             <React.Fragment key={weekIndex}>
-                                <td className="border p-2 text-right">0.00</td>
-                                <td className="border p-2 text-right">0.00</td>
+                                <td className="border p-2 text-right">{formatTrCurrencyAdvanced(weeklyGelirTotals[weekIndex], 2)}</td>
+                                <td className="border p-2 text-right">{formatTrCurrencyAdvanced(weeklyVirmanTotals[weekIndex], 2)}</td>
                             </React.Fragment>
                         ))}
-                        <td className="border p-2 text-right">0.00</td>
-                        <td className="border p-2 text-right">0.00</td>
-                        <td className="border p-2 text-right">0.00</td>
+                        <td className="border p-2 text-right">{formatTrCurrencyAdvanced(grandTotalGelir, 2)}</td>
+                        <td className="border p-2 text-right">{formatTrCurrencyAdvanced(grandTotalVirman, 2)}</td>
+                        <td className="border p-2 text-right">{formatTrCurrencyAdvanced(grandTotalKomisyon, 2)}</td>
                     </tr>
                 </tfoot>
             </table>
