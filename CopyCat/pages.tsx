@@ -343,6 +343,10 @@ export const DashboardPage: React.FC = () => {
     stokSayimList, stokFiyatList, stokList, kategoriList, ustKategoriList
   } = useDataContext();
 
+  if (!selectedBranch) {
+    return <Card title="Dashboard Raporu"><p className="text-red-500">Lütfen önce bir şube seçin.</p></Card>;
+  }
+
   const canViewGizliKategoriler = hasPermission(GIZLI_KATEGORI_YETKISI_ADI);
   const canViewFullHistory = hasPermission(GIZLI_KATEGORI_YETKISI_ADI); // As per doc, Gizli Kategori permission allows viewing all past periods.
   const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);

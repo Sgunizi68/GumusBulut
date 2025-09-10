@@ -174,7 +174,13 @@ def get_fatura_rapor(
 
 
 @router.get("/pos-kontrol/{sube_id}/{donem}", response_model=POSKontrolDashboardResponse)
-def get_pos_kontrol_dashboard(sube_id: int, donem: int, db: Session = Depends(get_db)):
+def get_pos_kontrol_dashboard(
+    sube_id: int,
+    donem: int,
+    skip: int = 0,
+    limit: int = Query(100, le=1000),
+    db: Session = Depends(get_db)
+):
     """
     POS Kontrol Dashboard endpoint - compares Gelir POS data with POS_Hareketleri data
     

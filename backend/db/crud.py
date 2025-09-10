@@ -1200,9 +1200,9 @@ def get_odeme_rapor(db: Session, donem_list: List[int], kategori_list: List[int]
         return empty_response
 
 # --- POS Kontrol Dashboard CRUD Functions ---
-def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
+def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int, skip: int = 0, limit: int = 100):
     """
-    Get POS Kontrol Dashboard data for a specific branch and period
+    Get POS Kontrol Dashboard data for a specific branch and period with pagination.
     """
     import logging
     from collections import defaultdict
@@ -1210,9 +1210,9 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
     from datetime import datetime, timedelta
     from sqlalchemy import func, and_, or_
     from schemas.pos_kontrol_dashboard import POSKontrolDailyData, POSKontrolSummary, POSKontrolDashboardResponse
-    
+
     logger = logging.getLogger(__name__)
-    
+
     try:
         # Convert donem to date range
         # donem is in YYMM format (e.g., 2508 for August 2025)
@@ -1221,21 +1221,21 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
             month = int(str(donem)[2:])
         else:
             raise ValueError("Invalid donem format. Expected YYMM format.")
-        
+
         # Calculate first and last day of the month
         first_day = datetime(year, month, 1)
         if month == 12:
             last_day = datetime(year + 1, 1, 1) - timedelta(days=1)
         else:
             last_day = datetime(year, month + 1, 1) - timedelta(days=1)
-        
+
         logger.info(f"Fetching POS Kontrol Dashboard data for Sube_ID: {sube_id}, Donem: {donem} ({first_day.date()} to {last_day.date()})")
-        
+
         # Get POS category ID (where Kategori_Adi = "POS")
         pos_kategori = db.query(models.Kategori).filter(
             models.Kategori.Kategori_Adi == "POS"
         ).first()
-        
+
         if not pos_kategori:
             logger.warning("POS category not found in database")
             # Return empty response
@@ -1248,10 +1248,10 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
                     success_rate="0%"
                 )
             )
-        
+
         pos_kategori_id = pos_kategori.Kategori_ID
         logger.info(f"Found POS category with ID: {pos_kategori_id}")
-        
+
         # Get Gelir data for POS category
         gelir_query = db.query(
             models.Gelir.Tarih,
@@ -1264,15 +1264,15 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
                 models.Gelir.Tarih <= last_day.date()
             )
         ).group_by(models.Gelir.Tarih)
-        
+
         gelir_records = gelir_query.all()
         logger.info(f"Found {len(gelir_records)} Gelir POS records")
-        
+
         # Find the "Kredi Kartı Ödemesi" category
         kredi_karti_kategori = db.query(models.Kategori).filter(
             models.Kategori.Kategori_Adi == "Kredi Kartı Ödemesi"
         ).first()
-        
+
         # Get all POS_Hareketleri records for the period
         pos_hareketleri_records = db.query(models.POSHareketleri).filter(
             and_(
@@ -1282,7 +1282,7 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
             )
         ).all()
         logger.info(f"Found {len(pos_hareketleri_records)} POS_Hareketleri records")
-        
+
         # Get all Odeme records for the period with Kredi Kartı Ödemesi category
         odeme_query = db.query(models.Odeme).filter(
             and_(
@@ -1291,11 +1291,11 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
                 models.Odeme.Tarih <= last_day.date()
             )
         )
-        
+
         # Filter by Kredi Kartı Ödemesi category if found
         if kredi_karti_kategori:
             odeme_query = odeme_query.filter(models.Odeme.Kategori_ID == kredi_karti_kategori.Kategori_ID)
-        
+
         odeme_records = odeme_query.all()
         logger.info(f"Found {len(odeme_records)} Odeme records with Kredi Kartı Ödemesi category")
 
@@ -1315,10 +1315,10 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
         kesinti_odeme_by_date = defaultdict(Decimal)
         for record in kesinti_odeme_records:
             kesinti_odeme_by_date[record.Tarih] += record.Tutar # Sum of negative numbers
-        
+
         # Create a lookup dictionary for Odeme records by (Tarih, Tutar) for matching
         odeme_lookup = {(record.Tarih, record.Tutar): record for record in odeme_records}
-        
+
         # Group POS_Hareketleri by Islem_Tarihi and calculate sums
         pos_hareketleri_by_date = defaultdict(lambda: {
             'total_islem_tutari': Decimal('0'),
@@ -1326,23 +1326,23 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
             'total_net_tutar': Decimal('0'),
             'matched_odeme_total': Decimal('0')  # For the correct Ödeme calculation
         })
-        
+
         # Process each POS_Hareketleri record
         for record in pos_hareketleri_records:
             islem_tutari = record.Islem_Tutari or Decimal('0')
             kesinti_tutari = record.Kesinti_Tutari or Decimal('0')
             net_tutar = record.Net_Tutar or Decimal('0')
-            
+
             # Add to date group totals
             pos_hareketleri_by_date[record.Islem_Tarihi]['total_islem_tutari'] += islem_tutari
             pos_hareketleri_by_date[record.Islem_Tarihi]['total_kesinti_tutari'] += kesinti_tutari
             pos_hareketleri_by_date[record.Islem_Tarihi]['total_net_tutar'] += net_tutar
-            
+
             # Check if there's a matching Odeme record
             # Match criteria: Hesaba_Gecis = Odeme.Tarih AND Islem_Tutari = Odeme.Tutar
             if (record.Hesaba_Gecis, record.Islem_Tutari) in odeme_lookup:
                 pos_hareketleri_by_date[record.Islem_Tarihi]['matched_odeme_total'] += record.Islem_Tutari
-        
+
         # Get Gelir data for POS category grouped by date
         gelir_records = db.query(
             models.Gelir.Tarih,
@@ -1356,7 +1356,7 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
             )
         ).group_by(models.Gelir.Tarih).all()
         logger.info(f"Found {len(gelir_records)} Gelir POS records")
-        
+
         # Create dictionaries for easy lookup
         gelir_dict = {record.Tarih: record.total_tutar for record in gelir_records}
         pos_hareketleri_dict = {
@@ -1364,30 +1364,30 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
         }
         # For the Ödeme field, we now use the matched_odeme_total instead of a simple sum of all Odeme records
         odeme_dict = {date: data['matched_odeme_total'] for date, data in pos_hareketleri_by_date.items()}
-        
+
         # Generate list of all dates in the period
         all_dates = []
         current_date = first_day.date()
         while current_date <= last_day.date():
             all_dates.append(current_date)
             current_date += timedelta(days=1)
-        
+
         # Build daily data
         daily_data = []
         successful_matches = 0
         error_matches = 0
-        
+
         for date in all_dates:
             # Get values for the date
             gelir_pos = gelir_dict.get(date)
             pos_hareketleri_data = pos_hareketleri_dict.get(date)
             odeme = odeme_dict.get(date)
-            
+
             pos_hareketleri = pos_hareketleri_data['total_islem_tutari'] if pos_hareketleri_data else None
             pos_kesinti = pos_hareketleri_data['total_kesinti_tutari'] if pos_hareketleri_data else None
             pos_net = pos_hareketleri_data['total_net_tutar'] if pos_hareketleri_data else None
             odeme = odeme_dict.get(date)  # This is now the matched total, not a simple lookup
-            
+
             # Compare values with tolerance (0.01) for Kontrol POS
             kontrol_pos = None
             if gelir_pos is not None and pos_hareketleri is not None:
@@ -1403,7 +1403,7 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
             elif gelir_pos is not None or pos_hareketleri is not None:
                 kontrol_pos = "Not OK"  # One is None, the other is not
                 error_matches += 1
-            
+
             # New calculation for Odeme_Kesinti
             next_day = date + timedelta(days=1)
             odeme_kesinti_for_date = abs(kesinti_odeme_by_date.get(next_day, Decimal('0')))
@@ -1419,7 +1419,7 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
                 kontrol_kesinti = "OK"
             elif pos_kesinti is not None or odeme_kesinti_for_date != Decimal('0'):
                 kontrol_kesinti = "Not OK"
-            
+
             # Set Odeme_Kesinti and Odeme_Net to actual Odeme values for proper comparison
             actual_odeme_for_date = None
             odeme_records_for_date = [r for r in odeme_records if r.Tarih == date]
@@ -1428,7 +1428,7 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
 
             # New calculation for Odeme_Net
             odeme_net_for_date = (odeme or Decimal('0')) - odeme_kesinti_for_date
-            
+
             daily_record = POSKontrolDailyData(
                 Tarih=date.strftime('%Y-%m-%d'),
                 Gelir_POS=float(gelir_pos) if gelir_pos is not None else None,
@@ -1441,16 +1441,19 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
                 Kontrol_POS=kontrol_pos,
                 Kontrol_Kesinti=kontrol_kesinti
             )
-            
+
             daily_data.append(daily_record)
-        
+
         # Calculate success rate
-        total_records = len(daily_data)
+        total_records = len(all_dates) # Use total number of dates for summary
         if total_records > 0:
             success_rate = f"{(successful_matches / total_records) * 100:.0f}%"
         else:
             success_rate = "0%"
-        
+
+        # Apply skip and limit for pagination
+        paginated_daily_data = daily_data[skip : skip + limit]
+
         # Create summary
         summary = POSKontrolSummary(
             total_records=total_records,
@@ -1458,16 +1461,16 @@ def get_pos_kontrol_dashboard_data(db: Session, sube_id: int, donem: int):
             error_matches=error_matches,
             success_rate=success_rate
         )
-        
+
         # Create response
         response = POSKontrolDashboardResponse(
-            data=daily_data,
+            data=paginated_daily_data,
             summary=summary
         )
-        
-        logger.info(f"Successfully generated POS Kontrol Dashboard data with {total_records} records, {successful_matches} successful matches, {error_matches} error matches, success rate: {success_rate}")
+
+        logger.info(f"Successfully generated POS Kontrol Dashboard data with {len(paginated_daily_data)} paginated records (total: {total_records}), {successful_matches} successful matches, {error_matches} error matches, success rate: {success_rate}")
         return response
-        
+
     except Exception as e:
         logger.error(f"Error in get_pos_kontrol_dashboard_data: {e}")
         # Return empty response on error

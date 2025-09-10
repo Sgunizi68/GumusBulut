@@ -76,6 +76,9 @@ export const POSKontrolDashboardPage: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [selectedPeriod, setSelectedPeriod] = useState(currentPeriod);
     const [error, setError] = useState<string | null>(null);
+    const [skip, setSkip] = useState<number>(0);
+    const [limit, setLimit] = useState<number>(30);
+    const [hasMore, setHasMore] = useState<boolean>(true);
     
     // Permission checks for export functionality
     const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
@@ -97,34 +100,54 @@ export const POSKontrolDashboardPage: React.FC = () => {
 
     useEffect(() => {
         const fetchReportData = async () => {
-            if (selectedBranch && selectedPeriod) {
+            if (selectedBranch && selectedPeriod && hasMore) {
                 setLoading(true);
                 setError(null);
-                
+
                 try {
-                    const url = `${API_BASE_URL}/pos-kontrol/${selectedBranch.Sube_ID}/${selectedPeriod}`;
-                    
+                    const url = `${API_BASE_URL}/pos-kontrol/${selectedBranch.Sube_ID}/${selectedPeriod}?skip=${skip}&limit=${limit}`;
+
                     const response = await fetch(url);
-                    
+
                     if (response.ok) {
-                        const data = await response.json();
-                        setReportData(data);
-                        
-                        if (data.data.length === 0) {
+                        const newData: POSKontrolDashboardResponse = await response.json();
+
+                        setReportData(prevData => {
+                            if (prevData && skip > 0) {
+                                return {
+                                    ...newData,
+                                    data: [...prevData.data, ...newData.data],
+                                };
+                            } else {
+                                return newData;
+                            }
+                        });
+
+                        setHasMore(newData.data.length === limit);
+
+                        if (newData.data.length === 0 && skip === 0) {
                             setError('Bu dönem için veri bulunamadı. Lütfen başka bir dönem seçin.');
                         }
                     } else {
                         const errorText = await response.text();
                         setError(`Veri alınırken hata oluştu: ${response.status} - ${errorText}`);
+                        setHasMore(false);
                     }
                 } catch (error) {
                     setError(`Bağlantı hatası: ${error instanceof Error ? error.message : 'Bilinmeyen hata'}`);
+                    setHasMore(false);
                 }
                 setLoading(false);
             }
         };
 
         fetchReportData();
+    }, [selectedBranch, selectedPeriod, skip, limit, hasMore]);
+
+    useEffect(() => {
+        setReportData(null);
+        setSkip(0);
+        setHasMore(true);
     }, [selectedBranch, selectedPeriod]);
     
     // Export Functions
@@ -461,42 +484,31 @@ export const POSKontrolDashboardPage: React.FC = () => {
                                 </table>
                             </div>
                         </div>
-                        
+
                         {/* Summary Statistics */}
                         <div className="bg-white border rounded-lg shadow-sm p-4 mb-4">
                             <h4 className="text-lg font-semibold mb-3 text-gray-800">Özet İstatistikler</h4>
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
                                 <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg text-center">
                                     <div className="text-blue-800 font-medium mb-1">Toplam Kayıt</div>
-                                    <div className="text-2xl font-bold text-blue-700">{filteredReportData?.data?.length || 0}</div>
+                                    <div className="text-2xl font-bold text-blue-700">{reportData?.summary?.total_records || 0}</div>
                                 </div>
                                 <div className="bg-green-50 border border-green-200 p-3 rounded-lg text-center">
                                     <div className="text-green-800 font-medium mb-1">Başarılı Eşleşmeler</div>
                                     <div className="text-2xl font-bold text-green-700">{
-                                        filteredReportData?.data?.filter(item => 
-                                            item.Kontrol_POS === 'OK' || 
-                                            item.Kontrol_Kesinti === 'OK'
-                                        ).length || 0
+                                        reportData?.summary?.successful_matches || 0
                                     }</div>
                                 </div>
                                 <div className="bg-red-50 border border-red-200 p-3 rounded-lg text-center">
                                     <div className="text-red-800 font-medium mb-1">Hatalı Eşleşmeler</div>
                                     <div className="text-2xl font-bold text-red-700">{
-                                        filteredReportData?.data?.filter(item => 
-                                            item.Kontrol_POS === 'Not OK' || 
-                                            item.Kontrol_Kesinti === 'Not OK'
-                                        ).length || 0
+                                        reportData?.summary?.error_matches || 0
                                     }</div>
                                 </div>
                                 <div className="bg-purple-50 border border-purple-200 p-3 rounded-lg text-center">
                                     <div className="text-purple-800 font-medium mb-1">Başarı Oranı</div>
                                     <div className="text-2xl font-bold text-purple-700">{
-                                        filteredReportData?.data?.length ? 
-                                            `${Math.round((filteredReportData.data.filter(item => 
-                                                item.Kontrol_POS === 'OK' || 
-                                                item.Kontrol_Kesinti === 'OK'
-                                            ).length / filteredReportData.data.length) * 100)}%` : 
-                                            '0%'
+                                        reportData?.summary?.success_rate || '0%'
                                     }</div>
                                 </div>
                             </div>
@@ -529,6 +541,18 @@ export const POSKontrolDashboardPage: React.FC = () => {
                                 </div>
                             </div>
                         </div>
+
+                        {reportData && reportData.data.length > 0 && hasMore && (
+                            <div className="flex justify-center mt-4">
+                                <Button
+                                    onClick={() => setSkip(prevSkip => prevSkip + limit)}
+                                    disabled={loading}
+                                    variant="secondary"
+                                >
+                                    {loading ? 'Yükleniyor...' : 'Daha Fazla Yükle'}
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 ) : null}
             </Card>

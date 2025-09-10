@@ -1,134 +1,22 @@
 (index):64 cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
 (anonymous) @ (index):64
-(anonymous) @ (index):64
 client:789 [vite] connecting...
 client:912 [vite] connected.
-react-dom_client.js?v=5d475cb7:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
-App.tsx:456 Uncaught (in promise) QuotaExceededError: Failed to execute 'setItem' on 'Storage': Setting the value of 'silvercloud_dataState' exceeded the quota.
-    at loadAndFetchData (App.tsx:456:26)
-loadAndFetchData @ App.tsx:456
-await in loadAndFetchData
-(anonymous) @ App.tsx:459
-react-stack-bottom-frame @ react-dom_client.js?v=5d475cb7:17478
-runWithFiberInDEV @ react-dom_client.js?v=5d475cb7:1485
-commitHookEffectListMount @ react-dom_client.js?v=5d475cb7:8460
-commitHookPassiveMountEffects @ react-dom_client.js?v=5d475cb7:8518
-commitPassiveMountOnFiber @ react-dom_client.js?v=5d475cb7:9887
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=5d475cb7:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=5d475cb7:9984
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=5d475cb7:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=5d475cb7:9881
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=5d475cb7:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=5d475cb7:9984
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=5d475cb7:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=5d475cb7:9881
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=5d475cb7:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=5d475cb7:9881
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=5d475cb7:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=5d475cb7:9984
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=5d475cb7:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=5d475cb7:9899
-flushPassiveEffects @ react-dom_client.js?v=5d475cb7:11302
-(anonymous) @ react-dom_client.js?v=5d475cb7:11060
-performWorkUntilDeadline @ react-dom_client.js?v=5d475cb7:36
-<DataProvider>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=866db15f:250
-AppWithToast @ App.tsx:1707
-react-stack-bottom-frame @ react-dom_client.js?v=5d475cb7:17424
-renderWithHooksAgain @ react-dom_client.js?v=5d475cb7:4281
-renderWithHooks @ react-dom_client.js?v=5d475cb7:4217
-updateFunctionComponent @ react-dom_client.js?v=5d475cb7:6619
-beginWork @ react-dom_client.js?v=5d475cb7:7654
-runWithFiberInDEV @ react-dom_client.js?v=5d475cb7:1485
-performUnitOfWork @ react-dom_client.js?v=5d475cb7:10874
-workLoopSync @ react-dom_client.js?v=5d475cb7:10728
-renderRootSync @ react-dom_client.js?v=5d475cb7:10711
-performWorkOnRoot @ react-dom_client.js?v=5d475cb7:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=5d475cb7:11623
-performWorkUntilDeadline @ react-dom_client.js?v=5d475cb7:36
-<AppWithToast>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=866db15f:250
-App @ App.tsx:1774
-react-stack-bottom-frame @ react-dom_client.js?v=5d475cb7:17424
-renderWithHooksAgain @ react-dom_client.js?v=5d475cb7:4281
-renderWithHooks @ react-dom_client.js?v=5d475cb7:4217
-updateFunctionComponent @ react-dom_client.js?v=5d475cb7:6619
-beginWork @ react-dom_client.js?v=5d475cb7:7654
-runWithFiberInDEV @ react-dom_client.js?v=5d475cb7:1485
-performUnitOfWork @ react-dom_client.js?v=5d475cb7:10874
-workLoopSync @ react-dom_client.js?v=5d475cb7:10728
-renderRootSync @ react-dom_client.js?v=5d475cb7:10711
-performWorkOnRoot @ react-dom_client.js?v=5d475cb7:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=5d475cb7:11623
-performWorkUntilDeadline @ react-dom_client.js?v=5d475cb7:36
-<App>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=866db15f:250
-(anonymous) @ index.tsx:14
-App.tsx:456 Uncaught (in promise) QuotaExceededError: Failed to execute 'setItem' on 'Storage': Setting the value of 'silvercloud_dataState' exceeded the quota.
-    at loadAndFetchData (App.tsx:456:26)
-loadAndFetchData @ App.tsx:456
-await in loadAndFetchData
-(anonymous) @ App.tsx:459
-react-stack-bottom-frame @ react-dom_client.js?v=5d475cb7:17478
-runWithFiberInDEV @ react-dom_client.js?v=5d475cb7:1485
-commitHookEffectListMount @ react-dom_client.js?v=5d475cb7:8460
-commitHookPassiveMountEffects @ react-dom_client.js?v=5d475cb7:8518
-reconnectPassiveEffects @ react-dom_client.js?v=5d475cb7:10016
-recursivelyTraverseReconnectPassiveEffects @ react-dom_client.js?v=5d475cb7:9995
-reconnectPassiveEffects @ react-dom_client.js?v=5d475cb7:10054
-recursivelyTraverseReconnectPassiveEffects @ react-dom_client.js?v=5d475cb7:9995
-reconnectPassiveEffects @ react-dom_client.js?v=5d475cb7:10009
-recursivelyTraverseReconnectPassiveEffects @ react-dom_client.js?v=5d475cb7:9995
-reconnectPassiveEffects @ react-dom_client.js?v=5d475cb7:10054
-recursivelyTraverseReconnectPassiveEffects @ react-dom_client.js?v=5d475cb7:9995
-reconnectPassiveEffects @ react-dom_client.js?v=5d475cb7:10009
-recursivelyTraverseReconnectPassiveEffects @ react-dom_client.js?v=5d475cb7:9995
-reconnectPassiveEffects @ react-dom_client.js?v=5d475cb7:10009
-recursivelyTraverseReconnectPassiveEffects @ react-dom_client.js?v=5d475cb7:9995
-reconnectPassiveEffects @ react-dom_client.js?v=5d475cb7:10054
-doubleInvokeEffectsOnFiber @ react-dom_client.js?v=5d475cb7:11461
-runWithFiberInDEV @ react-dom_client.js?v=5d475cb7:1485
-recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom_client.js?v=5d475cb7:11432
-commitDoubleInvokeEffectsInDEV @ react-dom_client.js?v=5d475cb7:11469
-flushPassiveEffects @ react-dom_client.js?v=5d475cb7:11309
-(anonymous) @ react-dom_client.js?v=5d475cb7:11060
-performWorkUntilDeadline @ react-dom_client.js?v=5d475cb7:36
-<DataProvider>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=866db15f:250
-AppWithToast @ App.tsx:1707
-react-stack-bottom-frame @ react-dom_client.js?v=5d475cb7:17424
-renderWithHooksAgain @ react-dom_client.js?v=5d475cb7:4281
-renderWithHooks @ react-dom_client.js?v=5d475cb7:4217
-updateFunctionComponent @ react-dom_client.js?v=5d475cb7:6619
-beginWork @ react-dom_client.js?v=5d475cb7:7654
-runWithFiberInDEV @ react-dom_client.js?v=5d475cb7:1485
-performUnitOfWork @ react-dom_client.js?v=5d475cb7:10874
-workLoopSync @ react-dom_client.js?v=5d475cb7:10728
-renderRootSync @ react-dom_client.js?v=5d475cb7:10711
-performWorkOnRoot @ react-dom_client.js?v=5d475cb7:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=5d475cb7:11623
-performWorkUntilDeadline @ react-dom_client.js?v=5d475cb7:36
-<AppWithToast>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=866db15f:250
-App @ App.tsx:1774
-react-stack-bottom-frame @ react-dom_client.js?v=5d475cb7:17424
-renderWithHooksAgain @ react-dom_client.js?v=5d475cb7:4281
-renderWithHooks @ react-dom_client.js?v=5d475cb7:4217
-updateFunctionComponent @ react-dom_client.js?v=5d475cb7:6619
-beginWork @ react-dom_client.js?v=5d475cb7:7654
-runWithFiberInDEV @ react-dom_client.js?v=5d475cb7:1485
-performUnitOfWork @ reac
+react-dom_client.js?v=61705e3c:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+App.tsx:64 Uncaught Error: useAppContext must be used within an AppProvider
+    at useAppContext (App.tsx:64:23)
+    at DashboardPage (pages.tsx:340:60)
+    at react-stack-bottom-frame (react-dom_client.js?v=61705e3c:17424:20)
+    at renderWithHooks (react-dom_client.js?v=61705e3c:4206:24)
+    at updateFunctionComponent (react-dom_client.js?v=61705e3c:6619:21)
+    at beginWork (react-dom_client.js?v=61705e3c:7654:20)
+    at runWithFiberInDEV (react-dom_client.js?v=61705e3c:1485:72)
+    at performUnitOfWork (react-dom_client.js?v=61705e3c:10874:82)
+    at workLoopSync (react-dom_client.js?v=61705e3c:10728:43)
+    at renderRootSync (react-dom_client.js?v=61705e3c:10711:13)
+react-dom_client.js?v=61705e3c:6229 An error occurred in the <DashboardPage> component.
 
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
 
-
-
-
-t-dom_client.js?v=5d475cb7:10874
-workLoopSync @ react-dom_client.js?v=5d475cb7:10728
-renderRootSync @ react-dom_client.js?v=5d475cb7:10711
-performWorkOnRoot @ react-dom_client.js?v=5d475cb7:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=5d475cb7:11623
-performWorkUntilDeadline @ react-dom_client.js?v=5d475cb7:36
-<App>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=866db15f:250
-(anonymous) @ index.tsx:14
+defaultOnUncaughtError @ react-dom_client.js?v=61705e3c:6229

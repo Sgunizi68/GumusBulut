@@ -1,26 +1,21 @@
-when "Excel'e Aktar" icon is pressed, "Tutar" transferred to Excel is not number but text hence any mathetical operation in Excel regarding tutar is not working. Fix this issue and transfer Tutar as number into Excel
- 
-fix the issue where the "Tutar" values are being exported as text instead of numbers in the Excel export.
+Web Service GumusBulut exceeded its memory limit
+An instance of your Web Service GumusBulut exceeded its memory limit, which triggered an automatic restart. While restarting, the instance was temporarily unavailable.
 
+This might have been caused by:
 
-This request is for the design of the "B2B Ekstre Kategori Atama" screen, which will be used to assign categories to records 
-in the B2B_Ekstre table. The screen will be placed under the "Fatura/Harcama" menu item and will follow the same design, filters,
- methods, and format as the existing "Fatura Kategori Atama" screen.
- 
- Create "B2B Ekstre Rapor" . The screen will be placed under the "Rapor" menu item and will follow the same design, filters, methods, and format as the existing "Fatura Rapor" screen
- 
-Calculate the "Net Nakit Gelir Toplam" as follows 
-"Net Nakit Gelir"  = 
-(SELECT SUM(Tutar) FROM SilverCloud.Gelir WHERE Kategori_ID = 11   AND DATE_FORMAT(Tarih, '%y%m') = Selected Donem)  
-- (SELECT SUM(Tutar) FROM SilverCloud.e_Fatura WHERE Gunluk_Harcama = 1   AND Donem = Selected Donem)
-- SELECT sum(Tutar) FROM SilverCloud.Diger_Harcama where Harcama_Tipi ='Nakit' and Gunluk_Harcama = 1 and Donem= Selected Donem ;
+A memory leak in your application
+A spike in incoming traffic
+An undersized instance type for your use case
+Recommended actions
+Check your service's logs and metrics to help identify why the instance exceeded its memory limit.
 
-on "Nakit Yatırma Kontrol Raporu" compare "Net Nakit Gelir Toplam" with "Bankaya Yatan Toplam" in "Özet Bilgiler" box
+If you find a memory leak, patch the leak and redeploy your service.
+If you experienced a traffic spike, consider scaling your service to help handle future spikes.
+Otherwise, your service might require more memory for your use case. To increase memory, upgrade your instance type.
+If you take no action, your service might exceed its memory limit again, resulting in additional interruptions.
 
+If you can't resolve this issue, please reach out to support@render.com.
 
-On the screen there are an error on the screen "Hata Veri alınırken hata oluştu: 404 - {"detail":"Not Found"}" Also there are errors in console as follows
+Best,
+The Render team
 
-I have updated Database and added Sube_ID to the same table as seen in attachmeent . 
-Now update backend setup which allows us push ands pull data for the same table
-
-"POS Hareketleri Yükleme" doesn't work properly and I would like to start this screen development from scratch . Remove all components for "POS Hareketleri Yükleme" screen, but keep backend , menu items and write down " Yapım Aşamasında" on the same screen . 
