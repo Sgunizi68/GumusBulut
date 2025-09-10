@@ -118,6 +118,7 @@ export const POS_HAREKETLERI_YUKLEME_EKRANI_YETKI_ADI = 'POS Hareketleri Yüklem
 export const POS_KONTROL_DASHBOARD_YETKI_ADI = 'POS Kontrol Dashboard Görüntüleme';
 export const ONLINE_KONTROL_DASHBOARD_YETKI_ADI = 'Online Kontrol Dashboard Görüntüleme';
 export const YEMEK_CEKI_EKRANI_YETKI_ADI = 'Yemek Çeki Ekranı Görüntüleme';
+export const YEMEK_CEKI_KONTROL_DASHBOARD_YETKI_ADI = 'Yemek Çeki Kontrol Dashboard Görüntüleme';
 
 
 // --- MENU STRUCTURE ---
@@ -192,6 +193,7 @@ export const MENU_GROUPS = [
             { label: 'Fatura & Diğer Harcama Raporu', path: '/fatura-diger-harcama-rapor', icon: Icons.Report, permission: FATURA_DIGER_HARCAMA_RAPOR_YETKI_ADI },
             { label: 'POS Kontrol Dashboard', path: '/pos-kontrol-dashboard', icon: Icons.Report, permission: POS_KONTROL_DASHBOARD_YETKI_ADI },
             { label: 'Online Kontrol Dashboard', path: '/online-kontrol-dashboard', icon: Icons.Report, permission: ONLINE_KONTROL_DASHBOARD_YETKI_ADI },
+            { label: 'Yemek Çeki Kontrol Dashboard', path: '/yemek-ceki-kontrol-dashboard', icon: Icons.Report, permission: YEMEK_CEKI_KONTROL_DASHBOARD_YETKI_ADI },
         ]
     }
 ];

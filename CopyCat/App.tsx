@@ -1,11 +1,12 @@
 import React, { useState, createContext, useContext, useCallback, ReactNode, useEffect, useMemo } from 'react';
 import { HashRouter, Routes, Route, Link, NavLink, Navigate, useLocation } from 'react-router-dom';
 import { AppContextType, Sube, Kullanici, EFatura, InvoiceAssignmentFormData, DataContextType, RolYetki, B2BEkstre, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, Puantaj, PuantajEntry, Gelir, GelirEkstra, AvansIstek, Rol, Yetki, KullaniciRol, Deger, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, Nakit, NakitFormData, EFaturaReferans, EFaturaReferansFormData, OdemeReferans, OdemeReferansFormData, Odeme, OdemeAssignmentFormData } from './types';
-import { LoginPage, DashboardPage, SubePage, UsersPage, RolesPage, PermissionsPage, UserRoleAssignmentPage, RolePermissionAssignmentPage, DegerlerPage, PlaceholderPage, UstKategorilerPage, KategorilerPage, InvoiceUploadPage, InvoiceCategoryAssignmentPage, B2BUploadPage, B2BCategoryAssignmentPage, DigerHarcamalarPage, GelirPage, StokPage, StokFiyatPage, StokSayimPage, CalisanPage, PuantajSecimPage, PuantajPage, AvansPage, NakitPage, OdemeYuklemePage, OdemeReferansPage, OdemeKategoriAtamaPage, POSHareketleriYuklemePage, OnlineKontrolDashboardPage, YemekCekiPage } from './pages';
+
 import { MENU_GROUPS, DASHBOARD_ITEM, Icons, DEFAULT_PERIOD, OZEL_FATURA_YETKI_ADI, PUANTAJ_HISTORY_ACCESS_YETKI_ADI, GELIR_GECMISI_YETKI_ADI, DEFAULT_END_DATE, STORAGE_KEYS } from './constants';
 import { ErrorProvider, useErrorContext, classifyError } from './contexts/ErrorContext';
 import { ToastContainer, ConnectionStatusBanner, useToast } from './contexts/ToastContext';
 
+import { LoginPage, DashboardPage, SubePage, UsersPage, RolesPage, PermissionsPage, UserRoleAssignmentPage, RolePermissionAssignmentPage, DegerlerPage, PlaceholderPage, UstKategorilerPage, KategorilerPage, InvoiceUploadPage, InvoiceCategoryAssignmentPage, B2BUploadPage, B2BCategoryAssignmentPage, DigerHarcamalarPage, GelirPage, StokPage, StokFiyatPage, StokSayimPage, CalisanPage, PuantajSecimPage, PuantajPage, AvansPage, NakitPage, OdemeYuklemePage, OdemeReferansPage, OdemeKategoriAtamaPage, POSHareketleriYuklemePage, OnlineKontrolDashboardPage, YemekCekiPage, YemekCekiKontrolDashboardPage } from './pages';
 import { EFaturaReferansPage } from './pages';
 import { NakitYatirmaRaporuPage } from './pages/NakitYatirmaRaporu';
 import { OdemeRaporPage } from './pages/OdemeRapor';
@@ -1741,6 +1742,7 @@ const AppWithToast: React.FC = () => {
                       <Route path="/pos-kontrol-dashboard" element={<POSKontrolDashboardPage />} />
                       <Route path="/online-kontrol-dashboard" element={<OnlineKontrolDashboardPage />} />
                       <Route path="/yemek-ceki" element={<YemekCekiPage />} />
+                      <Route path="/yemek-ceki-kontrol-dashboard" element={<YemekCekiKontrolDashboardPage />} />
                       
                       <Route path="*" element={<Navigate to="/" />} />
                     </Routes>

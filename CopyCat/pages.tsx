@@ -6125,6 +6125,7 @@ export const OdemeKategoriAtamaPage: React.FC = () => {
 
 export { default as POSHareketleriYuklemePage } from "./pages/POSHareketleriYukleme";
 export { default as YemekCekiPage } from "./pages/YemekCekiPage";
+export { YemekCekiKontrolDashboardPage } from "./pages/YemekCekiKontrolDashboard";
 
 // --- ONLINE KONTROL DASHBOARD PAGE ---
 export const OnlineKontrolDashboardPage: React.FC = () => {

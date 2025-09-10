@@ -1,428 +1,313 @@
+import React, { useEffect } from 'react';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card } from '../components';
-import { Icons, YEMEK_CEKI_KONTROL_DASHBOARD_YETKI_ADI, API_BASE_URL } from '../constants';
-import { useAppContext as useAuth } from '../contexts/AppContext';
-import { useDataContext } from '../contexts/DataContext';
-import { YemekCekiKontrolDashboardResponse, YemekCekiKontrolDashboardCategory, YemekCekiKontrolDashboardDetail } from '../types';
-
-const YemekCekiKontrolDashboardPage: React.FC = () => {
-    const { hasPermission, selectedBranch } = useAuth();
-    const { fetchData } = useDataContext();
-    const [period, setPeriod] = useState('2508');
-    const [dashboardData, setDashboardData] = useState<YemekCekiKontrolDashboardResponse | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    if (!hasPermission(YEMEK_CEKI_KONTROL_DASHBOARD_YETKI_ADI) || !selectedBranch) {
-        return (
-            <div className="p-4">
-                <p>Bu sayfayı görüntüleme yetkiniz bulunmamaktadır veya şube seçimi yapılmamıştır.</p>
-            </div>
-        );
-    }
-
-    const periodNames: { [key: string]: string } = {
-        '2507': 'Temmuz 2025 (2507)',
-        '2508': 'Ağustos 2025 (2508)',
-        '2509': 'Eylül 2025 (2509)',
-        '2510': 'Ekim 2025 (2510)'
-    };
-
-    const fetchDashboardData = useCallback(async () => {
-        if (!selectedBranch) return;
-        setLoading(true);
-        setError(null);
-        try {
-            const response = await fetchData<YemekCekiKontrolDashboardResponse>(
-                `${API_BASE_URL}/report/yemek-ceki-kontrol-dashboard/${selectedBranch.Sube_ID}/${period}`
-            );
-            if (response) {
-                setDashboardData(response);
-            } else {
-                setError("Rapor verisi yüklenirken bir hata oluştu.");
-            }
-        } catch (err) {
-            console.error("Failed to fetch dashboard data:", err);
-            setError("Rapor verisi yüklenirken bir hata oluştu.");
-        } finally {
-            setLoading(false);
-        }
-    }, [period, selectedBranch, fetchData]);
-
+export const YemekCekiKontrolDashboardPage: React.FC = () => {
     useEffect(() => {
-        fetchDashboardData();
-    }, [fetchDashboardData]);
+        // Script content will go here
+        function updateDashboard() {
+            const period = document.getElementById('period') as HTMLSelectElement;
+            const periodNames: { [key: string]: string } = {
+                '2507': 'Temmuz 2025 (2507)',
+                '2508': 'Ağustos 2025 (2508)',
+                '2509': 'Eylül 2025 (2509)',
+                '2510': 'Ekim 2025 (2510)'
+            };
 
-    const handlePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setPeriod(e.target.value);
-    };
-    
-    // Checkbox change handling
-    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const row = e.target.closest('tr');
-        if (row) {
-            if (e.target.checked) {
-                row.style.background = 'linear-gradient(135deg, rgba(0, 184, 148, 0.1) 0%, rgba(0, 160, 133, 0.1) 100%)';
-            } else {
-                row.style.background = '';
+            const tableHeaderTitle = document.querySelector('.table-header-title');
+            if (tableHeaderTitle) {
+                tableHeaderTitle.innerHTML = `📋 Yemek Çeki Kategorileri Detay Raporu - ${periodNames[period.value]}`;
             }
-        }
-    };
 
-    // Row animation logic (re-run when dashboardData changes)
-    useEffect(() => {
-        if (dashboardData) {
-            const rows = document.querySelectorAll('tbody tr');
-            rows.forEach((row, index) => {
-                const r = row as HTMLElement;
-                r.style.opacity = '0';
-                r.style.transform = 'translateY(20px)';
+            // Özet kartları güncelleme animasyonu
+            const cards = document.querySelectorAll('.summary-card');
+            cards.forEach((card, index) => {
+                (card as HTMLElement).style.animation = 'none';
                 setTimeout(() => {
-                    r.style.transition = 'all 0.5s ease';
-                    r.style.opacity = '1';
-                    r.style.transform = 'translateY(0)';
-                }, index * 100);
+                    (card as HTMLElement).style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s`;
+                }, 10);
             });
         }
-    }, [dashboardData]);
 
-    if (loading) {
-        return (
-            <div className="p-4 text-center">
-                <p>Yükleniyor...</p>
-            </div>
-        );
-    }
+        // Sayfa yüklendiğinde animasyonları başlat
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach((row, index) => {
+            (row as HTMLElement).style.opacity = '0';
+            (row as HTMLElement).style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                (row as HTMLElement).style.transition = 'all 0.5s ease';
+                (row as HTMLElement).style.opacity = '1';
+                (row as HTMLElement).style.transform = 'translateY(0)';
+            }, index * 100);
+        });
 
-    if (error) {
-        return (
-            <div className="p-4 text-center text-red-600">
-                <p>{error}</p>
-            </div>
-        );
-    }
+        // Checkbox değişim kontrolü
+        document.querySelectorAll('.checkbox').forEach(checkbox => {
+            const typedCheckbox = checkbox as HTMLInputElement;
+            typedCheckbox.addEventListener('change', function() {
+                const row = this.closest('tr');
+                if (row) {
+                    if (this.checked) {
+                        (row as HTMLElement).style.background = 'linear-gradient(135deg, rgba(0, 184, 148, 0.1) 0%, rgba(0, 160, 133, 0.1) 100%)';
+                    } else {
+                        (row as HTMLElement).style.background = '';
+                    }
+                }
+            });
+        });
 
-    if (!dashboardData || !dashboardData.summary || !dashboardData.categories) {
-        return (
-            <div className="p-4 text-center">
-                <p>Veri bulunamadı.</p>
-            </div>
-        );
-    }
+        // Expose updateDashboard to global scope for onchange attribute
+        (window as any).updateDashboard = updateDashboard;
 
-    const { summary, categories } = dashboardData;
+        return () => {
+            // Cleanup if necessary
+            delete (window as any).updateDashboard;
+        };
+    }, []);
 
     return (
-        <div className="p-4" style={{ fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>
-             <style>{`
-                .summary-card {
-                    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-                    color: white;
-                    padding: 25px;
-                    border-radius: 15px;
-                    text-align: center;
-                    transform: translateY(0);
-                    transition: all 0.3s ease;
-                    position: relative;
-                    overflow: hidden;
-                }
-                .summary-card::before {
-                    content: '';
-                    position: absolute;
-                    top: -50%;
-                    left: -50%;
-                    width: 200%;
-                    height: 200%;
-                    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-                    transform: rotate(45deg);
-                    transition: all 0.5s ease;
-                }
-                .summary-card:hover {
-                    transform: translateY(-10px);
-                    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-                }
-                .summary-card:hover::before {
-                    top: -30%;
-                    left: -30%;
-                }
-                .summary-card.income { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-                .summary-card.paid { background: linear-gradient(135deg, #48cae4 0%, #0077be 100%); }
-                .summary-card.difference { background: linear-gradient(135deg, #e17055 0%, #d63031 100%); }
-                .summary-card.pending { background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%); }
-                .summary-card h3 {
-                    font-size: 1.2em;
-                    margin-bottom: 10px;
-                    position: relative;
-                    z-index: 1;
-                }
-                .summary-card .amount {
-                    font-size: 2em;
-                    font-weight: bold;
-                    position: relative;
-                    z-index: 1;
-                }
-                .data-table {
-                    background: white;
-                    border-radius: 15px;
-                    overflow: hidden;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-                    margin-bottom: 30px;
-                }
-                .table-header {
-                    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
-                    color: white;
-                    padding: 20px;
-                    font-size: 1.3em;
-                    font-weight: 600;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                }
-                .table-header-title {
-                    flex: 1;
-                }
-                .period-selector {
-                    background: rgba(255, 255, 255, 0.15);
-                    padding: 8px 15px;
-                    border-radius: 10px;
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                }
-                .period-selector label {
-                    font-size: 1em;
-                    font-weight: 600;
-                }
-                .period-selector select {
-                    background: white;
-                    color: #2c3e50;
-                    border: none;
-                    padding: 6px 12px;
-                    border-radius: 8px;
-                    font-size: 0.9em;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                }
-                .period-selector select:hover {
-                    transform: translateY(-1px);
-                    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    font-size: 0.9em;
-                }
-                th {
-                    background: linear-gradient(135deg, #636e72 0%, #2d3436 100%);
-                    color: white;
-                    padding: 12px 8px;
-                    text-align: left;
-                    font-weight: 600;
-                    font-size: 0.85em;
-                    text-transform: uppercase;
-                    letter-spacing: 1px;
-                }
-                td {
-                    padding: 12px 8px;
-                    border-bottom: 1px solid #eee;
-                    transition: all 0.3s ease;
-                    font-size: 0.9em;
-                }
-                tr:hover td {
-                    background: rgba(116, 185, 255, 0.1);
-                    transform: scale(1.01);
-                }
-                .category-header {
-                    background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
-                    color: white;
-                    font-weight: bold;
-                    font-size: 0.9em;
-                }
-                .category-header:hover {
-                    background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
-                }
-                .category-header td {
-                    font-size: 0.85em;
-                    font-weight: bold;
-                    text-align: left;
-                    padding: 10px 8px;
-                }
-                .total-row {
-                    background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
-                    color: white;
-                    font-weight: bold;
-                    font-size: 1.1em;
-                }
-                .status-badge {
-                    padding: 4px 8px;
-                    border-radius: 15px;
-                    font-size: 0.75em;
-                    font-weight: 600;
-                    text-transform: uppercase;
-                    letter-spacing: 1px;
-                    display: inline-block;
-                }
-                .status-invoiced {
-                    background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
-                    color: white;
-                }
-                .status-pending {
-                    background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
-                    color: white;
-                }
-                .checkbox {
-                    transform: scale(1.2);
-                    accent-color: #00b894;
-                }
-                .amount {
-                    font-weight: bold;
-                    color: #2d3436;
-                }
-                .amount.positive {
-                    color: #00b894;
-                }
-                .amount.negative {
-                    color: #e17055;
-                }
-                .positive-diff {
-                    color: #00b894;
-                    font-weight: bold;
-                }
-                .negative-diff {
-                    color: #e17055;
-                    font-weight: bold;
-                }
-                @keyframes fadeInUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(30px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-                .data-table, .summary-card {
-                    animation: fadeInUp 0.6s ease-out;
-                }
-                .summary-card:nth-child(1) { animation-delay: 0.1s; }
-                .summary-card:nth-child(2) { animation-delay: 0.2s; }
-                .summary-card:nth-child(3) { animation-delay: 0.3s; }
-                .summary-card:nth-child(4) { animation-delay: 0.4s; }
-            `}</style>
-            <div className="container mx-auto" style={{ maxWidth: '1600px' }}>
-                <div className="header text-white text-center p-8 rounded-t-2xl" style={{ background: 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)' }}>
-                    <h1 className="text-4xl font-bold" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>🍽️ Yemek Çeki Kontrol Dashboard</h1>
-                </div>
+        // HTML content will go here, converted to JSX
+        <div className="container">
+            <div className="header">
+                <h1>🍽️ Yemek Çeki Kontrol Dashboard</h1>
+            </div>
 
-                <div className="content p-10 bg-white bg-opacity-95 rounded-b-2xl shadow-lg">
-                    {/* Summary Cards */}
-                    <div className="summary-cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-                        <div className="summary-card income">
-                            <h3>📊 Aylık Toplam Gelir</h3>
-                            <div className="amount">₺{summary.aylik_toplam_gelir.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
-                        </div>
-                        <div className="summary-card paid">
-                            <h3>💰 Dönem Tutar Toplamı</h3>
-                            <div className="amount">₺{summary.donem_tutar_toplami.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
-                        </div>
-                        <div className="summary-card difference">
-                            <h3>⚖️ Fark</h3>
-                            <div className="amount">₺{summary.fark.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
-                        </div>
-                        <div className="summary-card pending">
-                            <h3>📝 Kontrol Edilen Kayıt</h3>
-                            <div className="amount">{summary.kontrol_edilen_kayit}</div>
-                        </div>
+            <div className="content">
+                {/* Özet Kartları */}
+                <div className="summary-cards">
+                    <div className="summary-card income">
+                        <h3>📊 Aylık Toplam Gelir</h3>
+                        <div className="amount">₺170,500.00</div>
                     </div>
-
-                    {/* Yemek Çeki Kategorileri Tablosu */}
-                    <div className="data-table">
-                        <div className="table-header">
-                            <div className="table-header-title">
-                                📋 Yemek Çeki Kategorileri Detay Raporu - {periodNames[period]}
-                            </div>
-                            <div className="period-selector">
-                                <label htmlFor="period">Dönem:</label>
-                                <select id="period" value={period} onChange={handlePeriodChange}>
-                                    <option value="2508">2508 - Ağustos 2025</option>
-                                    <option value="2509">2509 - Eylül 2025</option>
-                                    <option value="2507">2507 - Temmuz 2025</option>
-                                    <option value="2510">2510 - Ekim 2025</option>
-                                </select>
-                            </div>
-                        </div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style={{ width: '20%' }}>Kategori</th>
-                                    <th style={{ width: '10%' }}>İlk Tarih</th>
-                                    <th style={{ width: '10%' }}>Son Tarih</th>
-                                    <th style={{ width: '10%' }}>Tutar</th>
-                                    <th style={{ width: '10%' }}>Önceki Dönem</th>
-                                    <th style={{ width: '10%' }}>Sonraki Dönem</th>
-                                    <th style={{ width: '10%' }}>Dönem Tutar</th>
-                                    <th style={{ width: '8%' }}>Fatura</th>
-                                    <th style={{ width: '10%' }}>Fatura Tarihi</th>
-                                    <th style={{ width: '10%' }}>Ödeme Tarihi</th>
-                                    <th style={{ width: '3%' }}>✓</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {categories.map((category: YemekCekiKontrolDashboardCategory) => (
-                                    <React.Fragment key={category.kategori_adi}>
-                                        <tr className="category-header">
-                                            <td>{category.kategori_adi}</td>
-                                            <td>Aylık Gelir:</td>
-                                            <td className={category.aylik_gelir >= 0 ? "positive-diff" : "negative-diff"}>₺{category.aylik_gelir.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                            <td>Toplam Dönem:</td>
-                                            <td className={category.toplam_donem >= 0 ? "positive-diff" : "negative-diff"}>₺{category.toplam_donem.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                            <td>Fark:</td>
-                                            <td className={category.fark >= 0 ? "positive-diff" : "negative-diff"}>₺{category.fark.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                            <td colSpan={4}></td>
-                                        </tr>
-                                        {category.details.map((detail: YemekCekiKontrolDashboardDetail) => (
-                                            <tr key={detail.id}>
-                                                <td style={{ paddingLeft: '25px' }}>{detail.kategori_adi}</td>
-                                                <td>{detail.ilk_tarih}</td>
-                                                <td>{detail.son_tarih}</td>
-                                                <td className="amount">₺{detail.tutar.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                                <td className={detail.onceki_donem_tutar >= 0 ? "amount positive" : "amount negative"}>₺{detail.onceki_donem_tutar.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                                <td className={detail.sonraki_donem_tutar >= 0 ? "amount positive" : "amount negative"}>₺{detail.sonraki_donem_tutar.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                                <td className={detail.donem_tutar >= 0 ? "amount positive" : "amount negative"}>₺{detail.donem_tutar.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                                <td><span className={`status-badge status-${detail.fatura_durum === 'Kesildi' ? 'invoiced' : 'pending'}`}>{detail.fatura_durum}</span></td>
-                                                <td>{detail.fatura_tarihi || '-'}</td>
-                                                <td>{detail.odeme_tarihi || '-'}</td>
-                                                <td><input type="checkbox" className="checkbox" checked={detail.kontrol_edildi} onChange={handleCheckboxChange} /></td>
-                                            </tr>
-                                        ))}
-                                    </React.Fragment>
-                                ))}
-
-                                {/* Genel Toplam */}
-                                <tr className="total-row">
-                                    <td>📊 GENEL TOPLAM</td>
-                                    <td>Aylık Gelir:</td>
-                                    <td className={summary.aylik_toplam_gelir >= 0 ? "positive-diff" : "negative-diff"}>₺{summary.aylik_toplam_gelir.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                    <td>Toplam Dönem:</td>
-                                    <td className={summary.donem_tutar_toplami >= 0 ? "positive-diff" : "negative-diff"}>₺{summary.donem_tutar_toplami.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                    <td>Fark:</td>
-                                    <td className={summary.fark >= 0 ? "positive-diff" : "negative-diff"}>₺{summary.fark.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                    <td colSpan={4}></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div className="summary-card paid">
+                        <h3>💰 Dönem Tutar Toplamı</h3>
+                        <div className="amount">₺166,550.00</div>
+                    </div>
+                    <div className="summary-card difference">
+                        <h3>⚖️ Fark</h3>
+                        <div className="amount">-₺3,950.00</div>
+                    </div>
+                    <div className="summary-card pending">
+                        <h3>📝 Kontrol Edilen Kayıt</h3>
+                        <div className="amount">9</div>
                     </div>
                 </div>
 
-                <div className="footer bg-gray-100 p-5 text-center text-gray-500 italic">
-                    📄 Son güncelleme: 08.09.2025 14:30 | 🎯 Toplam kontrol edilen kayıt: {summary.kontrol_edilen_kayit} | ⚠️ Bekleyen işlem: {dashboardData.categories.reduce((acc, cat) => acc + cat.details.filter(d => !d.kontrol_edildi).length, 0)}
+                {/* Yemek Çeki Kategorileri Tablosu */}
+                <div className="data-table">
+                    <div className="table-header">
+                        <div className="table-header-title">
+                            📋 Yemek Çeki Kategorileri Detay Raporu - Ağustos 2025 (2508)
+                        </div>
+                        <div className="period-selector">
+                            <label htmlFor="period">Dönem:</label>
+                            <select id="period" onChange={() => (window as any).updateDashboard()}>
+                                <option value="2508">2508 - Ağustos 2025</option>
+                                <option value="2509">2509 - Eylül 2025</option>
+                                <option value="2507">2507 - Temmuz 2025</option>
+                                <option value="2510">2510 - Ekim 2025</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style={{ width: '20%' }}>Kategori</th>
+                                <th style={{ width: '10%' }}>İlk Tarih</th>
+                                <th style={{ width: '10%' }}>Son Tarih</th>
+                                <th style={{ width: '10%' }}>Tutar</th>
+                                <th style={{ width: '10%' }}>Önceki Dönem</th>
+                                <th style={{ width: '10%' }}>Sonraki Dönem</th>
+                                <th style={{ width: '10%' }}>Dönem Tutar</th>
+                                <th style={{ width: '8%' }}>Fatura</th>
+                                <th style={{ width: '10%' }}>Fatura Tarihi</th>
+                                <th style={{ width: '10%' }}>Ödeme Tarihi</th>
+                                <th style={{ width: '3%' }}>✓</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {/* MULTINET Kategori Header */}
+                            <tr className="category-header">
+                                <td>💳 MULTINET</td>
+                                <td>Aylık Gelir:</td>
+                                <td className="positive-diff">₺85,000.00</td>
+                                <td>Toplam Dönem:</td>
+                                <td className="positive-diff">₺95,250.00</td>
+                                <td>Fark:</td>
+                                <td className="positive-diff">+₺10,250.00</td>
+                                <td colSpan={4}></td>
+                            </tr>
+                            <tr>
+                                <td style={{ paddingLeft: '25px' }}>YC-MLT-001</td>
+                                <td>25.07.2025</td>
+                                <td>15.08.2025</td>
+                                <td className="amount">₺45,200.00</td>
+                                <td className="amount negative">-₺8,150.00</td>
+                                <td className="amount">₺0.00</td>
+                                <td className="amount positive">₺37,050.00</td>
+                                <td><span className="status-badge status-invoiced">Kesildi</span></td>
+                                <td>16.08.2025</td>
+                                <td>25.08.2025</td>
+                                <td><input type="checkbox" className="checkbox" defaultChecked /></td>
+                            </tr>
+                            <tr>
+                                <td style={{ paddingLeft: '25px' }}>YC-MLT-002</td>
+                                <td>01.08.2025</td>
+                                <td>31.08.2025</td>
+                                <td className="amount">₺58,900.00</td>
+                                <td className="amount">₺0.00</td>
+                                <td className="amount">₺0.00</td>
+                                <td className="amount positive">₺58,900.00</td>
+                                <td><span className="status-badge status-invoiced">Kesildi</span></td>
+                                <td>02.09.2025</td>
+                                <td>12.09.2025</td>
+                                <td><input type="checkbox" className="checkbox" defaultChecked /></td>
+                            </tr>
+                            <tr>
+                                <td style={{ paddingLeft: '25px' }}>YC-MLT-003</td>
+                                <td>15.07.2025</td>
+                                <td>10.09.2025</td>
+                                <td className="amount">₺11,700.00</td>
+                                <td className="amount negative">-₺2,400.00</td>
+                                <td className="amount">₺0.00</td>
+                                <td className="amount positive">₺8,300.00</td>
+                                <td><span className="status-badge status-pending">Beklemede</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td><input type="checkbox" className="checkbox" /></td>
+                            </tr>
+
+                            {/* TICKET Kategori Header */}
+                            <tr className="category-header">
+                                <td>🎫 TICKET</td>
+                                <td>Aylık Gelir:</td>
+                                <td className="negative-diff">₺34,200.00</td>
+                                <td>Toplam Dönem:</td>
+                                <td className="negative-diff">₺32,500.00</td>
+                                <td>Fark:</td>
+                                <td className="negative-diff">-₺1,700.00</td>
+                                <td colSpan={4}></td>
+                            </tr>
+                            <tr>
+                                <td style={{ paddingLeft: '25px' }}>YC-TKT-001</td>
+                                <td>01.08.2025</td>
+                                <td>31.08.2025</td>
+                                <td className="amount">₺18,750.00</td>
+                                <td className="amount">₺0.00</td>
+                                <td className="amount">₺0.00</td>
+                                <td className="amount positive">₺18,750.00</td>
+                                <td><span className="status-badge status-invoiced">Kesildi</span></td>
+                                <td>01.09.2025</td>
+                                <td>08.09.2025</td>
+                                <td><input type="checkbox" className="checkbox" defaultChecked /></td>
+                            </tr>
+                            <tr>
+                                <td style={{ paddingLeft: '25px' }}>YC-TKT-002</td>
+                                <td>20.07.2025</td>
+                                <td>25.08.2025</td>
+                                <td className="amount">₺17,600.00</td>
+                                <td className="amount negative">-₺3,850.00</td>
+                                <td className="amount">₺0.00</td>
+                                <td className="amount positive">₺13,750.00</td>
+                                <td><span className="status-badge status-invoiced">Kesildi</span></td>
+                                <td>26.08.2025</td>
+                                <td>-</td>
+                                <td><input type="checkbox" className="checkbox" /></td>
+                            </tr>
+
+                            {/* SODEXO Kategori Header */}
+                            <tr className="category-header">
+                                <td>🪙 SODEXO</td>
+                                <td>Aylık Gelir:</td>
+                                <td className="negative-diff">₺29,800.00</td>
+                                <td>Toplam Dönem:</td>
+                                <td className="negative-diff">₺28,150.00</td>
+                                <td>Fark:</td>
+                                <td className="negative-diff">-₺1,650.00</td>
+                                <td colSpan={4}></td>
+                            </tr>
+                            <tr>
+                                <td style={{ paddingLeft: '25px' }}>YC-SDX-001</td>
+                                <td>05.08.2025</td>
+                                <td>28.08.2025</td>
+                                <td className="amount">₺15,900.00</td>
+                                <td className="amount">₺0.00</td>
+                                <td className="amount">₺0.00</td>
+                                <td className="amount positive">₺15,900.00</td>
+                                <td><span className="status-badge status-invoiced">Kesildi</span></td>
+                                <td>30.08.2025</td>
+                                <td>05.09.2025</td>
+                                <td><input type="checkbox" className="checkbox" defaultChecked /></td>
+                            </tr>
+                            <tr>
+                                <td style={{ paddingLeft: '25px' }}>YC-SDX-002</td>
+                                <td>12.08.2025</td>
+                                <td>18.09.2025</td>
+                                <td className="amount">₺18,450.00</td>
+                                <td className="amount">₺0.00</td>
+                                <td className="amount negative">-₺6,200.00</td>
+                                <td className="amount positive">₺12,250.00</td>
+                                <td><span className="status-badge status-pending">Beklemede</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td><input type="checkbox" className="checkbox" /></td>
+                            </tr>
+
+                            {/* METROPOL SETCARD Kategori Header */}
+                            <tr className="category-header">
+                                <td>🛍️ METROPOL SETCARD</td>
+                                <td>Aylık Gelir:</td>
+                                <td className="negative-diff">₺21,500.00</td>
+                                <td>Toplam Dönem:</td>
+                                <td className="negative-diff">₺10,650.00</td>
+                                <td>Fark:</td>
+                                <td className="negative-diff">-₺10,850.00</td>
+                                <td colSpan={4}></td>
+                            </tr>
+                            <tr>
+                                <td style={{ paddingLeft: '25px' }}>YC-MET-001</td>
+                                <td>10.07.2025</td>
+                                <td>05.09.2025</td>
+                                <td className="amount">₺26,800.00</td>
+                                <td className="amount negative">-₺12,950.00</td>
+                                <td className="amount">₺0.00</td>
+                                <td className="amount positive">₺9,650.00</td>
+                                <td><span className="status-badge status-invoiced">Kesildi</span></td>
+                                <td>08.09.2025</td>
+                                <td>-</td>
+                                <td><input type="checkbox" className="checkbox" /></td>
+                            </tr>
+                            <tr>
+                                <td style={{ paddingLeft: '25px' }}>YC-MET-002</td>
+                                <td>15.08.2025</td>
+                                <td>25.08.2025</td>
+                                <td className="amount">₺1,000.00</td>
+                                <td className="amount">₺0.00</td>
+                                <td className="amount">₺0.00</td>
+                                <td className="amount positive">₺1,000.00</td>
+                                <td><span className="status-badge status-invoiced">Kesildi</span></td>
+                                <td>26.08.2025</td>
+                                <td>28.08.2025</td>
+                                <td><input type="checkbox" className="checkbox" defaultChecked /></td>
+                            </tr>
+
+                            {/* Genel Toplam */}
+                            <tr className="total-row">
+                                <td>📊 GENEL TOPLAM</td>
+                                <td>Aylık Gelir:</td>
+                                <td className="negative-diff">₺170,500.00</td>
+                                <td>Toplam Dönem:</td>
+                                <td className="negative-diff">₺166,550.00</td>
+                                <td>Fark:</td>
+                                <td className="negative-diff">-₺3,950.00</td>
+                                <td colSpan={4}></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+            </div>
+
+            <div className="footer">
+                📄 Son güncelleme: 08.09.2025 14:30 | 🎯 Toplam kontrol edilen kayıt: 9 | ⚠️ Bekleyen işlem: 3
             </div>
         </div>
     );
 };
-
-export default YemekCekiKontrolDashboardPage;

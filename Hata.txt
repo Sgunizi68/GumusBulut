@@ -1,23 +1,20 @@
-(index):64 cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
-(anonymous) @ (index):64
-client:789 [vite] connecting...
-client:912 [vite] connected.
-react-dom_client.js?v=61705e3c:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
-App.tsx:64 Uncaught Error: useAppContext must be used within an AppProvider
-    at useAppContext (App.tsx:64:23)
-    at DashboardPage (pages.tsx:340:60)
-    at react-stack-bottom-frame (react-dom_client.js?v=61705e3c:17424:20)
-    at renderWithHooks (react-dom_client.js?v=61705e3c:4206:24)
-    at updateFunctionComponent (react-dom_client.js?v=61705e3c:6619:21)
-    at beginWork (react-dom_client.js?v=61705e3c:7654:20)
-    at runWithFiberInDEV (react-dom_client.js?v=61705e3c:1485:72)
-    at performUnitOfWork (react-dom_client.js?v=61705e3c:10874:82)
-    at workLoopSync (react-dom_client.js?v=61705e3c:10728:43)
-    at renderRootSync (react-dom_client.js?v=61705e3c:10711:13)
-react-dom_client.js?v=61705e3c:6229 An error occurred in the <DashboardPage> component.
-
-Consider adding an error boundary to your tree to customize error handling behavior.
-Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
-
-defaultOnUncaughtError @ react-dom_client.js?v=61705e3c:6229
-Yemek Çeki (Şube: Brandium)
+[plugin:vite:import-analysis] Failed to resolve import "./pages/LoginPage" from "App.tsx". Does the file exist?
+C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:16:26
+11 |  import { FaturaDigerHarcamaRaporuPage } from "./pages/FaturaDigerHarcamaRaporu";
+12 |  import { POSKontrolDashboardPage } from "./pages/POSKontrolDashboard";
+13 |  import { LoginPage } from "./pages/LoginPage";
+   |                             ^
+14 |  import { DashboardPage } from "./pages/DashboardPage";
+15 |  import { SubePage } from "./pages/SubePage";
+    at TransformPluginContext._formatLog (file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:42499:41)
+    at TransformPluginContext.error (file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:42496:16)
+    at normalizeUrl (file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:40475:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:40594:37
+    at async Promise.all (index 12)
+    at async TransformPluginContext.transform (file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:40521:7)
+    at async EnvironmentPluginContainer.transform (file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:42294:18)
+    at async loadAndTransform (file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:35735:27)
+    at async viteTransformMiddleware (file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:37250:24
+Click outside, press Esc key, or fix the code to dismiss.
+You can also disable this overlay by setting server.hmr.overlay to false in vite.config.ts.
