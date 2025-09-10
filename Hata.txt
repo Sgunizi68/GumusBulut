@@ -20,3 +20,4 @@ Consider adding an error boundary to your tree to customize error handling behav
 Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
 
 defaultOnUncaughtError @ react-dom_client.js?v=61705e3c:6229
+Yemek Çeki (Şube: Brandium)

@@ -2,7 +2,9 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useAppContext, useDataContext, API_BASE_URL } from '../App';
 import { useToast } from '../contexts/ToastContext';
 import { Card, Button, Input, Select, TableLayout, Modal } from '../components';
-import { Icons } from '../constants';
+import { Icons, YAZDIRMA_YETKISI_ADI, EXCELE_AKTAR_YETKISI_ADI } from '../constants';
+import { generateDashboardPdf } from '../utils/pdfGenerator';
+import * as XLSX from 'xlsx';
 import { YemekCeki, YemekCekiFormData } from '../types';
 
 const getMimeType = (imageName?: string | null): string => {
@@ -21,7 +23,7 @@ const getMimeType = (imageName?: string | null): string => {
 };
 
 const YemekCekiPage: React.FC = () => {
-  const { selectedBranch, currentPeriod } = useAppContext();
+  const { selectedBranch, currentPeriod, hasPermission } = useAppContext();
   const {
     kategoriList,
     yemekCekiList,
@@ -34,6 +36,44 @@ const YemekCekiPage: React.FC = () => {
     console.log("YemekCekiList updated in component:", yemekCekiList);
   }, [yemekCekiList]);
   const { showSuccess, showError } = useToast();
+
+  const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
+
+  const handleGeneratePdf = () => {
+    generateDashboardPdf('yemek-ceki-content', `Yemek_Ceki_${selectedBranch?.Sube_Adi}_${filterPeriod}.pdf`);
+  };
+
+  const handleExportToExcel = () => {
+    if (!selectedBranch) return;
+
+    const wb = XLSX.utils.book_new();
+    const ws_data = filteredYemekCekiList.map(y => {
+        const kategoriAdi = kategoriList.find(k => k.Kategori_ID === y.Kategori_ID)?.Kategori_Adi || 'N/A';
+        return {
+            'Kategori': kategoriAdi,
+            'Tarih': y.Tarih,
+            'Tutar': y.Tutar,
+            'Ödeme Tarihi': y.Odeme_Tarih,
+            'İlk Tarih': y.Ilk_Tarih,
+            'Son Tarih': y.Son_Tarih,
+            'Resim Adı': y.Imaj_Adi || '-',
+        };
+    });
+
+    const ws = XLSX.utils.json_to_sheet(ws_data);
+    ws['!cols'] = [
+        { wch: 20 },
+        { wch: 12 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 30 },
+    ];
+    XLSX.utils.book_append_sheet(wb, ws, 'Yemek Ceki');
+    XLSX.writeFile(wb, `Yemek_Ceki_${selectedBranch?.Sube_Adi}_${filterPeriod}.xlsx`);
+  };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingYemekCeki, setEditingYemekCeki] = useState<YemekCeki | null>(null);
@@ -260,10 +300,20 @@ const YemekCekiPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" id="yemek-ceki-content">
       <Card title={`Yemek Çeki (Şube: ${selectedBranch.Sube_Adi})`}
         actions={
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 hide-on-pdf">
+            {canPrint && (
+                <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button">
+                    <Icons.Print className="w-5 h-5" />
+                </Button>
+            )}
+            {canExportExcel && (
+                <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
+                    <Icons.Download className="w-5 h-5" />
+                </Button>
+            )}
             <Input
               placeholder="Kategori ara..."
               value={searchTerm}
