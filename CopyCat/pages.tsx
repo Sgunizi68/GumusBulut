@@ -6196,15 +6196,25 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
     const monthName = monthNames[month - 1];
 
     const platformNameWithoutOnline = platformName.replace(' Online', '');
-    const aramaYapilacakText = `${monthName} ${platformNameWithoutOnline} Komisyon Yansıtma`.toLowerCase();
+    
+    const keywords = [
+        monthName,
+        platformNameWithoutOnline,
+        'Komisyon',
+        'Yansıtma'
+    ];
 
     const komisyon = b2bEkstreList
       .filter(ekstre => {
-        const ekstreDonem = String(ekstre.Donem);
+        const ekstreDonem = String(ekstre.Donem).trim();
+        if (ekstreDonem !== viewedPeriod) return false;
+
         const ekstreAciklama = ekstre.Aciklama ? ekstre.Aciklama.toLowerCase() : '';
-        return ekstreDonem === viewedPeriod && ekstreAciklama.includes(aramaYapilacakText);
+        
+        // Check if all keywords are present in the description
+        return keywords.every(keyword => ekstreAciklama.includes(keyword.toLowerCase()));
       })
-      .reduce((total, ekstre) => total + Math.abs(ekstre.Alacak), 0);
+      .reduce((total, ekstre) => total + ekstre.Borc, 0); // Switched to Borc
 
     return komisyon;
   };

@@ -1,14 +1,25 @@
-CASE
-    WHEN EXISTS (
-        SELECT 1
-        FROM E_Fatura f
-        INNER JOIN E_Fatura_Referans r
-            ON f.Alici_Unvani = r.Alici_Unvani
-        WHERE f.Giden_Fatura = 1
-          AND f.Fatura_Tarihi = Ekran.SonTarih
-          AND f.Tutar = Ekran.Tutar
-          AND r.Referans_Kodu = Ekran.Kategori
-    )
-    THEN 'Kesildi'
-    ELSE 'Beklemede'
-END AS FaturaD
+rule:
+  name: "Komisyon Hesaplama"
+  target: "Komisyon Toplam"
+  query: |
+    SELECT SUM(Borc)
+    FROM SilverCloud.B2B_Ekstre
+    WHERE Aciklama LIKE {{Arama_Text_Platform}}
+      AND Donem = {{Ekran.Donem}}
+  variables:
+    Arama_Text_Platform: |
+      '%' + {{Donem.AyAdi}} + '%' + ({{Ekran.Platform}} - ' Online') + '%Komisyon%Yansıtma%'
+examples:
+  - input:
+      Donem: "2508"
+      Donem.AyAdi: "Ağustos"
+      Platform: "Yemek Sepeti Online"
+    output:
+      Arama_Text_Platform: "%Ağustos%Yemek Sepeti%Komisyon%Yansıtma%"
+
+  - input:
+      Donem: "2507"
+      Donem.AyAdi: "Temmuz"
+      Platform: "Trendyol Online"
+    output:
+      Arama_Text_Platform: "%Temmuz%Trendyol%Komisyon%Yansıtma%"
