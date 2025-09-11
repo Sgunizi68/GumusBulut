@@ -1,16 +1,14 @@
-Önceki Dönem
-SELECT sum(Tutar)
-FROM SilverCloud.Gelir
-WHERE
-  Tarih < Ekran.Dönem.ilk_Gün
-  AND Tarih >= Yemek_Ceki.İlk_Tarih
-  AND Kategori_ID = Ekran.Kategori_ID
-
-Sonraki Dönem
-
-SELECT sum(Tutar)
-FROM SilverCloud.Gelir
-WHERE
-  Tarih > Ekran.Dönem.Son_Gün
-  AND Tarih <= Yemek_Ceki.Son_Tarih
-  AND Kategori_ID = Ekran.Kategori_ID
+CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM E_Fatura f
+        INNER JOIN E_Fatura_Referans r
+            ON f.Alici_Unvani = r.Alici_Unvani
+        WHERE f.Giden_Fatura = 1
+          AND f.Fatura_Tarihi = Ekran.SonTarih
+          AND f.Tutar = Ekran.Tutar
+          AND r.Referans_Kodu = Ekran.Kategori
+    )
+    THEN 'Kesildi'
+    ELSE 'Beklemede'
+END AS FaturaD

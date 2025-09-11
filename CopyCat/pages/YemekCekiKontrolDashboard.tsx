@@ -23,11 +23,20 @@ const getPeriodDates = (period: string): { startDate: Date, endDate: Date } => {
     return { startDate, endDate };
 };
 
+// Helper to calculate the number of days between two dates (inclusive)
+const daysBetween = (startDate: Date, endDate: Date): number => {
+    if (endDate < startDate) return 0;
+    // Use UTC to avoid daylight saving issues
+    const startUTC = Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+    const endUTC = Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+    return Math.round((endUTC - startUTC) / (1000 * 60 * 60 * 24)) + 1;
+};
+
 const formatCurrency = (value: number) => {
     return value.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-const getPeriodFromDateString = (dateString: string): string => {
+const getPeriodFromDateString = (dateString: string | null | undefined): string => {
     const date = parseDate(dateString);
     if (!date) return '';
     const year = date.getFullYear().toString().slice(-2);
@@ -35,31 +44,82 @@ const getPeriodFromDateString = (dateString: string): string => {
     return `${year}${month}`;
 }
 
+const formatPeriodForDisplay = (period: string): string => {
+    if (period.length !== 4) return period;
+    const year = `20${period.substring(0, 2)}`;
+    const month = period.substring(2, 4);
+    const monthNames = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+    const monthName = monthNames[parseInt(month) - 1];
+    return `${period} - ${monthName} ${year}`;
+}
+
+const getMimeType = (filename: string | undefined | null): string => {
+    if (!filename) return 'application/octet-stream';
+    const extension = filename.split('.').pop()?.toLowerCase();
+    switch (extension) {
+        case 'jpg':
+        case 'jpeg':
+            return 'image/jpeg';
+        case 'png':
+            return 'image/png';
+        case 'gif':
+            return 'image/gif';
+        case 'svg':
+            return 'image/svg+xml';
+        case 'pdf':
+            return 'application/pdf';
+        default:
+            return 'application/octet-stream';
+    }
+}
+
 export const YemekCekiKontrolDashboardPage: React.FC = () => {
     const { selectedBranch } = useAppContext();
-    const { kategoriList, yemekCekiList, gelirList } = useDataContext();
+    const { ustKategoriList, kategoriList, yemekCekiList, gelirList, eFaturaList, eFaturaReferansList } = useDataContext();
 
-    const [period, setPeriod] = useState('2508');
-    const [periodName, setPeriodName] = useState('Ağustos 2025 (2508)');
+    const [period, setPeriod] = useState('');
+    const [periodName, setPeriodName] = useState('');
+
+    const availablePeriods = useMemo(() => {
+        const periods = new Set<string>();
+        gelirList.forEach(g => periods.add(getPeriodFromDateString(g.Tarih)));
+        yemekCekiList.forEach(c => {
+            periods.add(getPeriodFromDateString(c.Ilk_Tarih));
+            periods.add(getPeriodFromDateString(c.Son_Tarih));
+        });
+        return Array.from(periods).filter(p => p.length === 4).sort((a, b) => b.localeCompare(a));
+    }, [gelirList, yemekCekiList]);
+
+    useEffect(() => {
+        if (availablePeriods.length > 0 && !period) {
+            setPeriod(availablePeriods[0]);
+        }
+    }, [availablePeriods, period]);
+
+    useEffect(() => {
+        if (period) {
+            setPeriodName(formatPeriodForDisplay(period));
+        }
+    }, [period]);
 
     const handlePeriodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const newPeriod = event.target.value;
-        setPeriod(newPeriod);
-        const periodNames: { [key: string]: string } = {
-            '2507': 'Temmuz 2025 (2507)',
-            '2508': 'Ağustos 2025 (2508)',
-            '2509': 'Eylül 2025 (2509)',
-            '2510': 'Ekim 2025 (2510)'
-        };
-        setPeriodName(periodNames[newPeriod] || '');
+        setPeriod(event.target.value);
     };
 
     const processedData = useMemo(() => {
-        if (!selectedBranch || !yemekCekiList || !kategoriList || !gelirList) {
+        if (!selectedBranch || !yemekCekiList || !kategoriList || !gelirList || !ustKategoriList || !eFaturaList || !eFaturaReferansList || !period) {
             return { groups: [], kontrolEdilenKayitSayisi: 0, totalAylikGelir: 0, totalDonemTutar: 0, totalFark: 0 };
         }
 
         const { startDate: periodStart, endDate: periodEnd } = getPeriodDates(period);
+
+        const yemekCekiUstKategori = ustKategoriList.find(uk => uk.UstKategori_Adi.trim().toLowerCase() === 'yemek çeki');
+        if (!yemekCekiUstKategori) {
+            return { groups: [], kontrolEdilenKayitSayisi: 0, totalAylikGelir: 0, totalDonemTutar: 0, totalFark: 0 };
+        }
+        const allYemekCekiKategoriIDs = kategoriList
+            .filter(k => k.Ust_Kategori_ID === yemekCekiUstKategori.UstKategori_ID && k.Aktif_Pasif)
+            .map(k => k.Kategori_ID);
 
         const ilgiliCekler = yemekCekiList.filter(cek => {
             const ilkTarih = parseDate(cek.Ilk_Tarih);
@@ -68,6 +128,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
 
             return (
                 cek.Sube_ID === selectedBranch.Sube_ID &&
+                allYemekCekiKategoriIDs.includes(cek.Kategori_ID) &&
                 ilkTarih <= periodEnd &&
                 sonTarih >= periodStart
             );
@@ -78,10 +139,8 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
         let totalAylikGelir = 0;
         let totalDonemTutar = 0;
 
-        const kategoriIDsInCekler = [...new Set(ilgiliCekler.map(c => c.Kategori_ID))];
-
         const groups = kategoriList
-            .filter(k => kategoriIDsInCekler.includes(k.Kategori_ID))
+            .filter(k => allYemekCekiKategoriIDs.includes(k.Kategori_ID))
             .map(kategori => {
                 const grupAylikGelir = gelirList
                     .filter(g => 
@@ -93,6 +152,10 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
 
                 let grupDonemTutar = 0;
 
+                const aliciUnvanlariForKategori = eFaturaReferansList
+                    .filter(r => r.Referans_Kodu === kategori.Kategori_Adi)
+                    .map(r => r.Alici_Unvani);
+
                 const cekler = ilgiliCekler
                     .filter(cek => cek.Kategori_ID === kategori.Kategori_ID)
                     .map(cek => {
@@ -101,8 +164,9 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
 
                         const oncekiDonemTutar = gelirList
                             .filter(g => {
-                                const gelirTarihi = parseDate(g.Tarih)!;
-                                return g.Kategori_ID === cek.Kategori_ID &&
+                                const gelirTarihi = parseDate(g.Tarih);
+                                return gelirTarihi &&
+                                       g.Kategori_ID === cek.Kategori_ID &&
                                        gelirTarihi < periodStart &&
                                        gelirTarihi >= cekIlk_Tarih;
                             })
@@ -110,8 +174,9 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
 
                         const sonrakiDonemTutar = gelirList
                             .filter(g => {
-                                const gelirTarihi = parseDate(g.Tarih)!;
-                                return g.Kategori_ID === cek.Kategori_ID &&
+                                const gelirTarihi = parseDate(g.Tarih);
+                                return gelirTarihi &&
+                                       g.Kategori_ID === cek.Kategori_ID &&
                                        gelirTarihi > periodEnd &&
                                        gelirTarihi <= cekSon_Tarih;
                             })
@@ -119,6 +184,16 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
 
                         const donemTutar = cek.Tutar - oncekiDonemTutar - sonrakiDonemTutar;
                         
+                        const isKesildi = eFaturaList.some(f => {
+                            const faturaTarihi = parseDate(f.Fatura_Tarihi);
+                            return (
+                                f.Giden_Fatura &&
+                                f.Tutar === cek.Tutar &&
+                                faturaTarihi && parseDate(cek.Son_Tarih) && faturaTarihi.getTime() === parseDate(cek.Son_Tarih)!.getTime() &&
+                                aliciUnvanlariForKategori.includes(f.Alici_Unvani)
+                            );
+                        });
+
                         grupDonemTutar += donemTutar;
 
                         return {
@@ -126,6 +201,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                             oncekiDonemTutar,
                             sonrakiDonemTutar,
                             donemTutar,
+                            faturaStatus: isKesildi ? 'Kesildi' : 'Beklemede'
                         };
                     });
                 
@@ -144,7 +220,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
 
         return { groups, kontrolEdilenKayitSayisi, totalAylikGelir, totalDonemTutar, totalFark: totalDonemTutar - totalAylikGelir };
 
-    }, [yemekCekiList, kategoriList, gelirList, selectedBranch, period]);
+    }, [yemekCekiList, kategoriList, ustKategoriList, gelirList, eFaturaList, eFaturaReferansList, selectedBranch, period]);
 
     useEffect(() => {
         // Re-run animations and event listeners when data changes
@@ -217,10 +293,9 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                         <div className="period-selector">
                             <label htmlFor="period">Dönem:</label>
                             <select id="period" value={period} onChange={handlePeriodChange}>
-                                <option value="2508">2508 - Ağustos 2025</option>
-                                <option value="2509">2509 - Eylül 2025</option>
-                                <option value="2507">2507 - Temmuz 2025</option>
-                                <option value="2510">2510 - Ekim 2025</option>
+                                {availablePeriods.map(p => (
+                                    <option key={p} value={p}>{formatPeriodForDisplay(p)}</option>
+                                ))}
                             </select>
                         </div>
                     </div>
@@ -255,7 +330,21 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                                     </tr>
                                     {grup.cekler.map(cek => (
                                         <tr key={cek.ID}>
-                                            <td style={{ paddingLeft: '25px' }}>{`YC-${grup.Kategori_Adi.substring(0,3)}-${cek.ID}`}</td>
+                                            <td style={{ paddingLeft: '25px' }}>
+                                                {cek.Imaj && cek.Imaj_Adi ? (
+                                                    <a 
+                                                        href={`data:${getMimeType(cek.Imaj_Adi)};base64,${cek.Imaj}`}
+                                                        download={cek.Imaj_Adi}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-blue-600 hover:underline"
+                                                    >
+                                                        {cek.Imaj_Adi}
+                                                    </a>
+                                                ) : (
+                                                    '-'
+                                                )}
+                                            </td>
                                             <td>{parseDate(cek.Ilk_Tarih)?.toLocaleDateString('tr-TR') || '-'}</td>
                                             <td>{parseDate(cek.Son_Tarih)?.toLocaleDateString('tr-TR') || '-'}</td>
                                             <td className="amount">{formatCurrency(cek.Tutar)}</td>
@@ -263,14 +352,13 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                                             <td className={`amount ${cek.sonrakiDonemTutar > 0 ? 'negative' : ''}`}>{formatCurrency(cek.sonrakiDonemTutar)}</td>
                                             <td className="amount positive">{formatCurrency(cek.donemTutar)}</td>
                                             <td>
-                                                {cek.Imaj ? 
-                                                    <span className="status-badge status-invoiced">Kesildi</span> : 
-                                                    <span className="status-badge status-pending">Beklemede</span>
-                                                }
+                                                <span className={`status-badge ${cek.faturaStatus === 'Kesildi' ? 'status-invoiced' : 'status-pending'}`}>
+                                                    {cek.faturaStatus}
+                                                </span>
                                             </td>
-                                            <td>{cek.Imaj && parseDate(cek.Tarih) ? parseDate(cek.Tarih)!.toLocaleDateString('tr-TR') : '-'}</td>
+                                            <td>{cek.faturaStatus === 'Kesildi' ? parseDate(cek.Son_Tarih)?.toLocaleDateString('tr-TR') : '-'}</td>
                                             <td>{cek.Odeme_Tarih && parseDate(cek.Odeme_Tarih) ? parseDate(cek.Odeme_Tarih)!.toLocaleDateString('tr-TR') : '-'}</td>
-                                            <td><input type="checkbox" className="checkbox" defaultChecked={!!cek.Imaj} /></td>
+                                            <td><input type="checkbox" className="checkbox" defaultChecked={cek.faturaStatus === 'Kesildi'} /></td>
                                         </tr>
                                     ))}
                                 </React.Fragment>
