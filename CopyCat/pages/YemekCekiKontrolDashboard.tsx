@@ -1,7 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import '../styles/YemekCekiKontrolDashboard.css';
+import { useAppContext, useDataContext } from '../App';
+
+// Helper function to parse YYYY-MM-DD string to Date object safely
+const parseDate = (dateString: string | null | undefined): Date | null => {
+    if (!dateString) return null;
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+        console.warn(`Invalid date string encountered: ${dateString}`);
+        return null;
+    }
+    return date;
+};
+
+// Helper function to get the start and end dates of a given period (e.g., '2508')
+const getPeriodDates = (period: string): { startDate: Date, endDate: Date } => {
+    const year = 2000 + parseInt(period.substring(0, 2));
+    const month = parseInt(period.substring(2, 4));
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 0);
+    endDate.setHours(23, 59, 59, 999); // Set to end of day
+    return { startDate, endDate };
+};
+
+// Helper to calculate the number of days between two dates (inclusive)
+const daysBetween = (startDate: Date, endDate: Date): number => {
+    if (endDate < startDate) return 0;
+    // Use UTC to avoid daylight saving issues
+    const startUTC = Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+    const endUTC = Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+    return Math.round((endUTC - startUTC) / (1000 * 60 * 60 * 24)) + 1;
+};
+
+const formatCurrency = (value: number) => {
+    return value.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
 
 export const YemekCekiKontrolDashboardPage: React.FC = () => {
+    const { selectedBranch } = useAppContext();
+    const { kategoriList, yemekCekiList } = useDataContext();
+
     const [period, setPeriod] = useState('2508');
     const [periodName, setPeriodName] = useState('Ağustos 2025 (2508)');
 
@@ -17,7 +55,92 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
         setPeriodName(periodNames[newPeriod] || '');
     };
 
+    const processedData = useMemo(() => {
+        if (!selectedBranch || !yemekCekiList || !kategoriList) {
+            return { groups: [], kontrolEdilenKayitSayisi: 0, totalAylikGelir: 0, totalDonemTutar: 0, totalFark: 0 };
+        }
+
+        const { startDate: periodStart, endDate: periodEnd } = getPeriodDates(period);
+
+        const ilgiliCekler = yemekCekiList.filter(cek => {
+            const ilkTarih = parseDate(cek.Ilk_Tarih);
+            const sonTarih = parseDate(cek.Son_Tarih);
+            if (!ilkTarih || !sonTarih) return false;
+
+            return (
+                cek.Sube_ID === selectedBranch.Sube_ID &&
+                ilkTarih <= periodEnd &&
+                sonTarih >= periodStart
+            );
+        });
+
+        const kontrolEdilenKayitSayisi = ilgiliCekler.length;
+
+        let totalAylikGelir = 0;
+        let totalDonemTutar = 0;
+
+        const kategoriIDsInCekler = [...new Set(ilgiliCekler.map(c => c.Kategori_ID))];
+
+        const groups = kategoriList
+            .filter(k => kategoriIDsInCekler.includes(k.Kategori_ID))
+            .map(kategori => {
+                let grupAylikGelir = 0;
+                let grupDonemTutar = 0;
+
+                const cekler = ilgiliCekler
+                    .filter(cek => cek.Kategori_ID === kategori.Kategori_ID)
+                    .map(cek => {
+                        const cekIlk_Tarih = parseDate(cek.Ilk_Tarih)!;
+                        const cekSon_Tarih = parseDate(cek.Son_Tarih)!;
+                        const toplamGun = daysBetween(cekIlk_Tarih, cekSon_Tarih);
+                        const gunlukTutar = toplamGun > 0 ? cek.Tutar / toplamGun : 0;
+
+                        let oncekiDonemTutar = 0;
+                        if (cekIlk_Tarih < periodStart) {
+                            const oncekiDonemBitis = new Date(periodStart.getTime() - 1);
+                            const oncekiDonemGunSayisi = daysBetween(cekIlk_Tarih, oncekiDonemBitis);
+                            oncekiDonemTutar = oncekiDonemGunSayisi * gunlukTutar;
+                        }
+
+                        let sonrakiDonemTutar = 0;
+                        if (cekSon_Tarih > periodEnd) {
+                            const sonrakiDonemBaslangic = new Date(periodEnd.getTime() + 1);
+                            const sonrakiDonemGunSayisi = daysBetween(sonrakiDonemBaslangic, cekSon_Tarih);
+                            sonrakiDonemTutar = sonrakiDonemGunSayisi * gunlukTutar;
+                        }
+
+                        const donemTutar = cek.Tutar - oncekiDonemTutar - sonrakiDonemTutar;
+                        
+                        grupAylikGelir += cek.Tutar;
+                        grupDonemTutar += donemTutar;
+
+                        return {
+                            ...cek,
+                            oncekiDonemTutar,
+                            sonrakiDonemTutar,
+                            donemTutar,
+                        };
+                    });
+                
+                totalAylikGelir += grupAylikGelir;
+                totalDonemTutar += grupDonemTutar;
+
+                return {
+                    ...kategori,
+                    cekler: cekler,
+                    grupAylikGelir,
+                    grupDonemTutar,
+                    grupFark: grupDonemTutar - grupAylikGelir
+                };
+            })
+            .filter(g => g.cekler.length > 0);
+
+        return { groups, kontrolEdilenKayitSayisi, totalAylikGelir, totalDonemTutar, totalFark: totalDonemTutar - totalAylikGelir };
+
+    }, [yemekCekiList, kategoriList, selectedBranch, period]);
+
     useEffect(() => {
+        // Re-run animations and event listeners when data changes
         const allRows = document.querySelectorAll('tbody tr');
         allRows.forEach((row, index) => {
             const htmlRow = row as HTMLElement;
@@ -51,7 +174,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                 checkbox.removeEventListener('change', handleChange as EventListener);
             });
         };
-    }, [period]);
+    }, [processedData]);
 
     return (
         <div className="container">
@@ -60,27 +183,25 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
             </div>
 
             <div className="content">
-                {/* Özet Kartları */}
                 <div className="summary-cards">
                     <div className="summary-card income">
                         <h3>📊 Aylık Toplam Gelir</h3>
-                        <div className="amount">₺170,500.00</div>
+                        <div className="amount">{formatCurrency(processedData.totalAylikGelir)}</div>
                     </div>
                     <div className="summary-card paid">
                         <h3>💰 Dönem Tutar Toplamı</h3>
-                        <div className="amount">₺166,550.00</div>
+                        <div className="amount">{formatCurrency(processedData.totalDonemTutar)}</div>
                     </div>
                     <div className="summary-card difference">
                         <h3>⚖️ Fark</h3>
-                        <div className="amount">-₺3,950.00</div>
+                        <div className="amount">{formatCurrency(processedData.totalFark)}</div>
                     </div>
                     <div className="summary-card pending">
                         <h3>📝 Kontrol Edilen Kayıt</h3>
-                        <div className="amount">9</div>
+                        <div className="amount">{processedData.kontrolEdilenKayitSayisi}</div>
                     </div>
                 </div>
 
-                {/* Yemek Çeki Kategorileri Tablosu */}
                 <div className="data-table">
                     <div className="table-header">
                         <div className="table-header-title">
@@ -113,180 +234,49 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {/* MULTINET Kategori Header */}
-                            <tr className="category-header">
-                                <td>💳 MULTINET</td>
-                                <td>Aylık Gelir:</td>
-                                <td className="positive-diff">₺85,000.00</td>
-                                <td>Toplam Dönem:</td>
-                                <td className="positive-diff">₺95,250.00</td>
-                                <td>Fark:</td>
-                                <td className="positive-diff">+₺10,250.00</td>
-                                <td colSpan={4}></td>
-                            </tr>
-                            <tr>
-                                <td style={{ paddingLeft: '25px' }}>YC-MLT-001</td>
-                                <td>25.07.2025</td>
-                                <td>15.08.2025</td>
-                                <td className="amount">₺45,200.00</td>
-                                <td className="amount negative">-₺8,150.00</td>
-                                <td className="amount">₺0.00</td>
-                                <td className="amount positive">₺37,050.00</td>
-                                <td><span className="status-badge status-invoiced">Kesildi</span></td>
-                                <td>16.08.2025</td>
-                                <td>25.08.2025</td>
-                                <td><input type="checkbox" className="checkbox" defaultChecked /></td>
-                            </tr>
-                            <tr>
-                                <td style={{ paddingLeft: '25px' }}>YC-MLT-002</td>
-                                <td>01.08.2025</td>
-                                <td>31.08.2025</td>
-                                <td className="amount">₺58,900.00</td>
-                                <td className="amount">₺0.00</td>
-                                <td className="amount">₺0.00</td>
-                                <td className="amount positive">₺58,900.00</td>
-                                <td><span className="status-badge status-invoiced">Kesildi</span></td>
-                                <td>02.09.2025</td>
-                                <td>12.09.2025</td>
-                                <td><input type="checkbox" className="checkbox" defaultChecked /></td>
-                            </tr>
-                            <tr>
-                                <td style={{ paddingLeft: '25px' }}>YC-MLT-003</td>
-                                <td>15.07.2025</td>
-                                <td>10.09.2025</td>
-                                <td className="amount">₺11,700.00</td>
-                                <td className="amount negative">-₺2,400.00</td>
-                                <td className="amount negative">-₺1,000.00</td>
-                                <td className="amount positive">₺8,300.00</td>
-                                <td><span className="status-badge status-pending">Beklemede</span></td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td><input type="checkbox" className="checkbox" /></td>
-                            </tr>
-                            
-                            {/* TICKET Kategori Header */}
-                            <tr className="category-header">
-                                <td>🎫 TICKET</td>
-                                <td>Aylık Gelir:</td>
-                                <td className="negative-diff">₺34,200.00</td>
-                                <td>Toplam Dönem:</td>
-                                <td className="negative-diff">₺32,500.00</td>
-                                <td>Fark:</td>
-                                <td className="negative-diff">-₺1,700.00</td>
-                                <td colSpan={4}></td>
-                            </tr>
-                            <tr>
-                                <td style={{ paddingLeft: '25px' }}>YC-TKT-001</td>
-                                <td>01.08.2025</td>
-                                <td>31.08.2025</td>
-                                <td className="amount">₺18,750.00</td>
-                                <td className="amount">₺0.00</td>
-                                <td className="amount">₺0.00</td>
-                                <td className="amount positive">₺18,750.00</td>
-                                <td><span className="status-badge status-invoiced">Kesildi</span></td>
-                                <td>01.09.2025</td>
-                                <td>08.09.2025</td>
-                                <td><input type="checkbox" className="checkbox" defaultChecked /></td>
-                            </tr>
-                            <tr>
-                                <td style={{ paddingLeft: '25px' }}>YC-TKT-002</td>
-                                <td>20.07.2025</td>
-                                <td>25.08.2025</td>
-                                <td className="amount">₺17,600.00</td>
-                                <td className="amount negative">-₺3,850.00</td>
-                                <td className="amount">₺0.00</td>
-                                <td className="amount positive">₺13,750.00</td>
-                                <td><span className="status-badge status-invoiced">Kesildi</span></td>
-                                <td>26.08.2025</td>
-                                <td>-</td>
-                                <td><input type="checkbox" className="checkbox" /></td>
-                            </tr>
+                            {processedData.groups.map(grup => (
+                                <React.Fragment key={grup.Kategori_ID}>
+                                    <tr className="category-header">
+                                        <td>{grup.Kategori_Adi}</td>
+                                        <td>Aylık Gelir:</td>
+                                        <td className={grup.grupAylikGelir >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(grup.grupAylikGelir)}</td>
+                                        <td>Toplam Dönem:</td>
+                                        <td className={grup.grupDonemTutar >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(grup.grupDonemTutar)}</td>
+                                        <td>Fark:</td>
+                                        <td className={grup.grupFark >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(grup.grupFark)}</td>
+                                        <td colSpan={4}></td>
+                                    </tr>
+                                    {grup.cekler.map(cek => (
+                                        <tr key={cek.ID}>
+                                            <td style={{ paddingLeft: '25px' }}>{`YC-${grup.Kategori_Adi.substring(0,3)}-${cek.ID}`}</td>
+                                            <td>{parseDate(cek.Ilk_Tarih)?.toLocaleDateString('tr-TR') || '-'}</td>
+                                            <td>{parseDate(cek.Son_Tarih)?.toLocaleDateString('tr-TR') || '-'}</td>
+                                            <td className="amount">{formatCurrency(cek.Tutar)}</td>
+                                            <td className={`amount ${cek.oncekiDonemTutar > 0 ? 'negative' : ''}`}>{formatCurrency(cek.oncekiDonemTutar)}</td>
+                                            <td className={`amount ${cek.sonrakiDonemTutar > 0 ? 'negative' : ''}`}>{formatCurrency(cek.sonrakiDonemTutar)}</td>
+                                            <td className="amount positive">{formatCurrency(cek.donemTutar)}</td>
+                                            <td>
+                                                {cek.Imaj ? 
+                                                    <span className="status-badge status-invoiced">Kesildi</span> : 
+                                                    <span className="status-badge status-pending">Beklemede</span>
+                                                }
+                                            </td>
+                                            <td>{cek.Imaj && parseDate(cek.Tarih) ? parseDate(cek.Tarih)!.toLocaleDateString('tr-TR') : '-'}</td>
+                                            <td>{cek.Odeme_Tarih && parseDate(cek.Odeme_Tarih) ? parseDate(cek.Odeme_Tarih)!.toLocaleDateString('tr-TR') : '-'}</td>
+                                            <td><input type="checkbox" className="checkbox" defaultChecked={!!cek.Imaj} /></td>
+                                        </tr>
+                                    ))}
+                                </React.Fragment>
+                            ))}
 
-                            {/* SODEXO Kategori Header */}
-                            <tr className="category-header">
-                                <td>🪙 SODEXO</td>
-                                <td>Aylık Gelir:</td>
-                                <td className="negative-diff">₺29,800.00</td>
-                                <td>Toplam Dönem:</td>
-                                <td className="negative-diff">₺28,150.00</td>
-                                <td>Fark:</td>
-                                <td className="negative-diff">-₺1,650.00</td>
-                                <td colSpan={4}></td>
-                            </tr>
-                            <tr>
-                                <td style={{ paddingLeft: '25px' }}>YC-SDX-001</td>
-                                <td>05.08.2025</td>
-                                <td>28.08.2025</td>
-                                <td className="amount">₺15,900.00</td>
-                                <td className="amount">₺0.00</td>
-                                <td className="amount">₺0.00</td>
-                                <td className="amount positive">₺15,900.00</td>
-                                <td><span className="status-badge status-invoiced">Kesildi</span></td>
-                                <td>30.08.2025</td>
-                                <td>05.09.2025</td>
-                                <td><input type="checkbox" className="checkbox" defaultChecked /></td>
-                            </tr>
-                            <tr>
-                                <td style={{ paddingLeft: '25px' }}>YC-SDX-002</td>
-                                <td>12.08.2025</td>
-                                <td>18.09.2025</td>
-                                <td className="amount">₺18,450.00</td>
-                                <td className="amount">₺0.00</td>
-                                <td className="amount negative">-₺6,200.00</td>
-                                <td className="amount positive">₺12,250.00</td>
-                                <td><span className="status-badge status-pending">Beklemede</span></td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td><input type="checkbox" className="checkbox" /></td>
-                            </tr>
-
-                            {/* METROPOL SETCARD Kategori Header */}
-                            <tr className="category-header">
-                                <td>🛍️ METROPOL SETCARD</td>
-                                <td>Aylık Gelir:</td>
-                                <td className="negative-diff">₺21,500.00</td>
-                                <td>Toplam Dönem:</td>
-                                <td className="negative-diff">₺10,650.00</td>
-                                <td>Fark:</td>
-                                <td className="negative-diff">-₺10,850.00</td>
-                                <td colSpan={4}></td>
-                            </tr>
-                            <tr>
-                                <td style={{ paddingLeft: '25px' }}>YC-MET-001</td>
-                                <td>10.07.2025</td>
-                                <td>05.09.2025</td>
-                                <td className="amount">₺26,800.00</td>
-                                <td className="amount negative">-₺12,950.00</td>
-                                <td className="amount negative">-₺4,200.00</td>
-                                <td className="amount positive">₺9,650.00</td>
-                                <td><span className="status-badge status-invoiced">Kesildi</span></td>
-                                <td>08.09.2025</td>
-                                <td>-</td>
-                                <td><input type="checkbox" className="checkbox" /></td>
-                            </tr>
-                            <tr>
-                                <td style={{ paddingLeft: '25px' }}>YC-MET-002</td>
-                                <td>15.08.2025</td>
-                                <td>25.08.2025</td>
-                                <td className="amount">₺1,000.00</td>
-                                <td className="amount">₺0.00</td>
-                                <td className="amount">₺0.00</td>
-                                <td className="amount positive">₺1,000.00</td>
-                                <td><span className="status-badge status-invoiced">Kesildi</span></td>
-                                <td>26.08.2025</td>
-                                <td>28.08.2025</td>
-                                <td><input type="checkbox" className="checkbox" defaultChecked /></td>
-                            </tr>
-
-                            {/* Genel Toplam */}
                             <tr className="total-row">
                                 <td>📊 GENEL TOPLAM</td>
                                 <td>Aylık Gelir:</td>
-                                <td className="negative-diff">₺170,500.00</td>
+                                <td className={processedData.totalAylikGelir >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(processedData.totalAylikGelir)}</td>
                                 <td>Toplam Dönem:</td>
-                                <td className="negative-diff">₺166,550.00</td>
+                                <td className={processedData.totalDonemTutar >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(processedData.totalDonemTutar)}</td>
                                 <td>Fark:</td>
-                                <td className="negative-diff">-₺3,950.00</td>
+                                <td className={processedData.totalFark >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(processedData.totalFark)}</td>
                                 <td colSpan={4}></td>
                             </tr>
                         </tbody>
@@ -295,7 +285,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
             </div>
 
             <div className="footer">
-                📄 Son güncelleme: 08.09.2025 14:30 | 🎯 Toplam kontrol edilen kayıt: 9 | ⚠️ Bekleyen işlem: 3
+                {/* Footer content can also be dynamic later */}
             </div>
         </div>
     );

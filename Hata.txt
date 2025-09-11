@@ -1,19 +1,86 @@
-[plugin:vite:import-analysis] Failed to resolve import "./pages/LoginPage" from "App.tsx". Does the file exist?
-C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/App.tsx:16:26
-11 |  import { FaturaDigerHarcamaRaporuPage } from "./pages/FaturaDigerHarcamaRaporu";
-12 |  import { POSKontrolDashboardPage } from "./pages/POSKontrolDashboard";
-13 |  import { LoginPage } from "./pages/LoginPage";
-   |                             ^
-14 |  import { DashboardPage } from "./pages/DashboardPage";
-15 |  import { SubePage } from "./pages/SubePage";
-    at TransformPluginContext._formatLog (file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:42499:41)
-    at TransformPluginContext.error (file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:42496:16)
-    at normalizeUrl (file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:40475:23)
-    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
-    at async file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:40594:37
-    at async Promise.all (index 12)
-    at async TransformPluginContext.transform (file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:40521:7)
-    at async EnvironmentPluginContainer.transform (file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:42294:18)
-    at async loadAndTransform (file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:35735:27)
-    at async viteTransformMiddleware (file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:37250:24
-Click outside, press Esc key, or fix the cod
+(index):64 cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
+(anonymous) @ (index):64
+(anonymous) @ (index):64
+client:789 [vite] connecting...
+client:912 [vite] connected.
+react-dom_client.js?v=3a4de771:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+YemekCekiKontrolDashboard.tsx:59 --- Veri İşleme Başladı ---
+YemekCekiKontrolDashboard.tsx:60 Seçili Dönem: 2508
+YemekCekiKontrolDashboard.tsx:61 Seçili Şube: {Sube_Adi: 'Brandium', Aciklama: 'Brandium ', Aktif_Pasif: true, Sube_ID: 1}
+YemekCekiKontrolDashboard.tsx:62 Ham Yemek Çeki Listesi (ilk 5): []
+YemekCekiKontrolDashboard.tsx:70 Bulunan 'Yemek Çeki' Üst Kategorisi: undefined
+YemekCekiKontrolDashboard.tsx:72 Hata: 'Yemek Çeki' üst kategorisi bulunamadı.
+YemekCekiKontrolDashboard.tsx:59 --- Veri İşleme Başladı ---
+YemekCekiKontrolDashboard.tsx:60 Seçili Dönem: 2508
+YemekCekiKontrolDashboard.tsx:61 Seçili Şube: {Sube_Adi: 'Brandium', Aciklama: 'Brandium ', Aktif_Pasif: true, Sube_ID: 1}
+YemekCekiKontrolDashboard.tsx:62 Ham Yemek Çeki Listesi (ilk 5): []
+YemekCekiKontrolDashboard.tsx:70 Bulunan 'Yemek Çeki' Üst Kategorisi: undefined
+YemekCekiKontrolDashboard.tsx:72 Hata: 'Yemek Çeki' üst kategorisi bulunamadı.
+react-dom_client.js?v=3a4de771:16 [Violation] 'message' handler took 199ms
+YemekCekiKontrolDashboard.tsx:161 Hesaplamalarda Kullanılan Yemek_Ceki.Tutar Değerleri: []
+YemekCekiKontrolDashboard.tsx:161 Hesaplamalarda Kullanılan Yemek_Ceki.Tutar Değerleri: []
+YemekCekiKontrolDashboard.tsx:59 --- Veri İşleme Başladı ---
+YemekCekiKontrolDashboard.tsx:60 Seçili Dönem: 2508
+YemekCekiKontrolDashboard.tsx:61 Seçili Şube: {Sube_Adi: 'Brandium', Aciklama: 'Brandium ', Aktif_Pasif: true, Sube_ID: 1}
+YemekCekiKontrolDashboard.tsx:62 Ham Yemek Çeki Listesi (ilk 5): []
+YemekCekiKontrolDashboard.tsx:70 Bulunan 'Yemek Çeki' Üst Kategorisi: undefined
+YemekCekiKontrolDashboard.tsx:72 Hata: 'Yemek Çeki' üst kategorisi bulunamadı.
+YemekCekiKontrolDashboard.tsx:59 --- Veri İşleme Başladı ---
+YemekCekiKontrolDashboard.tsx:60 Seçili Dönem: 2508
+YemekCekiKontrolDashboard.tsx:61 Seçili Şube: {Sube_Adi: 'Brandium', Aciklama: 'Brandium ', Aktif_Pasif: true, Sube_ID: 1}
+YemekCekiKontrolDashboard.tsx:62 Ham Yemek Çeki Listesi (ilk 5): []
+YemekCekiKontrolDashboard.tsx:70 Bulunan 'Yemek Çeki' Üst Kategorisi: undefined
+YemekCekiKontrolDashboard.tsx:72 Hata: 'Yemek Çeki' üst kategorisi bulunamadı.
+YemekCekiKontrolDashboard.tsx:161 Hesaplamalarda Kullanılan Yemek_Ceki.Tutar Değerleri: []
+YemekCekiKontrolDashboard.tsx:59 --- Veri İşleme Başladı ---
+YemekCekiKontrolDashboard.tsx:60 Seçili Dönem: 2508
+YemekCekiKontrolDashboard.tsx:61 Seçili Şube: {Sube_Adi: 'Brandium', Aciklama: 'Brandium ', Aktif_Pasif: true, Sube_ID: 1}
+YemekCekiKontrolDashboard.tsx:62 Ham Yemek Çeki Listesi (ilk 5): (5) [{…}, {…}, {…}, {…}, {…}]
+YemekCekiKontrolDashboard.tsx:70 Bulunan 'Yemek Çeki' Üst Kategorisi: undefined
+YemekCekiKontrolDashboard.tsx:72 Hata: 'Yemek Çeki' üst kategorisi bulunamadı.
+YemekCekiKontrolDashboard.tsx:59 --- Veri İşleme Başladı ---
+YemekCekiKontrolDashboard.tsx:60 Seçili Dönem: 2508
+YemekCekiKontrolDashboard.tsx:61 Seçili Şube: {Sube_Adi: 'Brandium', Aciklama: 'Brandium ', Aktif_Pasif: true, Sube_ID: 1}
+YemekCekiKontrolDashboard.tsx:62 Ham Yemek Çeki Listesi (ilk 5): (5) [{…}, {…}, {…}, {…}, {…}]
+YemekCekiKontrolDashboard.tsx:70 Bulunan 'Yemek Çeki' Üst Kategorisi: undefined
+YemekCekiKontrolDashboard.tsx:72 Hata: 'Yemek Çeki' üst kategorisi bulunamadı.
+YemekCekiKontrolDashboard.tsx:161 Hesaplamalarda Kullanılan Yemek_Ceki.Tutar Değerleri: []
+YemekCekiKontrolDashboard.tsx:59 --- Veri İşleme Başladı ---
+YemekCekiKontrolDashboard.tsx:60 Seçili Dönem: 2508
+YemekCekiKontrolDashboard.tsx:61 Seçili Şube: {Sube_Adi: 'Brandium', Aciklama: 'Brandium ', Aktif_Pasif: true, Sube_ID: 1}
+YemekCekiKontrolDashboard.tsx:62 Ham Yemek Çeki Listesi (ilk 5): (5) [{…}, {…}, {…}, {…}, {…}]
+YemekCekiKontrolDashboard.tsx:70 Bulunan 'Yemek Çeki' Üst Kategorisi: undefined
+YemekCekiKontrolDashboard.tsx:72 Hata: 'Yemek Çeki' üst kategorisi bulunamadı.
+YemekCekiKontrolDashboard.tsx:59 --- Veri İşleme Başladı ---
+YemekCekiKontrolDashboard.tsx:60 Seçili Dönem: 2508
+YemekCekiKontrolDashboard.tsx:61 Seçili Şube: {Sube_Adi: 'Brandium', Aciklama: 'Brandium ', Aktif_Pasif: true, Sube_ID: 1}
+YemekCekiKontrolDashboard.tsx:62 Ham Yemek Çeki Listesi (ilk 5): (5) [{…}, {…}, {…}, {…}, {…}]
+YemekCekiKontrolDashboard.tsx:70 Bulunan 'Yemek Çeki' Üst Kategorisi: undefined
+YemekCekiKontrolDashboard.tsx:72 Hata: 'Yemek Çeki' üst kategorisi bulunamadı.
+YemekCekiKontrolDashboard.tsx:161 Hesaplamalarda Kullanılan Yemek_Ceki.Tutar Değerleri: []
+YemekCekiKontrolDashboard.tsx:59 --- Veri İşleme Başladı ---
+YemekCekiKontrolDashboard.tsx:60 Seçili Dönem: 2509
+YemekCekiKontrolDashboard.tsx:61 Seçili Şube: {Sube_Adi: 'Brandium', Aciklama: 'Brandium ', Aktif_Pasif: true, Sube_ID: 1}
+YemekCekiKontrolDashboard.tsx:62 Ham Yemek Çeki Listesi (ilk 5): (5) [{…}, {…}, {…}, {…}, {…}]0: {Kategori_ID: 6, Tarih: '2025-09-02', Tutar: 21552.5, Odeme_Tarih: '2025-10-02', Ilk_Tarih: '2025-08-27', …}ID: 7Ilk_Tarih: "2025-08-27"Imaj_Adi: "Multinet02092025.jpeg"Kategori_ID: 6Odeme_Tarih: "2025-10-02"Son_Tarih: "2025-09-02"Sube_ID: 1Tarih: "2025-09-02"Tutar: 21552.5has_imaj: true[[Prototype]]: Object1: ID: 8Ilk_Tarih: "2025-08-01"Imaj_Adi: "AySonu092025.jpeg"Kategori_ID: 8Odeme_Tarih: "2025-09-30"Son_Tarih: "2025-08-31"Sube_ID: 1Tarih: "2025-08-31"Tutar: 735has_imaj: true[[Prototype]]: Object2: {Kategori_ID: 8, Tarih: '2025-08-31', Tutar: 136005, Odeme_Tarih: '2025-09-30', Ilk_Tarih: '2025-08-01', …}3: {Kategori_ID: 7, Tarih: '2025-08-31', Tutar: 98772, Odeme_Tarih: '2025-09-30', Ilk_Tarih: '2025-08-01', …}4: {Kategori_ID: 9, Tarih: '2025-08-31', Tutar: 64512.5, Odeme_Tarih: '2025-09-30', Ilk_Tarih: '2025-08-01', …}length: 5[[Prototype]]: Array(0)
+YemekCekiKontrolDashboard.tsx:70 Bulunan 'Yemek Çeki' Üst Kategorisi: undefined
+YemekCekiKontrolDashboard.tsx:72 Hata: 'Yemek Çeki' üst kategorisi bulunamadı.
+YemekCekiKontrolDashboard.tsx:59 --- Veri İşleme Başladı ---
+YemekCekiKontrolDashboard.tsx:60 Seçili Dönem: 2509
+YemekCekiKontrolDashboard.tsx:61 Seçili Şube: {Sube_Adi: 'Brandium', Aciklama: 'Brandium ', Aktif_Pasif: true, Sube_ID: 1}
+YemekCekiKontrolDashboard.tsx:62 Ham Yemek Çeki Listesi (ilk 5): (5) [{…}, {…}, {…}, {…}, {…}]
+YemekCekiKontrolDashboard.tsx:70 Bulunan 'Yemek Çeki' Üst Kategorisi: undefined
+YemekCekiKontrolDashboard.tsx:72 Hata: 'Yemek Çeki' üst kategorisi bulunamadı.
+YemekCekiKontrolDashboard.tsx:161 Hesaplamalarda Kullanılan Yemek_Ceki.Tutar Değerleri: []
+YemekCekiKontrolDashboard.tsx:59 --- Veri İşleme Başladı ---
+YemekCekiKontrolDashboard.tsx:60 Seçili Dönem: 2508
+YemekCekiKontrolDashboard.tsx:61 Seçili Şube: {Sube_Adi: 'Brandium', Aciklama: 'Brandium ', Aktif_Pasif: true, Sube_ID: 1}
+YemekCekiKontrolDashboard.tsx:62 Ham Yemek Çeki Listesi (ilk 5): (5) [{…}, {…}, {…}, {…}, {…}]
+YemekCekiKontrolDashboard.tsx:70 Bulunan 'Yemek Çeki' Üst Kategorisi: undefined
+YemekCekiKontrolDashboard.tsx:72 Hata: 'Yemek Çeki' üst kategorisi bulunamadı.
+YemekCekiKontrolDashboard.tsx:59 --- Veri İşleme Başladı ---
+YemekCekiKontrolDashboard.tsx:60 Seçili Dönem: 2508
+YemekCekiKontrolDashboard.tsx:61 Seçili Şube: {Sube_Adi: 'Brandium', Aciklama: 'Brandium ', Aktif_Pasif: true, Sube_ID: 1}
+YemekCekiKontrolDashboard.tsx:62 Ham Yemek Çeki Listesi (ilk 5): (5) [{…}, {…}, {…}, {…}, {…}]
+YemekCekiKontrolDashboard.tsx:70 Bulunan 'Yemek Çeki' Üst Kategorisi: undefined
+YemekCekiKontrolDashboard.tsx:72 Hata: 'Yemek Çeki' üst kategorisi bulunamadı.
+YemekCekiKontrolDashboard.tsx:161 Hesaplamalarda Kullanılan Yemek_Ceki.Tutar Değerleri: []
