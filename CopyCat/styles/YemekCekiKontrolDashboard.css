@@ -188,11 +188,17 @@ tr:hover td {
     background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
     color: white;
     font-weight: bold;
-    font-size: 0.9em;
+    font-size: 1em; /* Increased from 0.9em */
 }
 
 .category-header:hover {
     background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+}
+
+.category-header .positive-diff,
+.category-header .negative-diff {
+    color: #f1f5f9; /* Light shade of white/gray */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2); /* Add a subtle shadow for readability */
 }
 
 .category-header td {

@@ -36,9 +36,17 @@ const formatCurrency = (value: number) => {
     return value.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
+const getPeriodFromDateString = (dateString: string): string => {
+    const date = parseDate(dateString);
+    if (!date) return '';
+    const year = date.getFullYear().toString().slice(-2);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    return `${year}${month}`;
+}
+
 export const YemekCekiKontrolDashboardPage: React.FC = () => {
     const { selectedBranch } = useAppContext();
-    const { kategoriList, yemekCekiList } = useDataContext();
+    const { kategoriList, yemekCekiList, gelirList } = useDataContext();
 
     const [period, setPeriod] = useState('2508');
     const [periodName, setPeriodName] = useState('Ağustos 2025 (2508)');
@@ -56,7 +64,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
     };
 
     const processedData = useMemo(() => {
-        if (!selectedBranch || !yemekCekiList || !kategoriList) {
+        if (!selectedBranch || !yemekCekiList || !kategoriList || !gelirList) {
             return { groups: [], kontrolEdilenKayitSayisi: 0, totalAylikGelir: 0, totalDonemTutar: 0, totalFark: 0 };
         }
 
@@ -84,7 +92,15 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
         const groups = kategoriList
             .filter(k => kategoriIDsInCekler.includes(k.Kategori_ID))
             .map(kategori => {
-                let grupAylikGelir = 0;
+                // Calculate Aylık Gelir from gelirList
+                const grupAylikGelir = gelirList
+                    .filter(g => 
+                        g.Sube_ID === selectedBranch.Sube_ID &&
+                        g.Kategori_ID === kategori.Kategori_ID &&
+                        getPeriodFromDateString(g.Tarih) === period
+                    )
+                    .reduce((sum, g) => sum + g.Tutar, 0);
+
                 let grupDonemTutar = 0;
 
                 const cekler = ilgiliCekler
@@ -111,7 +127,6 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
 
                         const donemTutar = cek.Tutar - oncekiDonemTutar - sonrakiDonemTutar;
                         
-                        grupAylikGelir += cek.Tutar;
                         grupDonemTutar += donemTutar;
 
                         return {
@@ -133,11 +148,11 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                     grupFark: grupDonemTutar - grupAylikGelir
                 };
             })
-            .filter(g => g.cekler.length > 0);
+            .filter(g => g.cekler.length > 0 || g.grupAylikGelir > 0);
 
         return { groups, kontrolEdilenKayitSayisi, totalAylikGelir, totalDonemTutar, totalFark: totalDonemTutar - totalAylikGelir };
 
-    }, [yemekCekiList, kategoriList, selectedBranch, period]);
+    }, [yemekCekiList, kategoriList, gelirList, selectedBranch, period]);
 
     useEffect(() => {
         // Re-run animations and event listeners when data changes
