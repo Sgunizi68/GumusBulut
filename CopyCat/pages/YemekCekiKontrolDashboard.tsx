@@ -2,12 +2,26 @@ import React, { useState, useEffect, useMemo } from 'react';
 import '../styles/YemekCekiKontrolDashboard.css';
 import { useAppContext, useDataContext } from '../App';
 
-// Helper function to parse YYYY-MM-DD string to Date object safely
+// Helper function to parse YYYY-MM-DD or DD.MM.YYYY string to Date object safely
 const parseDate = (dateString: string | null | undefined): Date | null => {
     if (!dateString) return null;
-    const date = new Date(dateString);
+    let date;
+    // Check for YYYY-MM-DD format
+    if (/^\d{4}-\d{2}-\d{2}/.test(dateString)) {
+        date = new Date(dateString);
+    } 
+    // Check for DD.MM.YYYY format
+    else if (/^\d{2}\.\d{2}\.\d{4}/.test(dateString)) {
+        const parts = dateString.split('.');
+        // new Date(year, monthIndex, day)
+        date = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+    } else {
+        // Try default parsing as a fallback
+        date = new Date(dateString);
+    }
+
     if (isNaN(date.getTime())) {
-        console.warn(`Invalid date string encountered: ${dateString}`);
+        console.warn(`Invalid or unhandled date format encountered: ${dateString}`);
         return null;
     }
     return date;
@@ -21,15 +35,6 @@ const getPeriodDates = (period: string): { startDate: Date, endDate: Date } => {
     const endDate = new Date(year, month, 0);
     endDate.setHours(23, 59, 59, 999); // Set to end of day
     return { startDate, endDate };
-};
-
-// Helper to calculate the number of days between two dates (inclusive)
-const daysBetween = (startDate: Date, endDate: Date): number => {
-    if (endDate < startDate) return 0;
-    // Use UTC to avoid daylight saving issues
-    const startUTC = Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
-    const endUTC = Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
-    return Math.round((endUTC - startUTC) / (1000 * 60 * 60 * 24)) + 1;
 };
 
 const formatCurrency = (value: number) => {
@@ -153,7 +158,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                 let grupDonemTutar = 0;
 
                 const aliciUnvanlariForKategori = eFaturaReferansList
-                    .filter(r => r.Referans_Kodu === kategori.Kategori_Adi)
+                    .filter(r => r.Referans_Kodu && r.Referans_Kodu.trim().toLowerCase() === kategori.Kategori_Adi.trim().toLowerCase())
                     .map(r => r.Alici_Unvani);
 
                 const cekler = ilgiliCekler
@@ -186,10 +191,11 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                         
                         const isKesildi = eFaturaList.some(f => {
                             const faturaTarihi = parseDate(f.Fatura_Tarihi);
+                            const cekSonTarih = parseDate(cek.Son_Tarih);
                             return (
                                 f.Giden_Fatura &&
-                                f.Tutar === cek.Tutar &&
-                                faturaTarihi && parseDate(cek.Son_Tarih) && faturaTarihi.getTime() === parseDate(cek.Son_Tarih)!.getTime() &&
+                                Math.abs(f.Tutar - cek.Tutar) < 0.01 && // Use tolerance for float comparison
+                                faturaTarihi && cekSonTarih && faturaTarihi.getTime() === cekSonTarih.getTime() &&
                                 aliciUnvanlariForKategori.includes(f.Alici_Unvani)
                             );
                         });
