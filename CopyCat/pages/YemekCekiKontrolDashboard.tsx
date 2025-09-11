@@ -23,15 +23,6 @@ const getPeriodDates = (period: string): { startDate: Date, endDate: Date } => {
     return { startDate, endDate };
 };
 
-// Helper to calculate the number of days between two dates (inclusive)
-const daysBetween = (startDate: Date, endDate: Date): number => {
-    if (endDate < startDate) return 0;
-    // Use UTC to avoid daylight saving issues
-    const startUTC = Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
-    const endUTC = Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
-    return Math.round((endUTC - startUTC) / (1000 * 60 * 60 * 24)) + 1;
-};
-
 const formatCurrency = (value: number) => {
     return value.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
@@ -92,7 +83,6 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
         const groups = kategoriList
             .filter(k => kategoriIDsInCekler.includes(k.Kategori_ID))
             .map(kategori => {
-                // Calculate Aylık Gelir from gelirList
                 const grupAylikGelir = gelirList
                     .filter(g => 
                         g.Sube_ID === selectedBranch.Sube_ID &&
@@ -108,22 +98,24 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                     .map(cek => {
                         const cekIlk_Tarih = parseDate(cek.Ilk_Tarih)!;
                         const cekSon_Tarih = parseDate(cek.Son_Tarih)!;
-                        const toplamGun = daysBetween(cekIlk_Tarih, cekSon_Tarih);
-                        const gunlukTutar = toplamGun > 0 ? cek.Tutar / toplamGun : 0;
 
-                        let oncekiDonemTutar = 0;
-                        if (cekIlk_Tarih < periodStart) {
-                            const oncekiDonemBitis = new Date(periodStart.getTime() - 1);
-                            const oncekiDonemGunSayisi = daysBetween(cekIlk_Tarih, oncekiDonemBitis);
-                            oncekiDonemTutar = oncekiDonemGunSayisi * gunlukTutar;
-                        }
+                        const oncekiDonemTutar = gelirList
+                            .filter(g => {
+                                const gelirTarihi = parseDate(g.Tarih)!;
+                                return g.Kategori_ID === cek.Kategori_ID &&
+                                       gelirTarihi < periodStart &&
+                                       gelirTarihi >= cekIlk_Tarih;
+                            })
+                            .reduce((sum, g) => sum + g.Tutar, 0);
 
-                        let sonrakiDonemTutar = 0;
-                        if (cekSon_Tarih > periodEnd) {
-                            const sonrakiDonemBaslangic = new Date(periodEnd.getTime() + 1);
-                            const sonrakiDonemGunSayisi = daysBetween(sonrakiDonemBaslangic, cekSon_Tarih);
-                            sonrakiDonemTutar = sonrakiDonemGunSayisi * gunlukTutar;
-                        }
+                        const sonrakiDonemTutar = gelirList
+                            .filter(g => {
+                                const gelirTarihi = parseDate(g.Tarih)!;
+                                return g.Kategori_ID === cek.Kategori_ID &&
+                                       gelirTarihi > periodEnd &&
+                                       gelirTarihi <= cekSon_Tarih;
+                            })
+                            .reduce((sum, g) => sum + g.Tutar, 0);
 
                         const donemTutar = cek.Tutar - oncekiDonemTutar - sonrakiDonemTutar;
                         
