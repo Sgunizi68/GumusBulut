@@ -1,17 +1,17 @@
-* {
+.yemek-ceki-dashboard-wrapper * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
+.yemek-ceki-dashboard-wrapper {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
+    min-height: 100%;
     padding: 20px;
 }
 
-.container {
+.yemek-ceki-dashboard-wrapper .container {
     max-width: 1600px;
     margin: 0 auto;
     background: rgba(255, 255, 255, 0.95);
@@ -21,7 +21,7 @@ body {
     overflow: hidden;
 }
 
-.header {
+.yemek-ceki-dashboard-wrapper .header {
     background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
     color: white;
     padding: 30px;
@@ -29,7 +29,7 @@ body {
     text-align: center;
 }
 
-.header h1 {
+.yemek-ceki-dashboard-wrapper .header h1 {
     font-size: 2.5em;
     margin: 0;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
@@ -37,18 +37,18 @@ body {
     z-index: 1;
 }
 
-.content {
+.yemek-ceki-dashboard-wrapper .content {
     padding: 40px;
 }
 
-.summary-cards {
+.yemek-ceki-dashboard-wrapper .summary-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     margin-bottom: 40px;
 }
 
-.summary-card {
+.yemek-ceki-dashboard-wrapper .summary-card {
     background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
     color: white;
     padding: 25px;
@@ -60,7 +60,7 @@ body {
     overflow: hidden;
 }
 
-.summary-card::before {
+.yemek-ceki-dashboard-wrapper .summary-card::before {
     content: '';
     position: absolute;
     top: -50%;
@@ -72,36 +72,36 @@ body {
     transition: all 0.5s ease;
 }
 
-.summary-card:hover {
+.yemek-ceki-dashboard-wrapper .summary-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
 }
 
-.summary-card:hover::before {
+.yemek-ceki-dashboard-wrapper .summary-card:hover::before {
     top: -30%;
     left: -30%;
 }
 
-.summary-card.income { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-.summary-card.paid { background: linear-gradient(135deg, #48cae4 0%, #0077be 100%); }
-.summary-card.difference { background: linear-gradient(135deg, #e17055 0%, #d63031 100%); }
-.summary-card.pending { background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%); }
+.yemek-ceki-dashboard-wrapper .summary-card.income { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.yemek-ceki-dashboard-wrapper .summary-card.paid { background: linear-gradient(135deg, #48cae4 0%, #0077be 100%); }
+.yemek-ceki-dashboard-wrapper .summary-card.difference { background: linear-gradient(135deg, #e17055 0%, #d63031 100%); }
+.yemek-ceki-dashboard-wrapper .summary-card.pending { background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%); }
 
-.summary-card h3 {
+.yemek-ceki-dashboard-wrapper .summary-card h3 {
     font-size: 1.2em;
     margin-bottom: 10px;
     position: relative;
     z-index: 1;
 }
 
-.summary-card .amount {
+.yemek-ceki-dashboard-wrapper .summary-card .amount {
     font-size: 2em;
     font-weight: bold;
     position: relative;
     z-index: 1;
 }
 
-.data-table {
+.yemek-ceki-dashboard-wrapper .data-table {
     background: white;
     border-radius: 15px;
     overflow: hidden;
@@ -109,7 +109,7 @@ body {
     margin-bottom: 30px;
 }
 
-.table-header {
+.yemek-ceki-dashboard-wrapper .table-header {
     background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
     color: white;
     padding: 20px;
@@ -120,11 +120,11 @@ body {
     align-items: center;
 }
 
-.table-header-title {
+.yemek-ceki-dashboard-wrapper .table-header-title {
     flex: 1;
 }
 
-.period-selector {
+.yemek-ceki-dashboard-wrapper .period-selector {
     background: rgba(255, 255, 255, 0.15);
     padding: 8px 15px;
     border-radius: 10px;
@@ -133,12 +133,12 @@ body {
     gap: 10px;
 }
 
-.period-selector label {
+.yemek-ceki-dashboard-wrapper .period-selector label {
     font-size: 1em;
     font-weight: 600;
 }
 
-.period-selector select {
+.yemek-ceki-dashboard-wrapper .period-selector select {
     background: white;
     color: #2c3e50;
     border: none;
@@ -150,18 +150,18 @@ body {
     transition: all 0.3s ease;
 }
 
-.period-selector select:hover {
+.yemek-ceki-dashboard-wrapper .period-selector select:hover {
     transform: translateY(-1px);
     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
-table {
+.yemek-ceki-dashboard-wrapper table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.9em;
 }
 
-th {
+.yemek-ceki-dashboard-wrapper th {
     background: linear-gradient(135deg, #636e72 0%, #2d3436 100%);
     color: white;
     padding: 12px 8px;
@@ -172,50 +172,50 @@ th {
     letter-spacing: 1px;
 }
 
-td {
+.yemek-ceki-dashboard-wrapper td {
     padding: 12px 8px;
     border-bottom: 1px solid #eee;
     transition: all 0.3s ease;
     font-size: 0.9em;
 }
 
-tr:hover td {
+.yemek-ceki-dashboard-wrapper tr:hover td {
     background: rgba(116, 185, 255, 0.1);
     transform: scale(1.01);
 }
 
-.category-header {
+.yemek-ceki-dashboard-wrapper .category-header {
     background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
     color: white;
     font-weight: bold;
     font-size: 1em; /* Increased from 0.9em */
 }
 
-.category-header:hover {
+.yemek-ceki-dashboard-wrapper .category-header:hover {
     background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
 }
 
-.category-header .positive-diff,
-.category-header .negative-diff {
+.yemek-ceki-dashboard-wrapper .category-header .positive-diff,
+.yemek-ceki-dashboard-wrapper .category-header .negative-diff {
     color: #f1f5f9; /* Light shade of white/gray */
     text-shadow: 1px 1px 2px rgba(0,0,0,0.2); /* Add a subtle shadow for readability */
 }
 
-.category-header td {
+.yemek-ceki-dashboard-wrapper .category-header td {
     font-size: 0.85em;
     font-weight: bold;
     text-align: left;
     padding: 10px 8px;
 }
 
-.total-row {
+.yemek-ceki-dashboard-wrapper .total-row {
     background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
     color: white;
     font-weight: bold;
     font-size: 1.1em;
 }
 
-.status-badge {
+.yemek-ceki-dashboard-wrapper .status-badge {
     padding: 4px 8px;
     border-radius: 15px;
     font-size: 0.75em;
@@ -225,35 +225,35 @@ tr:hover td {
     display: inline-block;
 }
 
-.status-invoiced {
+.yemek-ceki-dashboard-wrapper .status-invoiced {
     background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
     color: white;
 }
 
-.status-pending {
+.yemek-ceki-dashboard-wrapper .status-pending {
     background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
     color: white;
 }
 
-.checkbox {
+.yemek-ceki-dashboard-wrapper .checkbox {
     transform: scale(1.2);
     accent-color: #00b894;
 }
 
-.amount {
+.yemek-ceki-dashboard-wrapper .amount {
     font-weight: bold;
     color: #2d3436;
 }
 
-.amount.positive {
+.yemek-ceki-dashboard-wrapper .amount.positive {
     color: #00b894;
 }
 
-.amount.negative {
+.yemekceki-dashboard-wrapper .amount.negative {
     color: #e17055;
 }
 
-.footer {
+.yemek-ceki-dashboard-wrapper .footer {
     background: rgba(45, 52, 54, 0.1);
     padding: 20px;
     text-align: center;
@@ -261,12 +261,12 @@ tr:hover td {
     font-style: italic;
 }
 
-.positive-diff {
+.yemek-ceki-dashboard-wrapper .positive-diff {
     color: #00b894;
     font-weight: bold;
 }
 
-.negative-diff {
+.yemek-ceki-dashboard-wrapper .negative-diff {
     color: #e17055;
     font-weight: bold;
 }
@@ -282,15 +282,15 @@ tr:hover td {
     }
 }
 
-.data-table {
+.yemek-ceki-dashboard-wrapper .data-table {
     animation: fadeInUp 0.6s ease-out;
 }
 
-.summary-card {
+.yemek-ceki-dashboard-wrapper .summary-card {
     animation: fadeInUp 0.6s ease-out;
 }
 
-.summary-card:nth-child(1) { animation-delay: 0.1s; }
-.summary-card:nth-child(2) { animation-delay: 0.2s; }
-.summary-card:nth-child(3) { animation-delay: 0.3s; }
-.summary-card:nth-child(4) { animation-delay: 0.4s; }
+.yemek-ceki-dashboard-wrapper .summary-card:nth-child(1) { animation-delay: 0.1s; }
+.yemek-ceki-dashboard-wrapper .summary-card:nth-child(2) { animation-delay: 0.2s; }
+.yemek-ceki-dashboard-wrapper .summary-card:nth-child(3) { animation-delay: 0.3s; }
+.yemek-ceki-dashboard-wrapper .summary-card:nth-child(4) { animation-delay: 0.4s; }

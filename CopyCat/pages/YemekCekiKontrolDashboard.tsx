@@ -266,127 +266,129 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
     }, [processedData]);
 
     return (
-        <div className="container">
-            <div className="header">
-                <h1>🍽️ Yemek Çeki Kontrol Dashboard</h1>
-            </div>
-
-            <div className="content">
-                <div className="summary-cards">
-                    <div className="summary-card income">
-                        <h3>📊 Aylık Toplam Gelir</h3>
-                        <div className="amount">{formatCurrency(processedData.totalAylikGelir)}</div>
-                    </div>
-                    <div className="summary-card paid">
-                        <h3>💰 Dönem Tutar Toplamı</h3>
-                        <div className="amount">{formatCurrency(processedData.totalDonemTutar)}</div>
-                    </div>
-                    <div className="summary-card difference">
-                        <h3>⚖️ Fark</h3>
-                        <div className="amount">{formatCurrency(processedData.totalFark)}</div>
-                    </div>
-                    <div className="summary-card pending">
-                        <h3>📝 Kontrol Edilen Kayıt</h3>
-                        <div className="amount">{processedData.kontrolEdilenKayitSayisi}</div>
-                    </div>
+        <div className="yemek-ceki-dashboard-wrapper">
+            <div className="container">
+                <div className="header">
+                    <h1>🍽️ Yemek Çeki Kontrol Dashboard</h1>
                 </div>
 
-                <div className="data-table">
-                    <div className="table-header">
-                        <div className="table-header-title">
-                            📋 Yemek Çeki Kategorileri Detay Raporu - {periodName}
+                <div className="content">
+                    <div className="summary-cards">
+                        <div className="summary-card income">
+                            <h3>📊 Aylık Toplam Gelir</h3>
+                            <div className="amount">{formatCurrency(processedData.totalAylikGelir)}</div>
                         </div>
-                        <div className="period-selector">
-                            <label htmlFor="period">Dönem:</label>
-                            <select id="period" value={period} onChange={handlePeriodChange}>
-                                {availablePeriods.map(p => (
-                                    <option key={p} value={p}>{formatPeriodForDisplay(p)}</option>
-                                ))}
-                            </select>
+                        <div className="summary-card paid">
+                            <h3>💰 Dönem Tutar Toplamı</h3>
+                            <div className="amount">{formatCurrency(processedData.totalDonemTutar)}</div>
+                        </div>
+                        <div className="summary-card difference">
+                            <h3>⚖️ Fark</h3>
+                            <div className="amount">{formatCurrency(processedData.totalFark)}</div>
+                        </div>
+                        <div className="summary-card pending">
+                            <h3>📝 Kontrol Edilen Kayıt</h3>
+                            <div className="amount">{processedData.kontrolEdilenKayitSayisi}</div>
                         </div>
                     </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style={{ width: '20%' }}>Kategori</th>
-                                <th style={{ width: '10%' }}>İlk Tarih</th>
-                                <th style={{ width: '10%' }}>Son Tarih</th>
-                                <th style={{ width: '10%' }}>Tutar</th>
-                                <th style={{ width: '10%' }}>Önceki Dönem</th>
-                                <th style={{ width: '10%' }}>Sonraki Dönem</th>
-                                <th style={{ width: '10%' }}>Dönem Tutar</th>
-                                <th style={{ width: '8%' }}>Fatura</th>
-                                <th style={{ width: '10%' }}>Fatura Tarihi</th>
-                                <th style={{ width: '10%' }}>Ödeme Tarihi</th>
-                                <th style={{ width: '3%' }}>✓</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {processedData.groups.map(grup => (
-                                <React.Fragment key={grup.Kategori_ID}>
-                                    <tr className="category-header">
-                                        <td>{grup.Kategori_Adi}</td>
-                                        <td>Aylık Gelir:</td>
-                                        <td className={grup.grupAylikGelir >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(grup.grupAylikGelir)}</td>
-                                        <td>Toplam Dönem:</td>
-                                        <td className={grup.grupDonemTutar >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(grup.grupDonemTutar)}</td>
-                                        <td>Fark:</td>
-                                        <td className={grup.grupFark >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(grup.grupFark)}</td>
-                                        <td colSpan={4}></td>
-                                    </tr>
-                                    {grup.cekler.map(cek => (
-                                        <tr key={cek.ID}>
-                                            <td style={{ paddingLeft: '25px' }}>
-                                                {cek.Imaj && cek.Imaj_Adi ? (
-                                                    <a 
-                                                        href={`data:${getMimeType(cek.Imaj_Adi)};base64,${cek.Imaj}`}
-                                                        download={cek.Imaj_Adi}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-blue-600 hover:underline"
-                                                    >
-                                                        {cek.Imaj_Adi}
-                                                    </a>
-                                                ) : (
-                                                    '-'
-                                                )}
-                                            </td>
-                                            <td>{parseDate(cek.Ilk_Tarih)?.toLocaleDateString('tr-TR') || '-'}</td>
-                                            <td>{parseDate(cek.Son_Tarih)?.toLocaleDateString('tr-TR') || '-'}</td>
-                                            <td className="amount">{formatCurrency(cek.Tutar)}</td>
-                                            <td className={`amount ${cek.oncekiDonemTutar > 0 ? 'negative' : ''}`}>{formatCurrency(cek.oncekiDonemTutar)}</td>
-                                            <td className={`amount ${cek.sonrakiDonemTutar > 0 ? 'negative' : ''}`}>{formatCurrency(cek.sonrakiDonemTutar)}</td>
-                                            <td className="amount positive">{formatCurrency(cek.donemTutar)}</td>
-                                            <td>
-                                                <span className={`status-badge ${cek.faturaStatus === 'Kesildi' ? 'status-invoiced' : 'status-pending'}`}>
-                                                    {cek.faturaStatus}
-                                                </span>
-                                            </td>
-                                            <td>{cek.faturaStatus === 'Kesildi' ? parseDate(cek.Son_Tarih)?.toLocaleDateString('tr-TR') : '-'}</td>
-                                            <td>{cek.Odeme_Tarih && parseDate(cek.Odeme_Tarih) ? parseDate(cek.Odeme_Tarih)!.toLocaleDateString('tr-TR') : '-'}</td>
-                                            <td><input type="checkbox" className="checkbox" defaultChecked={cek.faturaStatus === 'Kesildi'} /></td>
-                                        </tr>
+
+                    <div className="data-table">
+                        <div className="table-header">
+                            <div className="table-header-title">
+                                📋 Yemek Çeki Kategorileri Detay Raporu - {periodName}
+                            </div>
+                            <div className="period-selector">
+                                <label htmlFor="period">Dönem:</label>
+                                <select id="period" value={period} onChange={handlePeriodChange}>
+                                    {availablePeriods.map(p => (
+                                        <option key={p} value={p}>{formatPeriodForDisplay(p)}</option>
                                     ))}
-                                </React.Fragment>
-                            ))}
+                                </select>
+                            </div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style={{ width: '20%' }}>Kategori</th>
+                                    <th style={{ width: '10%' }}>İlk Tarih</th>
+                                    <th style={{ width: '10%' }}>Son Tarih</th>
+                                    <th style={{ width: '10%' }}>Tutar</th>
+                                    <th style={{ width: '10%' }}>Önceki Dönem</th>
+                                    <th style={{ width: '10%' }}>Sonraki Dönem</th>
+                                    <th style={{ width: '10%' }}>Dönem Tutar</th>
+                                    <th style={{ width: '8%' }}>Fatura</th>
+                                    <th style={{ width: '10%' }}>Fatura Tarihi</th>
+                                    <th style={{ width: '10%' }}>Ödeme Tarihi</th>
+                                    <th style={{ width: '3%' }}>✓</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {processedData.groups.map(grup => (
+                                    <React.Fragment key={grup.Kategori_ID}>
+                                        <tr className="category-header">
+                                            <td>{grup.Kategori_Adi}</td>
+                                            <td>Aylık Gelir:</td>
+                                            <td className={grup.grupAylikGelir >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(grup.grupAylikGelir)}</td>
+                                            <td>Toplam Dönem:</td>
+                                            <td className={grup.grupDonemTutar >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(grup.grupDonemTutar)}</td>
+                                            <td>Fark:</td>
+                                            <td className={grup.grupFark >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(grup.grupFark)}</td>
+                                            <td colSpan={4}></td>
+                                        </tr>
+                                        {grup.cekler.map(cek => (
+                                            <tr key={cek.ID}>
+                                                <td style={{ paddingLeft: '25px' }}>
+                                                    {cek.Imaj && cek.Imaj_Adi ? (
+                                                        <a 
+                                                            href={`data:${getMimeType(cek.Imaj_Adi)};base64,${cek.Imaj}`}
+                                                            download={cek.Imaj_Adi}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-blue-600 hover:underline"
+                                                        >
+                                                            {cek.Imaj_Adi}
+                                                        </a>
+                                                    ) : (
+                                                        '-'
+                                                    )}
+                                                </td>
+                                                <td>{parseDate(cek.Ilk_Tarih)?.toLocaleDateString('tr-TR') || '-'}</td>
+                                                <td>{parseDate(cek.Son_Tarih)?.toLocaleDateString('tr-TR') || '-'}</td>
+                                                <td className="amount">{formatCurrency(cek.Tutar)}</td>
+                                                <td className={`amount ${cek.oncekiDonemTutar > 0 ? 'negative' : ''}`}>{formatCurrency(cek.oncekiDonemTutar)}</td>
+                                                <td className={`amount ${cek.sonrakiDonemTutar > 0 ? 'negative' : ''}`}>{formatCurrency(cek.sonrakiDonemTutar)}</td>
+                                                <td className="amount positive">{formatCurrency(cek.donemTutar)}</td>
+                                                <td>
+                                                    <span className={`status-badge ${cek.faturaStatus === 'Kesildi' ? 'status-invoiced' : 'status-pending'}`}>
+                                                        {cek.faturaStatus}
+                                                    </span>
+                                                </td>
+                                                <td>{cek.faturaStatus === 'Kesildi' ? parseDate(cek.Son_Tarih)?.toLocaleDateString('tr-TR') : '-'}</td>
+                                                <td>{cek.Odeme_Tarih && parseDate(cek.Odeme_Tarih) ? parseDate(cek.Odeme_Tarih)!.toLocaleDateString('tr-TR') : '-'}</td>
+                                                <td><input type="checkbox" className="checkbox" defaultChecked={cek.faturaStatus === 'Kesildi'} /></td>
+                                            </tr>
+                                        ))}
+                                    </React.Fragment>
+                                ))}
 
-                            <tr className="total-row">
-                                <td>📊 GENEL TOPLAM</td>
-                                <td>Aylık Gelir:</td>
-                                <td className={processedData.totalAylikGelir >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(processedData.totalAylikGelir)}</td>
-                                <td>Toplam Dönem:</td>
-                                <td className={processedData.totalDonemTutar >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(processedData.totalDonemTutar)}</td>
-                                <td>Fark:</td>
-                                <td className={processedData.totalFark >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(processedData.totalFark)}</td>
-                                <td colSpan={4}></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                <tr className="total-row">
+                                    <td>📊 GENEL TOPLAM</td>
+                                    <td>Aylık Gelir:</td>
+                                    <td className={processedData.totalAylikGelir >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(processedData.totalAylikGelir)}</td>
+                                    <td>Toplam Dönem:</td>
+                                    <td className={processedData.totalDonemTutar >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(processedData.totalDonemTutar)}</td>
+                                    <td>Fark:</td>
+                                    <td className={processedData.totalFark >= 0 ? 'positive-diff' : 'negative-diff'}>{formatCurrency(processedData.totalFark)}</td>
+                                    <td colSpan={4}></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-            <div className="footer">
-                {/* Footer content can also be dynamic later */}
+                <div className="footer">
+                    {/* Footer content can also be dynamic later */}
+                </div>
             </div>
         </div>
     );
