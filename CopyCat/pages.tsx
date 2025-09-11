@@ -6134,6 +6134,8 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
 
   const [viewedPeriod, setViewedPeriod] = useState(currentPeriod);
 
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
+
   const platforms = useMemo(() => {
     return kategoriList.filter(k => k.Ust_Kategori_ID === 1 && k.Aktif_Pasif);
   }, [kategoriList]);
@@ -6270,6 +6272,55 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
     return platforms.reduce((sum, platform) => sum + calculateMonthlyKomisyon(platform.Kategori_Adi), 0);
   }, [platforms, calculateMonthlyKomisyon]);
 
+  const handleExportToExcel = () => {
+    const dataForExport: (string | number)[][] = [];
+
+    const header: string[] = ['Platform'];
+    weeklyHeaders.forEach(h => {
+        header.push(`${h} Gelir`);
+        header.push(`${h} Virman`);
+    });
+    header.push('Gelir Toplam', 'Virman Toplam', 'Komisyon Toplam');
+    dataForExport.push(header);
+
+    platforms.forEach(platform => {
+        const row: (string | number)[] = [platform.Kategori_Adi];
+        const totalGelir = weeklyHeaders.reduce((sum, header) => sum + calculateWeeklyGelir(platform.Kategori_ID, header), 0);
+        const totalVirman = weeklyHeaders.reduce((sum, header) => sum + calculateVirman(platform.Kategori_Adi, header), 0);
+        
+        weeklyHeaders.forEach(header => {
+            row.push(calculateWeeklyGelir(platform.Kategori_ID, header));
+            row.push(calculateVirman(platform.Kategori_Adi, header));
+        });
+
+        row.push(totalGelir);
+        row.push(totalVirman);
+        row.push(calculateMonthlyKomisyon(platform.Kategori_Adi));
+        dataForExport.push(row);
+    });
+
+    const footer: (string | number)[] = ['GENEL TOPLAM'];
+    weeklyHeaders.forEach((_, weekIndex) => {
+        footer.push(weeklyGelirTotals[weekIndex]);
+        footer.push(weeklyVirmanTotals[weekIndex]);
+    });
+    footer.push(grandTotalGelir);
+    footer.push(grandTotalVirman);
+    footer.push(grandTotalKomisyon);
+    dataForExport.push(footer);
+
+    const ws = XLSX.utils.aoa_to_sheet(dataForExport);
+    ws['!cols'] = [ { wch: 20 } ];
+    for (let i = 0; i < weeklyHeaders.length * 2; i++) {
+        ws['!cols'].push({ wch: 15 });
+    }
+    ws['!cols'].push({ wch: 18 }, { wch: 18 }, { wch: 18 });
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Online Kontrol Raporu');
+    XLSX.writeFile(wb, `Online_Kontrol_Dashboard_${viewedPeriod}.xlsx`);
+  };
+
 
   if (!hasPermission('Online Kontrol Dashboard Görüntüleme')) {
       return <AccessDenied title="Online Kontrol Dashboard" />;
@@ -6278,6 +6329,11 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
   return (
     <Card title="Online Kontrol Dashboard" actions={
         <div className="flex items-center space-x-2">
+            {canExportExcel && (
+                <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
+                    <Icons.Download className="w-5 h-5" />
+                </Button>
+            )}
             <label htmlFor="period-select" className="text-sm font-medium">Dönem:</label>
             <Select id="period-select" value={viewedPeriod} onChange={e => setViewedPeriod(e.target.value)}>
                 {availablePeriods.map(p => {
