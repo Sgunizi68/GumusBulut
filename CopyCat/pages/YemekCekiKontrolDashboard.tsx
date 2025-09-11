@@ -1,70 +1,59 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import '../styles/YemekCekiKontrolDashboard.css';
 
 export const YemekCekiKontrolDashboardPage: React.FC = () => {
+    const [period, setPeriod] = useState('2508');
+    const [periodName, setPeriodName] = useState('Ağustos 2025 (2508)');
+
+    const handlePeriodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const newPeriod = event.target.value;
+        setPeriod(newPeriod);
+        const periodNames: { [key: string]: string } = {
+            '2507': 'Temmuz 2025 (2507)',
+            '2508': 'Ağustos 2025 (2508)',
+            '2509': 'Eylül 2025 (2509)',
+            '2510': 'Ekim 2025 (2510)'
+        };
+        setPeriodName(periodNames[newPeriod] || '');
+    };
+
     useEffect(() => {
-        // Script content will go here
-        function updateDashboard() {
-            const period = document.getElementById('period') as HTMLSelectElement;
-            const periodNames: { [key: string]: string } = {
-                '2507': 'Temmuz 2025 (2507)',
-                '2508': 'Ağustos 2025 (2508)',
-                '2509': 'Eylül 2025 (2509)',
-                '2510': 'Ekim 2025 (2510)'
-            };
-
-            const tableHeaderTitle = document.querySelector('.table-header-title');
-            if (tableHeaderTitle) {
-                tableHeaderTitle.innerHTML = `📋 Yemek Çeki Kategorileri Detay Raporu - ${periodNames[period.value]}`;
-            }
-
-            // Özet kartları güncelleme animasyonu
-            const cards = document.querySelectorAll('.summary-card');
-            cards.forEach((card, index) => {
-                (card as HTMLElement).style.animation = 'none';
-                setTimeout(() => {
-                    (card as HTMLElement).style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s`;
-                }, 10);
-            });
-        }
-
-        // Sayfa yüklendiğinde animasyonları başlat
-        const rows = document.querySelectorAll('tbody tr');
-        rows.forEach((row, index) => {
-            (row as HTMLElement).style.opacity = '0';
-            (row as HTMLElement).style.transform = 'translateY(20px)';
+        const allRows = document.querySelectorAll('tbody tr');
+        allRows.forEach((row, index) => {
+            const htmlRow = row as HTMLElement;
+            htmlRow.style.opacity = '0';
+            htmlRow.style.transform = 'translateY(20px)';
             setTimeout(() => {
-                (row as HTMLElement).style.transition = 'all 0.5s ease';
-                (row as HTMLElement).style.opacity = '1';
-                (row as HTMLElement).style.transform = 'translateY(0)';
-            }, index * 100);
+                htmlRow.style.transition = 'all 0.5s ease';
+                htmlRow.style.opacity = '1';
+                htmlRow.style.transform = 'translateY(0)';
+            }, index * 50);
         });
 
-        // Checkbox değişim kontrolü
-        document.querySelectorAll('.checkbox').forEach(checkbox => {
-            const typedCheckbox = checkbox as HTMLInputElement;
-            typedCheckbox.addEventListener('change', function() {
-                const row = this.closest('tr');
-                if (row) {
-                    if (this.checked) {
-                        (row as HTMLElement).style.background = 'linear-gradient(135deg, rgba(0, 184, 148, 0.1) 0%, rgba(0, 160, 133, 0.1) 100%)';
-                    } else {
-                        (row as HTMLElement).style.background = '';
-                    }
+        const checkboxes = document.querySelectorAll('.checkbox');
+        const handleChange = function(this: HTMLInputElement) {
+            const row = this.closest('tr');
+            if (row) {
+                if (this.checked) {
+                    row.style.background = 'linear-gradient(135deg, rgba(0, 184, 148, 0.1) 0%, rgba(0, 160, 133, 0.1) 100%)';
+                } else {
+                    row.style.background = '';
                 }
-            });
-        });
+            }
+        };
 
-        // Expose updateDashboard to global scope for onchange attribute
-        (window as any).updateDashboard = updateDashboard;
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', handleChange as EventListener);
+        });
 
         return () => {
-            // Cleanup if necessary
-            delete (window as any).updateDashboard;
+            checkboxes.forEach(checkbox => {
+                checkbox.removeEventListener('change', handleChange as EventListener);
+            });
         };
-    }, []);
+    }, [period]);
 
     return (
-        // HTML content will go here, converted to JSX
         <div className="container">
             <div className="header">
                 <h1>🍽️ Yemek Çeki Kontrol Dashboard</h1>
@@ -95,11 +84,11 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                 <div className="data-table">
                     <div className="table-header">
                         <div className="table-header-title">
-                            📋 Yemek Çeki Kategorileri Detay Raporu - Ağustos 2025 (2508)
+                            📋 Yemek Çeki Kategorileri Detay Raporu - {periodName}
                         </div>
                         <div className="period-selector">
                             <label htmlFor="period">Dönem:</label>
-                            <select id="period" onChange={() => (window as any).updateDashboard()}>
+                            <select id="period" value={period} onChange={handlePeriodChange}>
                                 <option value="2508">2508 - Ağustos 2025</option>
                                 <option value="2509">2509 - Eylül 2025</option>
                                 <option value="2507">2507 - Temmuz 2025</option>
@@ -167,14 +156,14 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                                 <td>10.09.2025</td>
                                 <td className="amount">₺11,700.00</td>
                                 <td className="amount negative">-₺2,400.00</td>
-                                <td className="amount">₺0.00</td>
+                                <td className="amount negative">-₺1,000.00</td>
                                 <td className="amount positive">₺8,300.00</td>
                                 <td><span className="status-badge status-pending">Beklemede</span></td>
                                 <td>-</td>
                                 <td>-</td>
                                 <td><input type="checkbox" className="checkbox" /></td>
                             </tr>
-
+                            
                             {/* TICKET Kategori Header */}
                             <tr className="category-header">
                                 <td>🎫 TICKET</td>
@@ -268,7 +257,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                                 <td>05.09.2025</td>
                                 <td className="amount">₺26,800.00</td>
                                 <td className="amount negative">-₺12,950.00</td>
-                                <td className="amount">₺0.00</td>
+                                <td className="amount negative">-₺4,200.00</td>
                                 <td className="amount positive">₺9,650.00</td>
                                 <td><span className="status-badge status-invoiced">Kesildi</span></td>
                                 <td>08.09.2025</td>
