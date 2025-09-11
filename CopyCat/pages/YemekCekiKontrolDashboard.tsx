@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import * as XLSX from 'xlsx';
 import '../styles/YemekCekiKontrolDashboard.css';
 import { useAppContext, useDataContext } from '../App';
+import { Button } from '../components'; // Import Button component
+import { Icons, EXCELE_AKTAR_YETKISI_ADI } from '../constants'; // Import Icons and permission names
 
 // Helper function to parse YYYY-MM-DD or DD.MM.YYYY string to Date object safely
 const parseDate = (dateString: string | null | undefined): Date | null => {
@@ -79,11 +82,13 @@ const getMimeType = (filename: string | undefined | null): string => {
 }
 
 export const YemekCekiKontrolDashboardPage: React.FC = () => {
-    const { selectedBranch } = useAppContext();
+    const { selectedBranch, hasPermission } = useAppContext();
     const { ustKategoriList, kategoriList, yemekCekiList, gelirList, eFaturaList, eFaturaReferansList } = useDataContext();
 
     const [period, setPeriod] = useState('');
     const [periodName, setPeriodName] = useState('');
+
+    const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
 
     const availablePeriods = useMemo(() => {
         const periods = new Set<string>();
@@ -194,7 +199,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                             const cekSonTarih = parseDate(cek.Son_Tarih);
                             return (
                                 f.Giden_Fatura &&
-                                Math.abs(f.Tutar - cek.Tutar) < 0.01 && // Use tolerance for float comparison
+                                Math.abs(f.Tutar - cek.Tutar) < 0.01 &&
                                 faturaTarihi && cekSonTarih && faturaTarihi.getTime() === cekSonTarih.getTime() &&
                                 aliciUnvanlariForKategori.includes(f.Alici_Unvani)
                             );
@@ -221,15 +226,61 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                     grupDonemTutar,
                     grupFark: grupDonemTutar - grupAylikGelir
                 };
-            })
-            .filter(g => g.cekler.length > 0 || g.grupAylikGelir > 0);
+            });
 
         return { groups, kontrolEdilenKayitSayisi, totalAylikGelir, totalDonemTutar, totalFark: totalDonemTutar - totalAylikGelir };
 
     }, [yemekCekiList, kategoriList, ustKategoriList, gelirList, eFaturaList, eFaturaReferansList, selectedBranch, period]);
 
+    const handleExportToExcel = () => {
+        const dataForExport: (string | number)[][] = [];
+        dataForExport.push(["Fatura Dosya Adı", "İlk Tarih", "Son Tarih", "Tutar", "Önceki Dönem", "Sonraki Dönem", "Dönem Tutar", "Fatura Durumu", "Fatura Tarihi", "Ödeme Tarihi"]);
+
+        processedData.groups.forEach(grup => {
+            dataForExport.push([
+                grup.Kategori_Adi.toUpperCase(),
+                "Aylık Gelir:",
+                grup.grupAylikGelir,
+                "Toplam Dönem:",
+                grup.grupDonemTutar,
+                "Fark:",
+                grup.grupFark
+            ]);
+
+            grup.cekler.forEach(cek => {
+                dataForExport.push([
+                    cek.Imaj_Adi || '-',
+                    parseDate(cek.Ilk_Tarih)?.toLocaleDateString('tr-TR') || '-',
+                    parseDate(cek.Son_Tarih)?.toLocaleDateString('tr-TR') || '-',
+                    cek.Tutar,
+                    cek.oncekiDonemTutar,
+                    cek.sonrakiDonemTutar,
+                    cek.donemTutar,
+                    cek.faturaStatus,
+                    cek.faturaStatus === 'Kesildi' ? parseDate(cek.Son_Tarih)?.toLocaleDateString('tr-TR') : '-',
+                    cek.Odeme_Tarih ? parseDate(cek.Odeme_Tarih)?.toLocaleDateString('tr-TR') : '-'
+                ]);
+            });
+        });
+
+        dataForExport.push([
+            "GENEL TOPLAM",
+            "Aylık Gelir:",
+            processedData.totalAylikGelir,
+            "Toplam Dönem:",
+            processedData.totalDonemTutar,
+            "Fark:",
+            processedData.totalFark
+        ]);
+
+        const ws = XLSX.utils.aoa_to_sheet(dataForExport);
+        ws['!cols'] = [{ wch: 30 }, { wch: 12 }, { wch: 12 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 12 }, { wch: 12 }, { wch: 12 }];
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Yemek Ceki Raporu');
+        XLSX.writeFile(wb, `Yemek_Ceki_Kontrol_${period}.xlsx`);
+    };
+
     useEffect(() => {
-        // Re-run animations and event listeners when data changes
         const allRows = document.querySelectorAll('tbody tr');
         allRows.forEach((row, index) => {
             const htmlRow = row as HTMLElement;
@@ -298,8 +349,13 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                                 📋 Yemek Çeki Kategorileri Detay Raporu - {periodName}
                             </div>
                             <div className="period-selector">
+                                {canExportExcel && (
+                                    <button onClick={handleExportToExcel} title="Excel'e Aktar" className="text-white hover:bg-white/20 p-2 rounded-full">
+                                        <Icons.Download className="w-5 h-5" />
+                                    </button>
+                                )}
                                 <label htmlFor="period">Dönem:</label>
-                                <select id="period" value={period} onChange={handlePeriodChange}>
+                                <select id="period" value={period} onChange={handlePeriodChange} className="bg-white text-gray-800 border-none rounded-md shadow-sm">
                                     {availablePeriods.map(p => (
                                         <option key={p} value={p}>{formatPeriodForDisplay(p)}</option>
                                     ))}
@@ -309,7 +365,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                         <table>
                             <thead>
                                 <tr>
-                                    <th style={{ width: '20%' }}>Kategori</th>
+                                    <th style={{ width: '20%' }}>Fatura Dosyası</th>
                                     <th style={{ width: '10%' }}>İlk Tarih</th>
                                     <th style={{ width: '10%' }}>Son Tarih</th>
                                     <th style={{ width: '10%' }}>Tutar</th>
