@@ -1,38 +1,144 @@
-App.tsx:282  POST http://localhost:8000/api/v1/pos-hareketleri/upload/ 500 (Internal Server Error)
-fetchData @ App.tsx:282
-(anonymous) @ App.tsx:639
-handleSubmit @ POSHareketleriYukleme.tsx:49
-executeDispatch @ react-dom_client.js?v=a20e2aba:11736
-runWithFiberInDEV @ react-dom_client.js?v=a20e2aba:1485
-processDispatchQueue @ react-dom_client.js?v=a20e2aba:11772
-(anonymous) @ react-dom_client.js?v=a20e2aba:12182
-batchedUpdates$1 @ react-dom_client.js?v=a20e2aba:2628
-dispatchEventForPluginEventSystem @ react-dom_client.js?v=a20e2aba:11877
-dispatchEvent @ react-dom_client.js?v=a20e2aba:14792
-dispatchDiscreteEvent @ react-dom_client.js?v=a20e2aba:14773
-App.tsx:311 Error in fetchData: {url: 'http://localhost:8000/api/v1/pos-hareketleri/upload/', errorMessage: "An unexpected error occurred on the server: create…areketleri'. Did you mean 'pos_hareketleri_list'?", statusCode: undefined, type: 'general', severity: 'medium', …}
-fetchData @ App.tsx:311
-await in fetchData
-(anonymous) @ App.tsx:639
-handleSubmit @ POSHareketleriYukleme.tsx:49
-executeDispatch @ react-dom_client.js?v=a20e2aba:11736
-runWithFiberInDEV @ react-dom_client.js?v=a20e2aba:1485
-processDispatchQueue @ react-dom_client.js?v=a20e2aba:11772
-(anonymous) @ react-dom_client.js?v=a20e2aba:12182
-batchedUpdates$1 @ react-dom_client.js?v=a20e2aba:2628
-dispatchEventForPluginEventSystem @ react-dom_client.js?v=a20e2aba:11877
-dispatchEvent @ react-dom_client.js?v=a20e2aba:14792
-dispatchDiscreteEvent @ react-dom_client.js?v=a20e2aba:14773
-App.tsx:328 General error: An unexpected error occurred on the server: create_pos_hareketleri_bulk() got an unexpected keyword argument 'pos_hareketleri'. Did you mean 'pos_hareketleri_list'?
-fetchData @ App.tsx:328
-await in fetchData
-(anonymous) @ App.tsx:639
-handleSubmit @ POSHareketleriYukleme.tsx:49
-executeDispatch @ react-dom_client.js?v=a20e2aba:11736
-runWithFiberInDEV @ react-dom_client.js?v=a20e2aba:1485
-processDispatchQueue @ react-dom_client.js?v=a20e2aba:11772
-(anonymous) @ react-dom_client.js?v=a20e2aba:12182
-batchedUpdates$1 @ react-dom_client.js?v=a20e2aba:2628
-dispatchEventForPluginEventSystem @ react-dom_client.js?v=a20e2aba:11877
-dispatchEvent @ react-dom_client.js?v=a20e2aba:14792
-dispatchDiscreteEvent @ react-dom_client.js?v=a20e2aba:14773
+(index):64 cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
+(anonymous) @ (index):64
+(anonymous) @ (index):64
+client:789 [vite] connecting...
+client:912 [vite] connected.
+react-dom_client.js?v=e0f4ce9f:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+App.tsx:183 Uncaught ReferenceError: formattedPeriod is not defined
+    at Header (App.tsx:183:24)
+    at react-stack-bottom-frame (react-dom_client.js?v=e0f4ce9f:17424:20)
+    at renderWithHooks (react-dom_client.js?v=e0f4ce9f:4206:24)
+    at updateFunctionComponent (react-dom_client.js?v=e0f4ce9f:6619:21)
+    at beginWork (react-dom_client.js?v=e0f4ce9f:7654:20)
+    at runWithFiberInDEV (react-dom_client.js?v=e0f4ce9f:1485:72)
+    at performUnitOfWork (react-dom_client.js?v=e0f4ce9f:10874:82)
+    at workLoopSync (react-dom_client.js?v=e0f4ce9f:10728:43)
+    at renderRootSync (react-dom_client.js?v=e0f4ce9f:10711:13)
+    at performWorkOnRoot (react-dom_client.js?v=e0f4ce9f:10359:46)
+Header @ App.tsx:183
+react-stack-bottom-frame @ react-dom_client.js?v=e0f4ce9f:17424
+renderWithHooks @ react-dom_client.js?v=e0f4ce9f:4206
+updateFunctionComponent @ react-dom_client.js?v=e0f4ce9f:6619
+beginWork @ react-dom_client.js?v=e0f4ce9f:7654
+runWithFiberInDEV @ react-dom_client.js?v=e0f4ce9f:1485
+performUnitOfWork @ react-dom_client.js?v=e0f4ce9f:10874
+workLoopSync @ react-dom_client.js?v=e0f4ce9f:10728
+renderRootSync @ react-dom_client.js?v=e0f4ce9f:10711
+performWorkOnRoot @ react-dom_client.js?v=e0f4ce9f:10359
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e0f4ce9f:11623
+performWorkUntilDeadline @ react-dom_client.js?v=e0f4ce9f:36
+<Header>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=b7484420:250
+MainLayout @ App.tsx:236
+react-stack-bottom-frame @ react-dom_client.js?v=e0f4ce9f:17424
+renderWithHooksAgain @ react-dom_client.js?v=e0f4ce9f:4281
+renderWithHooks @ react-dom_client.js?v=e0f4ce9f:4217
+updateFunctionComponent @ react-dom_client.js?v=e0f4ce9f:6619
+beginWork @ react-dom_client.js?v=e0f4ce9f:7654
+runWithFiberInDEV @ react-dom_client.js?v=e0f4ce9f:1485
+performUnitOfWork @ react-dom_client.js?v=e0f4ce9f:10874
+workLoopSync @ react-dom_client.js?v=e0f4ce9f:10728
+renderRootSync @ react-dom_client.js?v=e0f4ce9f:10711
+performWorkOnRoot @ react-dom_client.js?v=e0f4ce9f:10359
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e0f4ce9f:11623
+performWorkUntilDeadline @ react-dom_client.js?v=e0f4ce9f:36
+<MainLayout>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=b7484420:250
+AppWithToast @ App.tsx:1705
+react-stack-bottom-frame @ react-dom_client.js?v=e0f4ce9f:17424
+renderWithHooksAgain @ react-dom_client.js?v=e0f4ce9f:4281
+renderWithHooks @ react-dom_client.js?v=e0f4ce9f:4217
+updateFunctionComponent @ react-dom_client.js?v=e0f4ce9f:6619
+beginWork @ react-dom_client.js?v=e0f4ce9f:7654
+runWithFiberInDEV @ react-dom_client.js?v=e0f4ce9f:1485
+performUnitOfWork @ react-dom_client.js?v=e0f4ce9f:10874
+workLoopSync @ react-dom_client.js?v=e0f4ce9f:10728
+renderRootSync @ react-dom_client.js?v=e0f4ce9f:10711
+performWorkOnRoot @ react-dom_client.js?v=e0f4ce9f:10359
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e0f4ce9f:11623
+performWorkUntilDeadline @ react-dom_client.js?v=e0f4ce9f:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=b7484420:250
+App @ App.tsx:1765
+react-stack-bottom-frame @ react-dom_client.js?v=e0f4ce9f:17424
+renderWithHooksAgain @ react-dom_client.js?v=e0f4ce9f:4281
+renderWithHooks @ react-dom_client.js?v=e0f4ce9f:4217
+updateFunctionComponent @ react-dom_client.js?v=e0f4ce9f:6619
+beginWork @ react-dom_client.js?v=e0f4ce9f:7654
+runWithFiberInDEV @ react-dom_client.js?v=e0f4ce9f:1485
+performUnitOfWork @ react-dom_client.js?v=e0f4ce9f:10874
+workLoopSync @ react-dom_client.js?v=e0f4ce9f:10728
+renderRootSync @ react-dom_client.js?v=e0f4ce9f:10711
+performWorkOnRoot @ react-dom_client.js?v=e0f4ce9f:10359
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e0f4ce9f:11623
+performWorkUntilDeadline @ react-dom_client.js?v=e0f4ce9f:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=b7484420:250
+(anonymous) @ index.tsx:14
+App.tsx:236 An error occurred in the <Header> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+defaultOnUncaughtError @ react-dom_client.js?v=e0f4ce9f:6229
+logUncaughtError @ react-dom_client.js?v=e0f4ce9f:6283
+runWithFiberInDEV @ react-dom_client.js?v=e0f4ce9f:1485
+lane.callback @ react-dom_client.js?v=e0f4ce9f:6311
+callCallback @ react-dom_client.js?v=e0f4ce9f:4097
+commitCallbacks @ react-dom_client.js?v=e0f4ce9f:4109
+runWithFiberInDEV @ react-dom_client.js?v=e0f4ce9f:1487
+commitLayoutEffectOnFiber @ react-dom_client.js?v=e0f4ce9f:9029
+flushLayoutEffects @ react-dom_client.js?v=e0f4ce9f:11174
+commitRoot @ react-dom_client.js?v=e0f4ce9f:11080
+commitRootWhenReady @ react-dom_client.js?v=e0f4ce9f:10512
+performWorkOnRoot @ react-dom_client.js?v=e0f4ce9f:10457
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e0f4ce9f:11623
+performWorkUntilDeadline @ react-dom_client.js?v=e0f4ce9f:36
+<Header>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=b7484420:250
+MainLayout @ App.tsx:236
+react-stack-bottom-frame @ react-dom_client.js?v=e0f4ce9f:17424
+renderWithHooksAgain @ react-dom_client.js?v=e0f4ce9f:4281
+renderWithHooks @ react-dom_client.js?v=e0f4ce9f:4217
+updateFunctionComponent @ react-dom_client.js?v=e0f4ce9f:6619
+beginWork @ react-dom_client.js?v=e0f4ce9f:7654
+runWithFiberInDEV @ react-dom_client.js?v=e0f4ce9f:1485
+performUnitOfWork @ react-dom_client.js?v=e0f4ce9f:10874
+workLoopSync @ react-dom_client.js?v=e0f4ce9f:10728
+renderRootSync @ react-dom_client.js?v=e0f4ce9f:10711
+performWorkOnRoot @ react-dom_client.js?v=e0f4ce9f:10359
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e0f4ce9f:11623
+performWorkUntilDeadline @ react-dom_client.js?v=e0f4ce9f:36
+<MainLayout>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=b7484420:250
+AppWithToast @ App.tsx:1705
+react-stack-bottom-frame @ react-dom_client.js?v=e0f4ce9f:17424
+renderWithHooksAgain @ react-dom_client.js?v=e0f4ce9f:4281
+renderWithHooks @ react-dom_client.js?v=e0f4ce9f:4217
+updateFunctionComponent @ react-dom_client.js?v=e0f4ce9f:6619
+beginWork @ react-dom_client.js?v=e0f4ce9f:7654
+runWithFiberInDEV @ react-dom_client.js?v=e0f4ce9f:1485
+performUnitOfWork @ react-dom_client.js?v=e0f4ce9f:10874
+workLoopSync @ react-dom_client.js?v=e0f4ce9f:10728
+renderRootSync @ react-dom_client.js?v=e0f4ce9f:10711
+performWorkOnRoot @ react-dom_client.js?v=e0f4ce9f:10359
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e0f4ce9f:11623
+performWorkUntilDeadline @ react-dom_client.js?v=e0f4ce9f:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=b7484420:250
+App @ App.tsx:1765
+react-stack-bottom-frame @ react-dom_client.js?v=e0f4ce9f:17424
+renderWithHooksAgain @ react-dom_client.js?v=e0f4ce9f:4281
+renderWithHooks @ react-dom_client.js?v=e0f4ce9f:4217
+updateFunctionComponent @ react-dom_client.js?v=e0f4ce9f:6619
+beginWork @ react-dom_client.js?v=e0f4ce9f:7654
+runWithFiberInDEV @ react-dom_client.js?v=e0f4ce9f:1485
+performUnitOfWork @ react-dom_client.js?v=e0f4ce9f:10874
+workLoopSync @ react-dom_client.js?v=e0f4ce9f:10728
+renderRootSync @ react-dom_client.js?v=e0f4ce9f:10711
+performWorkOnRoot @ react-dom_client.js?v=e0f4ce9f:10359
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e0f4ce9f:11623
+performWorkUntilDeadline @ react-dom_client.js?v=e0f4ce9f:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=b7484420:250
+(anonymous) @ index.tsx:14

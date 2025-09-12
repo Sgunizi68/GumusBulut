@@ -169,6 +169,27 @@ const Header: React.FC = () => {
   
   const branchesForDropdown = subeList.filter(s => s.Aktif_Pasif);
 
+  // Helper function to format the period
+  const formatPeriod = useCallback((period: string): string => {
+    if (period.length !== 4) {
+      return period; // Return as is if not in YYMM format
+    }
+    const year = parseInt(period.substring(0, 2), 10) + 2000; // Assuming 20xx
+    const month = parseInt(period.substring(2, 4), 10);
+
+    const monthNames: { [key: number]: string } = {
+      1: 'Ocak', 2: 'Şubat', 3: 'Mart', 4: 'Nisan', 5: 'Mayıs', 6: 'Haziran',
+      7: 'Temmuz', 8: 'Ağustos', 9: 'Eylül', 10: 'Ekim', 11: 'Kasım', 12: 'Aralık'
+    };
+
+    const monthName = monthNames[month] || '';
+
+    return `${period} - ${monthName} ${year}`;
+  }, []);
+
+  // Memoize the formatted period to avoid re-calculation on every render
+  const formattedPeriod = useMemo(() => formatPeriod(currentPeriod), [currentPeriod, formatPeriod]);
+
   return (
     <header className="h-16 bg-white shadow-md flex items-center justify-between px-6 flex-shrink-0">
       <div>
@@ -180,10 +201,10 @@ const Header: React.FC = () => {
             <Input 
                 id="period-input"
                 type="text" disabled
-                value={currentPeriod}
+                value={formattedPeriod}
                 onChange={(e) => setPeriod(e.target.value)}
                 maxLength={4}
-                className="w-20 text-sm py-1.5"
+                className="w-36 text-sm py-1.5"
                 placeholder="YYAA"
             />
         </div>
