@@ -334,6 +334,7 @@ interface DashboardRowData {
   isTitle?: boolean;
   bgColor?: string;
   textColor?: string;
+  percentage?: number;
 }
 
 export const DashboardPage: React.FC = () => {
@@ -567,7 +568,24 @@ export const DashboardPage: React.FC = () => {
       ozetData.push({ label: 'Dönem Kâr / Zararı (Cirodan Kalan + Stok Farkı)', value: donemKarZarari, isEmphasized: true });
     }
 
-    return { gelirler: gelirlerData, giderler: giderlerData, ozet: ozetData };
+    const addPercentages = (data: DashboardRowData[]): DashboardRowData[] => {
+        if (grandTotalGelir === 0) return data;
+        return data.map(row => {
+            if (row.isTitle || row.value === 0) {
+                return row;
+            }
+            return {
+                ...row,
+                percentage: (row.value / grandTotalGelir) * 100
+            };
+        });
+    };
+
+    return { 
+        gelirler: addPercentages(gelirlerData), 
+        giderler: addPercentages(giderlerData), 
+        ozet: addPercentages(ozetData) 
+    };
 
   }, [
     selectedBranch, selectedPeriodForDashboard, gelirEkstraList, eFaturaList, b2bEkstreList,
@@ -600,11 +618,13 @@ export const DashboardPage: React.FC = () => {
             {row.label} {row.isFromPreviousPeriod && <span className="text-red-500 text-xs italic">(Önceki Dönem Verisi)</span>}
           </span>
           {!row.isTitle && (
-            <span className={`
-              ${row.isBold || row.isEmphasized ? 'font-semibold' : ''}
-              ${row.isEmphasized ? 'text-base' : ''}
-            `}>
-              {formatTrCurrencyAdvanced(row.value, 2)}
+            <span className={`flex items-baseline ${row.isBold || row.isEmphasized ? 'font-semibold' : ''} ${row.isEmphasized ? 'text-base' : ''}`}>
+                {formatTrCurrencyAdvanced(row.value, 2)}
+                {row.percentage !== undefined && (
+                    <span className="ml-2 text-xs text-gray-500 font-normal italic">
+                        ({row.percentage.toFixed(2)}%)
+                    </span>
+                )}
             </span>
           )}
         </div>
