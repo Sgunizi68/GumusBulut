@@ -206,7 +206,9 @@ def get_pos_kontrol_dashboard(
         report_data = crud.get_pos_kontrol_dashboard_data(
             db=db,
             sube_id=sube_id,
-            donem=donem
+            donem=donem,
+            skip=skip,
+            limit=limit
         )
         
         logger.info(f"Successfully generated POS Kontrol Dashboard with {len(report_data.data)} daily records, success rate: {report_data.summary.success_rate}")
