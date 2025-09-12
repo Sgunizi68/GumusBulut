@@ -6386,6 +6386,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                         <th rowSpan={2} className="border p-2 bg-green-600 text-white">Gelir Toplam</th>
                         <th rowSpan={2} className="border p-2 bg-orange-600 text-white">Virman Toplam</th>
                         <th rowSpan={2} className="border p-2 bg-purple-600 text-white">Komisyon Toplam</th>
+                        <th rowSpan={2} className="border p-2 bg-pink-600 text-white">Komisyon %</th>
                     </tr>
                     <tr>
                         {weeklyHeaders.map((_, index) => (
@@ -6394,12 +6395,19 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                                 <th className="border p-1 bg-orange-100 text-xs">Virman</th>
                             </React.Fragment>
                         ))}
+                        <th className="border p-1 bg-pink-100 text-xs">%</th>
                     </tr>
                 </thead>
                 <tbody>
                     {platforms.map(platform => {
                         const totalGelir = weeklyHeaders.reduce((sum, header) => sum + calculateWeeklyGelir(platform.Kategori_ID, header), 0);
                         const totalVirman = weeklyHeaders.reduce((sum, header) => sum + calculateVirman(platform.Kategori_Adi, header), 0);
+                        const monthlyKomisyon = calculateMonthlyKomisyon(platform.Kategori_Adi);
+                        
+                        const komisyonPercentage = totalVirman !== 0 
+                            ? (monthlyKomisyon / totalVirman) * 100 
+                            : 0;
+
                         return (
                             <tr key={platform.Kategori_ID}>
                                 <td className="border p-2 font-bold bg-red-100 text-red-800 text-left">{platform.Kategori_Adi}</td>
@@ -6411,7 +6419,10 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                                 ))}
                                 <td className="border p-2 text-right font-bold bg-green-100">{formatTrCurrencyAdvanced(totalGelir, 2)}</td>
                                 <td className="border p-2 text-right font-bold bg-orange-100">{formatTrCurrencyAdvanced(totalVirman, 2)}</td>
-                                <td className="border p-2 text-right font-bold bg-purple-100">{formatTrCurrencyAdvanced(calculateMonthlyKomisyon(platform.Kategori_Adi), 2)}</td>
+                                <td className="border p-2 text-right font-bold bg-purple-100">{formatTrCurrencyAdvanced(monthlyKomisyon, 2)}</td>
+                                <td className="border p-2 text-right font-bold bg-pink-100">
+                                    {komisyonPercentage.toFixed(2)}%
+                                </td>
                             </tr>
                         );
                     })}
@@ -6428,6 +6439,11 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                         <td className="border p-2 text-right">{formatTrCurrencyAdvanced(grandTotalGelir, 2)}</td>
                         <td className="border p-2 text-right">{formatTrCurrencyAdvanced(grandTotalVirman, 2)}</td>
                         <td className="border p-2 text-right">{formatTrCurrencyAdvanced(grandTotalKomisyon, 2)}</td>
+                        <td className="border p-2 text-right">
+                            {(grandTotalVirman !== 0 
+                                ? (grandTotalKomisyon / grandTotalVirman) * 100 
+                                : 0).toFixed(2)}%
+                        </td>
                     </tr>
                 </tfoot>
             </table>
