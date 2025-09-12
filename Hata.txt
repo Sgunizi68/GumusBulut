@@ -1,25 +1,38 @@
-rule:
-  name: "Komisyon Hesaplama"
-  target: "Komisyon Toplam"
-  query: |
-    SELECT SUM(Borc)
-    FROM SilverCloud.B2B_Ekstre
-    WHERE Aciklama LIKE {{Arama_Text_Platform}}
-      AND Donem = {{Ekran.Donem}}
-  variables:
-    Arama_Text_Platform: |
-      '%' + {{Donem.AyAdi}} + '%' + ({{Ekran.Platform}} - ' Online') + '%Komisyon%Yansıtma%'
-examples:
-  - input:
-      Donem: "2508"
-      Donem.AyAdi: "Ağustos"
-      Platform: "Yemek Sepeti Online"
-    output:
-      Arama_Text_Platform: "%Ağustos%Yemek Sepeti%Komisyon%Yansıtma%"
-
-  - input:
-      Donem: "2507"
-      Donem.AyAdi: "Temmuz"
-      Platform: "Trendyol Online"
-    output:
-      Arama_Text_Platform: "%Temmuz%Trendyol%Komisyon%Yansıtma%"
+App.tsx:282  POST http://localhost:8000/api/v1/pos-hareketleri/upload/ 500 (Internal Server Error)
+fetchData @ App.tsx:282
+(anonymous) @ App.tsx:639
+handleSubmit @ POSHareketleriYukleme.tsx:49
+executeDispatch @ react-dom_client.js?v=a20e2aba:11736
+runWithFiberInDEV @ react-dom_client.js?v=a20e2aba:1485
+processDispatchQueue @ react-dom_client.js?v=a20e2aba:11772
+(anonymous) @ react-dom_client.js?v=a20e2aba:12182
+batchedUpdates$1 @ react-dom_client.js?v=a20e2aba:2628
+dispatchEventForPluginEventSystem @ react-dom_client.js?v=a20e2aba:11877
+dispatchEvent @ react-dom_client.js?v=a20e2aba:14792
+dispatchDiscreteEvent @ react-dom_client.js?v=a20e2aba:14773
+App.tsx:311 Error in fetchData: {url: 'http://localhost:8000/api/v1/pos-hareketleri/upload/', errorMessage: "An unexpected error occurred on the server: create…areketleri'. Did you mean 'pos_hareketleri_list'?", statusCode: undefined, type: 'general', severity: 'medium', …}
+fetchData @ App.tsx:311
+await in fetchData
+(anonymous) @ App.tsx:639
+handleSubmit @ POSHareketleriYukleme.tsx:49
+executeDispatch @ react-dom_client.js?v=a20e2aba:11736
+runWithFiberInDEV @ react-dom_client.js?v=a20e2aba:1485
+processDispatchQueue @ react-dom_client.js?v=a20e2aba:11772
+(anonymous) @ react-dom_client.js?v=a20e2aba:12182
+batchedUpdates$1 @ react-dom_client.js?v=a20e2aba:2628
+dispatchEventForPluginEventSystem @ react-dom_client.js?v=a20e2aba:11877
+dispatchEvent @ react-dom_client.js?v=a20e2aba:14792
+dispatchDiscreteEvent @ react-dom_client.js?v=a20e2aba:14773
+App.tsx:328 General error: An unexpected error occurred on the server: create_pos_hareketleri_bulk() got an unexpected keyword argument 'pos_hareketleri'. Did you mean 'pos_hareketleri_list'?
+fetchData @ App.tsx:328
+await in fetchData
+(anonymous) @ App.tsx:639
+handleSubmit @ POSHareketleriYukleme.tsx:49
+executeDispatch @ react-dom_client.js?v=a20e2aba:11736
+runWithFiberInDEV @ react-dom_client.js?v=a20e2aba:1485
+processDispatchQueue @ react-dom_client.js?v=a20e2aba:11772
+(anonymous) @ react-dom_client.js?v=a20e2aba:12182
+batchedUpdates$1 @ react-dom_client.js?v=a20e2aba:2628
+dispatchEventForPluginEventSystem @ react-dom_client.js?v=a20e2aba:11877
+dispatchEvent @ react-dom_client.js?v=a20e2aba:14792
+dispatchDiscreteEvent @ react-dom_client.js?v=a20e2aba:14773

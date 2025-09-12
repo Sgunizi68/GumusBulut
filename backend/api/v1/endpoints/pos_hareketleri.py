@@ -24,69 +24,96 @@ async def upload_pos_hareketleri(
 ):
     logger.info(f"Starting POS Hareketleri upload for Sube_ID: {sube_id}")
     
-    # Check file extension
     if not (file.filename.endswith('.xlsx') or file.filename.endswith('.xls')):
-        logger.error(f"Invalid file type: {file.filename}")
-        raise HTTPException(status_code=400, detail="Invalid file type. Please upload an Excel file (.xlsx or .xls).")
+        raise HTTPException(status_code=400, detail="Invalid file type. Please upload an Excel file.")
 
-    # Read file content
     content = await file.read()
     
-    # Parse Excel file
     try:
         excel_file = BytesIO(content)
         df = pd.read_excel(excel_file, engine='openpyxl')
-    except Exception as e:
-        logger.error(f"Error reading Excel file: {e}")
-        raise HTTPException(status_code=400, detail="Error reading Excel file. Please ensure it's a valid Excel file.")
-    
-    pos_hareketleri_to_create = []
-    rows_read = 0
-    
-    # Process each row in the Excel file
-    for index, row in df.iterrows():
-        rows_read += 1
-        try:
-            # Handle potential missing or NaN values
-            islem_tutari = row.get("Islem_Tutari")
-            kesinti_tutari = row.get("Kesinti_Tutari", 0.00)
-            net_tutar = row.get("Net_Tutar")
-            
-            # Skip rows with missing required fields
-            if pd.isna(row.get("Islem_Tarihi")) or pd.isna(row.get("Hesaba_Gecis")) or pd.isna(row.get("Para_Birimi")) or pd.isna(islem_tutari):
-                logger.warning(f"Skipping row {rows_read} due to missing required fields")
-                continue
-            
-            # Create POS_Hareketleri object
+
+        if df.empty:
+            return {"added": 0, "skipped": 0}
+
+        # --- Robust Column Name Normalization and Mapping ---
+        
+        def normalize_column_name(col_name):
+            name = str(col_name).strip().lower()
+            # Consistent character replacement for robust matching
+            replacements = {
+                'ı': 'i', 'i̇': 'i', 'ş': 's', 'ç': 'c', 'ğ': 'g', 'ü': 'u', 'ö': 'o', 
+                '_': ' ', '-': ' '
+            }
+            for tr_char, en_char in replacements.items():
+                name = name.replace(tr_char, en_char)
+            # Consolidate whitespace
+            return " ".join(name.split())
+
+        df.columns = [normalize_column_name(col) for col in df.columns]
+
+        # Keys in this map are the fully normalized, ASCII-like versions
+        column_mapping = {
+            'islem tarihi': 'islem_tarihi',
+            'hesaba gecis tarihi': 'hesaba_gecis',
+            'para birimi': 'para_birimi',
+            'islem tutari': 'islem_tutari',
+            'kesinti tutari': 'kesinti_tutari',
+            'net tutar': 'net_tutar',
+            'tarih': 'islem_tarihi',
+            'tutar': 'islem_tutari',
+            'hesaba gecis': 'hesaba_gecis',
+        }
+
+        df.rename(columns=column_mapping, inplace=True)
+
+        # --- Validation and Type Conversion ---
+        required_cols = ["islem_tarihi", "hesaba_gecis", "para_birimi", "islem_tutari"]
+        missing_cols = [col for col in required_cols if col not in df.columns]
+        if missing_cols:
+            error_detail = f"Could not find required columns: {', '.join(missing_cols)}. Found: {df.columns.tolist()}"
+            raise HTTPException(status_code=400, detail=error_detail)
+
+        df['islem_tarihi'] = pd.to_datetime(df['islem_tarihi'], dayfirst=True, errors='coerce')
+        df['hesaba_gecis'] = pd.to_datetime(df['hesaba_gecis'], dayfirst=True, errors='coerce')
+        df['islem_tutari'] = pd.to_numeric(df['islem_tutari'], errors='coerce')
+        if 'kesinti_tutari' in df.columns:
+            df['kesinti_tutari'] = pd.to_numeric(df['kesinti_tutari'], errors='coerce')
+        if 'net_tutar' in df.columns:
+            df['net_tutar'] = pd.to_numeric(df['net_tutar'], errors='coerce')
+
+        pos_hareketleri_to_create = []
+        df.dropna(subset=['islem_tarihi', 'hesaba_gecis', 'para_birimi', 'islem_tutari'], inplace=True)
+        
+        for index, row in df.iterrows():
             pos_hareket_data = pos_hareketleri.POSHareketleriCreate(
-                Islem_Tarihi=row["Islem_Tarihi"],
-                Hesaba_Gecis=row["Hesaba_Gecis"],
-                Para_Birimi=str(row["Para_Birimi"]),
-                Islem_Tutari=islem_tutari,
-                Kesinti_Tutari=kesinti_tutari if not pd.isna(kesinti_tutari) else 0.00,
-                Net_Tutar=net_tutar if not pd.isna(net_tutar) else None,
+                Islem_Tarihi=row["islem_tarihi"],
+                Hesaba_Gecis=row["hesaba_gecis"],
+                Para_Birimi=str(row["para_birimi"]),
+                Islem_Tutari=row["islem_tutari"],
+                Kesinti_Tutari=row.get("kesinti_tutari", 0.00) if not pd.isna(row.get("kesinti_tutari")) else 0.00,
+                Net_Tutar=row.get("net_tutar") if not pd.isna(row.get("net_tutar")) else None,
                 Sube_ID=sube_id,
             )
             pos_hareketleri_to_create.append(pos_hareket_data)
-        except (ValueError, KeyError, TypeError) as e:
-            logger.error(f"Excel parsing error on row {rows_read}: {e} - Row data: {row}")
-            continue
+        
+        if not pos_hareketleri_to_create:
+            logger.warning("No valid data found to insert.")
+            return {"message": "No valid data to insert.", "added": 0, "skipped": len(df)}
 
-    logger.info(f"Total rows read from Excel: {rows_read}")
-    logger.info(f"Number of records to be created: {len(pos_hareketleri_to_create)}")
+        result = crud.create_pos_hareketleri_bulk(db=db, pos_hareketleri_list=pos_hareketleri_to_create)
+        
+        return {
+            "message": "POS transactions file processed successfully.",
+            "added": result["added"],
+            "skipped": result["skipped"]
+        }
 
-    if not pos_hareketleri_to_create:
-        logger.warning("Excel file is empty or contains no valid data to insert.")
-        return {"message": "Excel file is empty or contains no valid data to insert.", "added": 0, "skipped": 0}
-
-    result = crud.create_pos_hareketleri_bulk(db=db, pos_hareketleri=pos_hareketleri_to_create)
-    logger.info(f"Bulk insert result: {result}")
-    
-    return {
-        "message": "POS transactions file processed successfully.",
-        "added": result["added"],
-        "skipped": result["skipped"]
-    }
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        logger.error(f"Unhandled error during POS upload: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"An unexpected error occurred on the server: {e}")
 
 @router.post("/pos-hareketleri/", response_model=pos_hareketleri.POSHareketleriInDB, status_code=status.HTTP_201_CREATED)
 def create_pos_hareket(
