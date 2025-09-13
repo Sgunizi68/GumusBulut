@@ -129,7 +129,7 @@ def create_new_odeme(odeme_data: odeme.OdemeCreate, db: Session = Depends(databa
     return crud.create_odeme(db=db, odeme=odeme_data)
 
 @router.get("/Odeme/", response_model=List[odeme.OdemeInDB])
-def read_odemeler(skip: int = 0, limit: int = 1000, db: Session = Depends(database.get_db)):
+def read_odemeler(skip: int = 0, limit: int | None = None, db: Session = Depends(database.get_db)):
     odemeler = crud.get_odemeler(db, skip=skip, limit=limit)
     return odemeler
 

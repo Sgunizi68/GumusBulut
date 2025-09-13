@@ -205,21 +205,42 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                             );
                         });
 
-                        let odemeTutari = 0;
+                                                let odemeTutari = 0;
                         const odemeTarihi = parseDate(cek.Odeme_Tarih);
+                        
+                        console.log("--- Debugging Odeme Tutari (Detailed) ---");
+                        console.log("Full odemeList at start of cek processing:", odemeList);
+                        console.log("Current cek.Odeme_Tarih:", cek.Odeme_Tarih, "Parsed odemeTarihi:", odemeTarihi);
+
                         if (odemeTarihi && odemeTarihi <= new Date()) {
                             const odemeKategoriAdi = `${kategori.Kategori_Adi} Ödemesi`;
-                            const odemeKategori = kategoriList.find(k => k.Kategori_Adi.trim().toLowerCase() === odemeKategoriAdi.trim().toLowerCase());
+                            const odemeKategori = kategoriList.find(k => 
+                                k.Kategori_Adi.toLowerCase().includes(kategori.Kategori_Adi.toLowerCase()) && 
+                                k.Kategori_Adi.toLowerCase().includes('ödemesi')
+                            );
+                            console.log("Searching for odemeKategori:", odemeKategoriAdi, "Found:", odemeKategori ? { ID: odemeKategori.Kategori_ID, Adi: odemeKategori.Kategori_Adi } : 'Not Found');
+
                             if (odemeKategori) {
-                                const ilgiliOdeme = odemeList.find(o => 
-                                    o.Kategori_ID === odemeKategori.Kategori_ID && 
-                                    parseDate(o.Tarih)?.getTime() === odemeTarihi.getTime()
-                                );
+                                const odemeTarihiString = odemeTarihi.toISOString().substring(0, 10); // Normalize to YYYY-MM-DD
+                                console.log("Normalized odemeTarihiString for comparison:", odemeTarihiString);
+
+                                const ilgiliOdeme = odemeList.find(o => {
+                                    const oTarihNormalized = parseDate(o.Tarih)?.toISOString().substring(0, 10);
+                                    console.log(`  Comparing Odeme (ID: ${o.Odeme_ID}) - Kategori_ID: ${o.Kategori_ID} (Target: ${odemeKategori.Kategori_ID}), Tarih: ${o.Tarih} (Normalized: ${oTarihNormalized}, Target: ${odemeTarihiString})`);
+                                    return (
+                                        o.Kategori_ID === odemeKategori.Kategori_ID &&
+                                        oTarihNormalized === odemeTarihiString
+                                    );
+                                });
+                                console.log("Found ilgiliOdeme:", ilgiliOdeme);
+
                                 if (ilgiliOdeme) {
                                     odemeTutari = ilgiliOdeme.Tutar;
                                 }
                             }
                         }
+                        console.log("Final odemeTutari for this cek:", odemeTutari);
+                        console.log("------------------------------");
 
                         grupDonemTutar += donemTutar;
 

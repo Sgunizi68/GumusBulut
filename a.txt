@@ -1,12 +1,3 @@
 Select Tutar from Odeme where
 Odeme.Tarih = Ekran.Odeme_Tarih
 AND Odeme.Kategori_ID = (Select Kategori_ID from Kategori where Kategori_Adi like CONCAT('%', Ekran.Kategori ,' Ödemesi%')
-Örnek .
-SELECT Tutar
-FROM Odeme
-WHERE Odeme.Tarih = '2025-08-28'
-  AND Odeme.Kategori_ID = (
-      SELECT Kategori_ID
-      FROM Kategori
-      WHERE Kategori_Adi LIKE CONCAT('%', 'Multinet', ' Ödemesi%')
-  );
