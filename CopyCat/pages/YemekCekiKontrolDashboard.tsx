@@ -382,7 +382,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                         <table>
                             <thead>
                                 <tr>
-                                    <th style={{ width: '20%' }}>Fatura Dosyası</th>
+                                    <th style={{ width: '10%' }}>Fatura Dosyası</th>
                                     <th style={{ width: '10%' }}>İlk Tarih</th>
                                     <th style={{ width: '10%' }}>Son Tarih</th>
                                     <th style={{ width: '10%' }}>Tutar</th>
@@ -392,7 +392,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                                     <th style={{ width: '8%' }}>Fatura</th>
                                     <th style={{ width: '10%' }}>Fatura Tarihi</th>
                                     <th style={{ width: '10%' }}>Ödeme Tarihi</th>
-                                    <th style={{ width: '10%' }}>Ödeme Tutarı</th>
+                                    <th style={{ width: '20%' }}>Ödeme Tutarı</th>
                                     <th style={{ width: '3%' }}>✓</th>
                                 </tr>
                             </thead>
