@@ -461,7 +461,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                                                 <td>{cek.faturaStatus === 'Kesildi' ? parseDate(cek.Son_Tarih)?.toLocaleDateString('tr-TR') : '-'}</td>
                                                 <td>{cek.Odeme_Tarih && parseDate(cek.Odeme_Tarih) ? parseDate(cek.Odeme_Tarih)!.toLocaleDateString('tr-TR') : '-'}</td>
                                                 <td>{cek.Odeme_Tarih && cek.odemeTutari !== undefined ? formatCurrency(cek.odemeTutari) : '-'}</td>
-                                                <td><input type="checkbox" className="checkbox" defaultChecked={cek.faturaStatus === 'Kesildi'} /></td>
+                                                <td><input type="checkbox" className="checkbox" defaultChecked={cek.odemeTutari > 0} /></td>
                                             </tr>
                                         ))}
                                     </React.Fragment>
