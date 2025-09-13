@@ -6,14 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="364c7c9f-f57e-4db9-a56f-92c279098407" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CopyCat/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CopyCat/constants.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/constants.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Hata.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Hata.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/api/v1/endpoints/gelir_ekstra.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/v1/endpoints/gelir_ekstra.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/db/crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db/crud.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/db/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/schemas/gelir_ekstra.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/schemas/gelir_ekstra.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yemek_ceki_dashboard.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CopyCat/pages/YemekCekiKontrolDashboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/pages/YemekCekiKontrolDashboard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/a.txt" beforeDir="false" afterPath="$PROJECT_DIR$/a.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

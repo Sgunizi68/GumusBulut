@@ -83,7 +83,7 @@ const getMimeType = (filename: string | undefined | null): string => {
 
 export const YemekCekiKontrolDashboardPage: React.FC = () => {
     const { selectedBranch, hasPermission } = useAppContext();
-    const { ustKategoriList, kategoriList, yemekCekiList, gelirList, eFaturaList, eFaturaReferansList } = useDataContext();
+    const { ustKategoriList, kategoriList, yemekCekiList, gelirList, eFaturaList, eFaturaReferansList, odemeList } = useDataContext();
 
     const [period, setPeriod] = useState('');
     const [periodName, setPeriodName] = useState('');
@@ -117,7 +117,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
     };
 
     const processedData = useMemo(() => {
-        if (!selectedBranch || !yemekCekiList || !kategoriList || !gelirList || !ustKategoriList || !eFaturaList || !eFaturaReferansList || !period) {
+        if (!selectedBranch || !yemekCekiList || !kategoriList || !gelirList || !ustKategoriList || !eFaturaList || !eFaturaReferansList || !odemeList || !period) {
             return { groups: [], kontrolEdilenKayitSayisi: 0, totalAylikGelir: 0, totalDonemTutar: 0, totalFark: 0 };
         }
 
@@ -205,6 +205,22 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                             );
                         });
 
+                        let odemeTutari = 0;
+                        const odemeTarihi = parseDate(cek.Odeme_Tarih);
+                        if (odemeTarihi && odemeTarihi <= new Date()) {
+                            const odemeKategoriAdi = `${kategori.Kategori_Adi} Ödemesi`;
+                            const odemeKategori = kategoriList.find(k => k.Kategori_Adi.trim().toLowerCase() === odemeKategoriAdi.trim().toLowerCase());
+                            if (odemeKategori) {
+                                const ilgiliOdeme = odemeList.find(o => 
+                                    o.Kategori_ID === odemeKategori.Kategori_ID && 
+                                    parseDate(o.Tarih)?.getTime() === odemeTarihi.getTime()
+                                );
+                                if (ilgiliOdeme) {
+                                    odemeTutari = ilgiliOdeme.Tutar;
+                                }
+                            }
+                        }
+
                         grupDonemTutar += donemTutar;
 
                         return {
@@ -212,7 +228,8 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                             oncekiDonemTutar,
                             sonrakiDonemTutar,
                             donemTutar,
-                            faturaStatus: isKesildi ? 'Kesildi' : 'Beklemede'
+                            faturaStatus: isKesildi ? 'Kesildi' : 'Beklemede',
+                            odemeTutari,
                         };
                     });
                 
@@ -230,7 +247,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
 
         return { groups, kontrolEdilenKayitSayisi, totalAylikGelir, totalDonemTutar, totalFark: totalDonemTutar - totalAylikGelir };
 
-    }, [yemekCekiList, kategoriList, ustKategoriList, gelirList, eFaturaList, eFaturaReferansList, selectedBranch, period]);
+    }, [yemekCekiList, kategoriList, ustKategoriList, gelirList, eFaturaList, eFaturaReferansList, odemeList, selectedBranch, period]);
 
     const handleExportToExcel = () => {
         const dataForExport: (string | number)[][] = [];
@@ -375,6 +392,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                                     <th style={{ width: '8%' }}>Fatura</th>
                                     <th style={{ width: '10%' }}>Fatura Tarihi</th>
                                     <th style={{ width: '10%' }}>Ödeme Tarihi</th>
+                                    <th style={{ width: '10%' }}>Ödeme Tutarı</th>
                                     <th style={{ width: '3%' }}>✓</th>
                                 </tr>
                             </thead>
@@ -421,6 +439,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                                                 </td>
                                                 <td>{cek.faturaStatus === 'Kesildi' ? parseDate(cek.Son_Tarih)?.toLocaleDateString('tr-TR') : '-'}</td>
                                                 <td>{cek.Odeme_Tarih && parseDate(cek.Odeme_Tarih) ? parseDate(cek.Odeme_Tarih)!.toLocaleDateString('tr-TR') : '-'}</td>
+                                                <td>{cek.Odeme_Tarih && cek.odemeTutari !== undefined ? formatCurrency(cek.odemeTutari) : '-'}</td>
                                                 <td><input type="checkbox" className="checkbox" defaultChecked={cek.faturaStatus === 'Kesildi'} /></td>
                                             </tr>
                                         ))}
