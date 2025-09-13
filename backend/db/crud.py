@@ -1063,7 +1063,7 @@ def get_odeme(db: Session, odeme_id: int):
     return db.query(models.Odeme).filter(models.Odeme.Odeme_ID == odeme_id).first()
 
 def get_odemeler(db: Session, skip: int = 0, limit: int | None = None):
-    return db.query(models.Odeme).offset(skip).limit(limit).all()
+    return db.query(models.Odeme).all()
 
 def create_odeme(db: Session, odeme: odeme.OdemeCreate):
     db_odeme = models.Odeme(**odeme.dict())
