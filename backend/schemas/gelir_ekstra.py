@@ -6,6 +6,7 @@ class GelirEkstraBase(BaseModel):
     Tarih: date
     RobotPos_Tutar: float
     ZRapor_Tutar: float
+    Tabak_Sayisi: int = 0
     Kayit_Tarihi: datetime = datetime.now()
 
 class GelirEkstraCreate(GelirEkstraBase):
@@ -14,6 +15,7 @@ class GelirEkstraCreate(GelirEkstraBase):
 class GelirEkstraUpdate(BaseModel):
     RobotPos_Tutar: float | None = None
     ZRapor_Tutar: float | None = None
+    Tabak_Sayisi: int | None = None
 
 class GelirEkstraInDB(GelirEkstraBase):
     GelirEkstra_ID: int

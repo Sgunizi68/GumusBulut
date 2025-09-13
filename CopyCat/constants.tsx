@@ -119,6 +119,7 @@ export const POS_KONTROL_DASHBOARD_YETKI_ADI = 'POS Kontrol Dashboard Görüntü
 export const ONLINE_KONTROL_DASHBOARD_YETKI_ADI = 'Online Kontrol Dashboard Görüntüleme';
 export const YEMEK_CEKI_EKRANI_YETKI_ADI = 'Yemek Çeki Ekranı Görüntüleme';
 export const YEMEK_CEKI_KONTROL_DASHBOARD_YETKI_ADI = 'Yemek Çeki Kontrol Dashboard Görüntüleme';
+export const TABAK_SAYISI_YUKLEME_EKRANI_YETKI_ADI = 'Tabak Sayısı Yükleme Ekranı Görüntüleme';
 
 
 // --- MENU STRUCTURE ---
@@ -157,6 +158,7 @@ export const MENU_GROUPS = [
             { label: 'Ödeme Kategori Atama', path: '/odeme-kategori-atama', icon: Icons.Category, permission: ODEME_KATEGORI_ATAMA_EKRANI_YETKI_ADI },
             { label: 'Diğer Harcamalar', path: '/other-expenses', icon: Icons.CreditCard, permission: DIGER_HARCAMALAR_EKRANI_YETKI_ADI },
             { label: 'POS Hareketleri Yükleme', path: '/pos-hareketleri-yukleme', icon: Icons.Upload, permission: POS_HAREKETLERI_YUKLEME_EKRANI_YETKI_ADI },
+            { label: 'Tabak Sayısı Yükleme', path: '/tabak-sayisi-yukleme', icon: Icons.Upload, permission: TABAK_SAYISI_YUKLEME_EKRANI_YETKI_ADI },
             { label: 'Yemek Çeki', path: '/yemek-ceki', icon: Icons.CreditCard, permission: YEMEK_CEKI_EKRANI_YETKI_ADI },
         ]
     },

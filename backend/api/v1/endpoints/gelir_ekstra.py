@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -6,6 +6,17 @@ from db import crud, database, models
 from schemas import gelir_ekstra
 
 router = APIRouter()
+
+@router.post("/upload-tabak-sayisi/")
+async def upload_tabak_sayisi(
+    file: UploadFile = File(...),
+    sube_id: int = Form(...),
+    db: Session = Depends(database.get_db)
+):
+    result = await crud.process_tabak_sayisi_excel(db=db, file=file, sube_id=sube_id)
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
 
 @router.post("/gelir-ekstra/", response_model=gelir_ekstra.GelirEkstraInDB, status_code=status.HTTP_201_CREATED)
 def create_gelir_ekstra(gelir_ekstra: gelir_ekstra.GelirEkstraCreate, db: Session = Depends(database.get_db)):

@@ -7,6 +7,7 @@ import { ErrorProvider, useErrorContext, classifyError } from './contexts/ErrorC
 import { ToastContainer, ConnectionStatusBanner, useToast } from './contexts/ToastContext';
 
 import { LoginPage, DashboardPage, SubePage, UsersPage, RolesPage, PermissionsPage, UserRoleAssignmentPage, RolePermissionAssignmentPage, DegerlerPage, PlaceholderPage, UstKategorilerPage, KategorilerPage, InvoiceUploadPage, InvoiceCategoryAssignmentPage, B2BUploadPage, B2BCategoryAssignmentPage, DigerHarcamalarPage, GelirPage, StokPage, StokFiyatPage, StokSayimPage, CalisanPage, PuantajSecimPage, PuantajPage, AvansPage, NakitPage, OdemeYuklemePage, OdemeReferansPage, OdemeKategoriAtamaPage, POSHareketleriYuklemePage, OnlineKontrolDashboardPage, YemekCekiPage, YemekCekiKontrolDashboardPage } from './pages';
+import { TabakSayisiYuklemePage } from './pages/TabakSayisiYukleme';
 import { EFaturaReferansPage } from './pages';
 import { NakitYatirmaRaporuPage } from './pages/NakitYatirmaRaporu';
 import { OdemeRaporPage } from './pages/OdemeRapor';
@@ -661,6 +662,14 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         method: 'POST',
         body: formData,
     }, true);
+    return result;
+  }, []);
+
+  const uploadTabakSayisi = useCallback(async (formData: FormData) => {
+    const result = await fetchData<any>(`${API_BASE_URL}/upload-tabak-sayisi/`, {
+        method: 'POST',
+        body: formData,
+    });
     return result;
   }, []);
 
@@ -1570,7 +1579,8 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     updateOdeme,
     uploadOdeme,
     uploadPosHareketleri,
-  }), [yemekCekiList, addYemekCeki, updateYemekCeki, deleteYemekCeki, subeList, eFaturaList, b2bEkstreList, digerHarcamaList, stokList, stokFiyatList, stokSayimList, calisanList, puantajSecimiList, puantajList, gelirList, gelirEkstraList, avansIstekList, ustKategoriList, kategoriList, degerList, userList, rolesList, permissionsList, userRolesList, rolePermissionsList, eFaturaReferansList, odemeReferansList, nakitList, odemeList, addSube, updateSube, addEFaturas, updateEFatura, addB2BEkstreler, updateB2BEkstre, addDigerHarcama, updateDigerHarcama, deleteDigerHarcama, addStok, updateStok, addStokFiyat, updateStokFiyat, addOrUpdateStokSayim, addCalisan, updateCalisan, addUser, updateUser, addPuantajSecimi, updatePuantajSecimi, addOrUpdatePuantajEntry, getPuantajEntry, deletePuantajEntry, addOrUpdateGelirEntry, getGelirEntry, addOrUpdateGelirEkstraEntry, getGelirEkstraEntry, addOrUpdateAvansIstek, deleteAvansIstek, getAvansIstek, addUstKategori, updateUstKategori, addKategori, updateKategori, fetchDegerler, addDeger, updateDeger, addRole, updateRole, deleteRole, addPermission, updatePermission, deletePermission, addUserRole, updateUserRole, deleteUserRole, addRolePermission, updateRolePermission, deleteRolePermission, addEFaturaReferans, updateEFaturaReferans, deleteEFaturaReferans, addOdemeReferans, updateOdemeReferans, deleteOdemeReferans, addNakit, updateNakit, deleteNakit, updateOdeme, uploadOdeme, uploadPosHareketleri]);
+    uploadTabakSayisi,
+  }), [yemekCekiList, addYemekCeki, updateYemekCeki, deleteYemekCeki, subeList, eFaturaList, b2bEkstreList, digerHarcamaList, stokList, stokFiyatList, stokSayimList, calisanList, puantajSecimiList, puantajList, gelirList, gelirEkstraList, avansIstekList, ustKategoriList, kategoriList, degerList, userList, rolesList, permissionsList, userRolesList, rolePermissionsList, eFaturaReferansList, odemeReferansList, nakitList, odemeList, addSube, updateSube, addEFaturas, updateEFatura, addB2BEkstreler, updateB2BEkstre, addDigerHarcama, updateDigerHarcama, deleteDigerHarcama, addStok, updateStok, addStokFiyat, updateStokFiyat, addOrUpdateStokSayim, addCalisan, updateCalisan, addUser, updateUser, addPuantajSecimi, updatePuantajSecimi, addOrUpdatePuantajEntry, getPuantajEntry, deletePuantajEntry, addOrUpdateGelirEntry, getGelirEntry, addOrUpdateGelirEkstraEntry, getGelirEkstraEntry, addOrUpdateAvansIstek, deleteAvansIstek, getAvansIstek, addUstKategori, updateUstKategori, addKategori, updateKategori, fetchDegerler, addDeger, updateDeger, addRole, updateRole, deleteRole, addPermission, updatePermission, deletePermission, addUserRole, updateUserRole, deleteUserRole, addRolePermission, updateRolePermission, deleteRolePermission, addEFaturaReferans, updateEFaturaReferans, deleteEFaturaReferans, addOdemeReferans, updateOdemeReferans, deleteOdemeReferans, addNakit, updateNakit, deleteNakit, updateOdeme,     uploadOdeme, uploadPosHareketleri, uploadTabakSayisi]);
 
   return <DataContext.Provider value={dataContextValue}>{children}</DataContext.Provider>;
 };
@@ -1748,6 +1758,7 @@ const AppWithToast: React.FC = () => {
                       <Route path="/other-expenses" element={<DigerHarcamalarPage />} />
                       <Route path="/gelir" element={<GelirPage />} />
                       <Route path="/pos-hareketleri-yukleme" element={<POSHareketleriYuklemePage />} />
+                      <Route path="/tabak-sayisi-yukleme" element={<TabakSayisiYuklemePage />} />
                       <Route path="/nakit-girisi" element={<NakitPage />} />
                       <Route path="/stock-definitions" element={<StokPage />} />
                       <Route path="/stock-prices" element={<StokFiyatPage />} />

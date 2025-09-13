@@ -2401,3 +2401,54 @@ def get_odeme_rapor(db: Session, donem_list: Optional[List[int]] = None, kategor
             total_records=0
         )
         return empty_response
+  
+import pandas as pd  
+from fastapi import UploadFile  
+  
+async def process_tabak_sayisi_excel(db: Session, file: UploadFile, sube_id: int):  
+    try:  
+        contents = await file.read()  
+        df = pd.read_excel(contents)  
+  
+        df.columns = [col.strip() for col in df.columns]  
+  
+        required_columns = ["Toplam Tabak Sayisi", "Tarih"]  
+        if not all(col in df.columns for col in required_columns):  
+            missing_cols = [col for col in required_columns if col not in df.columns]  
+            return {"error": f"Missing required columns in Excel file: {', '.join(missing_cols)}"}  
+  
+        updated_count = 0  
+        not_found_count = 0  
+        errors = []  
+  
+        for index, row in df.iterrows():  
+            try:  
+                plate_count = row["Toplam Tabak Sayisi"]  
+                event_date = pd.to_datetime(row["Tarih"], format='%%d-%%m-%%Y %%H:%%M:%%S').date()  
+  
+                gelir_ekstra_record = db.query(models.GelirEkstra).filter(  
+                    models.GelirEkstra.Sube_ID == sube_id,  
+                    models.GelirEkstra.Tarih == event_date  
+                ).first()  
+  
+                if gelir_ekstra_record:  
+                    gelir_ekstra_record.Tabak_Sayisi = int(plate_count)  
+                    updated_count += 1  
+                else:  
+                    not_found_count += 1  
+  
+            except Exception as e:  
+                errors.append(f"Row {index + 2}: {str(e)}")  
+  
+        db.commit()  
+  
+        return {  
+            "message": "File processed successfully.",  
+            "updated_records": updated_count,  
+            "records_not_found": not_found_count,  
+            "errors": errors  
+        }  
+  
+    except Exception as e:  
+        db.rollback()  
+        return {"error": f"Failed to process Excel file: {str(e)}"} 

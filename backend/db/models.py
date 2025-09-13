@@ -205,6 +205,7 @@ class GelirEkstra(Base):
     RobotPos_Tutar = Column(DECIMAL(15, 2), nullable=False)
     
     ZRapor_Tutar = Column(DECIMAL(15, 2), nullable=False, default=0.00)
+    Tabak_Sayisi = Column(Integer, nullable=False, default=0)
     Kayit_Tarihi = Column(DateTime, default=func.now())
 
     sube = relationship("Sube", back_populates="gelir_ekstralar")
