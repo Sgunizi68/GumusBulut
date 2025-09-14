@@ -2408,24 +2408,35 @@ from fastapi import UploadFile
 async def process_tabak_sayisi_excel(db: Session, file: UploadFile, sube_id: int):  
     try:  
         contents = await file.read()  
-        df = pd.read_excel(contents)  
-  
-        df.columns = [col.strip() for col in df.columns]  
-  
-        required_columns = ["Toplam Tabak Sayisi", "Tarih"]  
-        if not all(col in df.columns for col in required_columns):  
-            missing_cols = [col for col in required_columns if col not in df.columns]  
-            return {"error": f"Missing required columns in Excel file: {', '.join(missing_cols)}"}  
-  
+        df = pd.read_excel(contents, header=0)  # Assuming the first row is the header
+
+        # Strip any whitespace from column names
+        df.columns = [col.strip() for col in df.columns]
+        print(f"Excel columns: {df.columns}")
+
+        # Find the required columns dynamically
+        tarih_col = next((col for col in df.columns if 'Tarih' in col), None)
+        tabak_col = next((col for col in df.columns if 'Toplam Tabak' in col), None)
+
+        if not tarih_col or not tabak_col:
+            missing = []
+            if not tarih_col: missing.append("'Tarih' içeren bir sütun")
+            if not tabak_col: missing.append("'Toplam Tabak' içeren bir sütun")
+            return {"error": f"Excel dosyasında gerekli sütunlar eksik: {', '.join(missing)}"}
+
         updated_count = 0  
         not_found_count = 0  
         errors = []  
-  
+
         for index, row in df.iterrows():  
             try:  
-                plate_count = row["Toplam Tabak Sayisi"]  
-                event_date = pd.to_datetime(row["Tarih"], format='%%d-%%m-%%Y %%H:%%M:%%S').date()  
-  
+                plate_count = row[tabak_col]
+                # Try to parse the date with multiple formats
+                try:
+                    event_date = pd.to_datetime(row[tarih_col]).date()
+                except Exception:
+                    event_date = pd.to_datetime(row[tarih_col], format='%%d-%%m-%%Y %%H:%%M:%%S').date()  
+
                 gelir_ekstra_record = db.query(models.GelirEkstra).filter(  
                     models.GelirEkstra.Sube_ID == sube_id,  
                     models.GelirEkstra.Tarih == event_date  
