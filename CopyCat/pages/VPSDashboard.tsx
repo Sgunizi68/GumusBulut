@@ -195,48 +195,30 @@ export const VPSDashboardPage: React.FC = () => {
                 </tr>
               </thead>
               
-              <tbody>
-                {/* Main Data Rows */}
-                {mainData.map((row, index) => (
-                  <tr key={index} className="border-b border-slate-200/50 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-transparent transition-all duration-300 group">
-                    <td className="p-4 font-bold text-slate-700 border-r-2 border-slate-200 bg-gradient-to-r from-slate-50/80 to-white/80 sticky left-0 z-10 group-hover:from-blue-100/80 group-hover:to-blue-50/80 transition-all duration-300">
-                      <div className="flex items-center gap-3">
-                        <div className={`p-2 rounded-lg bg-gradient-to-r ${row.color} shadow-md`}>
-                          <row.icon className="w-4 h-4 text-white" />
-                        </div>
-                        <div>
-                          <div className="font-bold text-slate-800">{row.label}</div>
-                          {row.average && (
-                            <div className="text-sm text-slate-600 font-medium">Ort: {row.average}</div>
-                          )}
-                        </div>
-                      </div>
-                    </td>
-                    {row.values.map((value, colIndex) => (
-                      <td key={colIndex} className={`p-3 text-center border-r border-slate-100 transition-all duration-200 ${ 
-                        isWeekend(dates[colIndex]) ? 'bg-red-50/30' : ''
+              <thead>
+                <tr className="bg-gradient-to-r from-slate-50 to-slate-100 border-b-2 border-slate-200">
+                  <th className="text-left p-4 font-bold text-slate-700 w-56 sticky left-0 bg-gradient-to-r from-slate-50 to-slate-100 z-10 border-r-2 border-slate-200">
+                    Metrik
+                  </th>
+                  {dates.map((date) => (
+                    <th key={date} className={`text-center p-3 font-bold w-16 border-r border-slate-200 transition-colors duration-200 ${
+                      isWeekend(date) 
+                        ? 'bg-gradient-to-b from-red-50 to-red-100 text-red-700' 
+                        : 'text-slate-700 hover:bg-slate-100'
+                    }`}>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center mx-auto font-bold ${ 
+                        isWeekend(date)
+                          ? 'bg-red-200 text-red-800'
+                          : 'bg-slate-200 text-slate-700'
                       }`}>
-                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center mx-auto font-bold text-slate-700 shadow-sm hover:shadow-md hover:scale-105 transition-all duration-200">
-                          {value}
-                        </div>
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-                
-                {/* Separator Row */}
-                <tr className="bg-gradient-to-r from-indigo-500 to-purple-600 border-y-4 border-indigo-200">
-                  <td colSpan={dates.length + 1} className="p-6 text-center font-bold text-white text-xl">
-                    <div className="flex items-center justify-center gap-3">
-                      <Target className="w-8 h-8" />
-                      Puantaj Özeti
-                    </div>
-                  </td>
+                        {date}
+                      </div>
+                    </th>
+                  ))}
                 </tr>
-                
-                {/* Score Data Rows */}
-                {scoreData.map((row, index) => (
-                  <tbody>
+              </thead>
+              
+              <tbody>
                 {/* Main Data Rows */}
                 {mainData.map((row, index) => (
                   <tr key={index} className="border-b border-slate-200/50 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-transparent transition-all duration-300 group">
@@ -305,8 +287,6 @@ export const VPSDashboardPage: React.FC = () => {
                       </td>
                     ))}
                   </tr>
-                ))}
-              </tbody>
                 ))}
               </tbody>
             </table>
