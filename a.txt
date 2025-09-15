@@ -1,3 +1,23 @@
-Select Tutar from Odeme where
-Odeme.Tarih = Ekran.Odeme_Tarih
-AND Odeme.Kategori_ID = (Select Kategori_ID from Kategori where Kategori_Adi like CONCAT('%', Ekran.Kategori ,' Ödemesi%')
+SELECT
+    p.Tarih,
+    s.Secim,
+    COUNT(p.TC_No) AS Kayit_Sayisi
+FROM SilverCloud.Puantaj p
+INNER JOIN SilverCloud.Puantaj_Secimi s
+    ON p.Secim_ID = s.Secim_ID
+WHERE p.Tarih BETWEEN Ekran.Donem.ilkGun AND Ekran.Donem.SonGun   -- dönem aralığı
+GROUP BY p.Tarih, s.Secim
+ORDER BY p.Tarih, s.Secim;
+
+
+Örnek
+SELECT
+    p.Tarih,
+    s.Secim,
+    COUNT(p.TC_No) AS Kayit_Sayisi
+FROM SilverCloud.Puantaj p
+INNER JOIN SilverCloud.Puantaj_Secimi s
+    ON p.Secim_ID = s.Secim_ID
+WHERE p.Tarih BETWEEN '2025-08-01' AND '2025-08-31'   -- dönem aralığı
+GROUP BY p.Tarih, s.Secim
+ORDER BY p.Tarih, s.Secim;

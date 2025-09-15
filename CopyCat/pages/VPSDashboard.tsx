@@ -218,6 +218,31 @@ export const VPSDashboardPage: React.FC = () => {
                 </tr>
               </thead>
               
+                          <table className="w-full border-collapse">
+              {/* Header */}
+              <thead>
+                <tr className="bg-gradient-to-r from-slate-50 to-slate-100 border-b-2 border-slate-200">
+                  <th className="text-left p-4 font-bold text-slate-700 w-56 sticky left-0 bg-gradient-to-r from-slate-50 to-slate-100 z-10 border-r-2 border-slate-200">
+                    Metrik
+                  </th>
+                  {dates.map((date) => (
+                    <th key={date} className={`text-center p-3 font-bold w-16 border-r border-slate-200 transition-colors duration-200 ${
+                      isWeekend(date) 
+                        ? 'bg-gradient-to-b from-red-50 to-red-100 text-red-700' 
+                        : 'text-slate-700 hover:bg-slate-100'
+                    }`}>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center mx-auto font-bold ${ 
+                        isWeekend(date)
+                          ? 'bg-red-200 text-red-800'
+                          : 'bg-slate-200 text-slate-700'
+                      }`}>
+                        {date}
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              
               <tbody>
                 {/* Main Data Rows */}
                 {mainData.map((row, index) => (
@@ -257,6 +282,28 @@ export const VPSDashboardPage: React.FC = () => {
                   </td>
                 </tr>
                 
+                {/* New Header for Score Data */}
+                <tr className="bg-gradient-to-r from-slate-50 to-slate-100 border-b-2 border-slate-200">
+                  <th className="text-left p-4 font-bold text-slate-700 w-56 sticky left-0 bg-gradient-to-r from-slate-50 to-slate-100 z-10 border-r-2 border-slate-200">
+                    Metrik
+                  </th>
+                  {dates.map((date) => (
+                    <th key={date} className={`text-center p-3 font-bold w-16 border-r border-slate-200 transition-colors duration-200 ${
+                      isWeekend(date) 
+                        ? 'bg-gradient-to-b from-red-50 to-red-100 text-red-700' 
+                        : 'text-slate-700 hover:bg-slate-100'
+                    }`}>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center mx-auto font-bold ${ 
+                        isWeekend(date)
+                          ? 'bg-red-200 text-red-800'
+                          : 'bg-slate-200 text-slate-700'
+                      }`}>
+                        {date}
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+
                 {/* Score Data Rows */}
                 {scoreData.map((row, index) => (
                   <tr key={`score-${index}`} className="border-b border-slate-200/50 hover:bg-gradient-to-r hover:from-slate-50/50 hover:to-transparent transition-all duration-300 group">
@@ -289,6 +336,7 @@ export const VPSDashboardPage: React.FC = () => {
                   </tr>
                 ))}
               </tbody>
+            </table>
             </table>
           </div>
         </div>
