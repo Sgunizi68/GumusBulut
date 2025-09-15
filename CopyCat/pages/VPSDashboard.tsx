@@ -3,7 +3,7 @@ import { Calendar, TrendingUp, Users, Clock, Target, BarChart3, Activity } from 
 import { useDataContext } from '../App';
 
 export const VPSDashboardPage: React.FC = () => {
-  const { puantajSecimiList, puantajList, gelirEkstraList } = useDataContext();
+    const { puantajSecimiList, puantajList, gelirEkstraList, calisanList } = useDataContext();
   const [selectedMonth, setSelectedMonth] = useState('2509');
 
   const months = [
@@ -23,12 +23,34 @@ export const VPSDashboardPage: React.FC = () => {
   }, [selectedMonth]);
 
   const mainData = useMemo(() => {
-    const calisan = dates.map(() => Math.floor(Math.random() * 10) + 5); // 5-15 arası
+    const year = 2000 + parseInt(selectedMonth.substring(0, 2));
+    const month = parseInt(selectedMonth.substring(2, 4));
+
+    const calisanValues = dates.map(day => {
+      const currentDayDate = new Date(year, month - 1, day);
+      currentDayDate.setHours(0, 0, 0, 0); // Normalize to start of the day
+
+      if (!calisanList) return 0;
+
+      return calisanList.filter(c => {
+        const girisDate = new Date(c.Sigorta_Giris);
+        girisDate.setHours(0, 0, 0, 0); // Normalize
+
+        const cikisDate = c.Sigorta_Cikis ? new Date(c.Sigorta_Cikis) : null;
+        if (cikisDate) {
+          cikisDate.setHours(0, 0, 0, 0); // Normalize
+        }
+        
+        // Check if the currentDayDate is within the employee's active period
+        // Sigorta_Giris <= currentDayDate AND (Sigorta_Cikis IS NULL OR Sigorta_Cikis >= currentDayDate)
+        return girisDate <= currentDayDate && (!cikisDate || cikisDate >= currentDayDate);
+      }).length;
+    });
     const aktifCalisan = dates.map(() => Math.floor(Math.random() * 8) + 3); // 3-11 arası
     const vps = dates.map(() => Math.floor(Math.random() * 3) + 2); // 2-4 arası
 
     // Ortalamaları hesapla
-    const calisanOrtalama = (calisan.reduce((a, b) => a + b, 0) / calisan.length).toFixed(1);
+    const calisanOrtalama = (calisanValues.reduce((a, b) => a + b, 0) / calisanValues.length).toFixed(1);
     const aktifCalisanOrtalama = (aktifCalisan.reduce((a, b) => a + b, 0) / aktifCalisan.length).toFixed(1);
 
     // Puantaj Günü Calculation
@@ -39,9 +61,6 @@ export const VPSDashboardPage: React.FC = () => {
 
     const dailyPuantajCounts = new Map<string, Map<number, number>>();
     
-    const year = 2000 + parseInt(selectedMonth.substring(0, 2));
-    const month = parseInt(selectedMonth.substring(2, 4));
-
     if(puantajList) {
         puantajList.forEach(p => {
           const pDate = new Date(p.Tarih);
@@ -81,7 +100,7 @@ export const VPSDashboardPage: React.FC = () => {
       { 
         label: `Çalışan Ortalaması`, 
         average: calisanOrtalama,
-        values: calisan,
+        values: calisanValues,
         icon: Users,
         color: 'from-blue-500 to-blue-600'
       },
@@ -111,7 +130,7 @@ export const VPSDashboardPage: React.FC = () => {
         color: 'from-indigo-500 to-indigo-600'
       }
     ];
-  }, [dates, puantajList, puantajSecimiList, selectedMonth, gelirEkstraList]);
+  }, [dates, puantajList, puantajSecimiList, selectedMonth, gelirEkstraList, calisanList]);
 
   const scoreData = useMemo(() => {
     if (!puantajSecimiList || !puantajList || !selectedMonth) return [];

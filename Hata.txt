@@ -1,21 +1,22 @@
-  Plugin: vite:esbuild
-  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages/VPSDashboard.tsx:240:16
+(index):64 cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
+(anonymous) @ (index):64
+client:789 [vite] connecting...
+client:912 [vite] connected.
+react-dom_client.js?v=fbfea576:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+VPSDashboard.tsx:27 Uncaught ReferenceError: Cannot access 'year' before initialization
+    at VPSDashboard.tsx:27:39
+    at Array.map (<anonymous>)
+    at VPSDashboard.tsx:26:33
+    at mountMemo (react-dom_client.js?v=fbfea576:5052:25)
+    at Object.useMemo (react-dom_client.js?v=fbfea576:16513:20)
+    at exports.useMemo (chunk-UGC3UZ7L.js?v=fbfea576:915:36)
+    at VPSDashboardPage (VPSDashboard.tsx:25:20)
+    at react-stack-bottom-frame (react-dom_client.js?v=fbfea576:17424:20)
+    at renderWithHooks (react-dom_client.js?v=fbfea576:4206:24)
+    at updateFunctionComponent (react-dom_client.js?v=fbfea576:6619:21)
+react-dom_client.js?v=fbfea576:6229 An error occurred in the <VPSDashboardPage> component.
 
-  Expected ")" but found "{"
-  238|                  {scoreData.map((row, index) => (
-  239|                    {/* Score Data Rows */}
-  240|                  {scoreData.map((row, index) => (
-     |                  ^
-  241|                    <tr key={`score-${index}`} className="border-b border-slate-200/50 hover:bg-gradient-to-r hover:from-slate-50/50 hover:to-transparent transition-all duration-300 group">
-  242|                      <td className="p-4 border-r-2 border-slate-200 bg-gradient-to-r from-slate-50/80 to-white/80 sticky left-0 z-10 group-hover:from-slate-100/80 group-hover:to-slate-50/80 transition-all duration-300">
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
 
-      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
-      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
-      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
-      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
-      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
-      at Socket.emit (node:events:518:28)
-      at addChunk (node:internal/streams/readable:561:12)
-      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
-      at Readable.push (node:internal/streams/readable:392:5)
-      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+defaultOnUncaughtError @ react-dom_client.js?v=fbfea576:6229
