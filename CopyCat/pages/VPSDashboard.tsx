@@ -3,7 +3,7 @@ import { Calendar, TrendingUp, Users, Clock, Target, BarChart3, Activity } from 
 import { useDataContext } from '../App';
 
 export const VPSDashboardPage: React.FC = () => {
-  const { puantajSecimiList, puantajList } = useDataContext();
+  const { puantajSecimiList, puantajList, gelirEkstraList } = useDataContext();
   const [selectedMonth, setSelectedMonth] = useState('2509');
 
   const months = [
@@ -25,7 +25,6 @@ export const VPSDashboardPage: React.FC = () => {
   const mainData = useMemo(() => {
     const calisan = dates.map(() => Math.floor(Math.random() * 10) + 5); // 5-15 arası
     const aktifCalisan = dates.map(() => Math.floor(Math.random() * 8) + 3); // 3-11 arası
-    const tabakSayisi = dates.map(() => Math.floor(Math.random() * 40) + 30); // 30-70 arası
     const vps = dates.map(() => Math.floor(Math.random() * 3) + 2); // 2-4 arası
 
     // Ortalamaları hesapla
@@ -70,6 +69,13 @@ export const VPSDashboardPage: React.FC = () => {
       return totalDeger;
     });
 
+    // Tabak Sayısı Calculation
+    const tabakSayisiValues = dates.map(day => {
+      const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const gelirEkstra = gelirEkstraList ? gelirEkstraList.find(ge => ge.Tarih.split('T')[0] === dateStr) : null;
+      return gelirEkstra ? gelirEkstra.Tabak_Sayisi : 0;
+    });
+
 
     return [
       { 
@@ -94,7 +100,7 @@ export const VPSDashboardPage: React.FC = () => {
       },
       { 
         label: 'Tabak Sayısı', 
-        values: tabakSayisi,
+        values: tabakSayisiValues,
         icon: Target,
         color: 'from-orange-500 to-orange-600'
       },
@@ -105,7 +111,7 @@ export const VPSDashboardPage: React.FC = () => {
         color: 'from-indigo-500 to-indigo-600'
       }
     ];
-  }, [dates, puantajList, puantajSecimiList, selectedMonth]);
+  }, [dates, puantajList, puantajSecimiList, selectedMonth, gelirEkstraList]);
 
   const scoreData = useMemo(() => {
     if (!puantajSecimiList || !puantajList || !selectedMonth) return [];
