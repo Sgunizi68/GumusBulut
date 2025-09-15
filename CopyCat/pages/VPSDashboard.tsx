@@ -13,18 +13,11 @@ export const VPSDashboardPage: React.FC = () => {
 
   // Random tarih dizisi oluştur (1-30 arası)
   const dates = useMemo(() => {
-    const randomDates = [];
-    const dayCount = Math.floor(Math.random() * 10) + 15; // 15-25 gün arası
-    const allDays = Array.from({length: 30}, (_, i) => i + 1);
-    
-    // Rastgele günler seç
-    for (let i = 0; i < dayCount; i++) {
-      const randomIndex = Math.floor(Math.random() * allDays.length);
-      randomDates.push(allDays[randomIndex]);
-      allDays.splice(randomIndex, 1);
-    }
-    
-    return randomDates.sort((a, b) => a - b);
+    if (!selectedMonth || selectedMonth.length !== 4) return [];
+    const year = 2000 + parseInt(selectedMonth.substring(0, 2));
+    const month = parseInt(selectedMonth.substring(2, 4));
+    const daysInMonth = new Date(year, month, 0).getDate();
+    return Array.from({ length: daysInMonth }, (_, i) => i + 1);
   }, [selectedMonth]);
 
   const mainData = useMemo(() => {
