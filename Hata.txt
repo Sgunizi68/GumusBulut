@@ -1,189 +1,21 @@
-(index):64 cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
-(anonymous) @ (index):64
-(anonymous) @ (index):64
-client:789 [vite] connecting...
-client:912 [vite] connected.
-react-dom_client.js?v=e45391b4:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
-App.tsx:304  POST http://localhost:8000/api/v1/upload-tabak-sayisi/ 400 (Bad Request)
-fetchData @ App.tsx:304
-(anonymous) @ App.tsx:669
-handleSubmit @ TabakSayisiYukleme.tsx:45
-executeDispatch @ react-dom_client.js?v=e45391b4:11736
-runWithFiberInDEV @ react-dom_client.js?v=e45391b4:1485
-processDispatchQueue @ react-dom_client.js?v=e45391b4:11772
-(anonymous) @ react-dom_client.js?v=e45391b4:12182
-batchedUpdates$1 @ react-dom_client.js?v=e45391b4:2628
-dispatchEventForPluginEventSystem @ react-dom_client.js?v=e45391b4:11877
-dispatchEvent @ react-dom_client.js?v=e45391b4:14792
-dispatchDiscreteEvent @ react-dom_client.js?v=e45391b4:14773
-<form>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=5380ec21:250
-TabakSayisiYuklemePage @ TabakSayisiYukleme.tsx:90
-react-stack-bottom-frame @ react-dom_client.js?v=e45391b4:17424
-renderWithHooksAgain @ react-dom_client.js?v=e45391b4:4281
-renderWithHooks @ react-dom_client.js?v=e45391b4:4217
-updateFunctionComponent @ react-dom_client.js?v=e45391b4:6619
-beginWork @ react-dom_client.js?v=e45391b4:7654
-runWithFiberInDEV @ react-dom_client.js?v=e45391b4:1485
-performUnitOfWork @ react-dom_client.js?v=e45391b4:10874
-workLoopSync @ react-dom_client.js?v=e45391b4:10728
-renderRootSync @ react-dom_client.js?v=e45391b4:10711
-performWorkOnRoot @ react-dom_client.js?v=e45391b4:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e45391b4:11623
-performWorkUntilDeadline @ react-dom_client.js?v=e45391b4:36
-<TabakSayisiYuklemePage>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=5380ec21:250
-AppWithToast @ App.tsx:1761
-react-stack-bottom-frame @ react-dom_client.js?v=e45391b4:17424
-renderWithHooksAgain @ react-dom_client.js?v=e45391b4:4281
-renderWithHooks @ react-dom_client.js?v=e45391b4:4217
-updateFunctionComponent @ react-dom_client.js?v=e45391b4:6619
-beginWork @ react-dom_client.js?v=e45391b4:7654
-runWithFiberInDEV @ react-dom_client.js?v=e45391b4:1485
-performUnitOfWork @ react-dom_client.js?v=e45391b4:10874
-workLoopSync @ react-dom_client.js?v=e45391b4:10728
-renderRootSync @ react-dom_client.js?v=e45391b4:10711
-performWorkOnRoot @ react-dom_client.js?v=e45391b4:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e45391b4:11623
-performWorkUntilDeadline @ react-dom_client.js?v=e45391b4:36
-<AppWithToast>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=5380ec21:250
-App @ App.tsx:1797
-react-stack-bottom-frame @ react-dom_client.js?v=e45391b4:17424
-renderWithHooksAgain @ react-dom_client.js?v=e45391b4:4281
-renderWithHooks @ react-dom_client.js?v=e45391b4:4217
-updateFunctionComponent @ react-dom_client.js?v=e45391b4:6619
-beginWork @ react-dom_client.js?v=e45391b4:7654
-runWithFiberInDEV @ react-dom_client.js?v=e45391b4:1485
-performUnitOfWork @ react-dom_client.js?v=e45391b4:10874
-workLoopSync @ react-dom_client.js?v=e45391b4:10728
-renderRootSync @ react-dom_client.js?v=e45391b4:10711
-performWorkOnRoot @ react-dom_client.js?v=e45391b4:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e45391b4:11623
-performWorkUntilDeadline @ react-dom_client.js?v=e45391b4:36
-<App>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=5380ec21:250
-(anonymous) @ index.tsx:14
-App.tsx:333 Error in fetchData: {url: 'http://localhost:8000/api/v1/upload-tabak-sayisi/', errorMessage: 'Missing required columns in Excel file: Toplam Tabak Sayisi', statusCode: undefined, type: 'general', severity: 'medium', …}
-fetchData @ App.tsx:333
-await in fetchData
-(anonymous) @ App.tsx:669
-handleSubmit @ TabakSayisiYukleme.tsx:45
-executeDispatch @ react-dom_client.js?v=e45391b4:11736
-runWithFiberInDEV @ react-dom_client.js?v=e45391b4:1485
-processDispatchQueue @ react-dom_client.js?v=e45391b4:11772
-(anonymous) @ react-dom_client.js?v=e45391b4:12182
-batchedUpdates$1 @ react-dom_client.js?v=e45391b4:2628
-dispatchEventForPluginEventSystem @ react-dom_client.js?v=e45391b4:11877
-dispatchEvent @ react-dom_client.js?v=e45391b4:14792
-dispatchDiscreteEvent @ react-dom_client.js?v=e45391b4:14773
-<form>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=5380ec21:250
-TabakSayisiYuklemePage @ TabakSayisiYukleme.tsx:90
-react-stack-bottom-frame @ react-dom_client.js?v=e45391b4:17424
-renderWithHooksAgain @ react-dom_client.js?v=e45391b4:4281
-renderWithHooks @ react-dom_client.js?v=e45391b4:4217
-updateFunctionComponent @ react-dom_client.js?v=e45391b4:6619
-beginWork @ react-dom_client.js?v=e45391b4:7654
-runWithFiberInDEV @ react-dom_client.js?v=e45391b4:1485
-performUnitOfWork @ react-dom_client.js?v=e45391b4:10874
-workLoopSync @ react-dom_client.js?v=e45391b4:10728
-renderRootSync @ react-dom_client.js?v=e45391b4:10711
-performWorkOnRoot @ react-dom_client.js?v=e45391b4:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e45391b4:11623
-performWorkUntilDeadline @ react-dom_client.js?v=e45391b4:36
-<TabakSayisiYuklemePage>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=5380ec21:250
-AppWithToast @ App.tsx:1761
-react-stack-bottom-frame @ react-dom_client.js?v=e45391b4:17424
-renderWithHooksAgain @ react-dom_client.js?v=e45391b4:4281
-renderWithHooks @ react-dom_client.js?v=e45391b4:4217
-updateFunctionComponent @ react-dom_client.js?v=e45391b4:6619
-beginWork @ react-dom_client.js?v=e45391b4:7654
-runWithFiberInDEV @ react-dom_client.js?v=e45391b4:1485
-performUnitOfWork @ react-dom_client.js?v=e45391b4:10874
-workLoopSync @ react-dom_client.js?v=e45391b4:10728
-renderRootSync @ react-dom_client.js?v=e45391b4:10711
-performWorkOnRoot @ react-dom_client.js?v=e45391b4:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e45391b4:11623
-performWorkUntilDeadline @ react-dom_client.js?v=e45391b4:36
-<AppWithToast>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=5380ec21:250
-App @ App.tsx:1797
-react-stack-bottom-frame @ react-dom_client.js?v=e45391b4:17424
-renderWithHooksAgain @ react-dom_client.js?v=e45391b4:4281
-renderWithHooks @ react-dom_client.js?v=e45391b4:4217
-updateFunctionComponent @ react-dom_client.js?v=e45391b4:6619
-beginWork @ react-dom_client.js?v=e45391b4:7654
-runWithFiberInDEV @ react-dom_client.js?v=e45391b4:1485
-performUnitOfWork @ react-dom_client.js?v=e45391b4:10874
-workLoopSync @ react-dom_client.js?v=e45391b4:10728
-renderRootSync @ react-dom_client.js?v=e45391b4:10711
-performWorkOnRoot @ react-dom_client.js?v=e45391b4:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e45391b4:11623
-performWorkUntilDeadline @ react-dom_client.js?v=e45391b4:36
-<App>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=5380ec21:250
-(anonymous) @ index.tsx:14
-App.tsx:350 General error: Missing required columns in Excel file: Toplam Tabak Sayisi
-fetchData @ App.tsx:350
-await in fetchData
-(anonymous) @ App.tsx:669
-handleSubmit @ TabakSayisiYukleme.tsx:45
-executeDispatch @ react-dom_client.js?v=e45391b4:11736
-runWithFiberInDEV @ react-dom_client.js?v=e45391b4:1485
-processDispatchQueue @ react-dom_client.js?v=e45391b4:11772
-(anonymous) @ react-dom_client.js?v=e45391b4:12182
-batchedUpdates$1 @ react-dom_client.js?v=e45391b4:2628
-dispatchEventForPluginEventSystem @ react-dom_client.js?v=e45391b4:11877
-dispatchEvent @ react-dom_client.js?v=e45391b4:14792
-dispatchDiscreteEvent @ react-dom_client.js?v=e45391b4:14773
-<form>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=5380ec21:250
-TabakSayisiYuklemePage @ TabakSayisiYukleme.tsx:90
-react-stack-bottom-frame @ react-dom_client.js?v=e45391b4:17424
-renderWithHooksAgain @ react-dom_client.js?v=e45391b4:4281
-renderWithHooks @ react-dom_client.js?v=e45391b4:4217
-updateFunctionComponent @ react-dom_client.js?v=e45391b4:6619
-beginWork @ react-dom_client.js?v=e45391b4:7654
-runWithFiberInDEV @ react-dom_client.js?v=e45391b4:1485
-performUnitOfWork @ react-dom_client.js?v=e45391b4:10874
-workLoopSync @ react-dom_client.js?v=e45391b4:10728
-renderRootSync @ react-dom_client.js?v=e45391b4:10711
-performWorkOnRoot @ react-dom_client.js?v=e45391b4:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e45391b4:11623
-performWorkUntilDeadline @ react-dom_client.js?v=e45391b4:36
-<TabakSayisiYuklemePage>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=5380ec21:250
-AppWithToast @ App.tsx:1761
-react-stack-bottom-frame @ react-dom_client.js?v=e45391b4:17424
-renderWithHooksAgain @ react-dom_client.js?v=e45391b4:4281
-renderWithHooks @ react-dom_client.js?v=e45391b4:4217
-updateFunctionComponent @ react-dom_client.js?v=e45391b4:6619
-beginWork @ react-dom_client.js?v=e45391b4:7654
-runWithFiberInDEV @ react-dom_client.js?v=e45391b4:1485
-performUnitOfWork @ react-dom_client.js?v=e45391b4:10874
-workLoopSync @ react-dom_client.js?v=e45391b4:10728
-renderRootSync @ react-dom_client.js?v=e45391b4:10711
-performWorkOnRoot @ react-dom_client.js?v=e45391b4:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e45391b4:11623
-performWorkUntilDeadline @ react-dom_client.js?v=e45391b4:36
-<AppWithToast>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=5380ec21:250
-App @ App.tsx:1797
-react-stack-bottom-frame @ react-dom_client.js?v=e45391b4:17424
-renderWithHooksAgain @ react-dom_client.js?v=e45391b4:4281
-renderWithHooks @ react-dom_client.js?v=e45391b4:4217
-updateFunctionComponent @ react-dom_client.js?v=e45391b4:6619
-beginWork @ react-dom_client.js?v=e45391b4:7654
-runWithFiberInDEV @ react-dom_client.js?v=e45391b4:1485
-performUnitOfWork @ react-dom_client.js?v=e45391b4:10874
-workLoopSync @ react-dom_client.js?v=e45391b4:10728
-renderRootSync @ react-dom_client.js?v=e45391b4:10711
-performWorkOnRoot @ react-dom_client.js?v=e45391b4:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=e45391b4:11623
-performWorkUntilDeadline @ react-dom_client.js?v=e45391b4:36
-<App>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=5380ec21:250
-(anonymous) @ index.tsx:14
+  Plugin: vite:esbuild
+  File: C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages/VPSDashboard.tsx:240:16
 
+  Expected ")" but found "{"
+  238|                  {scoreData.map((row, index) => (
+  239|                    {/* Score Data Rows */}
+  240|                  {scoreData.map((row, index) => (
+     |                  ^
+  241|                    <tr key={`score-${index}`} className="border-b border-slate-200/50 hover:bg-gradient-to-r hover:from-slate-50/50 hover:to-transparent transition-all duration-300 group">
+  242|                      <td className="p-4 border-r-2 border-slate-200 bg-gradient-to-r from-slate-50/80 to-white/80 sticky left-0 z-10 group-hover:from-slate-100/80 group-hover:to-slate-50/80 transition-all duration-300">
+
+      at failureErrorWithLog (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:1465:15)
+      at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)

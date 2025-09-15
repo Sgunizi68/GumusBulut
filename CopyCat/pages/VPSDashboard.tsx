@@ -1,7 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { Calendar, TrendingUp, Users, Clock, Target, BarChart3, Activity } from 'lucide-react';
+import { useDataContext } from '../App';
 
 export const VPSDashboardPage: React.FC = () => {
+  const { puantajSecimiList } = useDataContext();
   const [selectedMonth, setSelectedMonth] = useState('2509');
 
   const months = [
@@ -67,72 +69,21 @@ export const VPSDashboardPage: React.FC = () => {
   }, [dates]);
 
   const scoreData = useMemo(() => {
-    const generateRandomValues = (probability = 0.3, value = '') => {
-      return dates.map(() => Math.random() < probability ? value : '');
-    };
-
     const generatePersonCounts = () => {
       return dates.map(() => Math.floor(Math.random() * 8) + 1);
     };
 
-    const categories = [
-      { 
-        label: 'Bayram Arife', 
-        multiplier: '1.5x',
-        values: generateRandomValues(0.05, '1.5'), // Daha az göster
-        className: 'bg-gradient-to-r from-blue-50 to-blue-100 text-blue-800 border-blue-200',
-        activeClass: 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg scale-105'
-      },
-      { 
-        label: 'Bayram Tatil', 
-        multiplier: '2.0x',
-        values: generateRandomValues(0.08, '2.0'), // Daha az göster
-        className: 'bg-gradient-to-r from-emerald-50 to-emerald-100 text-emerald-800 border-emerald-200',
-        activeClass: 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg scale-105'
-      },
-      { 
-        label: 'Çalışıyor', 
-        multiplier: '1.0x',
-        values: generateRandomValues(0.05, '1.0'), // Daha az göster
-        className: 'bg-gradient-to-r from-amber-50 to-amber-100 text-amber-800 border-amber-200',
-        activeClass: 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-lg scale-105'
-      },
-      { 
-        label: 'Çıkış', 
-        multiplier: '0.0x',
-        values: generateRandomValues(0.03, '0.0'), // Daha az göster
-        className: 'bg-gradient-to-r from-red-50 to-red-100 text-red-800 border-red-200',
-        activeClass: 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg scale-105'
-      },
-      { 
-        label: 'Haftalık İzin', 
-        multiplier: '1.0x',
-        values: generateRandomValues(0.04, '1.0'), // Daha az göster
-        className: 'bg-gradient-to-r from-violet-50 to-violet-100 text-violet-800 border-violet-200',
-        activeClass: 'bg-gradient-to-r from-violet-500 to-violet-600 text-white shadow-lg scale-105'
-      },
-      { 
-        label: 'İzinde Çalışma', 
-        multiplier: '2.0x',
-        values: generateRandomValues(0.02, '2.0'), // Çok az göster
-        className: 'bg-gradient-to-r from-teal-50 to-teal-100 text-teal-800 border-teal-200',
-        activeClass: 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg scale-105'
-      },
-      { 
-        label: 'Yıllık İzin', 
-        multiplier: '1.0x',
-        values: generateRandomValues(0.03, '1.0'), // Daha az göster
-        className: 'bg-gradient-to-r from-pink-50 to-pink-100 text-pink-800 border-pink-200',
-        activeClass: 'bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg scale-105'
-      }
-    ];
+    if (!puantajSecimiList) return [];
 
-    // Her kategori için kişi sayılarını hesapla - her hücre için
-    return categories.map(category => ({
-      ...category,
-      personCounts: generatePersonCounts() // Her gün için kişi sayısı
-    }));
-  }, [dates]);
+    return puantajSecimiList
+      .filter(item => item.Aktif_Pasif)
+      .map(item => ({
+        label: item.Secim,
+        multiplier: `${item.Degeri.toFixed(1)}x`,
+        personCounts: generatePersonCounts(),
+        color: item.Renk_Kodu || '#888888'
+      }));
+  }, [dates, puantajSecimiList]);
 
   const isWeekend = (date) => {
     const day = new Date(2025, parseInt(selectedMonth.slice(2)) - 1, date).getDay();
@@ -285,12 +236,20 @@ export const VPSDashboardPage: React.FC = () => {
                 
                 {/* Score Data Rows */}
                 {scoreData.map((row, index) => (
-                  <tr key={`score-${index}`} className="border-b border-slate-200/50 hover:bg-gradient-to-r hover:from-slate-50/50 hover:to-transparent transition-all duration-300 group">
-                    <td className="p-4 border-r-2 border-slate-200 bg-gradient-to-r from-slate-50/80 to-white/80 sticky left-0 z-10 group-hover:from-slate-100/80 group-hover:to-slate-50/80 transition-all duration-300">
-                      <div className="flex items-center justify-between">
-                        <div className="font-bold text-slate-800">{row.label}</div>
-                        <div className={`px-3 py-1 rounded-full text-xs font-bold border-2 ${row.className}`}>
-                          {row.multiplier}
+                  <tbody>
+                {/* Main Data Rows */}
+                {mainData.map((row, index) => (
+                  <tr key={index} className="border-b border-slate-200/50 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-transparent transition-all duration-300 group">
+                    <td className="p-4 font-bold text-slate-700 border-r-2 border-slate-200 bg-gradient-to-r from-slate-50/80 to-white/80 sticky left-0 z-10 group-hover:from-blue-100/80 group-hover:to-blue-50/80 transition-all duration-300">
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-lg bg-gradient-to-r ${row.color} shadow-md`}>
+                          <row.icon className="w-4 h-4 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-slate-800">{row.label}</div>
+                          {row.average && (
+                            <div className="text-sm text-slate-600 font-medium">Ort: {row.average}</div>
+                          )}
                         </div>
                       </div>
                     </td>
@@ -298,14 +257,56 @@ export const VPSDashboardPage: React.FC = () => {
                       <td key={colIndex} className={`p-3 text-center border-r border-slate-100 transition-all duration-200 ${ 
                         isWeekend(dates[colIndex]) ? 'bg-red-50/30' : ''
                       }`}>
+                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center mx-auto font-bold text-slate-700 shadow-sm hover:shadow-md hover:scale-105 transition-all duration-200">
+                          {value}
+                        </div>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+                
+                {/* Separator Row */}
+                <tr className="bg-gradient-to-r from-indigo-500 to-purple-600 border-y-4 border-indigo-200">
+                  <td colSpan={dates.length + 1} className="p-6 text-center font-bold text-white text-xl">
+                    <div className="flex items-center justify-center gap-3">
+                      <Target className="w-8 h-8" />
+                      Puantaj Özeti
+                    </div>
+                  </td>
+                </tr>
+                
+                {/* Score Data Rows */}
+                {scoreData.map((row, index) => (
+                  <tr key={`score-${index}`} className="border-b border-slate-200/50 hover:bg-gradient-to-r hover:from-slate-50/50 hover:to-transparent transition-all duration-300 group">
+                    <td className="p-4 border-r-2 border-slate-200 bg-gradient-to-r from-slate-50/80 to-white/80 sticky left-0 z-10 group-hover:from-slate-100/80 group-hover:to-slate-50/80 transition-all duration-300">
+                      <div className="flex items-center justify-between">
+                        <div className="font-bold text-slate-800">{row.label}</div>
+                        <div 
+                          className={`px-3 py-1 rounded-full text-xs font-bold border-2`}
+                          style={{
+                            borderColor: row.color,
+                            backgroundColor: `${row.color}20`,
+                            color: row.color,
+                          }}
+                        >
+                          {row.multiplier}
+                        </div>
+                      </div>
+                    </td>
+                    {row.personCounts.map((count, colIndex) => (
+                      <td key={colIndex} className={`p-3 text-center border-r border-slate-100 transition-all duration-200 ${ 
+                        isWeekend(dates[colIndex]) ? 'bg-red-50/30' : ''
+                      }`}>
                         <div className="flex flex-col items-center gap-1">
                           <div className="text-xs font-bold text-slate-700 bg-slate-200 px-2 py-1 rounded-full min-w-8">
-                            {row.personCounts && row.personCounts[colIndex] ? row.personCounts[colIndex] : 0}
+                            {count}
                           </div>
                         </div>
                       </td>
                     ))}
                   </tr>
+                ))}
+              </tbody>
                 ))}
               </tbody>
             </table>
