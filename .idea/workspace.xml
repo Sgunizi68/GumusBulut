@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="364c7c9f-f57e-4db9-a56f-92c279098407" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Python.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Hata.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Hata.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/db/crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db/crud.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Online Kontrol Dashboard.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YüklemeYapılacak2.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Şube Bazlı Toplam Tabak Sayısı - 1.08.2025 06_00_00 - 1.09.2025 06_00_00.xlsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

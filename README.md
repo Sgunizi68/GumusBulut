@@ -26,8 +26,9 @@ The SilverCloud System is a comprehensive web-based application designed to stre
     *   Tailwind CSS (for styling)
     *   XLSX library (for Excel file processing)
 *   **Backend:**
-    *   Python (likely FastAPI, based on project structure)
-    *   (Potentially MySQL or another relational database)
+    *   Python (FastAPI framework)
+    *   MySQL (Database)
+    *   SQLAlchemy (ORM)
 
 ## Setup and Installation
 
@@ -36,6 +37,7 @@ The SilverCloud System is a comprehensive web-based application designed to stre
 *   Node.js (LTS version recommended)
 *   Python 3.x
 *   npm or yarn (for Node.js package management)
+*   MySQL Database (ensure it's running and accessible)
 
 ### Frontend Setup
 
@@ -75,11 +77,23 @@ The SilverCloud System is a comprehensive web-based application designed to stre
     ```bash
     pip install -r requirements.txt
     ```
-4.  Run the backend application (example for FastAPI with Uvicorn):
+4.  **Configure Database Connection:**
+    Create a `.env.local` file in the project root directory (next to the `backend` and `CopyCat` folders) with your MySQL database credentials:
+    ```
+    DB_USER=your_mysql_user
+    DB_PASSWORD=your_mysql_password
+    DB_HOST=localhost
+    DB_PORT=3306
+    DB_NAME=your_database_name
+    SECRET_KEY=your_super_secret_key_for_auth
+    ```
+    Replace `your_mysql_user`, `your_mysql_password`, `your_database_name`, and `your_super_secret_key_for_auth` with your actual database credentials and a strong secret key.
+
+5.  Run the backend application (example for FastAPI with Uvicorn):
     ```bash
     uvicorn main:app --reload
     ```
-    Adjust the command based on your specific backend framework and entry point.
+    The backend API should now be running, typically accessible at `http://localhost:8000`.
 
 ## Usage
 
@@ -116,15 +130,20 @@ Once the frontend and backend servers are running:
 │   │   ├── constants.ts # Application-wide constants and mock data
 │   │   └── types.ts     # TypeScript type definitions for data structures
 │   └── ...              # Other frontend configuration files (package.json, tsconfig.json, vite.config.ts)
-└── .env.local           # Environment variables for local development
-└── GEMINI.md            # This document
+├── .env.local           # Environment variables for local development
+├── .qoder/GEMINI.md     # This document (updated path)
 └── ...                  # Other project-level files
 ```
 
 ## Contributing
 
-Contributions are welcome! Please refer to the project's contribution guidelines (if available) for details on how to submit pull requests, report issues, and contribute to the development.
+Contributions are welcome! If you'd like to contribute, please follow these steps:
+1.  Fork the repository.
+2.  Create a new branch for your feature or bug fix.
+3.  Make your changes and ensure they adhere to the project's coding standards.
+4.  Write and run tests if applicable.
+5.  Submit a pull request with a clear description of your changes.
 
 ## License
 
-(Specify your project's license here, e.g., MIT License, Apache License 2.0, etc.)
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
