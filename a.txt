@@ -1,23 +1,36 @@
 SELECT
-    p.Tarih,
-    s.Secim,
-    COUNT(p.TC_No) AS Kayit_Sayisi
-FROM SilverCloud.Puantaj p
-INNER JOIN SilverCloud.Puantaj_Secimi s
-    ON p.Secim_ID = s.Secim_ID
-WHERE p.Tarih BETWEEN Ekran.Donem.ilkGun AND Ekran.Donem.SonGun   -- dönem aralığı
-GROUP BY p.Tarih, s.Secim
-ORDER BY p.Tarih, s.Secim;
-
+    x.Tarih,
+    SUM(x.Kayit_Sayisi * x.Degeri) AS Toplam_Deger
+FROM (
+    SELECT
+        p.Tarih,
+        p.Secim_ID,
+        s.Degeri,
+        COUNT(p.TC_No) AS Puantaj_Gunu
+    FROM SilverCloud.Puantaj p
+    JOIN SilverCloud.Puantaj_Secimi s
+      ON p.Secim_ID = s.Secim_ID
+    WHERE p.Tarih BETWEEN Ekran.Donem.ilkGun AND Ekran.Donem.SonGun
+    GROUP BY p.Tarih, p.Secim_ID, s.Degeri
+) AS x
+GROUP BY x.Tarih
+ORDER BY x.Tarih;
 
 Örnek
 SELECT
-    p.Tarih,
-    s.Secim,
-    COUNT(p.TC_No) AS Kayit_Sayisi
-FROM SilverCloud.Puantaj p
-INNER JOIN SilverCloud.Puantaj_Secimi s
-    ON p.Secim_ID = s.Secim_ID
-WHERE p.Tarih BETWEEN '2025-08-01' AND '2025-08-31'   -- dönem aralığı
-GROUP BY p.Tarih, s.Secim
-ORDER BY p.Tarih, s.Secim;
+    x.Tarih,
+    SUM(x.Kayit_Sayisi * x.Degeri) AS Puantaj_Gunu
+FROM (
+    SELECT
+        p.Tarih,
+        p.Secim_ID,
+        s.Degeri,
+        COUNT(p.TC_No) AS Kayit_Sayisi
+    FROM SilverCloud.Puantaj p
+    JOIN SilverCloud.Puantaj_Secimi s
+      ON p.Secim_ID = s.Secim_ID
+    WHERE p.Tarih BETWEEN '2025-08-01' AND '2025-08-31'
+    GROUP BY p.Tarih, p.Secim_ID, s.Degeri
+) AS x
+GROUP BY x.Tarih
+ORDER BY x.Tarih;

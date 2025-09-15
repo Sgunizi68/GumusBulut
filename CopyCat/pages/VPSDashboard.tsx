@@ -3,7 +3,7 @@ import { Calendar, TrendingUp, Users, Clock, Target, BarChart3, Activity } from 
 import { useDataContext } from '../App';
 
 export const VPSDashboardPage: React.FC = () => {
-  const { puantajSecimiList } = useDataContext();
+  const { puantajSecimiList, puantajList } = useDataContext();
   const [selectedMonth, setSelectedMonth] = useState('2509');
 
   const months = [
@@ -32,6 +32,45 @@ export const VPSDashboardPage: React.FC = () => {
     const calisanOrtalama = (calisan.reduce((a, b) => a + b, 0) / calisan.length).toFixed(1);
     const aktifCalisanOrtalama = (aktifCalisan.reduce((a, b) => a + b, 0) / aktifCalisan.length).toFixed(1);
 
+    // Puantaj Günü Calculation
+    const secimDegeriMap = new Map<number, number>();
+    if(puantajSecimiList) {
+        puantajSecimiList.forEach(s => secimDegeriMap.set(s.Secim_ID, s.Degeri));
+    }
+
+    const dailyPuantajCounts = new Map<string, Map<number, number>>();
+    
+    const year = 2000 + parseInt(selectedMonth.substring(0, 2));
+    const month = parseInt(selectedMonth.substring(2, 4));
+
+    if(puantajList) {
+        puantajList.forEach(p => {
+          const pDate = new Date(p.Tarih);
+          if (pDate.getFullYear() === year && (pDate.getMonth() + 1) === month) {
+            const dateStr = p.Tarih.split('T')[0]; // Assuming YYYY-MM-DDTHH:mm:ss format
+            if (!dailyPuantajCounts.has(dateStr)) {
+              dailyPuantajCounts.set(dateStr, new Map<number, number>());
+            }
+            const dayMap = dailyPuantajCounts.get(dateStr)!;
+            dayMap.set(p.Secim_ID, (dayMap.get(p.Secim_ID) || 0) + 1);
+          }
+        });
+    }
+
+    const puantajGunuValues = dates.map(day => {
+      const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      let totalDeger = 0;
+      if (dailyPuantajCounts.has(dateStr)) {
+        const dayMap = dailyPuantajCounts.get(dateStr)!;
+        for (const [secimId, count] of dayMap.entries()) {
+          const degeri = secimDegeriMap.get(secimId) || 0;
+          totalDeger += count * degeri;
+        }
+      }
+      return totalDeger;
+    });
+
+
     return [
       { 
         label: `Çalışan Ortalaması`, 
@@ -49,7 +88,7 @@ export const VPSDashboardPage: React.FC = () => {
       },
       { 
         label: 'Puantaj Günü', 
-        values: dates,
+        values: puantajGunuValues,
         icon: Calendar,
         color: 'from-purple-500 to-purple-600'
       },
@@ -66,24 +105,41 @@ export const VPSDashboardPage: React.FC = () => {
         color: 'from-indigo-500 to-indigo-600'
       }
     ];
-  }, [dates]);
+  }, [dates, puantajList, puantajSecimiList, selectedMonth]);
 
   const scoreData = useMemo(() => {
-    const generatePersonCounts = () => {
-      return dates.map(() => Math.floor(Math.random() * 8) + 1);
-    };
+    if (!puantajSecimiList || !puantajList || !selectedMonth) return [];
 
-    if (!puantajSecimiList) return [];
+    const year = 2000 + parseInt(selectedMonth.substring(0, 2));
+    const month = parseInt(selectedMonth.substring(2, 4));
+
+    const puantajCounts = new Map<string, number>(); // Key: "YYYY-MM-DD_Secim_ID", Value: count
+
+    puantajList.forEach(p => {
+      const pDate = new Date(p.Tarih);
+      if (pDate.getFullYear() === year && (pDate.getMonth() + 1) === month) {
+        const key = `${p.Tarih}_${p.Secim_ID}`;
+        puantajCounts.set(key, (puantajCounts.get(key) || 0) + 1);
+      }
+    });
 
     return puantajSecimiList
       .filter(item => item.Aktif_Pasif)
-      .map(item => ({
-        label: item.Secim,
-        multiplier: `${item.Degeri.toFixed(1)}x`,
-        personCounts: generatePersonCounts(),
-        color: item.Renk_Kodu || '#888888'
-      }));
-  }, [dates, puantajSecimiList]);
+      .map(secim => {
+        const personCounts = dates.map(day => {
+          const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          const key = `${dateStr}_${secim.Secim_ID}`;
+          return puantajCounts.get(key) || 0;
+        });
+
+        return {
+          label: secim.Secim,
+          multiplier: `${secim.Degeri.toFixed(1)}x`,
+          personCounts: personCounts,
+          color: secim.Renk_Kodu || '#888888'
+        };
+      });
+  }, [dates, puantajSecimiList, puantajList, selectedMonth]);
 
   const isWeekend = (date) => {
     const day = new Date(2025, parseInt(selectedMonth.slice(2)) - 1, date).getDay();
@@ -171,55 +227,6 @@ export const VPSDashboardPage: React.FC = () => {
           
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
-              {/* Header */}
-              <thead>
-                <tr className="bg-gradient-to-r from-slate-50 to-slate-100 border-b-2 border-slate-200">
-                  <th className="text-left p-4 font-bold text-slate-700 w-56 sticky left-0 bg-gradient-to-r from-slate-50 to-slate-100 z-10 border-r-2 border-slate-200">
-                    Metrik
-                  </th>
-                  {dates.map((date) => (
-                    <th key={date} className={`text-center p-3 font-bold w-16 border-r border-slate-200 transition-colors duration-200 ${
-                      isWeekend(date) 
-                        ? 'bg-gradient-to-b from-red-50 to-red-100 text-red-700' 
-                        : 'text-slate-700 hover:bg-slate-100'
-                    }`}>
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center mx-auto font-bold ${ 
-                        isWeekend(date)
-                          ? 'bg-red-200 text-red-800'
-                          : 'bg-slate-200 text-slate-700'
-                      }`}>
-                        {date}
-                      </div>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              
-              <thead>
-                <tr className="bg-gradient-to-r from-slate-50 to-slate-100 border-b-2 border-slate-200">
-                  <th className="text-left p-4 font-bold text-slate-700 w-56 sticky left-0 bg-gradient-to-r from-slate-50 to-slate-100 z-10 border-r-2 border-slate-200">
-                    Metrik
-                  </th>
-                  {dates.map((date) => (
-                    <th key={date} className={`text-center p-3 font-bold w-16 border-r border-slate-200 transition-colors duration-200 ${
-                      isWeekend(date) 
-                        ? 'bg-gradient-to-b from-red-50 to-red-100 text-red-700' 
-                        : 'text-slate-700 hover:bg-slate-100'
-                    }`}>
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center mx-auto font-bold ${ 
-                        isWeekend(date)
-                          ? 'bg-red-200 text-red-800'
-                          : 'bg-slate-200 text-slate-700'
-                      }`}>
-                        {date}
-                      </div>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              
-                          <table className="w-full border-collapse">
-              {/* Header */}
               <thead>
                 <tr className="bg-gradient-to-r from-slate-50 to-slate-100 border-b-2 border-slate-200">
                   <th className="text-left p-4 font-bold text-slate-700 w-56 sticky left-0 bg-gradient-to-r from-slate-50 to-slate-100 z-10 border-r-2 border-slate-200">
@@ -336,7 +343,6 @@ export const VPSDashboardPage: React.FC = () => {
                   </tr>
                 ))}
               </tbody>
-            </table>
             </table>
           </div>
         </div>
