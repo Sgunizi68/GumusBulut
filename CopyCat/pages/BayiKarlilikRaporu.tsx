@@ -81,7 +81,7 @@ const moreRows = [
 
 export const BayiKarlilikRaporuPage: React.FC = () => {
   const { hasPermission } = useAppContext();
-  const { gelirEkstraList } = useDataContext();
+  const { gelirEkstraList, gelirList, kategoriList } = useDataContext();
   const pageTitle = "Bayi Karlılık Raporu";
   const requiredPermission = "Bayi Karlılık Raporu Görüntüleme"; 
 
@@ -104,7 +104,6 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
 
     const tabakSayisiValues = Array(12).fill(0);
     const toplamCiroValues = Array(12).fill(0);
-
     if (gelirEkstraList) {
         gelirEkstraList.forEach(item => {
             const itemDate = new Date(item.Tarih);
@@ -127,6 +126,26 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         ? parseFloat((totalTabakSayisi / totalWorkingDays).toFixed(2)) 
         : 0;
 
+    const seftenisteKategoriIds = new Set(
+        kategoriList.filter(k => k.Ust_Kategori_ID === 1).map(k => k.Kategori_ID)
+    );
+    const seftenisteCiroValues = Array(12).fill(0);
+    if (gelirList) {
+        gelirList.forEach(item => {
+            const itemDate = new Date(item.Tarih);
+            if (itemDate.getFullYear() === year && seftenisteKategoriIds.has(item.Kategori_ID)) {
+                const monthIndex = itemDate.getMonth();
+                seftenisteCiroValues[monthIndex] += item.Tutar;
+            }
+        });
+    }
+    const totalSeftenisteCiro = seftenisteCiroValues.reduce((a, b) => a + b, 0);
+
+    const restoranCiroValues = months.map((_, i) => 
+        (toplamCiroValues[i] || 0) - (seftenisteCiroValues[i] || 0)
+    );
+    const totalRestoranCiro = totalToplamCiro - totalSeftenisteCiro;
+
     // --- Row Processing ---
     const newExcelRows = excelRows.map(row => {
         switch (row.label) {
@@ -138,6 +157,10 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
                 return { ...row, values: gunlukZiyaretciValues, total: totalGunlukZiyaretci };
             case "Toplam Ciro":
                 return { ...row, values: toplamCiroValues, total: totalToplamCiro };
+            case "Şefteniste Ciro":
+                return { ...row, values: seftenisteCiroValues, total: totalSeftenisteCiro };
+            case "Restoran Ciro":
+                return { ...row, values: restoranCiroValues, total: totalRestoranCiro };
             default:
                 return row;
         }
@@ -148,7 +171,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         processedDigerRows: digerDetayiRows, 
         processedMoreRows: moreRows 
     };
-  }, [year, gelirEkstraList]);
+  }, [year, gelirEkstraList, gelirList, kategoriList]);
 
   const formatCell = (v: any) => {
     if (v === null || v === undefined || v === '' || v === 0) return '';

@@ -1,17 +1,25 @@
-
 SELECT
-    DATE_FORMAT(Tarih, '%b%y') AS Donem,   -- örnek: Jan25, Feb25
-    SUM(RobotPos_Tutar) AS Toplam_Ciro
-FROM SilverCloud.GelirEkstra
+    DATE_FORMAT(Tarih, '%b%y') AS Donem,
+    SUM(Tutar) AS Seften_Iste
+FROM SilverCloud.Gelir
 WHERE Tarih BETWEEN Ekran.Yıl.YılınİlkGünü AND 'Ekran.Yıl.YılınSonGünü
+  AND Kategori_ID IN (
+        SELECT Kategori_ID
+        FROM SilverCloud.Kategori
+        WHERE Ust_Kategori_ID = 1
+  )
 GROUP BY DATE_FORMAT(Tarih, '%b%y')
 ORDER BY MIN(Tarih);
-
 Örnek
 SELECT
-    DATE_FORMAT(Tarih, '%b%y') AS Donem,   -- örnek: Jan25, Feb25
-    SUM(RobotPos_Tutar) AS Toplam_Ciro
-FROM SilverCloud.GelirEkstra
+    DATE_FORMAT(Tarih, '%b%y') AS Donem,
+    SUM(Tutar) AS Seften_Iste
+FROM SilverCloud.Gelir
 WHERE Tarih BETWEEN '2025-01-01' AND '2025-12-31'
+  AND Kategori_ID IN (
+        SELECT Kategori_ID
+        FROM SilverCloud.Kategori
+        WHERE Ust_Kategori_ID = 1
+  )
 GROUP BY DATE_FORMAT(Tarih, '%b%y')
 ORDER BY MIN(Tarih);
