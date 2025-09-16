@@ -93,6 +93,18 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
   const [showDigerDetayi, setShowDigerDetayi] = useState(false);
   const [compactView, setCompactView] = useState(false);
 
+  const yearOptions = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    if (currentYear <= 2025) {
+        return [2025];
+    }
+    const years = [];
+    for (let y = 2025; y <= currentYear; y++) {
+        years.push(y);
+    }
+    return years.sort((a, b) => b - a); // Sort descending
+  }, []);
+
   const headers = months.map((m) => `${m}${String(year).slice(2)}`);
 
   const { processedExcelRows, processedDigerRows, processedMoreRows } = useMemo(() => {
@@ -263,9 +275,9 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
                   onChange={(e) => setYear(parseInt(e.target.value))}
                   className="bg-white border border-gray-300 rounded-lg px-4 py-2 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
-                  <option value={2024}>2024</option>
-                  <option value={2025}>2025</option>
-                  <option value={2026}>2026</option>
+                  {yearOptions.map(y => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
                 </select>
               </div>
             </div>
