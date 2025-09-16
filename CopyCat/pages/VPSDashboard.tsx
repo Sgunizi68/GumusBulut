@@ -42,8 +42,8 @@ export const VPSDashboardPage: React.FC = () => {
         }
         
         // Check if the currentDayDate is within the employee's active period
-        // Sigorta_Giris <= currentDayDate AND (Sigorta_Cikis IS NULL OR Sigorta_Cikis >= currentDayDate)
-        return girisDate <= currentDayDate && (!cikisDate || cikisDate >= currentDayDate);
+        // Sigorta_Giris <= currentDayDate AND (Sigorta_Cikis IS NULL OR Sigorta_Cikis > currentDayDate)
+        return girisDate <= currentDayDate && (!cikisDate || cikisDate > currentDayDate);
       }).length;
     });
     const aktifCalisanValues = dates.map(day => {
