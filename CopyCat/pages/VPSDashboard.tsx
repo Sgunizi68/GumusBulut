@@ -46,12 +46,29 @@ export const VPSDashboardPage: React.FC = () => {
         return girisDate <= currentDayDate && (!cikisDate || cikisDate >= currentDayDate);
       }).length;
     });
-    const aktifCalisan = dates.map(() => Math.floor(Math.random() * 8) + 3); // 3-11 arası
+    const aktifCalisanValues = dates.map(day => {
+      const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      if (!puantajList || !puantajSecimiList) return 0;
+
+      const activePuantajRecords = puantajList.filter(p => {
+        const pDate = p.Tarih.split('T')[0];
+        return pDate === dateStr;
+      });
+
+      let count = 0;
+      activePuantajRecords.forEach(p => {
+        const secim = puantajSecimiList.find(s => s.Secim_ID === p.Secim_ID);
+        if (secim && secim.Secim.includes('Çalışma')) {
+          count++;
+        }
+      });
+      return count;
+    });
     const vps = dates.map(() => Math.floor(Math.random() * 3) + 2); // 2-4 arası
 
     // Ortalamaları hesapla
     const calisanOrtalama = (calisanValues.reduce((a, b) => a + b, 0) / calisanValues.length).toFixed(1);
-    const aktifCalisanOrtalama = (aktifCalisan.reduce((a, b) => a + b, 0) / aktifCalisan.length).toFixed(1);
+    const aktifCalisanOrtalama = (aktifCalisanValues.reduce((a, b) => a + b, 0) / aktifCalisanValues.length).toFixed(1);
 
     // Puantaj Günü Calculation
     const secimDegeriMap = new Map<number, number>();
@@ -107,7 +124,7 @@ export const VPSDashboardPage: React.FC = () => {
       { 
         label: `Aktif Çalışan Ortalaması`, 
         average: aktifCalisanOrtalama,
-        values: aktifCalisan,
+        values: aktifCalisanValues,
         icon: Activity,
         color: 'from-green-500 to-green-600'
       },

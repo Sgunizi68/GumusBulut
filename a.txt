@@ -1,37 +1,21 @@
-WITH RECURSIVE takvim AS (
-    SELECT DATE(Ekran.Donem.ilkGun) AS Tarih
-    UNION ALL
-    SELECT DATE_ADD(Tarih, INTERVAL 1 DAY)
-    FROM takvim
-    WHERE Tarih < Ekran.Donem.SonGun
-)
--- 2. Çalışanları günlere göre say
 SELECT
-    t.Tarih,
-    COUNT(c.TC_No) AS Calisan_Sayisi
-FROM takvim t
-LEFT JOIN SilverCloud.Calisan c
-  ON c.Sigorta_Giris <= t.Tarih
- AND (c.Sigorta_Cikis IS NULL OR c.Sigorta_Cikis >= t.Tarih)
-GROUP BY t.Tarih
-ORDER BY t.Tarih;
-
+    p.Tarih,
+    COUNT(p.TC_No) AS Kayit_Sayisi
+FROM SilverCloud.Puantaj p
+INNER JOIN SilverCloud.Puantaj_Secimi s
+    ON p.Secim_ID = s.Secim_ID
+WHERE p.Tarih BETWEEN Ekran.Donem.ilkGun AND Ekran.Donem.SonGun
+  AND s.Secim LIKE '%Çalışma%'
+GROUP BY p.Tarih
+ORDER BY p.Tarih;
 Örnek
--- 1. Ağustos 2025 için gün listesi oluştur
-WITH RECURSIVE takvim AS (
-    SELECT DATE('2025-08-01') AS Tarih
-    UNION ALL
-    SELECT DATE_ADD(Tarih, INTERVAL 1 DAY)
-    FROM takvim
-    WHERE Tarih < '2025-08-31'
-)
--- 2. Çalışanları günlere göre say
 SELECT
-    t.Tarih,
-    COUNT(c.TC_No) AS Calisan_Sayisi
-FROM takvim t
-LEFT JOIN SilverCloud.Calisan c
-  ON c.Sigorta_Giris <= t.Tarih
- AND (c.Sigorta_Cikis IS NULL OR c.Sigorta_Cikis >= t.Tarih)
-GROUP BY t.Tarih
-ORDER BY t.Tarih;
+    p.Tarih,
+    COUNT(p.TC_No) AS Kayit_Sayisi
+FROM SilverCloud.Puantaj p
+INNER JOIN SilverCloud.Puantaj_Secimi s
+    ON p.Secim_ID = s.Secim_ID
+WHERE p.Tarih BETWEEN '2025-08-01' AND '2025-08-31'
+  AND s.Secim LIKE '%Çalışma%'
+GROUP BY p.Tarih
+ORDER BY p.Tarih;
