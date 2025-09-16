@@ -183,6 +183,30 @@ export const VPSDashboardPage: React.FC = () => {
       });
   }, [dates, puantajSecimiList, puantajList, selectedMonth]);
 
+  const { iseGirenCalisanSayisi, istenCikanCalisanSayisi } = useMemo(() => {
+    if (!calisanList || !selectedMonth) {
+      return { iseGirenCalisanSayisi: 0, istenCikanCalisanSayisi: 0 };
+    }
+
+    const year = 2000 + parseInt(selectedMonth.substring(0, 2));
+    const month = parseInt(selectedMonth.substring(2, 4));
+    const firstDayOfMonth = new Date(year, month - 1, 1);
+    const lastDayOfMonth = new Date(year, month, 0);
+
+    const iseGiren = calisanList.filter(c => {
+      const girisDate = new Date(c.Sigorta_Giris);
+      return girisDate >= firstDayOfMonth && girisDate <= lastDayOfMonth;
+    }).length;
+
+    const istenCikan = calisanList.filter(c => {
+      if (!c.Sigorta_Cikis) return false;
+      const cikisDate = new Date(c.Sigorta_Cikis);
+      return cikisDate >= firstDayOfMonth && cikisDate <= lastDayOfMonth;
+    }).length;
+
+    return { iseGirenCalisanSayisi: iseGiren, istenCikanCalisanSayisi: istenCikan };
+  }, [calisanList, selectedMonth]);
+
   const isWeekend = (date) => {
     const day = new Date(2025, parseInt(selectedMonth.slice(2)) - 1, date).getDay();
     return day === 0 || day === 6; // Pazar = 0, Cumartesi = 6
@@ -242,7 +266,7 @@ export const VPSDashboardPage: React.FC = () => {
               <TrendingUp className="w-5 h-5 text-emerald-500" />
             </div>
             <h3 className="text-sm font-medium text-slate-600 mb-1">İşe Giren Çalışan Sayısı</h3>
-            <p className="text-3xl font-bold text-slate-800">{Math.floor(Math.random() * 5) + 8}</p>
+            <p className="text-3xl font-bold text-slate-800">{iseGirenCalisanSayisi}</p>
           </div>
           
           {/* 4. kart: İşten Çıkan Çalışan Sayısı */}
@@ -254,7 +278,7 @@ export const VPSDashboardPage: React.FC = () => {
               <TrendingUp className="w-5 h-5 text-red-500 transform rotate-180" />
             </div>
             <h3 className="text-sm font-medium text-slate-600 mb-1">İşten Çıkan Çalışan Sayısı</h3>
-            <p className="text-3xl font-bold text-slate-800">{Math.floor(Math.random() * 3) + 1}</p>
+            <p className="text-3xl font-bold text-slate-800">{istenCikanCalisanSayisi}</p>
           </div>
         </div>
 

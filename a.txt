@@ -1,21 +1,5 @@
-SELECT
-    p.Tarih,
-    COUNT(p.TC_No) AS Kayit_Sayisi
-FROM SilverCloud.Puantaj p
-INNER JOIN SilverCloud.Puantaj_Secimi s
-    ON p.Secim_ID = s.Secim_ID
-WHERE p.Tarih BETWEEN Ekran.Donem.ilkGun AND Ekran.Donem.SonGun
-  AND s.Secim LIKE '%Çalışma%'
-GROUP BY p.Tarih
-ORDER BY p.Tarih;
+SELECT count(*) FROM SilverCloud.Calisan
+where Sigorta_Giris BETWEEN Ekran.Donem.ilkGun AND Ekran.Donem.SonGun;
 Örnek
-SELECT
-    p.Tarih,
-    COUNT(p.TC_No) AS Kayit_Sayisi
-FROM SilverCloud.Puantaj p
-INNER JOIN SilverCloud.Puantaj_Secimi s
-    ON p.Secim_ID = s.Secim_ID
-WHERE p.Tarih BETWEEN '2025-08-01' AND '2025-08-31'
-  AND s.Secim LIKE '%Çalışma%'
-GROUP BY p.Tarih
-ORDER BY p.Tarih;
+SELECT count(*) FROM SilverCloud.Calisan
+where Sigorta_Giris BETWEEN '2025-08-01' AND '2025-08-31';
