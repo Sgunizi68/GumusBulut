@@ -64,7 +64,6 @@ export const VPSDashboardPage: React.FC = () => {
       });
       return count;
     });
-    const vps = dates.map(() => Math.floor(Math.random() * 3) + 2); // 2-4 arası
 
     // Ortalamaları hesapla
     const calisanOrtalama = (calisanValues.reduce((a, b) => a + b, 0) / calisanValues.length).toFixed(1);
@@ -112,8 +111,18 @@ export const VPSDashboardPage: React.FC = () => {
       return gelirEkstra ? gelirEkstra.Tabak_Sayisi : 0;
     });
 
+    // VPS Calculation
+    const vps = dates.map((_, index) => {
+      const tabak = tabakSayisiValues[index];
+      const calisan = calisanValues[index];
+      if (calisan === 0) {
+        return 0;
+      }
+      return parseFloat((tabak / calisan).toFixed(2));
+    });
 
-    return [
+
+    const data = [
       { 
         label: `Çalışan Ortalaması`, 
         average: calisanOrtalama,
@@ -147,6 +156,22 @@ export const VPSDashboardPage: React.FC = () => {
         color: 'from-indigo-500 to-indigo-600'
       }
     ];
+
+    return data.map(row => {
+      let totalValue;
+      if (row.label === 'VPS') {
+        const totalTabak = data.find(r => r.label === 'Tabak Sayısı').values.reduce((a, b) => a + b, 0);
+        const totalCalisan = data.find(r => r.label.includes('Çalışan Ortalaması')).values.reduce((a, b) => a + b, 0);
+        totalValue = totalCalisan === 0 ? 0 : parseFloat((totalTabak / totalCalisan).toFixed(2));
+      } else {
+        totalValue = row.values.reduce((a, b) => a + b, 0);
+      }
+      
+      return {
+        ...row,
+        total: totalValue
+      };
+    });
   }, [dates, puantajList, puantajSecimiList, selectedMonth, gelirEkstraList, calisanList]);
 
   const scoreData = useMemo(() => {
@@ -165,7 +190,7 @@ export const VPSDashboardPage: React.FC = () => {
       }
     });
 
-    return puantajSecimiList
+    const data = puantajSecimiList
       .filter(item => item.Aktif_Pasif)
       .map(secim => {
         const personCounts = dates.map(day => {
@@ -181,6 +206,11 @@ export const VPSDashboardPage: React.FC = () => {
           color: secim.Renk_Kodu || '#888888'
         };
       });
+
+    return data.map(row => ({
+      ...row,
+      total: row.personCounts.reduce((a, b) => a + b, 0)
+    }));
   }, [dates, puantajSecimiList, puantajList, selectedMonth]);
 
   const { iseGirenCalisanSayisi, istenCikanCalisanSayisi } = useMemo(() => {
@@ -313,6 +343,9 @@ export const VPSDashboardPage: React.FC = () => {
                       </div>
                     </th>
                   ))}
+                  <th className="text-center p-4 font-bold text-slate-700 w-24 sticky right-0 bg-gradient-to-l from-slate-100 to-slate-50 z-10 border-l-2 border-slate-200">
+                    Toplam
+                  </th>
                 </tr>
               </thead>
               
@@ -342,12 +375,17 @@ export const VPSDashboardPage: React.FC = () => {
                         </div>
                       </td>
                     ))}
+                    <td className="p-4 font-bold text-slate-800 border-l-2 border-slate-200 bg-gradient-to-l from-slate-100/80 to-white/80 sticky right-0 z-10 group-hover:from-blue-100/80 group-hover:to-blue-50/80 transition-all duration-300">
+                      <div className="w-16 h-10 rounded-lg bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center mx-auto font-bold text-blue-800 shadow-md">
+                        {row.total}
+                      </div>
+                    </td>
                   </tr>
                 ))}
                 
                 {/* Separator Row */}
                 <tr className="bg-gradient-to-r from-indigo-500 to-purple-600 border-y-4 border-indigo-200">
-                  <td colSpan={dates.length + 1} className="p-6 text-center font-bold text-white text-xl">
+                  <td colSpan={dates.length + 2} className="p-6 text-center font-bold text-white text-xl">
                     <div className="flex items-center justify-center gap-3">
                       <Target className="w-8 h-8" />
                       Puantaj Özeti
@@ -375,6 +413,9 @@ export const VPSDashboardPage: React.FC = () => {
                       </div>
                     </th>
                   ))}
+                  <th className="text-center p-4 font-bold text-slate-700 w-24 sticky right-0 bg-gradient-to-l from-slate-100 to-slate-50 z-10 border-l-2 border-slate-200">
+                    Toplam
+                  </th>
                 </tr>
 
                 {/* Score Data Rows */}
@@ -406,6 +447,11 @@ export const VPSDashboardPage: React.FC = () => {
                         </div>
                       </td>
                     ))}
+                    <td className="p-4 font-bold text-slate-800 border-l-2 border-slate-200 bg-gradient-to-l from-slate-100/80 to-white/80 sticky right-0 z-10 group-hover:from-slate-100/80 group-hover:to-slate-50/80 transition-all duration-300">
+                      <div className="w-16 h-10 rounded-lg bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center mx-auto font-bold text-slate-800 shadow-md">
+                        {row.total}
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
