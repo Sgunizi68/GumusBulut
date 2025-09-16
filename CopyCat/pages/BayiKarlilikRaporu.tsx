@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { ChevronDown, ChevronUp, Calendar, TrendingUp, Eye, EyeOff } from "lucide-react";
-import { useAppContext } from '../App';
+import { useAppContext, useDataContext } from '../App';
 import { Card } from '../components';
-import { Icons } from '../constants';
 
 // A simple Access Denied component, can be moved to a shared file if needed
 const AccessDenied: React.FC<{ title: string }> = ({ title }) => (
@@ -18,7 +17,7 @@ const months = [
   "Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"
 ];
 
-// Satır başlıkları PDF'den alındı. "Diğer Detayı" gruplaması eklendi.
+// Base data structure for the report rows.
 const excelRows = [
   { label: "Tabak Sayısı", values: Array(12).fill(null), total: null, category: "operasyonel" },
   { label: "Çalışma Gün Sayısı", values: Array(12).fill(null), total: null, category: "operasyonel" },
@@ -59,25 +58,10 @@ const excelRows = [
 ];
 
 const digerDetayiRows = [
-  "Elektrik",
-  "Su",
-  "Doğalgaz",
-  "Temizlik",
-  "Bakım / Onarım",
-  "Lisans / Yazılım",
-  "Sarf Malzemeleri",
-  "Haberleşme / İnternet",
-  "Sigorta",
-  "Danışmanlık",
-  "İzin / Ruhsat",
-  "Banka Masrafları",
-  "Eğitim",
-  "Kırtasiye",
-  "Seyahat",
-  "Konaklama",
-  "Temsil / Ağırlama",
-  "Ceza / Tazminat",
-  "Diğer"
+  "Elektrik", "Su", "Doğalgaz", "Temizlik", "Bakım / Onarım", "Lisans / Yazılım",
+  "Sarf Malzemeleri", "Haberleşme / İnternet", "Sigorta", "Danışmanlık", "İzin / Ruhsat",
+  "Banka Masrafları", "Eğitim", "Kırtasiye", "Seyahat", "Konaklama", "Temsil / Ağırlama",
+  "Ceza / Tazminat", "Diğer"
 ].map((label) => ({ label, values: Array(12).fill(null), total: null, category: "diger" }));
 
 const moreRows = [
@@ -97,6 +81,7 @@ const moreRows = [
 
 export const BayiKarlilikRaporuPage: React.FC = () => {
   const { hasPermission } = useAppContext();
+  const { gelirEkstraList } = useDataContext();
   const pageTitle = "Bayi Karlılık Raporu";
   const requiredPermission = "Bayi Karlılık Raporu Görüntüleme"; 
 
@@ -104,37 +89,72 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
       return <AccessDenied title={pageTitle} />;
   }
 
-  const [year, setYear] = useState(2024);
+  const [year, setYear] = useState(new Date().getFullYear());
   const [showDigerDetayi, setShowDigerDetayi] = useState(false);
   const [compactView, setCompactView] = useState(false);
 
-  // Generate headers dynamically based on selected year (AAAYY format)
   const headers = months.map((m) => `${m}${String(year).slice(2)}`);
 
-  // Calculate working days for each month based on the year (all days of the month)
-  const calculateWorkingDays = (monthIndex: number, year: number) => {
-    return new Date(year, monthIndex + 1, 0).getDate();
-  };
+  const { processedExcelRows, processedDigerRows, processedMoreRows } = useMemo(() => {
+    const calculateWorkingDays = (monthIndex: number, year: number) => new Date(year, monthIndex + 1, 0).getDate();
 
-  // Update working days in excelRows
-  const updatedExcelRows = excelRows.map(row => {
-    if (row.label === "Çalışma Gün Sayısı") {
-      const workingDaysValues = months.map((_, index) => calculateWorkingDays(index, year));
-      const totalWorkingDays = workingDaysValues.reduce((sum, days) => sum + days, 0);
-      return {
-        ...row,
-        values: workingDaysValues,
-        total: totalWorkingDays
-      };
+    // --- Main Calculations ---
+    const workingDaysValues = months.map((_, index) => calculateWorkingDays(index, year));
+    const totalWorkingDays = workingDaysValues.reduce((sum, days) => sum + days, 0);
+
+    const tabakSayisiValues = Array(12).fill(0);
+    const toplamCiroValues = Array(12).fill(0);
+
+    if (gelirEkstraList) {
+        gelirEkstraList.forEach(item => {
+            const itemDate = new Date(item.Tarih);
+            if (itemDate.getFullYear() === year) {
+                const monthIndex = itemDate.getMonth();
+                tabakSayisiValues[monthIndex] += item.Tabak_Sayisi;
+                toplamCiroValues[monthIndex] += item.RobotPos_Tutar;
+            }
+        });
     }
-    return row;
-  });
+    const totalTabakSayisi = tabakSayisiValues.reduce((a, b) => a + b, 0);
+    const totalToplamCiro = toplamCiroValues.reduce((a, b) => a + b, 0);
+
+    const gunlukZiyaretciValues = months.map((_, i) => {
+        const tabak = tabakSayisiValues[i] || 0;
+        const günler = workingDaysValues[i] || 0;
+        return günler > 0 ? parseFloat((tabak / günler).toFixed(2)) : 0;
+    });
+    const totalGunlukZiyaretci = totalWorkingDays > 0 
+        ? parseFloat((totalTabakSayisi / totalWorkingDays).toFixed(2)) 
+        : 0;
+
+    // --- Row Processing ---
+    const newExcelRows = excelRows.map(row => {
+        switch (row.label) {
+            case "Tabak Sayısı":
+                return { ...row, values: tabakSayisiValues, total: totalTabakSayisi };
+            case "Çalışma Gün Sayısı":
+                return { ...row, values: workingDaysValues, total: totalWorkingDays };
+            case "Günlük Ziyaretçi Sayısı":
+                return { ...row, values: gunlukZiyaretciValues, total: totalGunlukZiyaretci };
+            case "Toplam Ciro":
+                return { ...row, values: toplamCiroValues, total: totalToplamCiro };
+            default:
+                return row;
+        }
+    });
+
+    return { 
+        processedExcelRows: newExcelRows, 
+        processedDigerRows: digerDetayiRows, 
+        processedMoreRows: moreRows 
+    };
+  }, [year, gelirEkstraList]);
 
   const formatCell = (v: any) => {
-    if (v === null || v === undefined || v === '') return '';
+    if (v === null || v === undefined || v === '' || v === 0) return '';
     if (typeof v === 'number') {
       if (Number.isInteger(v)) return v.toLocaleString('tr-TR');
-      return v.toLocaleString('tr-TR', { maximumFractionDigits: 2 });
+      return v.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
     return String(v);
   };
@@ -147,47 +167,27 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
 
   const isBoldRow = (label: string) => {
     const boldLabels = [
-      "Tabak Sayısı",
-      "Çalışma Gün Sayısı", 
-      "Günlük Ziyaretçi Sayısı",
-      "Toplam Ciro",
-      "Maliyet",
-      "Maliyet %",
-      "Personel Sayısı (Sürücü Sayısı Hariç)",
-      "Toplam Maaş Gideri (Sürücü Maaşı Hariç)",
-      "Personel Maaş Giderleri; SGK, Stopaj (Muhtasar) Dahil",
-      "Ortalama Kişi Başı Maaş",
-      "Maaş Giderleri %",
-      "VPS (Personel Başına Ziyaretçi Sayısı)",
-      "Toplam Kira",
-      "Toplam Kira %",
-      "Paket Komisyon ve Lojistik Giderleri",
-      "Paket Komisyon ve Lojistik (Paket Satış) %",
-      "Toplam Diğer Giderler",
-      "Diğer Giderler %",
-      "Ciro Primi ve Reklam Primi",
-      "Ciro Primi ve Reklam %"
+      "Tabak Sayısı", "Çalışma Gün Sayısı", "Günlük Ziyaretçi Sayısı", "Toplam Ciro", "Maliyet", "Maliyet %",
+      "Personel Sayısı (Sürücü Sayısı Hariç)", "Toplam Maaş Gideri (Sürücü Maaşı Hariç)", 
+      "Personel Maaş Giderleri; SGK, Stopaj (Muhtasar) Dahil", "Ortalama Kişi Başı Maaş", "Maaş Giderleri %",
+      "VPS (Personel Başına Ziyaretçi Sayısı)", "Toplam Kira", "Toplam Kira %", "Paket Komisyon ve Lojistik Giderleri",
+      "Paket Komisyon ve Lojistik (Paket Satış) %", "Toplam Diğer Giderler", "Diğer Giderler %",
+      "Ciro Primi ve Reklam Primi", "Ciro Primi ve Reklam %"
     ];
     return boldLabels.includes(label);
   };
 
   const isSeparatorRow = (label: string) => {
     const separatorLabels = [
-      "Günlük Ziyaretçi Sayısı",
-      "Restoran Ciro", 
-      "Maliyet %",
-      "VPS (Personel Başına Ziyaretçi Sayısı)",
-      "Toplam Kira %",
-      "Paket Komisyon ve Lojistik (Paket Satış) %",
-      "Diğer Giderler %",
-      "Ciro Primi ve Reklam %"
+      "Günlük Ziyaretçi Sayısı", "Restoran Ciro", "Maliyet %", "VPS (Personel Başına Ziyaretçi Sayısı)",
+      "Toplam Kira %", "Paket Komisyon ve Lojistik (Paket Satış) %", "Diğer Giderler %", "Ciro Primi ve Reklam %"
     ];
     return separatorLabels.includes(label);
   };
 
   const renderRow = (r: any, idx: number) => (
-    <>
-      <tr key={idx} className={`${getCategoryStyle(r.category, r.label)} transition-all duration-200 hover:shadow-sm border-b border-gray-200`}>
+    <React.Fragment key={idx}>
+      <tr className={`${getCategoryStyle(r.category, r.label)} transition-all duration-200 hover:shadow-sm border-b border-gray-200`}>
         <td className={`px-4 py-3 text-gray-800 ${compactView ? 'text-xs' : 'text-sm'} ${isBoldRow(r.label) ? 'font-bold' : 'font-medium'}`}>
           {r.label}
         </td>
@@ -205,7 +205,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
           <td colSpan={headers.length + 2} className="h-2"></td>
         </tr>
       )}
-    </>
+    </React.Fragment>
   );
 
   return (
@@ -276,9 +276,9 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {updatedExcelRows.map(renderRow)}
+                {processedExcelRows.map(renderRow)}
 
-                {moreRows.map(renderRow)}
+                {processedMoreRows.map(renderRow)}
 
                 {/* Diğer Detayı Başlığı */}
                 <tr 
@@ -296,7 +296,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
                   </td>
                 </tr>
 
-                {showDigerDetayi && digerDetayiRows.map(renderRow)}
+                {showDigerDetayi && processedDigerRows.map(renderRow)}
               </tbody>
             </table>
           </div>

@@ -1,21 +1,17 @@
+
 SELECT
-    p.Tarih,
-    COUNT(p.TC_No) AS Kayit_Sayisi
-FROM SilverCloud.Puantaj p
-INNER JOIN SilverCloud.Puantaj_Secimi s
-    ON p.Secim_ID = s.Secim_ID
-WHERE p.Tarih BETWEEN Ekran.Donem.ilkGun AND Ekran.Donem.SonGun
-  AND s.Secim LIKE '%İzin%'
-GROUP BY p.Tarih
-ORDER BY p.Tarih;
+    DATE_FORMAT(Tarih, '%b%y') AS Donem,   -- örnek: Jan25, Feb25
+    SUM(RobotPos_Tutar) AS Toplam_Ciro
+FROM SilverCloud.GelirEkstra
+WHERE Tarih BETWEEN Ekran.Yıl.YılınİlkGünü AND 'Ekran.Yıl.YılınSonGünü
+GROUP BY DATE_FORMAT(Tarih, '%b%y')
+ORDER BY MIN(Tarih);
+
 Örnek
 SELECT
-    p.Tarih,
-    COUNT(p.TC_No) AS Kayit_Sayisi
-FROM SilverCloud.Puantaj p
-INNER JOIN SilverCloud.Puantaj_Secimi s
-    ON p.Secim_ID = s.Secim_ID
-WHERE p.Tarih BETWEEN '2025-08-01' AND '2025-08-31'
-  AND s.Secim LIKE '%İzin%'
-GROUP BY p.Tarih
-ORDER BY p.Tarih;
+    DATE_FORMAT(Tarih, '%b%y') AS Donem,   -- örnek: Jan25, Feb25
+    SUM(RobotPos_Tutar) AS Toplam_Ciro
+FROM SilverCloud.GelirEkstra
+WHERE Tarih BETWEEN '2025-01-01' AND '2025-12-31'
+GROUP BY DATE_FORMAT(Tarih, '%b%y')
+ORDER BY MIN(Tarih);
