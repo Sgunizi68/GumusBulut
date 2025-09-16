@@ -20,9 +20,16 @@ const POSHareketleriYuklemePage: React.FC = () => {
     if (e.target.files && e.target.files.length > 0) {
       const selectedFile = e.target.files[0];
       // Check file extension
-      if (!selectedFile.name.match(/\.(xls|xlsx)$/i)) {
-        showError("Geçersiz Dosya", "Lütfen sadece Excel dosyaları yükleyin (.xls veya .xlsx)");
+      if (selectedFile.name.toLowerCase().endsWith('.xls')) {
+        showError("Eski Excel Formatı", "Lütfen .xls dosyanızı Excel'de açıp .xlsx formatında kaydedin ve tekrar deneyin.");
         setFile(null);
+        e.target.value = ''; // Reset the input
+        return;
+      }
+      if (!selectedFile.name.toLowerCase().endsWith('.xlsx')) {
+        showError("Geçersiz Dosya Türü", "Lütfen sadece .xlsx formatında bir Excel dosyası yükleyin.");
+        setFile(null);
+        e.target.value = ''; // Reset the input
         return;
       }
       setFile(selectedFile);
@@ -82,14 +89,14 @@ const POSHareketleriYuklemePage: React.FC = () => {
       <Card title="POS Hareketleri Yükleme" icon={Icons.Upload}>
         <div className="space-y-6">
           <div className="bg-blue-50 border-l-4 border-blue-500 p-4">
-            <div className="flex items-center">
-              <Icons.InformationCircle className="h-5 w-5 text-blue-500 mr-2" />
-              <p className="text-sm text-blue-700">
-                POS hareketlerini yüklemek için lütfen uygun formatta bir Excel dosyası seçin. 
-                Dosya .xls veya .xlsx uzantılı olmalıdır.
-              </p>
-            </div>
-          </div>
+        <div className="flex items-center">
+          <Icons.InformationCircle className="h-5 w-5 text-blue-500 mr-2" />
+          <p className="text-sm text-blue-700">
+            POS hareketlerini yüklemek için lütfen uygun formatta bir Excel dosyası seçin. 
+            Dosya <strong>.xlsx</strong> uzantılı olmalıdır. Eski .xls formatı desteklenmemektedir.
+          </p>
+        </div>
+      </div>
           
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -121,7 +128,7 @@ const POSHareketleriYuklemePage: React.FC = () => {
                   <Input
                     id="excel-file"
                     type="file"
-                    accept=".xls,.xlsx"
+                    accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     onChange={handleFileChange}
                     className="flex-1"
                   />

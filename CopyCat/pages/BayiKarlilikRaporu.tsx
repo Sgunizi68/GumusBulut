@@ -85,10 +85,6 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
   const pageTitle = "Bayi Karlılık Raporu";
   const requiredPermission = "Bayi Karlılık Raporu Görüntüleme"; 
 
-  if (!hasPermission(requiredPermission)) {
-      return <AccessDenied title={pageTitle} />;
-  }
-
   const [year, setYear] = useState(new Date().getFullYear());
   const [showDigerDetayi, setShowDigerDetayi] = useState(false);
   const [compactView, setCompactView] = useState(false);
@@ -104,6 +100,10 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     }
     return years.sort((a, b) => b - a); // Sort descending
   }, []);
+
+  if (!hasPermission(requiredPermission)) {
+      return <AccessDenied title={pageTitle} />;
+  }
 
   const headers = months.map((m) => `${m}${String(year).slice(2)}`);
 
