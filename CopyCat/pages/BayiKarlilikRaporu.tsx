@@ -81,7 +81,7 @@ const moreRows = [
 
 export const BayiKarlilikRaporuPage: React.FC = () => {
   const { hasPermission } = useAppContext();
-  const { gelirEkstraList, gelirList, kategoriList } = useDataContext();
+  const { gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList } = useDataContext();
   const pageTitle = "Bayi Karlılık Raporu";
   const requiredPermission = "Bayi Karlılık Raporu Görüntüleme"; 
 
@@ -158,6 +158,36 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     );
     const totalRestoranCiro = totalToplamCiro - totalSeftenisteCiro;
 
+    const getLatestPriceForPeriod = (malzemeKodu: string, periodYYMM: string) => {
+        const periodYear = 2000 + parseInt(periodYYMM.substring(0, 2));
+        const periodMonth = parseInt(periodYYMM.substring(2, 4));
+        const periodStartDate = new Date(periodYear, periodMonth - 1, 1);
+
+        const relevantPrices = stokFiyatList
+            .filter(sf => sf.Malzeme_Kodu === malzemeKodu && new Date(sf.Gecerlilik_Baslangic_Tarih) <= periodStartDate)
+            .sort((a, b) => new Date(b.Gecerlilik_Baslangic_Tarih).getTime() - new Date(a.Gecerlilik_Baslangic_Tarih).getTime());
+
+        return relevantPrices.length > 0 ? relevantPrices[0].Fiyat : 0;
+    };
+
+    const aySonuStokValues = Array(12).fill(0);
+    if (stokSayimList) {
+        const yearSayimlar = stokSayimList.filter(s => {
+            const sayimYear = 2000 + parseInt(s.Donem.substring(0, 2));
+            return sayimYear === year;
+        });
+
+        yearSayimlar.forEach(sayim => {
+            const price = getLatestPriceForPeriod(sayim.Malzeme_Kodu, sayim.Donem);
+            const value = sayim.Miktar * price;
+            const monthIndex = parseInt(sayim.Donem.substring(2, 4)) - 1;
+            if (monthIndex >= 0 && monthIndex < 12) {
+                aySonuStokValues[monthIndex] += value;
+            }
+        });
+    }
+    const totalAySonuStok = aySonuStokValues.reduce((a, b) => a + b, 0);
+
     // --- Row Processing ---
     const newExcelRows = excelRows.map(row => {
         switch (row.label) {
@@ -173,6 +203,8 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
                 return { ...row, values: seftenisteCiroValues, total: totalSeftenisteCiro };
             case "Restoran Ciro":
                 return { ...row, values: restoranCiroValues, total: totalRestoranCiro };
+            case "Ay Sonu Sayılan Stok Değeri":
+                return { ...row, values: aySonuStokValues, total: totalAySonuStok };
             default:
                 return row;
         }
@@ -183,7 +215,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         processedDigerRows: digerDetayiRows, 
         processedMoreRows: moreRows 
     };
-  }, [year, gelirEkstraList, gelirList, kategoriList]);
+  }, [year, gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList]);
 
   const formatCell = (v: any) => {
     if (v === null || v === undefined || v === '' || v === 0) return '';
