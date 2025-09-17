@@ -1,36 +1,24 @@
-SELECT
-    p.Donem,
-    SUM(
-        p.Miktar *
-        (
-            SELECT s.Fiyat
-            FROM SilverCloud.Stok_Fiyat s
-            WHERE s.Malzeme_Kodu = p.Malzeme_Kodu
-			AND s.Gecerlilik_Baslangic_Tarih <= STR_TO_DATE(CONCAT('20', p.Donem, '01'), '%Y%m%d')
-            ORDER BY s.Gecerlilik_Baslangic_Tarih DESC
-            LIMIT 1
-        )
-    ) AS Donem_Toplami
-FROM SilverCloud.Stok_Sayim p
-Where Year(STR_TO_DATE(CONCAT('20', p.Donem, '01'), '%Y%m%d'))=Ekran.Yıl
-GROUP BY p.Donem
-ORDER BY p.Donem;
-Örnek
+WITH maliyet_kategorileri AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Ust_Kategori_ID IN (
+        SELECT UstKategori_ID
+        FROM SilverCloud.UstKategori
+        WHERE UstKategori_Adi = 'Satışların Maliyeti'
+    )
+),
+tumunu_veriler AS (
+    SELECT Donem, Tutar, 'Diger_Harcama' AS Kaynak
+    FROM SilverCloud.Diger_Harcama
+    WHERE Kategori_ID IN (SELECT Kategori_ID FROM maliyet_kategorileri)
 
-SELECT
-    p.Donem,
-    SUM(
-        p.Miktar *
-        (
-            SELECT s.Fiyat
-            FROM SilverCloud.Stok_Fiyat s
-            WHERE s.Malzeme_Kodu = p.Malzeme_Kodu
-			AND s.Gecerlilik_Baslangic_Tarih <= STR_TO_DATE(CONCAT('20', p.Donem, '01'), '%Y%m%d')
-            ORDER BY s.Gecerlilik_Baslangic_Tarih DESC
-            LIMIT 1
-        )
-    ) AS Donem_Toplami
-FROM SilverCloud.Stok_Sayim p
-Where Year(STR_TO_DATE(CONCAT('20', p.Donem, '01'), '%Y%m%d'))=2025
-GROUP BY p.Donem
-ORDER BY p.Donem;
+    UNION ALL
+
+    SELECT Donem, Tutar, 'e_Fatura' AS Kaynak
+    FROM SilverCloud.e_Fatura
+    WHERE Kategori_ID IN (SELECT Kategori_ID FROM maliyet_kategorileri)
+)
+SELECT Donem, SUM(Tutar) AS Toplam_Tutar
+FROM tumunu_veriler
+GROUP BY Donem
+ORDER BY Donem;

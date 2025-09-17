@@ -81,7 +81,7 @@ const moreRows = [
 
 export const BayiKarlilikRaporuPage: React.FC = () => {
   const { hasPermission } = useAppContext();
-  const { gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList } = useDataContext();
+  const { gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList, calisanList, ustKategoriList, digerHarcamaList, eFaturaList } = useDataContext();
   const pageTitle = "Bayi Karlılık Raporu";
   const requiredPermission = "Bayi Karlılık Raporu Görüntüleme"; 
 
@@ -188,6 +188,69 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     }
     const totalAySonuStok = aySonuStokValues.reduce((a, b) => a + b, 0);
 
+    const prevYear = year - 1;
+    const prevYearDonem = (prevYear % 100).toString().padStart(2, '0') + '12';
+    const prevYearDecemberSayimlar = stokSayimList.filter(s => s.Donem === prevYearDonem);
+    let prevYearDecemberStockValue = 0;
+    if (prevYearDecemberSayimlar.length > 0) {
+        prevYearDecemberSayimlar.forEach(sayim => {
+            const price = getLatestPriceForPeriod(sayim.Malzeme_Kodu, sayim.Donem);
+            prevYearDecemberStockValue += sayim.Miktar * price;
+        });
+    }
+
+    const ayBasiStokValues = Array(12).fill(0);
+    ayBasiStokValues[0] = prevYearDecemberStockValue;
+    for (let i = 1; i < 12; i++) {
+        ayBasiStokValues[i] = aySonuStokValues[i - 1];
+    }
+
+    const personelSayisiValues = Array(12).fill(0);
+    if (calisanList) {
+        for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
+            const days = workingDaysValues[monthIndex];
+            let dailyCountsForMonth = 0;
+            for (let day = 1; day <= days; day++) {
+                const currentDate = new Date(year, monthIndex, day);
+                const activeEmployeesOnDay = calisanList.filter(c => {
+                    if (!c.Sigorta_Giris) return false;
+                    const girisDate = new Date(c.Sigorta_Giris);
+                    const cikisDate = c.Sigorta_Cikis ? new Date(c.Sigorta_Cikis) : null;
+                    return girisDate <= currentDate && (!cikisDate || cikisDate > currentDate);
+                }).length;
+                dailyCountsForMonth += activeEmployeesOnDay;
+            }
+            personelSayisiValues[monthIndex] = days > 0 ? parseFloat((dailyCountsForMonth / days).toFixed(2)) : 0;
+        }
+    }
+    const totalPersonelSayisi = personelSayisiValues.length > 0 ? parseFloat((personelSayisiValues.reduce((a, b) => a + b, 0) / 12).toFixed(2)) : 0;
+
+    const ayIciAlimlarValues = Array(12).fill(0);
+    const satislarinMaliyetiUstKategori = ustKategoriList.find(uk => uk.UstKategori_Adi === 'Satışların Maliyeti');
+    if (satislarinMaliyetiUstKategori && (digerHarcamaList || eFaturaList)) {
+        const maliyetKategoriIds = new Set(
+            kategoriList
+                .filter(k => k.Ust_Kategori_ID === satislarinMaliyetiUstKategori.UstKategori_ID)
+                .map(k => k.Kategori_ID)
+        );
+
+        const processList = (list: any[]) => {
+            list.forEach(item => {
+                const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                if (itemYear === year && maliyetKategoriIds.has(item.Kategori_ID)) {
+                    const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        ayIciAlimlarValues[monthIndex] += item.Tutar;
+                    }
+                }
+            });
+        };
+
+        if (digerHarcamaList) processList(digerHarcamaList);
+        if (eFaturaList) processList(eFaturaList);
+    }
+    const totalAyIciAlimlar = ayIciAlimlarValues.reduce((a, b) => a + b, 0);
+
     // --- Row Processing ---
     const newExcelRows = excelRows.map(row => {
         switch (row.label) {
@@ -205,6 +268,12 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
                 return { ...row, values: restoranCiroValues, total: totalRestoranCiro };
             case "Ay Sonu Sayılan Stok Değeri":
                 return { ...row, values: aySonuStokValues, total: totalAySonuStok };
+            case "Ay Başı Stok Değeri":
+                return { ...row, values: ayBasiStokValues, total: null }; // Total is not applicable
+            case "Personel Sayısı (Sürücü Sayısı Hariç)":
+                return { ...row, values: personelSayisiValues, total: totalPersonelSayisi };
+            case "Ay içerisindeki Alımlar":
+                return { ...row, values: ayIciAlimlarValues, total: totalAyIciAlimlar };
             default:
                 return row;
         }
@@ -215,7 +284,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         processedDigerRows: digerDetayiRows, 
         processedMoreRows: moreRows 
     };
-  }, [year, gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList]);
+  }, [year, gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList, calisanList, ustKategoriList, digerHarcamaList, eFaturaList]);
 
   const formatCell = (v: any) => {
     if (v === null || v === undefined || v === '' || v === 0) return '';
