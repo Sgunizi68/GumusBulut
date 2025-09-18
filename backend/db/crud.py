@@ -2473,25 +2473,31 @@ def get_depo_kira_rapor(db: Session):
     from sqlalchemy import func, union_all
     from sqlalchemy.orm import aliased
     from decimal import Decimal
+    import logging
+    logger = logging.getLogger(__name__)
 
     # Find the Kategori_ID for 'Depo Kira'
     depo_kira_kategori = db.query(models.Kategori).filter(models.Kategori.Kategori_Adi == 'Depo Kira').first()
     if not depo_kira_kategori:
+        logger.warning("Category 'Depo Kira' not found.")
         return []
 
     depo_kira_kategori_id = depo_kira_kategori.Kategori_ID
+    logger.info(f"Found 'Depo Kira' category with ID: {depo_kira_kategori_id}")
 
     # Query for Diger_Harcama
     diger_harcama_q = db.query(
         models.DigerHarcama.Donem.label("Donem"),
         models.DigerHarcama.Tutar.label("Tutar")
     ).filter(models.DigerHarcama.Kategori_ID == depo_kira_kategori_id)
+    logger.info(f"Found {diger_harcama_q.count()} records in Diger_Harcama for 'Depo Kira'")
 
     # Query for e_Fatura
     e_fatura_q = db.query(
         models.EFatura.Donem.label("Donem"),
         models.EFatura.Tutar.label("Tutar")
     ).filter(models.EFatura.Kategori_ID == depo_kira_kategori_id)
+    logger.info(f"Found {e_fatura_q.count()} records in e_Fatura for 'Depo Kira'")
 
     # Combine the queries
     unioned_q = union_all(diger_harcama_q, e_fatura_q).alias("tumunu_veriler")
@@ -2501,6 +2507,7 @@ def get_depo_kira_rapor(db: Session):
         unioned_q.c.Donem,
         func.sum(unioned_q.c.Tutar).label("Toplam_Tutar")
     ).group_by(unioned_q.c.Donem).order_by(unioned_q.c.Donem).all()
+    logger.info(f"Final results: {results}")
 
     # Format the results
     formatted_results = [{"Donem": row.Donem, "Toplam_Tutar": float(row.Toplam_Tutar)} for row in results]

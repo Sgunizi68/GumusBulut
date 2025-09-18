@@ -81,7 +81,7 @@ const moreRows = [
 
 export const BayiKarlilikRaporuPage: React.FC = () => {
   const { hasPermission } = useAppContext();
-  const { gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList, calisanList, ustKategoriList, digerHarcamaList, eFaturaList } = useDataContext();
+  const { depoKiraRapor, gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList, calisanList, ustKategoriList, digerHarcamaList, eFaturaList } = useDataContext();
   const pageTitle = "Bayi Karlılık Raporu";
   const requiredPermission = "Bayi Karlılık Raporu Görüntüleme"; 
 
@@ -395,6 +395,20 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     }
     const totalOrtakGider = ortakGiderValues.reduce((a, b) => a + b, 0);
 
+    const depoKiraValues = Array(12).fill(0);
+    if (depoKiraRapor) {
+        depoKiraRapor.forEach(item => {
+            const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+            if (itemYear === year) {
+                const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                if (monthIndex >= 0 && monthIndex < 12) {
+                    depoKiraValues[monthIndex] += item.Toplam_Tutar;
+                }
+            }
+        });
+    }
+    const totalDepoKira = depoKiraValues.reduce((a, b) => a + b, 0);
+
 
     // --- Row Processing ---
     const newExcelRows = excelRows.map(row => {
@@ -439,6 +453,8 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
                 return { ...row, values: ciroKiraValues, total: totalCiroKira };
             case "Ortak alan ve Genel Giderler":
                 return { ...row, values: ortakGiderValues, total: totalOrtakGider };
+            case "Depo Kira":
+                return { ...row, values: depoKiraValues, total: totalDepoKira };
             default:
                 return row;
         }
@@ -449,7 +465,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         processedDigerRows: digerDetayiRows,
         processedMoreRows: moreRows
     };
-  }, [year, gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList, calisanList, ustKategoriList, digerHarcamaList, eFaturaList]);
+  }, [year, depoKiraRapor, gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList, calisanList, ustKategoriList, digerHarcamaList, eFaturaList]);
 
   const formatCell = (v: any) => {
     if (v === null || v === undefined || v === '' || v === 0) return '';

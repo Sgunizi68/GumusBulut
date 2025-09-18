@@ -481,6 +481,7 @@ export interface AppContextType {
 }
 
 export interface DataContextType {
+  depoKiraRapor: any[];
   yemekCekiList: YemekCeki[];
   addYemekCeki: (formData: FormData) => Promise<{ success: boolean; message?: string }>;
   updateYemekCeki: (yemekCekiId: number, formData: FormData) => Promise<{ success: boolean; message?: string }>;

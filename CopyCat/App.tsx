@@ -385,6 +385,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [nakitList, setNakitList] = useState<Nakit[]>([]);
     const [odemeList, setOdemeList] = useState<Odeme[]>([]);
     const [yemekCekiList, setYemekCekiList] = useState<YemekCeki[]>([]);
+    const [depoKiraRapor, setDepoKiraRapor] = useState<any[]>([]);
 
     // Initial data fetching with caching
     useEffect(() => {
@@ -401,7 +402,8 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 subeler, eFaturalar, b2bEkstreler, digerHarcamalar, stoklar, stokFiyatlar,
                 stokSayimlar, calisanlar, puantajSecimleri, puantajlar, gelirler,
                 gelirEkstralar, avansIstekler, ustKategoriler, kategoriler, degerler,
-                users, roles, permissions, userRoles, rolePermissions, eFaturaReferanslar, odemeReferanslar, nakitler, odemeler, yemekCekiler
+                users, roles, permissions, userRoles, rolePermissions, eFaturaReferanslar, odemeReferanslar, nakitler, odemeler, yemekCekiler,
+                depoKiraData
             ] = await Promise.all([
                 fetchData<Sube[]>(`${API_BASE_URL}/subeler/`),
                 fetchData<EFatura[]>(`${API_BASE_URL}/e-faturalar/`),
@@ -429,6 +431,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 fetchData<Nakit[]>(`${API_BASE_URL}/nakit/`),
                 fetchData<Odeme[]>(`${API_BASE_URL}/Odeme/`),
                 fetchData<YemekCeki[]>(`${API_BASE_URL}/yemek-cekiler/`),
+                fetchData<any[]>(`${API_BASE_URL}/depo-kira-rapor/`),
             ]);
 
             // 3. Update state and cache - Be selective to avoid quota errors
@@ -462,6 +465,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             if (nakitler) setNakitList(nakitler);
             if (odemeler) setOdemeList(odemeler);
             if (yemekCekiler) setYemekCekiList(yemekCekiler);
+            if (depoKiraData) setDepoKiraRapor(depoKiraData);
 
             try {
                 localStorage.setItem(STORAGE_KEYS.DATA_STATE, JSON.stringify(newDataToCache));
@@ -1489,6 +1493,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const dataContextValue: DataContextType = useMemo(() => ({
+    depoKiraRapor,
     yemekCekiList,
     addYemekCeki,
     updateYemekCeki,
@@ -1582,7 +1587,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     uploadOdeme,
     uploadPosHareketleri,
     uploadTabakSayisi,
-  }), [yemekCekiList, addYemekCeki, updateYemekCeki, deleteYemekCeki, subeList, eFaturaList, b2bEkstreList, digerHarcamaList, stokList, stokFiyatList, stokSayimList, calisanList, puantajSecimiList, puantajList, gelirList, gelirEkstraList, avansIstekList, ustKategoriList, kategoriList, degerList, userList, rolesList, permissionsList, userRolesList, rolePermissionsList, eFaturaReferansList, odemeReferansList, nakitList, odemeList, addSube, updateSube, addEFaturas, updateEFatura, addB2BEkstreler, updateB2BEkstre, addDigerHarcama, updateDigerHarcama, deleteDigerHarcama, addStok, updateStok, addStokFiyat, updateStokFiyat, addOrUpdateStokSayim, addCalisan, updateCalisan, addUser, updateUser, addPuantajSecimi, updatePuantajSecimi, addOrUpdatePuantajEntry, getPuantajEntry, deletePuantajEntry, addOrUpdateGelirEntry, getGelirEntry, addOrUpdateGelirEkstraEntry, getGelirEkstraEntry, addOrUpdateAvansIstek, deleteAvansIstek, getAvansIstek, addUstKategori, updateUstKategori, addKategori, updateKategori, fetchDegerler, addDeger, updateDeger, addRole, updateRole, deleteRole, addPermission, updatePermission, deletePermission, addUserRole, updateUserRole, deleteUserRole, addRolePermission, updateRolePermission, deleteRolePermission, addEFaturaReferans, updateEFaturaReferans, deleteEFaturaReferans, addOdemeReferans, updateOdemeReferans, deleteOdemeReferans, addNakit, updateNakit, deleteNakit, updateOdeme,     uploadOdeme, uploadPosHareketleri, uploadTabakSayisi]);
+  }), [depoKiraRapor, yemekCekiList, addYemekCeki, updateYemekCeki, deleteYemekCeki, subeList, eFaturaList, b2bEkstreList, digerHarcamaList, stokList, stokFiyatList, stokSayimList, calisanList, puantajSecimiList, puantajList, gelirList, gelirEkstraList, avansIstekList, ustKategoriList, kategoriList, degerList, userList, rolesList, permissionsList, userRolesList, rolePermissionsList, eFaturaReferansList, odemeReferansList, nakitList, odemeList, addSube, updateSube, addEFaturas, updateEFatura, addB2BEkstreler, updateB2BEkstre, addDigerHarcama, updateDigerHarcama, deleteDigerHarcama, addStok, updateStok, addStokFiyat, updateStokFiyat, addOrUpdateStokSayim, addCalisan, updateCalisan, addUser, updateUser, addPuantajSecimi, updatePuantajSecimi, addOrUpdatePuantajEntry, getPuantajEntry, deletePuantajEntry, addOrUpdateGelirEntry, getGelirEntry, addOrUpdateGelirEkstraEntry, getGelirEkstraEntry, addOrUpdateAvansIstek, deleteAvansIstek, getAvansIstek, addUstKategori, updateUstKategori, addKategori, updateKategori, fetchDegerler, addDeger, updateDeger, addRole, updateRole, deleteRole, addPermission, updatePermission, deletePermission, addUserRole, updateUserRole, deleteUserRole, addRolePermission, updateRolePermission, deleteRolePermission, addEFaturaReferans, updateEFaturaReferans, deleteEFaturaReferans, addOdemeReferans, updateOdemeReferans, deleteOdemeReferans, addNakit, updateNakit, deleteNakit, updateOdeme,     uploadOdeme, uploadPosHareketleri, uploadTabakSayisi]);
 
   return <DataContext.Provider value={dataContextValue}>{children}</DataContext.Provider>;
 };
