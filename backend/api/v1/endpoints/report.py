@@ -219,3 +219,22 @@ def get_pos_kontrol_dashboard(
     except Exception as e:
         logger.error(f"Error in get_pos_kontrol_dashboard: {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@router.get("/depo-kira-rapor/", response_model=List[Dict[str, Any]])
+def get_depo_kira_rapor(db: Session = Depends(get_db)):
+    """
+    Depo Kira Raporu için verileri getirir.
+
+    Returns:
+        List[Dict[str, Any]]: Contains Donem and Toplam_Tutar
+    """
+    logger.info(f"Getting Depo Kira Raporu")
+
+    try:
+        report_data = crud.get_depo_kira_rapor(db=db)
+        logger.info(f"Successfully generated Depo Kira report with {len(report_data)} records")
+        return report_data
+
+    except Exception as e:
+        logger.error(f"Error in get_depo_kira_rapor: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")

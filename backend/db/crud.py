@@ -2401,9 +2401,10 @@ def get_odeme_rapor(db: Session, donem_list: Optional[List[int]] = None, kategor
             total_records=0
         )
         return empty_response
-  
-import pandas as pd  
-from fastapi import UploadFile  
+
+import pandas as pd
+from fastapi import UploadFile
+
   
 async def process_tabak_sayisi_excel(db: Session, file: UploadFile, sube_id: int):  
     try:  
@@ -2462,4 +2463,46 @@ async def process_tabak_sayisi_excel(db: Session, file: UploadFile, sube_id: int
   
     except Exception as e:  
         db.rollback()  
-        return {"error": f"Failed to process Excel file: {str(e)}"} 
+        return {"error": f"Failed to process Excel file: {str(e)}"}  
+
+def get_depo_kira_rapor(db: Session):
+    """
+    Calculates the total 'Depo Kira' expenses per period (Donem) by combining
+    data from both the Diger_Harcama and e_Fatura tables.
+    """
+    from sqlalchemy import func, union_all
+    from sqlalchemy.orm import aliased
+    from decimal import Decimal
+
+    # Find the Kategori_ID for 'Depo Kira'
+    depo_kira_kategori = db.query(models.Kategori).filter(models.Kategori.Kategori_Adi == 'Depo Kira').first()
+    if not depo_kira_kategori:
+        return []
+
+    depo_kira_kategori_id = depo_kira_kategori.Kategori_ID
+
+    # Query for Diger_Harcama
+    diger_harcama_q = db.query(
+        models.DigerHarcama.Donem.label("Donem"),
+        models.DigerHarcama.Tutar.label("Tutar")
+    ).filter(models.DigerHarcama.Kategori_ID == depo_kira_kategori_id)
+
+    # Query for e_Fatura
+    e_fatura_q = db.query(
+        models.EFatura.Donem.label("Donem"),
+        models.EFatura.Tutar.label("Tutar")
+    ).filter(models.EFatura.Kategori_ID == depo_kira_kategori_id)
+
+    # Combine the queries
+    unioned_q = union_all(diger_harcama_q, e_fatura_q).alias("tumunu_veriler")
+
+    # Group by Donem and SUM Tutar
+    results = db.query(
+        unioned_q.c.Donem,
+        func.sum(unioned_q.c.Tutar).label("Toplam_Tutar")
+    ).group_by(unioned_q.c.Donem).order_by(unioned_q.c.Donem).all()
+
+    # Format the results
+    formatted_results = [{"Donem": row.Donem, "Toplam_Tutar": float(row.Toplam_Tutar)} for row in results]
+
+    return formatted_results 

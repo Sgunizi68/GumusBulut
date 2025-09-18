@@ -134,8 +134,8 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         const günler = workingDaysValues[i] || 0;
         return günler > 0 ? parseFloat((tabak / günler).toFixed(2)) : 0;
     });
-    const totalGunlukZiyaretci = totalWorkingDays > 0 
-        ? parseFloat((totalTabakSayisi / totalWorkingDays).toFixed(2)) 
+    const totalGunlukZiyaretci = totalWorkingDays > 0
+        ? parseFloat((totalTabakSayisi / totalWorkingDays).toFixed(2))
         : 0;
 
     const seftenisteKategoriIds = new Set(
@@ -153,7 +153,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     }
     const totalSeftenisteCiro = seftenisteCiroValues.reduce((a, b) => a + b, 0);
 
-    const restoranCiroValues = months.map((_, i) => 
+    const restoranCiroValues = months.map((_, i) =>
         (toplamCiroValues[i] || 0) - (seftenisteCiroValues[i] || 0)
     );
     const totalRestoranCiro = totalToplamCiro - totalSeftenisteCiro;
@@ -251,6 +251,151 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     }
     const totalAyIciAlimlar = ayIciAlimlarValues.reduce((a, b) => a + b, 0);
 
+    const ayIadeValues = Array(12).fill(0);
+    const totalAyIade = 0;
+
+    const maliyetValues = months.map((_, i) => {
+        const ayBasi = ayBasiStokValues[i] || 0;
+        const ayIciAlim = ayIciAlimlarValues[i] || 0;
+        const ayIade = ayIadeValues[i] || 0;
+        const aySonu = aySonuStokValues[i] || 0;
+        return ayBasi + ayIciAlim - ayIade - aySonu;
+    });
+    const totalMaliyet = maliyetValues.reduce((a, b) => a + b, 0);
+
+    const maliyetYuzdeValues = months.map((_, i) => {
+        const maliyet = maliyetValues[i] || 0;
+        const ciro = toplamCiroValues[i] || 0;
+        return ciro > 0 ? parseFloat(((maliyet / ciro) * 100).toFixed(2)) : 0;
+    });
+    const totalMaliyetYuzde = totalToplamCiro > 0 ? parseFloat(((totalMaliyet / totalToplamCiro) * 100).toFixed(2)) : 0;
+
+    const maasGiderleriUstKategori = ustKategoriList.find(uk => uk.UstKategori_Adi === 'Maaş Giderleri');
+    let maasKategoriIds = new Set();
+    if (maasGiderleriUstKategori) {
+        maasKategoriIds = new Set(
+            kategoriList
+                .filter(k => k.Ust_Kategori_ID === maasGiderleriUstKategori.UstKategori_ID)
+                .map(k => k.Kategori_ID)
+        );
+    }
+
+    const personelMaasGiderleriValues = Array(12).fill(0);
+    if (maasGiderleriUstKategori && (digerHarcamaList || eFaturaList)) {
+        const processList = (list: any[]) => {
+            list.forEach(item => {
+                const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                if (itemYear === year && maasKategoriIds.has(item.Kategori_ID)) {
+                    const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        personelMaasGiderleriValues[monthIndex] += item.Tutar;
+                    }
+                }
+            });
+        };
+
+        if (digerHarcamaList) processList(digerHarcamaList);
+        if (eFaturaList) processList(eFaturaList);
+    }
+    const totalPersonelMaasGiderleri = personelMaasGiderleriValues.reduce((a, b) => a + b, 0);
+
+    const maasGiderleriYuzdeValues = months.map((_, i) => {
+        const gider = personelMaasGiderleriValues[i] || 0;
+        const ciro = toplamCiroValues[i] || 0;
+        return ciro > 0 ? parseFloat(((gider / ciro) * 100).toFixed(2)) : 0;
+    });
+    const totalMaasGiderleriYuzde = totalToplamCiro > 0 ? parseFloat(((totalPersonelMaasGiderleri / totalToplamCiro) * 100).toFixed(2)) : 0;
+
+    const ortalamaKisiBasiMaasValues = months.map((_, i) => {
+        const maasGideri = personelMaasGiderleriValues[i] || 0;
+        const personelSayisi = personelSayisiValues[i] || 0;
+        return personelSayisi > 0 ? parseFloat((maasGideri / personelSayisi).toFixed(2)) : 0;
+    });
+    const totalOrtalamaKisiBasiMaas = totalPersonelSayisi > 0 ? parseFloat((totalPersonelMaasGiderleri / totalPersonelSayisi).toFixed(2)) : 0;
+
+    const vpsValues = months.map((_, i) => {
+        const ziyaretciSayisi = gunlukZiyaretciValues[i] || 0;
+        const personelSayisi = personelSayisiValues[i] || 0;
+        return personelSayisi > 0 ? parseFloat((ziyaretciSayisi / personelSayisi).toFixed(2)) : 0;
+    });
+    const totalVps = totalPersonelSayisi > 0 ? parseFloat((totalGunlukZiyaretci / totalPersonelSayisi).toFixed(2)) : 0;
+
+    const sabitKiraKategori = kategoriList.find(k => k.Kategori_Adi === 'Sabit Kira');
+    let sabitKiraKategoriId = null;
+    if (sabitKiraKategori) {
+        sabitKiraKategoriId = sabitKiraKategori.Kategori_ID;
+    }
+
+    const sabitKiraValues = Array(12).fill(0);
+    if (sabitKiraKategoriId && (digerHarcamaList || eFaturaList)) {
+        const processList = (list: any[]) => {
+            list.forEach(item => {
+                const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                if (itemYear === year && item.Kategori_ID === sabitKiraKategoriId) {
+                    const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        sabitKiraValues[monthIndex] += item.Tutar;
+                    }
+                }
+            });
+        };
+
+        if (digerHarcamaList) processList(digerHarcamaList);
+        if (eFaturaList) processList(eFaturaList);
+    }
+    const totalSabitKira = sabitKiraValues.reduce((a, b) => a + b, 0);
+
+    const ciroKiraKategori = kategoriList.find(k => k.Kategori_Adi === 'Ciro Kira');
+    let ciroKiraKategoriId = null;
+    if (ciroKiraKategori) {
+        ciroKiraKategoriId = ciroKiraKategori.Kategori_ID;
+    }
+
+    const ciroKiraValues = Array(12).fill(0);
+    if (ciroKiraKategoriId && (digerHarcamaList || eFaturaList)) {
+        const processList = (list: any[]) => {
+            list.forEach(item => {
+                const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                if (itemYear === year && item.Kategori_ID === ciroKiraKategoriId) {
+                    const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        ciroKiraValues[monthIndex] += item.Tutar;
+                    }
+                }
+            });
+        };
+
+        if (digerHarcamaList) processList(digerHarcamaList);
+        if (eFaturaList) processList(eFaturaList);
+    }
+    const totalCiroKira = ciroKiraValues.reduce((a, b) => a + b, 0);
+
+    const ortakGiderKategori = kategoriList.find(k => k.Kategori_Adi === 'Ortak Gider');
+    let ortakGiderKategoriId = null;
+    if (ortakGiderKategori) {
+        ortakGiderKategoriId = ortakGiderKategori.Kategori_ID;
+    }
+
+    const ortakGiderValues = Array(12).fill(0);
+    if (ortakGiderKategoriId && (digerHarcamaList || eFaturaList)) {
+        const processList = (list: any[]) => {
+            list.forEach(item => {
+                const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                if (itemYear === year && item.Kategori_ID === ortakGiderKategoriId) {
+                    const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        ortakGiderValues[monthIndex] += item.Tutar;
+                    }
+                }
+            });
+        };
+
+        if (digerHarcamaList) processList(digerHarcamaList);
+        if (eFaturaList) processList(eFaturaList);
+    }
+    const totalOrtakGider = ortakGiderValues.reduce((a, b) => a + b, 0);
+
+
     // --- Row Processing ---
     const newExcelRows = excelRows.map(row => {
         switch (row.label) {
@@ -274,15 +419,35 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
                 return { ...row, values: personelSayisiValues, total: totalPersonelSayisi };
             case "Ay içerisindeki Alımlar":
                 return { ...row, values: ayIciAlimlarValues, total: totalAyIciAlimlar };
+            case "Ay içerisindeki İade":
+                return { ...row, values: ayIadeValues, total: totalAyIade };
+            case "Maliyet":
+                return { ...row, values: maliyetValues, total: totalMaliyet };
+            case "Maliyet %":
+                return { ...row, values: maliyetYuzdeValues, total: totalMaliyetYuzde };
+            case "Personel Maaş Giderleri; SGK, Stopaj (Muhtasar) Dahil":
+                return { ...row, values: personelMaasGiderleriValues, total: totalPersonelMaasGiderleri };
+            case "Maaş Giderleri %":
+                return { ...row, values: maasGiderleriYuzdeValues, total: totalMaasGiderleriYuzde };
+            case "Ortalama Kişi Başı Maaş":
+                return { ...row, values: ortalamaKisiBasiMaasValues, total: totalOrtalamaKisiBasiMaas };
+            case "VPS (Personel Başına Ziyaretçi Sayısı)":
+                return { ...row, values: vpsValues, total: totalVps };
+            case "Sabit Kira":
+                return { ...row, values: sabitKiraValues, total: totalSabitKira };
+            case "Ciro kira":
+                return { ...row, values: ciroKiraValues, total: totalCiroKira };
+            case "Ortak alan ve Genel Giderler":
+                return { ...row, values: ortakGiderValues, total: totalOrtakGider };
             default:
                 return row;
         }
     });
 
-    return { 
-        processedExcelRows: newExcelRows, 
-        processedDigerRows: digerDetayiRows, 
-        processedMoreRows: moreRows 
+    return {
+        processedExcelRows: newExcelRows,
+        processedDigerRows: digerDetayiRows,
+        processedMoreRows: moreRows
     };
   }, [year, gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList, calisanList, ustKategoriList, digerHarcamaList, eFaturaList]);
 

@@ -1,22 +1,18 @@
-WITH maliyet_kategorileri AS (
+WITH X_kategorileri AS (
     SELECT Kategori_ID
     FROM SilverCloud.Kategori
-    WHERE Ust_Kategori_ID IN (
-        SELECT UstKategori_ID
-        FROM SilverCloud.UstKategori
-        WHERE UstKategori_Adi = 'Satışların Maliyeti'
-    )
+    WHERE Kategori_Adi = 'Depo Kira'
 ),
 tumunu_veriler AS (
     SELECT Donem, Tutar, 'Diger_Harcama' AS Kaynak
     FROM SilverCloud.Diger_Harcama
-    WHERE Kategori_ID IN (SELECT Kategori_ID FROM maliyet_kategorileri)
+    WHERE Kategori_ID IN (SELECT Kategori_ID FROM X_kategorileri)
 
     UNION ALL
 
     SELECT Donem, Tutar, 'e_Fatura' AS Kaynak
     FROM SilverCloud.e_Fatura
-    WHERE Kategori_ID IN (SELECT Kategori_ID FROM maliyet_kategorileri)
+    WHERE Kategori_ID IN (SELECT Kategori_ID FROM X_kategorileri)
 )
 SELECT Donem, SUM(Tutar) AS Toplam_Tutar
 FROM tumunu_veriler
