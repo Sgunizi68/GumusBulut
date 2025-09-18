@@ -320,6 +320,9 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     });
     const totalVps = totalPersonelSayisi > 0 ? parseFloat((totalGunlukZiyaretci / totalPersonelSayisi).toFixed(2)) : 0;
 
+    const stopajliKiraValues = Array(12).fill(0);
+    const totalStopajliKira = 0;
+
     const sabitKiraKategori = kategoriList.find(k => k.Kategori_Adi === 'Sabit Kira');
     let sabitKiraKategoriId = null;
     if (sabitKiraKategori) {
@@ -409,6 +412,18 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     }
     const totalDepoKira = depoKiraValues.reduce((a, b) => a + b, 0);
 
+    const toplamKiraValues = months.map((_, i) => {
+        return (stopajliKiraValues[i] || 0) + (sabitKiraValues[i] || 0) + (ciroKiraValues[i] || 0) + (depoKiraValues[i] || 0) + (ortakGiderValues[i] || 0);
+    });
+    const totalToplamKira = toplamKiraValues.reduce((a, b) => a + b, 0);
+
+    const toplamKiraYuzdeValues = months.map((_, i) => {
+        const kira = toplamKiraValues[i] || 0;
+        const ciro = toplamCiroValues[i] || 0;
+        return ciro > 0 ? parseFloat(((kira / ciro) * 100).toFixed(2)) : 0;
+    });
+    const totalToplamKiraYuzde = totalToplamCiro > 0 ? parseFloat(((totalToplamKira / totalToplamCiro) * 100).toFixed(2)) : 0;
+
 
     // --- Row Processing ---
     const newExcelRows = excelRows.map(row => {
@@ -447,6 +462,8 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
                 return { ...row, values: ortalamaKisiBasiMaasValues, total: totalOrtalamaKisiBasiMaas };
             case "VPS (Personel Başına Ziyaretçi Sayısı)":
                 return { ...row, values: vpsValues, total: totalVps };
+            case "Stopajlı Kira":
+                return { ...row, values: stopajliKiraValues, total: totalStopajliKira };
             case "Sabit Kira":
                 return { ...row, values: sabitKiraValues, total: totalSabitKira };
             case "Ciro kira":
@@ -455,6 +472,10 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
                 return { ...row, values: ortakGiderValues, total: totalOrtakGider };
             case "Depo Kira":
                 return { ...row, values: depoKiraValues, total: totalDepoKira };
+            case "Toplam Kira":
+                return { ...row, values: toplamKiraValues, total: totalToplamKira };
+            case "Toplam Kira %":
+                return { ...row, values: toplamKiraYuzdeValues, total: totalToplamKiraYuzde };
             default:
                 return row;
         }
