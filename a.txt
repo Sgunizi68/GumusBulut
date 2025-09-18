@@ -7,7 +7,7 @@ tumunu_veriler AS (
     SELECT Donem, Tutar, 'Diger_Harcama' AS Kaynak
     FROM SilverCloud.Diger_Harcama
     WHERE Kategori_ID IN (SELECT Kategori_ID FROM X_kategorileri)
-
+11
     UNION ALL
 
     SELECT Donem, Tutar, 'e_Fatura' AS Kaynak
