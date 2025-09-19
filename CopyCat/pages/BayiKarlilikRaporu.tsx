@@ -58,10 +58,10 @@ const excelRows = [
 ];
 
 const digerDetayiRows = [
-  "Elektrik", "Su", "Doğalgaz Gideri", "İnternet ve Telefon", "Demirbaş Sayılmayan Giderler", "Lisans / Yazılım",
-  "Sarf Malzemeleri", "Haberleşme / İnternet", "Sigorta", "Danışmanlık", "İzin / Ruhsat",
-  "Banka Masrafları", "Eğitim", "Kırtasiye", "Seyahat", "Konaklama", "Temsil / Ağırlama",
-  "Ceza / Tazminat", "Diğer"
+  "Elektrik", "Su", "Doğalgaz Gideri", "İnternet ve Telefon", "Demirbaş Sayılmayan Giderler", "Kredi Kartı Komisyon Giderleri",
+  "Yemek Kartı Komisyon Giderleri", "Personel Yemek Giderleri", "Temizlik Giderleri", "Bakım Onarım", "Personel Tazminat (Kıdem, İhbar vb.)",
+  "İlaçlama", "Baca Temizliği", "ÇTV, İşgaliye, İlan Reklam Vergi Bedelleri", "Kırtasiye", "İş güvenliği Uzmanı", "Müşavirlik Ücreti",
+  "HIJYEN DENETİMİ", "İşyeri Sigorta Gideri"
 ].map((label) => ({ label, values: Array(12).fill(null), total: null, category: "diger" }));
 
 const moreRows = [
@@ -561,6 +561,31 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     }
     const totalSu = suValues.reduce((a, b) => a + b, 0);
 
+    const bankaKomisyonuKategori = kategoriList.find(k => k.Kategori_Adi === 'Banka Komisyonu');
+    let bankaKomisyonuKategoriId = null;
+    if (bankaKomisyonuKategori) {
+        bankaKomisyonuKategoriId = bankaKomisyonuKategori.Kategori_ID;
+    }
+
+    const krediKartiKomisyonGiderleriValues = Array(12).fill(0);
+    if (bankaKomisyonuKategoriId && (digerHarcamaList || eFaturaList)) {
+        const processList = (list: any[]) => {
+            list.forEach(item => {
+                const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                if (itemYear === year && item.Kategori_ID === bankaKomisyonuKategoriId) {
+                    const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        krediKartiKomisyonGiderleriValues[monthIndex] += item.Tutar;
+                    }
+                }
+            });
+        };
+
+        if (digerHarcamaList) processList(digerHarcamaList);
+        if (eFaturaList) processList(eFaturaList);
+    }
+    const totalKrediKartiKomisyonGiderleri = krediKartiKomisyonGiderleriValues.reduce((a, b) => a + b, 0);
+
 
     // --- Row Processing ---
     const newExcelRows = excelRows.map(row => {
@@ -643,6 +668,9 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         }
         if (row.label === "Su") {
             return { ...row, values: suValues, total: totalSu };
+        }
+        if (row.label === "Kredi Kartı Komisyon Giderleri") {
+            return { ...row, values: krediKartiKomisyonGiderleriValues, total: totalKrediKartiKomisyonGiderleri };
         }
         return row;
     });

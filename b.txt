@@ -1,9 +1,4 @@
 Eski	                Yeni
-Elektrik	            Elektrik
-Su	                    Su
-Doğalgaz	            Doğalgaz Gideri
-Temizlik	            İnternet ve Telefon
-Bakım / Onarım	        Demirbaş Sayılmayan Giderler
 Lisans / Yazılım        Kredi Kartı Komisyon Giderleri
 Sarf Malzemeleri	    Yemek Kartı Komisyon Giderleri
 Haberleşme / İnternet	Personel Yemek Giderleri

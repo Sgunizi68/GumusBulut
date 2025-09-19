@@ -51,20 +51,20 @@ const digerDetayiRows = [
   "Doğalgaz Gideri",
   "İnternet ve Telefon",
   "Demirbaş Sayılmayan Giderler",
-  "Lisans / Yazılım",
-  "Sarf Malzemeleri",
-  "Haberleşme / İnternet",
-  "Sigorta",
-  "Danışmanlık",
-  "İzin / Ruhsat",
-  "Banka Masrafları",
-  "Eğitim",
+  "Kredi Kartı Komisyon Giderleri",
+  "Yemek Kartı Komisyon Giderleri",
+  "Personel Yemek Giderleri",
+  "Temizlik Giderleri",
+  "Bakım Onarım",
+  "Personel Tazminat (Kıdem, İhbar vb.)",
+  "İlaçlama",
+  "Baca Temizliği",
+  "ÇTV, İşgaliye, İlan Reklam Vergi Bedelleri",
   "Kırtasiye",
-  "Seyahat",
-  "Konaklama",
-  "Temsil / Ağırlama",
-  "Ceza / Tazminat",
-  "Diğer"
+  "İş güvenliği Uzmanı",
+  "Müşavirlik Ücreti",
+  "HIJYEN DENETİMİ",
+  "İşyeri Sigorta Gideri"
 ].map((label) => ({ label, values: Array(12).fill(null), total: null, category: "diger" }));
 
 const moreRows = [

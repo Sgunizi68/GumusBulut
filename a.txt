@@ -1,7 +1,7 @@
 WITH X_kategorileri AS (
     SELECT Kategori_ID
     FROM SilverCloud.Kategori
-    WHERE Kategori_Adi = 'Tavuk Dünyası Lojistik'
+    WHERE Kategori_Adi = 'Banka Komisyonu'
 ),
 tumunu_veriler AS (
     SELECT Donem, Tutar, 'Diger_Harcama' AS Kaynak
