@@ -424,6 +424,31 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     });
     const totalToplamKiraYuzde = totalToplamCiro > 0 ? parseFloat(((totalToplamKira / totalToplamCiro) * 100).toFixed(2)) : 0;
 
+    const tavukDunyasiLojistikGiderleriKategori = kategoriList.find(k => k.Kategori_Adi === 'Tavuk Dünyası Lojistik');
+    let tavukDunyasiLojistikGiderleriKategoriId = null;
+    if (tavukDunyasiLojistikGiderleriKategori) {
+        tavukDunyasiLojistikGiderleriKategoriId = tavukDunyasiLojistikGiderleriKategori.Kategori_ID;
+    }
+
+    const tavukDunyasiLojistikGiderleriValues = Array(12).fill(0);
+    if (tavukDunyasiLojistikGiderleriKategoriId && (digerHarcamaList || eFaturaList)) {
+        const processList = (list: any[]) => {
+            list.forEach(item => {
+                const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                if (itemYear === year && item.Kategori_ID === tavukDunyasiLojistikGiderleriKategoriId) {
+                    const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        tavukDunyasiLojistikGiderleriValues[monthIndex] += item.Tutar;
+                    }
+                }
+            });
+        };
+
+        if (digerHarcamaList) processList(digerHarcamaList);
+        if (eFaturaList) processList(eFaturaList);
+    }
+    const totalTavukDunyasiLojistikGiderleri = tavukDunyasiLojistikGiderleriValues.reduce((a, b) => a + b, 0);
+
     const tavukDunyasiCiroPrimiKategori = kategoriList.find(k => k.Kategori_Adi === 'Tavuk Dünyası Ciro Primi');
     let tavukDunyasiCiroPrimiKategoriId = null;
     if (tavukDunyasiCiroPrimiKategori) {
@@ -486,6 +511,56 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     });
     const totalCiroPrimiVeReklamYuzde = totalToplamCiro > 0 ? parseFloat(((totalCiroPrimiVeReklamPrimi / totalToplamCiro) * 100).toFixed(2)) : 0;
 
+    const elektrikKategori = kategoriList.find(k => k.Kategori_Adi === 'Elektrik');
+    let elektrikKategoriId = null;
+    if (elektrikKategori) {
+        elektrikKategoriId = elektrikKategori.Kategori_ID;
+    }
+
+    const elektrikValues = Array(12).fill(0);
+    if (elektrikKategoriId && (digerHarcamaList || eFaturaList)) {
+        const processList = (list: any[]) => {
+            list.forEach(item => {
+                const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                if (itemYear === year && item.Kategori_ID === elektrikKategoriId) {
+                    const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        elektrikValues[monthIndex] += item.Tutar;
+                    }
+                }
+            });
+        };
+
+        if (digerHarcamaList) processList(digerHarcamaList);
+        if (eFaturaList) processList(eFaturaList);
+    }
+    const totalElektrik = elektrikValues.reduce((a, b) => a + b, 0);
+
+    const suKategori = kategoriList.find(k => k.Kategori_Adi === 'Su');
+    let suKategoriId = null;
+    if (suKategori) {
+        suKategoriId = suKategori.Kategori_ID;
+    }
+
+    const suValues = Array(12).fill(0);
+    if (suKategoriId && (digerHarcamaList || eFaturaList)) {
+        const processList = (list: any[]) => {
+            list.forEach(item => {
+                const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                if (itemYear === year && item.Kategori_ID === suKategoriId) {
+                    const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        suValues[monthIndex] += item.Tutar;
+                    }
+                }
+            });
+        };
+
+        if (digerHarcamaList) processList(digerHarcamaList);
+        if (eFaturaList) processList(eFaturaList);
+    }
+    const totalSu = suValues.reduce((a, b) => a + b, 0);
+
 
     // --- Row Processing ---
     const newExcelRows = excelRows.map(row => {
@@ -544,6 +619,9 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     });
 
     const newMoreRows = moreRows.map(row => {
+        if (row.label === "Tavuk Dünyası Lojistik Giderleri") {
+            return { ...row, values: tavukDunyasiLojistikGiderleriValues, total: totalTavukDunyasiLojistikGiderleri };
+        }
         if (row.label === "Tavuk Dünyası Ciro Primi") {
             return { ...row, values: tavukDunyasiCiroPrimiValues, total: totalTavukDunyasiCiroPrimi };
         }
@@ -553,15 +631,25 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         if (row.label === "Ciro Primi ve Reklam Primi") {
             return { ...row, values: ciroPrimiVeReklamPrimiValues, total: totalCiroPrimiVeReklamPrimi };
         }
-        if (row.label === "Ciro Primi ve Reklam %" || row.label === "Ciro Primi ve Reklam %") {
+        if (row.label === "Ciro Primi ve Reklam %") {
             return { ...row, values: ciroPrimiVeReklamYuzdeValues, total: totalCiroPrimiVeReklamYuzde };
+        }
+        return row;
+    });
+
+    const newDigerDetayiRows = digerDetayiRows.map(row => {
+        if (row.label === "Elektrik") {
+            return { ...row, values: elektrikValues, total: totalElektrik };
+        }
+        if (row.label === "Su") {
+            return { ...row, values: suValues, total: totalSu };
         }
         return row;
     });
 
     return {
         processedExcelRows: newExcelRows,
-        processedDigerRows: digerDetayiRows,
+        processedDigerRows: newDigerDetayiRows,
         processedMoreRows: newMoreRows
     };
   }, [year, depoKiraRapor, gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList, calisanList, ustKategoriList, digerHarcamaList, eFaturaList]);
