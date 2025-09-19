@@ -424,6 +424,68 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     });
     const totalToplamKiraYuzde = totalToplamCiro > 0 ? parseFloat(((totalToplamKira / totalToplamCiro) * 100).toFixed(2)) : 0;
 
+    const tavukDunyasiCiroPrimiKategori = kategoriList.find(k => k.Kategori_Adi === 'Tavuk Dünyası Ciro Primi');
+    let tavukDunyasiCiroPrimiKategoriId = null;
+    if (tavukDunyasiCiroPrimiKategori) {
+        tavukDunyasiCiroPrimiKategoriId = tavukDunyasiCiroPrimiKategori.Kategori_ID;
+    }
+
+    const tavukDunyasiCiroPrimiValues = Array(12).fill(0);
+    if (tavukDunyasiCiroPrimiKategoriId && (digerHarcamaList || eFaturaList)) {
+        const processList = (list: any[]) => {
+            list.forEach(item => {
+                const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                if (itemYear === year && item.Kategori_ID === tavukDunyasiCiroPrimiKategoriId) {
+                    const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        tavukDunyasiCiroPrimiValues[monthIndex] += item.Tutar;
+                    }
+                }
+            });
+        };
+
+        if (digerHarcamaList) processList(digerHarcamaList);
+        if (eFaturaList) processList(eFaturaList);
+    }
+    const totalTavukDunyasiCiroPrimi = tavukDunyasiCiroPrimiValues.reduce((a, b) => a + b, 0);
+
+    const tavukDunyasiReklamPrimiKategori = kategoriList.find(k => k.Kategori_Adi === 'Tavuk Dünyası Reklam Primi');
+    let tavukDunyasiReklamPrimiKategoriId = null;
+    if (tavukDunyasiReklamPrimiKategori) {
+        tavukDunyasiReklamPrimiKategoriId = tavukDunyasiReklamPrimiKategori.Kategori_ID;
+    }
+
+    const tavukDunyasiReklamPrimiValues = Array(12).fill(0);
+    if (tavukDunyasiReklamPrimiKategoriId && (digerHarcamaList || eFaturaList)) {
+        const processList = (list: any[]) => {
+            list.forEach(item => {
+                const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                if (itemYear === year && item.Kategori_ID === tavukDunyasiReklamPrimiKategoriId) {
+                    const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        tavukDunyasiReklamPrimiValues[monthIndex] += item.Tutar;
+                    }
+                }
+            });
+        };
+
+        if (digerHarcamaList) processList(digerHarcamaList);
+        if (eFaturaList) processList(eFaturaList);
+    }
+    const totalTavukDunyasiReklamPrimi = tavukDunyasiReklamPrimiValues.reduce((a, b) => a + b, 0);
+
+    const ciroPrimiVeReklamPrimiValues = months.map((_, i) => {
+        return (tavukDunyasiCiroPrimiValues[i] || 0) + (tavukDunyasiReklamPrimiValues[i] || 0);
+    });
+    const totalCiroPrimiVeReklamPrimi = ciroPrimiVeReklamPrimiValues.reduce((a, b) => a + b, 0);
+
+    const ciroPrimiVeReklamYuzdeValues = months.map((_, i) => {
+        const prim = ciroPrimiVeReklamPrimiValues[i] || 0;
+        const ciro = toplamCiroValues[i] || 0;
+        return ciro > 0 ? parseFloat(((prim / ciro) * 100).toFixed(2)) : 0;
+    });
+    const totalCiroPrimiVeReklamYuzde = totalToplamCiro > 0 ? parseFloat(((totalCiroPrimiVeReklamPrimi / totalToplamCiro) * 100).toFixed(2)) : 0;
+
 
     // --- Row Processing ---
     const newExcelRows = excelRows.map(row => {
@@ -481,10 +543,26 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         }
     });
 
+    const newMoreRows = moreRows.map(row => {
+        if (row.label === "Tavuk Dünyası Ciro Primi") {
+            return { ...row, values: tavukDunyasiCiroPrimiValues, total: totalTavukDunyasiCiroPrimi };
+        }
+        if (row.label === "Tavuk Dünyası Reklam Primi") {
+            return { ...row, values: tavukDunyasiReklamPrimiValues, total: totalTavukDunyasiReklamPrimi };
+        }
+        if (row.label === "Ciro Primi ve Reklam Primi") {
+            return { ...row, values: ciroPrimiVeReklamPrimiValues, total: totalCiroPrimiVeReklamPrimi };
+        }
+        if (row.label === "Ciro Primi ve Reklam %" || row.label === "Ciro Primi ve Reklam %") {
+            return { ...row, values: ciroPrimiVeReklamYuzdeValues, total: totalCiroPrimiVeReklamYuzde };
+        }
+        return row;
+    });
+
     return {
         processedExcelRows: newExcelRows,
         processedDigerRows: digerDetayiRows,
-        processedMoreRows: moreRows
+        processedMoreRows: newMoreRows
     };
   }, [year, depoKiraRapor, gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList, calisanList, ustKategoriList, digerHarcamaList, eFaturaList]);
 
