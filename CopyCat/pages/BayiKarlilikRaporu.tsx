@@ -58,7 +58,7 @@ const excelRows = [
 ];
 
 const digerDetayiRows = [
-  "Elektrik", "Su", "Doğalgaz", "Temizlik", "Bakım / Onarım", "Lisans / Yazılım",
+  "Elektrik", "Su", "Doğalgaz Gideri", "İnternet ve Telefon", "Demirbaş Sayılmayan Giderler", "Lisans / Yazılım",
   "Sarf Malzemeleri", "Haberleşme / İnternet", "Sigorta", "Danışmanlık", "İzin / Ruhsat",
   "Banka Masrafları", "Eğitim", "Kırtasiye", "Seyahat", "Konaklama", "Temsil / Ağırlama",
   "Ceza / Tazminat", "Diğer"

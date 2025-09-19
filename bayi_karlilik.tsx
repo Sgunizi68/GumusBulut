@@ -48,9 +48,9 @@ const excelRows = [
 const digerDetayiRows = [
   "Elektrik",
   "Su",
-  "Doğalgaz",
-  "Temizlik",
-  "Bakım / Onarım",
+  "Doğalgaz Gideri",
+  "İnternet ve Telefon",
+  "Demirbaş Sayılmayan Giderler",
   "Lisans / Yazılım",
   "Sarf Malzemeleri",
   "Haberleşme / İnternet",
