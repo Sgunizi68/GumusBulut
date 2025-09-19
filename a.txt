@@ -1,7 +1,7 @@
 WITH X_kategorileri AS (
     SELECT Kategori_ID
     FROM SilverCloud.Kategori
-    WHERE Kategori_Adi = 'Yemek Sepeti (Online) Komisyonu'
+    WHERE Kategori_Adi = 'Doğalgaz Gideri'
 ),
 tumunu_veriler AS (
     SELECT Donem, Tutar, 'Diger_Harcama' AS Kaynak

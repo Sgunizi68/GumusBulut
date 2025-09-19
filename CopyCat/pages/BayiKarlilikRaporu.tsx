@@ -618,6 +618,56 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     });
     const totalPaketKomisyonLojistikYuzde = totalToplamCiro > 0 ? parseFloat(((totalPaketKomisyonLojistikGiderleri / totalToplamCiro) * 100).toFixed(2)) : 0;
 
+    const yemekCekiKomisyonKategori = kategoriList.find(k => k.Kategori_Adi === 'Yemek Çekleri Komisyonu');
+    let yemekCekiKomisyonKategoriId = null;
+    if (yemekCekiKomisyonKategori) {
+        yemekCekiKomisyonKategoriId = yemekCekiKomisyonKategori.Kategori_ID;
+    }
+
+    const yemekKartiKomisyonGiderleriValues = Array(12).fill(0);
+    if (yemekCekiKomisyonKategoriId && (digerHarcamaList || eFaturaList)) {
+        const processList = (list: any[]) => {
+            list.forEach(item => {
+                const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                if (itemYear === year && item.Kategori_ID === yemekCekiKomisyonKategoriId) {
+                    const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        yemekKartiKomisyonGiderleriValues[monthIndex] += item.Tutar;
+                    }
+                }
+            });
+        };
+
+        if (digerHarcamaList) processList(digerHarcamaList);
+        if (eFaturaList) processList(eFaturaList);
+    }
+    const totalYemekKartiKomisyonGiderleri = yemekKartiKomisyonGiderleriValues.reduce((a, b) => a + b, 0);
+
+    const dogalgazGideriKategori = kategoriList.find(k => k.Kategori_Adi === 'Doğalgaz Gideri');
+    let dogalgazGideriKategoriId = null;
+    if (dogalgazGideriKategori) {
+        dogalgazGideriKategoriId = dogalgazGideriKategori.Kategori_ID;
+    }
+
+    const dogalgazGideriValues = Array(12).fill(0);
+    if (dogalgazGideriKategoriId && (digerHarcamaList || eFaturaList)) {
+        const processList = (list: any[]) => {
+            list.forEach(item => {
+                const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                if (itemYear === year && item.Kategori_ID === dogalgazGideriKategoriId) {
+                    const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        dogalgazGideriValues[monthIndex] += item.Tutar;
+                    }
+                }
+            });
+        };
+
+        if (digerHarcamaList) processList(digerHarcamaList);
+        if (eFaturaList) processList(eFaturaList);
+    }
+    const totalDogalgazGideri = dogalgazGideriValues.reduce((a, b) => a + b, 0);
+
 
     // --- Row Processing ---
     const newExcelRows = excelRows.map(row => {
@@ -709,6 +759,12 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         }
         if (row.label === "Kredi Kartı Komisyon Giderleri") {
             return { ...row, values: krediKartiKomisyonGiderleriValues, total: totalKrediKartiKomisyonGiderleri };
+        }
+        if (row.label === "Yemek Kartı Komisyon Giderleri") {
+            return { ...row, values: yemekKartiKomisyonGiderleriValues, total: totalYemekKartiKomisyonGiderleri };
+        }
+        if (row.label === "Doğalgaz Gideri") {
+            return { ...row, values: dogalgazGideriValues, total: totalDogalgazGideri };
         }
         return row;
     });
