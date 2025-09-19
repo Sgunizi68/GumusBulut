@@ -586,6 +586,38 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     }
     const totalKrediKartiKomisyonGiderleri = krediKartiKomisyonGiderleriValues.reduce((a, b) => a + b, 0);
 
+    const yemekSepetiKomisyonKategori = kategoriList.find(k => k.Kategori_Adi === 'Yemek Sepeti (Online) Komisyonu');
+    let yemekSepetiKomisyonKategoriId = null;
+    if (yemekSepetiKomisyonKategori) {
+        yemekSepetiKomisyonKategoriId = yemekSepetiKomisyonKategori.Kategori_ID;
+    }
+
+    const paketKomisyonLojistikGiderleriValues = Array(12).fill(0);
+    if (yemekSepetiKomisyonKategoriId && (digerHarcamaList || eFaturaList)) {
+        const processList = (list: any[]) => {
+            list.forEach(item => {
+                const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                if (itemYear === year && item.Kategori_ID === yemekSepetiKomisyonKategoriId) {
+                    const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        paketKomisyonLojistikGiderleriValues[monthIndex] += item.Tutar;
+                    }
+                }
+            });
+        };
+
+        if (digerHarcamaList) processList(digerHarcamaList);
+        if (eFaturaList) processList(eFaturaList);
+    }
+    const totalPaketKomisyonLojistikGiderleri = paketKomisyonLojistikGiderleriValues.reduce((a, b) => a + b, 0);
+
+    const paketKomisyonLojistikYuzdeValues = months.map((_, i) => {
+        const gider = paketKomisyonLojistikGiderleriValues[i] || 0;
+        const ciro = toplamCiroValues[i] || 0;
+        return ciro > 0 ? parseFloat(((gider / ciro) * 100).toFixed(2)) : 0;
+    });
+    const totalPaketKomisyonLojistikYuzde = totalToplamCiro > 0 ? parseFloat(((totalPaketKomisyonLojistikGiderleri / totalToplamCiro) * 100).toFixed(2)) : 0;
+
 
     // --- Row Processing ---
     const newExcelRows = excelRows.map(row => {
@@ -644,6 +676,12 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     });
 
     const newMoreRows = moreRows.map(row => {
+        if (row.label === "Paket Komisyon ve Lojistik Giderleri") {
+            return { ...row, values: paketKomisyonLojistikGiderleriValues, total: totalPaketKomisyonLojistikGiderleri };
+        }
+        if (row.label === "Paket Komisyon ve Lojistik (Paket Satış) %") {
+            return { ...row, values: paketKomisyonLojistikYuzdeValues, total: totalPaketKomisyonLojistikYuzde };
+        }
         if (row.label === "Tavuk Dünyası Lojistik Giderleri") {
             return { ...row, values: tavukDunyasiLojistikGiderleriValues, total: totalTavukDunyasiLojistikGiderleri };
         }
