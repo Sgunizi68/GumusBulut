@@ -69,6 +69,7 @@ const moreRows = [
   { label: "Diğer Giderler", values: Array(12).fill(null), total: null, category: "gider" },
   { label: "Kredi Kartı Komisyon Giderleri", values: Array(12).fill(null), total: null, category: "komisyon" },
   { label: "Yemek Kartı Komisyon Giderleri", values: Array(12).fill(null), total: null, category: "komisyon" },
+  { label: "Diğer Detay Toplamı", values: Array(12).fill(null), total: null, category: "gider" },
   { label: "Tavuk Dünyası Lojistik Giderleri", values: Array(12).fill(null), total: null, category: "gider" },
   { label: "Toplam Diğer Giderler", values: Array(12).fill(null), total: null, category: "gider" },
   { label: "Diğer Giderler %", values: Array(12).fill(null), total: null, category: "gider" },
@@ -673,6 +674,11 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     }
     const totalDigerGiderler = digerGiderlerValues.reduce((a, b) => a + b, 0);
 
+    const digerDetayToplamiValues = months.map((_, i) => {
+        return (digerGiderlerValues[i] || 0) + (krediKartiKomisyonGiderleriValues[i] || 0) + (yemekKartiKomisyonGiderleriValues[i] || 0);
+    });
+    const totalDigerDetayToplami = digerDetayToplamiValues.reduce((a, b) => a + b, 0);
+
 
     // --- Row Processing ---
     const newExcelRows = excelRows.map(row => {
@@ -736,6 +742,9 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         }
         if (row.label === "Paket Komisyon ve Lojistik (Paket Satış) %") {
             return { ...row, values: paketKomisyonLojistikYuzdeValues, total: totalPaketKomisyonLojistikYuzde };
+        }
+        if (row.label === "Diğer Detay Toplamı") {
+            return { ...row, values: digerDetayToplamiValues, total: totalDigerDetayToplami };
         }
         if (row.label === "Tavuk Dünyası Lojistik Giderleri") {
             return { ...row, values: tavukDunyasiLojistikGiderleriValues, total: totalTavukDunyasiLojistikGiderleri };
@@ -806,7 +815,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
       "Personel Sayısı (Sürücü Sayısı Hariç)", "Toplam Maaş Gideri (Sürücü Maaşı Hariç)", 
       "Personel Maaş Giderleri; SGK, Stopaj (Muhtasar) Dahil", "Ortalama Kişi Başı Maaş", "Maaş Giderleri %",
       "VPS (Personel Başına Ziyaretçi Sayısı)", "Toplam Kira", "Toplam Kira %", "Paket Komisyon ve Lojistik Giderleri",
-      "Paket Komisyon ve Lojistik (Paket Satış) %", "Toplam Diğer Giderler", "Diğer Giderler %",
+      "Paket Komisyon ve Lojistik (Paket Satış) %", "Diğer Detay Toplamı", "Toplam Diğer Giderler", "Diğer Giderler %",
       "Ciro Primi ve Reklam Primi", "Ciro Primi ve Reklam %"
     ];
     return boldLabels.includes(label);
