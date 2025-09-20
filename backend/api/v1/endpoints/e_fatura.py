@@ -13,6 +13,10 @@ def create_bulk_efatura(efaturas: List[e_fatura.EFaturaCreate], db: Session = De
         raise HTTPException(status_code=400, detail="No invoices provided")
     return crud.create_efaturas_bulk(db=db, efaturas=efaturas)
 
+@router.post("/e-fatura/", response_model=e_fatura.EFaturaInDB, status_code=status.HTTP_201_CREATED)
+def create_single_efatura(efatura: e_fatura.EFaturaCreate, db: Session = Depends(database.get_db)):
+    return crud.create_efatura(db=db, efatura=efatura)
+
 @router.get("/e-faturalar/", response_model=List[e_fatura.EFaturaInDB])
 def read_efaturalar(db: Session = Depends(database.get_db)):
     efaturalar = crud.get_efaturalar(db)

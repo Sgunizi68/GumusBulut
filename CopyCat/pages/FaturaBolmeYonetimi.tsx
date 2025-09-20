@@ -28,43 +28,78 @@ const FaturaBolmeYonetimiPage = () => {
         const response = await fetch(`${API_BASE_URL}/bolunmus-faturalar/`);
         const data = await response.json();
 
-        const groupedFaturalar = data.reduce((acc, fatura) => {
+        const groupedByAnaFatura = data.reduce((acc, fatura) => {
           const anaFaturaNo = fatura.Ana_Fatura;
           if (!acc[anaFaturaNo]) {
-            acc[anaFaturaNo] = {
-              id: anaFaturaNo, // Use anaFaturaNo as a unique key for the group
-              orijinalFaturaNo: anaFaturaNo,
-              aliciUnvani: fatura.Alici_Unvani,
-              faturaTarihi: fatura.Fatura_Tarihi,
-              toplamTutar: 0, // Will be calculated later
-              kategori: 'Bölünmüş Fatura',
-              aciklama: fatura.Aciklama,
-              donem: fatura.Donem.toString(),
-              gunluk: fatura.Gunluk_Harcama,
-              detaylar: [],
-              acik: true,
-            };
+            acc[anaFaturaNo] = [];
           }
-
-          acc[anaFaturaNo].detaylar.push({
-            id: fatura.Fatura_ID,
-            faturaNo: fatura.Bolunmus_Fatura,
-            tutar: parseFloat(fatura.Tutar),
-            kategori: fatura.Kategori_Adi || 'Kategorisiz',
-            ozel: fatura.Ozel,
-          });
-
+          acc[anaFaturaNo].push(fatura);
           return acc;
         }, {});
 
-        // Calculate total amount for each main invoice
-        for (const key in groupedFaturalar) {
-          groupedFaturalar[key].toplamTutar = groupedFaturalar[key].detaylar.reduce((sum, detay) => sum + detay.tutar, 0);
-        }
+        const faturaPromises = Object.keys(groupedByAnaFatura).map(async (anaFaturaNo) => {
+          const detaylar = groupedByAnaFatura[anaFaturaNo];
+          const firstDetail = detaylar[0];
 
-        setBolunmusFaturalar(Object.values(groupedFaturalar));
+          // Fetch the main invoice to get the correct total amount
+          try {
+            const anaFaturaResponse = await fetch(`${API_BASE_URL}/e-faturalar/fatura-no/${anaFaturaNo}`);
+            if (!anaFaturaResponse.ok) {
+              throw new Error('Ana fatura bulunamadı');
+            }
+            const anaFaturaData = await anaFaturaResponse.json();
+
+            return {
+              id: anaFaturaNo,
+              orijinalFaturaNo: anaFaturaNo,
+              aliciUnvani: anaFaturaData.Alici_Unvani,
+              faturaTarihi: anaFaturaData.Fatura_Tarihi,
+              toplamTutar: parseFloat(anaFaturaData.Tutar),
+              kategori: 'Bölünmüş Fatura',
+              aciklama: anaFaturaData.Aciklama,
+              donem: anaFaturaData.Donem.toString(),
+              gunluk: anaFaturaData.Gunluk_Harcama,
+              detaylar: detaylar.map(d => ({
+                id: d.Fatura_ID,
+                faturaNo: d.Bolunmus_Fatura,
+                tutar: parseFloat(d.Tutar),
+                kategori: d.Kategori_Adi || 'Kategorisiz',
+                ozel: d.Ozel,
+                donem: d.Donem.toString()
+              })),
+              acik: true,
+            };
+          } catch (error) {
+            console.warn(`Ana fatura alınamadı: ${anaFaturaNo}. Detaylar toplamı kullanılacak.`, error);
+            const totalFromDetails = detaylar.reduce((sum, d) => sum + parseFloat(d.Tutar), 0);
+            return {
+              id: anaFaturaNo,
+              orijinalFaturaNo: anaFaturaNo,
+              aliciUnvani: firstDetail.Alici_Unvani,
+              faturaTarihi: firstDetail.Fatura_Tarihi,
+              toplamTutar: totalFromDetails,
+              kategori: 'Bölünmüş Fatura',
+              aciklama: firstDetail.Aciklama,
+              donem: firstDetail.Donem.toString(),
+              gunluk: firstDetail.Gunluk_Harcama,
+              detaylar: detaylar.map(d => ({
+                id: d.Fatura_ID,
+                faturaNo: d.Bolunmus_Fatura,
+                tutar: parseFloat(d.Tutar),
+                kategori: d.Kategori_Adi || 'Kategorisiz',
+                ozel: d.Ozel,
+                donem: d.Donem.toString()
+              })),
+              acik: true,
+            };
+          }
+        });
+
+        const resolvedFaturalar = await Promise.all(faturaPromises);
+        setBolunmusFaturalar(resolvedFaturalar);
+
       } catch (error) {
-        console.error('Error fetching bolunmus faturalar:', error);
+        console.error('Bölünmüş faturalar alınırken hata oluştu:', error);
       }
     };
 
@@ -111,11 +146,13 @@ const FaturaBolmeYonetimiPage = () => {
         const kalanTutar = fatura.toplamTutar - mevcutToplam;
         
         const yeniDetay = {
-          id: Date.now() + Math.random(),
+          id: Date.now(), // Temporary ID
+          isNew: true, // Flag for new item
           faturaNo: `${fatura.orijinalFaturaNo}-${yeniSiraNo}`,
           tutar: Math.min(1000, kalanTutar > 0 ? kalanTutar : 0),
           kategori: 'Yeni Detay',
-          ozel: false
+          ozel: false,
+          donem: fatura.donem
         };
 
         return {
@@ -127,80 +164,131 @@ const FaturaBolmeYonetimiPage = () => {
     }));
   };
 
-  const detaySil = (faturaId, detayId) => {
-    setBolunmusFaturalar(bolunmusFaturalar.map(fatura => {
-      if (fatura.id === faturaId) {
-        const yeniDetaylar = fatura.detaylar.filter(detay => detay.id !== detayId);
-        
-        if (yeniDetaylar.length < 2) {
-          alert('En az 2 detay satırı bulunmalıdır!');
-          return fatura;
-        }
+  const editDetayKaydet = async (faturaId, detayId) => {
+    const fatura = bolunmusFaturalar.find(f => f.id === faturaId);
+    if (!fatura) return;
 
-        const duzenliDetaylar = yeniDetaylar.map((detay, index) => ({
-          ...detay,
-          faturaNo: `${fatura.orijinalFaturaNo}-${index + 1}`
-        }));
+    const detay = fatura.detaylar.find(d => d.id === detayId);
+    if (!detay) return;
 
-        return {
-          ...fatura,
-          detaylar: duzenliDetaylar
-        };
-      }
-      return fatura;
-    }));
-  };
+    const yeniTutar = parseFloat(tempValues.tutar) || 0;
+    const digerDetaylarToplami = fatura.detaylar
+      .filter(d => d.id !== detayId)
+      .reduce((toplam, d) => toplam + d.tutar, 0);
 
-  const filteredKategoriler = kategoriList.filter(k => k.Tip === 'Gider' || k.Tip === 'Bilgi');
+    if (digerDetaylarToplami + yeniTutar > fatura.toplamTutar) {
+      alert(`Toplam tutar ${fatura.toplamTutar.toLocaleString('tr-TR')}₺'yi aşamaz!`);
+      return;
+    }
 
-  const editDetayBaslat = (detay, fatura) => {
-    setEditingDetay(detay.id);
-    setTempValues({
-      tutar: detay.tutar,
-      kategori: detay.kategori,
-      ozel: detay.ozel,
-      donem: fatura.donem
-    });
-  };
+    const kategori = kategoriList.find(k => k.Kategori_Adi === tempValues.kategori);
+    const kategoriId = kategori ? kategori.Kategori_ID : null;
 
-  const editDetayKaydet = (faturaId, detayId) => {
-    setBolunmusFaturalar(bolunmusFaturalar.map(fatura => {
-      if (fatura.id === faturaId) {
-        const guncelDetaylar = fatura.detaylar.map(detay => {
-          if (detay.id === detayId) {
-            const yeniTutar = parseFloat(tempValues.tutar) || 0;
-            
-            const digerDetaylarToplami = fatura.detaylar
-              .filter(d => d.id !== detayId)
-              .reduce((toplam, d) => toplam + d.tutar, 0);
-            
-            if (digerDetaylarToplami + yeniTutar > fatura.toplamTutar) {
-              alert(`Toplam tutar ${fatura.toplamTutar.toLocaleString('tr-TR')}₺'yi aşamaz!`);
-              return detay;
-            }
-            
-            return {
-              ...detay,
-              tutar: yeniTutar,
-              kategori: tempValues.kategori,
-              ozel: tempValues.ozel
-            };
-          }
-          return detay;
+    const payload = {
+      Fatura_Tarihi: fatura.faturaTarihi,
+      Fatura_Numarasi: detay.faturaNo,
+      Alici_Unvani: fatura.aliciUnvani,
+      Tutar: yeniTutar,
+      Kategori_ID: kategoriId,
+      Aciklama: fatura.aciklama,
+      Donem: tempValues.donem,
+      Ozel: tempValues.ozel,
+      Gunluk_Harcama: fatura.gunluk,
+      Giden_Fatura: false, // Assuming this is the default
+      Sube_ID: 1 // Assuming a default Sube_ID, you might need to get this from context
+    };
+
+    try {
+      let response;
+      if (detay.isNew) {
+        response = await fetch(`${API_BASE_URL}/e-fatura/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
         });
-        
-        return { ...fatura, detaylar: guncelDetaylar, donem: tempValues.donem };
+      } else {
+        response = await fetch(`${API_BASE_URL}/e-faturalar/${detayId}`,
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          }
+        );
       }
-      return fatura;
-    }));
-    
-    setEditingDetay(null);
-    setTempValues({});
+
+      if (!response.ok) {
+        throw new Error('Fatura güncellenirken bir hata oluştu.');
+      }
+
+      const savedDetay = await response.json();
+
+      setBolunmusFaturalar(bolunmusFaturalar.map(f => {
+        if (f.id === faturaId) {
+          const guncelDetaylar = f.detaylar.map(d => {
+            if (d.id === detayId) {
+              return {
+                ...d,
+                id: savedDetay.Fatura_ID, // Update with the real ID from the backend
+                isNew: false, // No longer a new item
+                tutar: yeniTutar,
+                kategori: tempValues.kategori,
+                ozel: tempValues.ozel,
+                donem: tempValues.donem
+              };
+            }
+            return d;
+          });
+          return { ...f, detaylar: guncelDetaylar };
+        }
+        return f;
+      }));
+
+      setEditingDetay(null);
+      setTempValues({});
+
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   const editDetayIptal = () => {
     setEditingDetay(null);
     setTempValues({});
+  };
+
+  const editDetayBaslat = (detay) => {
+    setEditingDetay(detay.id);
+    setTempValues({
+      tutar: detay.tutar,
+      kategori: detay.kategori,
+      ozel: detay.ozel,
+      donem: detay.donem,
+    });
+  };
+
+  const detaySil = async (faturaId, detayId) => {
+    if (window.confirm('Bu detayı silmek istediğinizden emin misiniz?')) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/e-faturalar/${detayId}`, {
+          method: 'DELETE',
+        });
+  
+        if (!response.ok) {
+          throw new Error('Detay silinirken bir hata oluştu.');
+        }
+  
+        setBolunmusFaturalar(bolunmusFaturalar.map(f => {
+          if (f.id === faturaId) {
+            const guncelDetaylar = f.detaylar.filter(d => d.id !== detayId);
+            return { ...f, detaylar: guncelDetaylar };
+          }
+          return f;
+        }));
+  
+      } catch (error) {
+        alert(error.message);
+      }
+    }
   };
 
   const yeniFaturaBul = async () => {
@@ -504,7 +592,7 @@ const FaturaBolmeYonetimiPage = () => {
                                       className="px-2 py-1 border border-gray-300 rounded text-sm"
                                     >
                                       <option value="">Kategori Seçin</option>
-                                      {filteredKategoriler.map(kat => (
+                                      {kategoriList.map(kat => (
                                         <option key={kat.Kategori_ID} value={kat.Kategori_Adi}>{kat.Kategori_Adi}</option>
                                       ))}
                                     </select>

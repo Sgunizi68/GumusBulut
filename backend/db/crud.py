@@ -266,6 +266,13 @@ def get_efatura_by_fatura_numarasi(db: Session, fatura_numarasi: str):
         return efatura
     return None
 
+def create_efatura(db: Session, efatura: e_fatura.EFaturaCreate):
+    db_efatura = models.EFatura(**efatura.dict())
+    db.add(db_efatura)
+    db.commit()
+    db.refresh(db_efatura)
+    return db_efatura
+
 
 # --- RolYetki CRUD ---
 def get_rol_yetki(db: Session, rol_id: int, yetki_id: int):
