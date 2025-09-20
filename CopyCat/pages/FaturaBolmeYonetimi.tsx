@@ -1,100 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icons } from '../constants';
+import { API_BASE_URL } from '../constants';
 
 const FaturaBolmeYonetimiPage = () => {
-  const [bolunmusFaturalar, setBolunmusFaturalar] = useState([
-    {
-      id: 1,
-      orijinalFaturaNo: 'T032025000010487',
-      aliciUnvani: 'ABC Şirketi Ltd. Şti.',
-      faturaTarihi: '2024-03-15',
-      toplamTutar: 15000,
-      kategori: 'Bölünmüş Fatura',
-      aciklama: 'Yazılım Geliştirme Hizmeti',
-      donem: '2403',
-      gunluk: true,
-      detaylar: [
-        {
-          id: 1,
-          faturaNo: 'T032025000010487-1',
-          tutar: 8000,
-          kategori: 'Yazılım Geliştirme',
-          ozel: false
-        },
-        {
-          id: 2,
-          faturaNo: 'T032025000010487-2',
-          tutar: 7000,
-          kategori: 'Yazılım Geliştirme',
-          ozel: true
+  const [bolunmusFaturalar, setBolunmusFaturalar] = useState([]);
+
+  useEffect(() => {
+    const fetchBolunmusFaturalar = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/bolunmus-faturalar/`);
+        const data = await response.json();
+
+        const groupedFaturalar = data.reduce((acc, fatura) => {
+          const anaFaturaNo = fatura.Ana_Fatura;
+          if (!acc[anaFaturaNo]) {
+            acc[anaFaturaNo] = {
+              id: anaFaturaNo, // Use anaFaturaNo as a unique key for the group
+              orijinalFaturaNo: anaFaturaNo,
+              aliciUnvani: fatura.Alici_Unvani,
+              faturaTarihi: fatura.Fatura_Tarihi,
+              toplamTutar: 0, // Will be calculated later
+              kategori: 'Bölünmüş Fatura',
+              aciklama: fatura.Aciklama,
+              donem: fatura.Donem.toString(),
+              gunluk: fatura.Gunluk_Harcama,
+              detaylar: [],
+              acik: true,
+            };
+          }
+
+          acc[anaFaturaNo].detaylar.push({
+            id: fatura.Fatura_ID,
+            faturaNo: fatura.Bolunmus_Fatura,
+            tutar: fatura.Tutar,
+            kategori: fatura.Kategori_ID ? `Kat ID: ${fatura.Kategori_ID}` : 'Kategorisiz',
+            ozel: fatura.Ozel,
+          });
+
+          return acc;
+        }, {});
+
+        // Calculate total amount for each main invoice
+        for (const key in groupedFaturalar) {
+          groupedFaturalar[key].toplamTutar = groupedFaturalar[key].detaylar.reduce((sum, detay) => sum + parseFloat(detay.tutar), 0);
         }
-      ],
-      acik: true
-    },
-    {
-      id: 2,
-      orijinalFaturaNo: 'T032025000010488',
-      aliciUnvani: 'XYZ Teknoloji A.Ş.',
-      faturaTarihi: '2024-03-16',
-      toplamTutar: 25000,
-      kategori: 'Bölünmüş Fatura',
-      aciklama: 'Danışmanlık Hizmeti',
-      donem: '2403',
-      gunluk: false,
-      detaylar: [
-        {
-          id: 3,
-          faturaNo: 'T032025000010488-1',
-          tutar: 12000,
-          kategori: 'Danışmanlık',
-          ozel: true
-        },
-        {
-          id: 4,
-          faturaNo: 'T032025000010488-2',
-          tutar: 8000,
-          kategori: 'Danışmanlık',
-          ozel: false
-        },
-        {
-          id: 5,
-          faturaNo: 'T032025000010488-3',
-          tutar: 5000,
-          kategori: 'Danışmanlık',
-          ozel: true
-        }
-      ],
-      acik: false
-    },
-    {
-      id: 3,
-      orijinalFaturaNo: 'T032025000010489',
-      aliciUnvani: 'DEF Holding A.Ş.',
-      faturaTarihi: '2024-02-20',
-      toplamTutar: 18000,
-      kategori: 'Bölünmüş Fatura',
-      aciklama: 'Eğitim Hizmeti',
-      donem: '2402',
-      gunluk: true,
-      detaylar: [
-        {
-          id: 6,
-          faturaNo: 'T032025000010489-1',
-          tutar: 10000,
-          kategori: 'Eğitim',
-          ozel: true
-        },
-        {
-          id: 7,
-          faturaNo: 'T032025000010489-2',
-          tutar: 8000,
-          kategori: 'Eğitim',
-          ozel: false
-        }
-      ],
-      acik: false
-    }
-  ]);
+
+        setBolunmusFaturalar(Object.values(groupedFaturalar));
+      } catch (error) {
+        console.error('Error fetching bolunmus faturalar:', error);
+      }
+    };
+
+    fetchBolunmusFaturalar();
+  }, []);
 
   const [editingDetay, setEditingDetay] = useState(null);
   const [tempValues, setTempValues] = useState({});

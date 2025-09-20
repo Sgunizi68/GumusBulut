@@ -2513,3 +2513,21 @@ def get_depo_kira_rapor(db: Session):
     formatted_results = [{"Donem": row.Donem, "Toplam_Tutar": float(row.Toplam_Tutar)} for row in results]
 
     return formatted_results 
+
+def get_bolunmus_faturalar(db: Session):
+    sql_query = """
+    SELECT
+        t.Fatura_Numarasi AS Bolunmus_Fatura,
+        s.Fatura_Numarasi AS Ana_Fatura,
+        t.*
+    FROM SilverCloud.e_Fatura t
+    INNER JOIN SilverCloud.e_Fatura s
+        ON t.Fatura_Numarasi LIKE CONCAT('%', s.Fatura_Numarasi, '%')
+    INNER JOIN SilverCloud.Kategori k
+        ON s.Kategori_ID = k.Kategori_ID
+    WHERE k.Kategori_Adi = 'Bölünmüş Fatura'
+    ORDER BY t.Fatura_Numarasi;
+    """
+    from sqlalchemy import text
+    result = db.execute(text(sql_query))
+    return result.fetchall()
