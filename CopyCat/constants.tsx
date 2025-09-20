@@ -122,6 +122,7 @@ export const YEMEK_CEKI_KONTROL_DASHBOARD_YETKI_ADI = 'Yemek Çeki Kontrol Dashb
 export const TABAK_SAYISI_YUKLEME_EKRANI_YETKI_ADI = 'Tabak Sayısı Yükleme Ekranı Görüntüleme';
 export const VPS_DASHBOARD_YETKI_ADI = 'VPS Dashboard Görüntüleme';
 export const BAYI_KARLILIK_RAPORU_YETKI_ADI = 'Bayi Karlılık Raporu Görüntüleme';
+export const FATURA_BOLME_YONETIMI_EKRANI_YETKI_ADI = 'Fatura Bölme Yönetimi Ekranı Görüntüleme';
 
 
 // --- MENU STRUCTURE ---
@@ -154,6 +155,7 @@ export const MENU_GROUPS = [
         items: [
             { label: 'Fatura Yükleme', path: '/invoice-upload', icon: Icons.Upload, permission: FATURA_YUKLEME_EKRANI_YETKI_ADI },
             { label: 'Fatura Kategori Atama', path: '/invoice-category-assignment', icon: Icons.Category, permission: FATURA_KATEGORI_ATAMA_EKRANI_YETKI_ADI },
+            { label: 'Fatura Bölme Yönetimi', path: '/fatura-bolme-yonetimi', icon: Icons.Invoice, permission: FATURA_BOLME_YONETIMI_EKRANI_YETKI_ADI },
             { label: 'B2B Ekstre Yükleme', path: '/b2b-upload', icon: Icons.ClipboardDocumentList, permission: B2B_YUKLEME_EKRANI_YETKI_ADI },
             { label: 'B2B Ekstre Kategori Atama', path: '/b2b-category-assignment', icon: Icons.Category, permission: B2B_KATEGORI_ATAMA_EKRANI_YETKI_ADI },
             { label: 'Ödeme Yükleme', path: '/odeme-yukleme', icon: Icons.Upload, permission: ODEME_YUKLEME_EKRANI_YETKI_ADI },
