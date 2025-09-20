@@ -1,10 +1,9 @@
-
 WITH X_kategorileri AS (
     SELECT Kategori_ID
     FROM SilverCloud.Kategori
-    WHERE Kategori_Adi IN ('Banka Komisyonu','Yemek Çekleri Komisyonu')
+    WHERE Kategori_Adi = 'Banka Komisyonu'
 ),
-tumunu_veriler1 AS (
+tumunu_veriler AS (
     SELECT Donem, Tutar, 'Diger_Harcama' AS Kaynak
     FROM SilverCloud.Diger_Harcama
     WHERE Kategori_ID IN (SELECT Kategori_ID FROM X_kategorileri)
@@ -14,35 +13,8 @@ tumunu_veriler1 AS (
     SELECT Donem, Tutar, 'e_Fatura' AS Kaynak
     FROM SilverCloud.e_Fatura
     WHERE Kategori_ID IN (SELECT Kategori_ID FROM X_kategorileri)
-),
-maliyet_kategorileri AS (
-    SELECT Kategori_ID
-    FROM SilverCloud.Kategori
-    WHERE Ust_Kategori_ID IN (
-        SELECT UstKategori_ID
-        FROM SilverCloud.UstKategori
-        WHERE UstKategori_Adi = 'Diğer Giderler'
-    )
-),
-tumunu_veriler2 AS (
-    SELECT Donem, Tutar, 'Diger_Harcama' AS Kaynak
-    FROM SilverCloud.Diger_Harcama
-    WHERE Kategori_ID IN (SELECT Kategori_ID FROM maliyet_kategorileri)
-
-    UNION ALL
-
-    SELECT Donem, Tutar, 'e_Fatura' AS Kaynak
-    FROM SilverCloud.e_Fatura
-    WHERE Kategori_ID IN (SELECT Kategori_ID FROM maliyet_kategorileri)
-),
-hepsi AS (
-    SELECT Donem, Tutar, 'Komisyon_Giderleri' AS Grup FROM tumunu_veriler1
-    UNION ALL
-    SELECT Donem, Tutar, 'Diger_Giderler' AS Grup FROM tumunu_veriler2
 )
-SELECT
-    Donem,
-    SUM(Tutar) AS Toplam_Tutar
-FROM hepsi
+SELECT Donem, SUM(Tutar) AS Toplam_Tutar
+FROM tumunu_veriler
 GROUP BY Donem
 ORDER BY Donem;

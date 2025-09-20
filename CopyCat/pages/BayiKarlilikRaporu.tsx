@@ -594,21 +594,21 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     }
     const totalSu = suValues.reduce((a, b) => a + b, 0);
 
-    const komisyonKategoriIds = new Set(
+    const bankaKomisyonuKategoriIds = new Set(
         kategoriList
-            .filter(k => ['Banka Komisyonu', 'Yemek Çekleri Komisyonu'].includes(k.Kategori_Adi))
+            .filter(k => k.Kategori_Adi === 'Banka Komisyonu')
             .map(k => k.Kategori_ID)
     );
 
-    const komisyonGiderleriValues = Array(12).fill(0);
-    if (komisyonKategoriIds.size > 0 && (digerHarcamaList || eFaturaList)) {
+    const krediKartiKomisyonGiderleriValues = Array(12).fill(0);
+    if (bankaKomisyonuKategoriIds.size > 0 && (digerHarcamaList || eFaturaList)) {
         const processList = (list: any[]) => {
             list.forEach(item => {
                 const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
-                if (itemYear === year && komisyonKategoriIds.has(item.Kategori_ID)) {
+                if (itemYear === year && bankaKomisyonuKategoriIds.has(item.Kategori_ID)) {
                     const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
                     if (monthIndex >= 0 && monthIndex < 12) {
-                        komisyonGiderleriValues[monthIndex] += item.Tutar;
+                        krediKartiKomisyonGiderleriValues[monthIndex] += item.Tutar;
                     }
                 }
             });
@@ -617,7 +617,32 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         if (digerHarcamaList) processList(digerHarcamaList);
         if (eFaturaList) processList(eFaturaList);
     }
-    const totalKomisyonGiderleri = komisyonGiderleriValues.reduce((a, b) => a + b, 0);
+    const totalKrediKartiKomisyonGiderleri = krediKartiKomisyonGiderleriValues.reduce((a, b) => a + b, 0);
+
+    const yemekCekleriKomisyonuKategoriIds = new Set(
+        kategoriList
+            .filter(k => k.Kategori_Adi === 'Yemek Çekleri Komisyonu')
+            .map(k => k.Kategori_ID)
+    );
+
+    const yemekKartiKomisyonGiderleriValues = Array(12).fill(0);
+    if (yemekCekleriKomisyonuKategoriIds.size > 0 && (digerHarcamaList || eFaturaList)) {
+        const processList = (list: any[]) => {
+            list.forEach(item => {
+                const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                if (itemYear === year && yemekCekleriKomisyonuKategoriIds.has(item.Kategori_ID)) {
+                    const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        yemekKartiKomisyonGiderleriValues[monthIndex] += item.Tutar;
+                    }
+                }
+            });
+        };
+
+        if (digerHarcamaList) processList(digerHarcamaList);
+        if (eFaturaList) processList(eFaturaList);
+    }
+    const totalYemekKartiKomisyonGiderleri = yemekKartiKomisyonGiderleriValues.reduce((a, b) => a + b, 0);
 
     const digerGiderlerUstKategori = ustKategoriList.find(uk => uk.UstKategori_Adi === 'Diğer Giderler');
     let digerGiderlerKategoriIds = new Set();
@@ -731,10 +756,10 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
             return { ...row, values: digerGiderlerValues, total: totalDigerGiderler };
         }
         if (row.label === "Kredi Kartı Komisyon Giderleri") {
-            return { ...row, values: komisyonGiderleriValues, total: totalKomisyonGiderleri };
+            return { ...row, values: krediKartiKomisyonGiderleriValues, total: totalKrediKartiKomisyonGiderleri };
         }
         if (row.label === "Yemek Kartı Komisyon Giderleri") {
-            return { ...row, values: komisyonGiderleriValues, total: totalKomisyonGiderleri };
+            return { ...row, values: yemekKartiKomisyonGiderleriValues, total: totalYemekKartiKomisyonGiderleri };
         }
         return row;
     });
@@ -746,9 +771,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         if (row.label === "Su") {
             return { ...row, values: suValues, total: totalSu };
         }
-        if (row.label === "Komisyon Giderleri") {
-            return { ...row, values: komisyonGiderleriValues, total: totalKomisyonGiderleri };
-        }
+
         if (row.label === "Doğalgaz Gideri") {
             return { ...row, values: digerGiderlerValues, total: totalDigerGiderler };
         }
