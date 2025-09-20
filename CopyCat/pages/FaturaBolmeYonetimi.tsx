@@ -57,7 +57,7 @@ const FaturaBolmeYonetimiPage = () => {
               toplamTutar: parseFloat(anaFaturaData.Tutar),
               kategori: 'Bölünmüş Fatura',
               aciklama: anaFaturaData.Aciklama,
-              donem: anaFaturaData.Donem.toString(),
+              donem: anaFaturaData.Donem ? anaFaturaData.Donem.toString() : '',
               gunluk: anaFaturaData.Gunluk_Harcama,
               detaylar: detaylar.map(d => ({
                 id: d.Fatura_ID,
@@ -65,7 +65,7 @@ const FaturaBolmeYonetimiPage = () => {
                 tutar: parseFloat(d.Tutar),
                 kategori: d.Kategori_Adi || 'Kategorisiz',
                 ozel: d.Ozel,
-                donem: d.Donem.toString()
+                donem: d.Donem ? d.Donem.toString() : ''
               })),
               acik: true,
             };
@@ -141,7 +141,14 @@ const FaturaBolmeYonetimiPage = () => {
   const yeniDetayEkle = (faturaId) => {
     setBolunmusFaturalar(bolunmusFaturalar.map(fatura => {
       if (fatura.id === faturaId) {
-        const yeniSiraNo = fatura.detaylar.length + 1;
+        const maxSiraNo = fatura.detaylar.reduce((max, detay) => {
+          const match = detay.faturaNo.match(/-\d+$/);
+          if (match) {
+            return Math.max(max, parseInt(match[0].substring(1)));
+          }
+          return max;
+        }, 0);
+        const yeniSiraNo = maxSiraNo + 1;
         const mevcutToplam = detayTutarToplami(fatura.detaylar);
         const kalanTutar = fatura.toplamTutar - mevcutToplam;
         
@@ -199,6 +206,8 @@ const FaturaBolmeYonetimiPage = () => {
     };
 
     try {
+      console.log('Sending payload:', payload); // Log the payload
+
       let response;
       if (detay.isNew) {
         response = await fetch(`${API_BASE_URL}/e-fatura/`, {
@@ -217,7 +226,10 @@ const FaturaBolmeYonetimiPage = () => {
       }
 
       if (!response.ok) {
-        throw new Error('Fatura güncellenirken bir hata oluştu.');
+        const errorData = await response.json().catch(() => ({ message: 'No error message from server' }));
+        console.error('API Error:', response.status, response.statusText, errorData); // Log API error details
+        console.log('Detailed validation errors:', errorData.detail); // Explicitly log the detail array
+        throw new Error(`Fatura kaydedilirken bir hata oluştu: ${JSON.stringify(errorData.detail, null, 2) || errorData.message || response.statusText}`);
       }
 
       const savedDetay = await response.json();
@@ -321,31 +333,83 @@ const FaturaBolmeYonetimiPage = () => {
     }
   };
 
-  const yeniFaturaKaydet = () => {
+  const yeniFaturaKaydet = async () => {
     const yeniFatura = {
-      id: Date.now(),
+      id: Date.now(), // Temporary ID for the parent group
       ...yeniFaturaData,
       kategori: 'Bölünmüş Fatura',
       detaylar: [
         {
-          id: Date.now() + 1,
+          id: Date.now() + 1, // Temporary ID
           faturaNo: `${yeniFaturaData.orijinalFaturaNo}-1`,
           tutar: yeniFaturaData.toplamTutar / 2,
           kategori: yeniFaturaData.kategori,
-          ozel: false
+          ozel: false,
+          donem: yeniFaturaData.donem,
+          isNew: true // Mark as new
         },
         {
-          id: Date.now() + 2,
+          id: Date.now() + 2, // Temporary ID
           faturaNo: `${yeniFaturaData.orijinalFaturaNo}-2`,
           tutar: yeniFaturaData.toplamTutar / 2,
           kategori: yeniFaturaData.kategori,
-          ozel: false
+          ozel: false,
+          donem: yeniFaturaData.donem,
+          isNew: true // Mark as new
         }
       ],
       acik: true
     };
 
-    setBolunmusFaturalar([...bolunmusFaturalar, yeniFatura]);
+    const savedDetaylar = [];
+    for (const detay of yeniFatura.detaylar) {
+      const payload = {
+        Fatura_Tarihi: yeniFaturaData.faturaTarihi,
+        Fatura_Numarasi: detay.faturaNo,
+        Alici_Unvani: yeniFaturaData.aliciUnvani,
+        Tutar: detay.tutar,
+        Kategori_ID: kategoriList.find(k => k.Kategori_Adi === detay.kategori)?.Kategori_ID || null,
+        Aciklama: yeniFaturaData.aciklama,
+        Donem: detay.donem,
+        Ozel: detay.ozel,
+        Gunluk_Harcama: yeniFaturaData.gunluk,
+        Giden_Fatura: false,
+        Sube_ID: 1
+      };
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/e-fatura/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ message: 'No error message from server' }));
+          console.error('Yeni detay kaydedilirken API Hatası:', response.status, response.statusText, errorData);
+          alert(`Yeni detay kaydedilemedi: ${JSON.stringify(errorData.detail, null, 2) || errorData.message || response.statusText}`);
+          continue;
+        }
+
+        const savedDetay = await response.json();
+        savedDetaylar.push({
+          ...detay,
+          id: savedDetay.Fatura_ID,
+          isNew: false
+        });
+
+      } catch (error) {
+        console.error('Yeni detay kaydetme hatası:', error);
+        alert(`Yeni detay kaydedilemedi: ${error.message}`);
+        continue;
+      }
+    }
+
+    setBolunmusFaturalar(prevFaturalar => [
+      ...prevFaturalar,
+      { ...yeniFatura, detaylar: savedDetaylar }
+    ]);
+
     setYeniFaturaModal(false);
     setYeniFaturaNo('');
     setYeniFaturaData({
@@ -355,7 +419,8 @@ const FaturaBolmeYonetimiPage = () => {
       kategori: 'Bölünmüş Fatura',
       aciklama: '',
       donem: '',
-      gunluk: false
+      gunluk: false,
+      ozel: false
     });
   };
 
