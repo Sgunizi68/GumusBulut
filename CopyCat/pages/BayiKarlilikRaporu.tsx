@@ -2,6 +2,9 @@ import React, { useState, useMemo } from "react";
 import { ChevronDown, ChevronUp, Calendar, TrendingUp, Eye, EyeOff } from "lucide-react";
 import { useAppContext, useDataContext } from '../App';
 import { Card } from '../components';
+import { Icons, YAZDIRMA_YETKISI_ADI, EXCELE_AKTAR_YETKISI_ADI } from '../constants';
+import { generateDashboardPdf } from '../utils/pdfGenerator';
+import * as XLSX from 'xlsx';
 
 // A simple Access Denied component, can be moved to a shared file if needed
 const AccessDenied: React.FC<{ title: string }> = ({ title }) => (
@@ -106,6 +109,9 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
   if (!hasPermission(requiredPermission)) {
       return <AccessDenied title={pageTitle} />;
   }
+
+  const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
 
   const headers = months.map((m) => `${m}${String(year).slice(2)}`);
 
@@ -897,6 +903,63 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     </React.Fragment>
   );
 
+  const handleExportToExcel = () => {
+    const wb = XLSX.utils.book_new();
+
+    // Custom formatter for Turkish locale (dot as thousand separator, comma as decimal separator)
+    const formatTurkishNumber = (value: number): string => {
+        if (value === null || value === undefined) return '';
+        return value.toLocaleString('tr-TR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).replace(/\./g, '#').replace(/,/g, '.').replace(/#/g, ',');
+    };
+
+    // Helper to prepare data for a sheet
+    const prepareSheetData = (rows: any[], includeTotalColumn: boolean = true) => {
+        const data = [];
+        // Add headers
+        const sheetHeaders = ["Şube Raporu Adı", ...headers, ...(includeTotalColumn ? ["Toplam"] : [])];
+        data.push(sheetHeaders);
+
+        rows.forEach(row => {
+            const rowData = [row.label, ...row.values.map(formatTurkishNumber)];
+            if (includeTotalColumn) {
+                rowData.push(formatTurkishNumber(row.total));
+            }
+            data.push(rowData);
+        });
+        return data;
+    };
+
+    // Sheet 1: Main Report Data (processedExcelRows)
+    const excelRowsData = prepareSheetData(processedExcelRows);
+    const wsExcelRows = XLSX.utils.aoa_to_sheet(excelRowsData);
+    wsExcelRows['!cols'] = [{ wch: 30 }, ...Array(headers.length).fill({ wch: 15 }), { wch: 15 }]; // Adjust column widths
+    XLSX.utils.book_append_sheet(wb, wsExcelRows, 'Ana Rapor');
+
+    // Sheet 2: More Rows Data (processedMoreRows)
+    const moreRowsData = prepareSheetData(processedMoreRows);
+    const wsMoreRows = XLSX.utils.aoa_to_sheet(moreRowsData);
+    wsMoreRows['!cols'] = [{ wch: 30 }, ...Array(headers.length).fill({ wch: 15 }), { wch: 15 }];
+    XLSX.utils.book_append_sheet(wb, wsMoreRows, 'Ek Rapor');
+
+    // Sheet 3: Diğer Detayı (processedDigerRows)
+    const digerRowsData = prepareSheetData(processedDigerRows);
+    const wsDigerRows = XLSX.utils.aoa_to_sheet(digerRowsData);
+    wsDigerRows['!cols'] = [{ wch: 30 }, ...Array(headers.length).fill({ wch: 15 }), { wch: 15 }];
+    XLSX.utils.book_append_sheet(wb, wsDigerRows, 'Diğer Detaylar');
+
+    XLSX.writeFile(wb, `Bayi_Karlilik_Raporu_${year}.xlsx`);
+  };
+
+  const handleDownloadPdf = () => {
+    generateDashboardPdf(
+      'bayi-karlilik-raporu-content',
+      `Bayi_Karlilik_Raporu_${year}.pdf`
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Header */}
@@ -922,6 +985,26 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
                 {compactView ? 'Detaylı Görünüm' : 'Kompakt Görünüm'}
               </button>
               
+              {/* New Export Buttons */}
+              {canExportExcel && (
+                <button
+                  onClick={handleExportToExcel}
+                  className="flex items-center gap-2 px-3 py-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition-colors text-sm font-medium"
+                >
+                  <Icons.Download className="h-4 w-4" />
+                  Excel'e Aktar
+                </button>
+              )}
+              {canPrint && (
+                <button
+                  onClick={handleDownloadPdf}
+                  className="flex items-center gap-2 px-3 py-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors text-sm font-medium"
+                >
+                  <Icons.DocumentReport className="h-4 w-4" />
+                  PDF olarak İndir
+                </button>
+              )}
+              
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-gray-500" />
                 <select
@@ -941,7 +1024,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto p-6">
-        <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200">
+        <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200" id="bayi-karlilik-raporu-content">
           {/* Top Scroll */}
           <div className="overflow-x-auto scrollbar-thin">
             <div className="h-4 min-w-full bg-transparent"></div>
