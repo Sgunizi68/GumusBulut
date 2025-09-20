@@ -67,7 +67,7 @@ const FaturaBolmeYonetimiPage = () => {
                 ozel: d.Ozel,
                 donem: d.Donem ? d.Donem.toString() : ''
               })),
-              acik: true,
+              acik: false,
             };
           } catch (error) {
             console.warn(`Ana fatura alınamadı: ${anaFaturaNo}. Detaylar toplamı kullanılacak.`, error);
@@ -561,7 +561,7 @@ const FaturaBolmeYonetimiPage = () => {
         <div className="space-y-6">
           {filtrelenmis.map((fatura) => {
             const detayToplami = detayTutarToplami(fatura.detaylar);
-            const tutarUyumlu = detayToplami === fatura.toplamTutar;
+            const tutarUyumlu = Math.abs(detayToplami - fatura.toplamTutar) < 0.01;
             
             return (
               <div key={fatura.id} className="bg-white rounded-lg shadow-md">
