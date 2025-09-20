@@ -3,187 +3,117 @@
 (anonymous) @ (index):64
 client:789 [vite] connecting...
 client:912 [vite] connected.
-react-dom_client.js?v=fbfea576:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
-BayiKarlilikRaporu.tsx:85 depoKiraRapor: []
-BayiKarlilikRaporu.tsx:85 depoKiraRapor: []
-BayiKarlilikRaporu.tsx:85 depoKiraRapor: []
-BayiKarlilikRaporu.tsx:85 depoKiraRapor: []
-App.tsx:306  GET http://localhost:8000/api/v1/reports/depo-kira-rapor/ 404 (Not Found)
-fetchData @ App.tsx:306
-loadAndFetchData @ App.tsx:434
-(anonymous) @ App.tsx:477
-react-stack-bottom-frame @ react-dom_client.js?v=fbfea576:17478
-runWithFiberInDEV @ react-dom_client.js?v=fbfea576:1485
-commitHookEffectListMount @ react-dom_client.js?v=fbfea576:8460
-commitHookPassiveMountEffects @ react-dom_client.js?v=fbfea576:8518
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9887
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9984
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9881
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9984
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9881
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9881
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9984
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9899
-flushPassiveEffects @ react-dom_client.js?v=fbfea576:11302
-(anonymous) @ react-dom_client.js?v=fbfea576:11060
-performWorkUntilDeadline @ react-dom_client.js?v=fbfea576:36
-<DataProvider>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=fbfea576:250
-AppWithToast @ App.tsx:1735
-react-stack-bottom-frame @ react-dom_client.js?v=fbfea576:17424
-renderWithHooksAgain @ react-dom_client.js?v=fbfea576:4281
-renderWithHooks @ react-dom_client.js?v=fbfea576:4217
-updateFunctionComponent @ react-dom_client.js?v=fbfea576:6619
-beginWork @ react-dom_client.js?v=fbfea576:7654
-runWithFiberInDEV @ react-dom_client.js?v=fbfea576:1485
-performUnitOfWork @ react-dom_client.js?v=fbfea576:10874
-workLoopSync @ react-dom_client.js?v=fbfea576:10728
-renderRootSync @ react-dom_client.js?v=fbfea576:10711
-performWorkOnRoot @ react-dom_client.js?v=fbfea576:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=fbfea576:11623
-performWorkUntilDeadline @ react-dom_client.js?v=fbfea576:36
+react-dom_client.js?v=51fee4a5:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+BayiKarlilikRaporu.tsx:745 Uncaught ReferenceError: dogalgazGideriValues is not defined
+    at BayiKarlilikRaporu.tsx:745:38
+    at Array.map (<anonymous>)
+    at BayiKarlilikRaporu.tsx:734:48
+    at mountMemo (react-dom_client.js?v=51fee4a5:5052:25)
+    at Object.useMemo (react-dom_client.js?v=51fee4a5:16513:20)
+    at exports.useMemo (chunk-UGC3UZ7L.js?v=3446e18c:915:36)
+    at BayiKarlilikRaporuPage (BayiKarlilikRaporu.tsx:109:73)
+    at react-stack-bottom-frame (react-dom_client.js?v=51fee4a5:17424:20)
+    at renderWithHooks (react-dom_client.js?v=51fee4a5:4206:24)
+    at updateFunctionComponent (react-dom_client.js?v=51fee4a5:6619:21)
+(anonymous) @ BayiKarlilikRaporu.tsx:745
+(anonymous) @ BayiKarlilikRaporu.tsx:734
+mountMemo @ react-dom_client.js?v=51fee4a5:5052
+useMemo @ react-dom_client.js?v=51fee4a5:16513
+exports.useMemo @ chunk-UGC3UZ7L.js?v=3446e18c:915
+BayiKarlilikRaporuPage @ BayiKarlilikRaporu.tsx:109
+react-stack-bottom-frame @ react-dom_client.js?v=51fee4a5:17424
+renderWithHooks @ react-dom_client.js?v=51fee4a5:4206
+updateFunctionComponent @ react-dom_client.js?v=51fee4a5:6619
+beginWork @ react-dom_client.js?v=51fee4a5:7654
+runWithFiberInDEV @ react-dom_client.js?v=51fee4a5:1485
+performUnitOfWork @ react-dom_client.js?v=51fee4a5:10868
+workLoopSync @ react-dom_client.js?v=51fee4a5:10728
+renderRootSync @ react-dom_client.js?v=51fee4a5:10711
+performWorkOnRoot @ react-dom_client.js?v=51fee4a5:10359
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=51fee4a5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=51fee4a5:36
+<BayiKarlilikRaporuPage>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=d4b2e88e:250
+AppWithToast @ App.tsx:1786
+react-stack-bottom-frame @ react-dom_client.js?v=51fee4a5:17424
+renderWithHooksAgain @ react-dom_client.js?v=51fee4a5:4281
+renderWithHooks @ react-dom_client.js?v=51fee4a5:4217
+updateFunctionComponent @ react-dom_client.js?v=51fee4a5:6619
+beginWork @ react-dom_client.js?v=51fee4a5:7654
+runWithFiberInDEV @ react-dom_client.js?v=51fee4a5:1485
+performUnitOfWork @ react-dom_client.js?v=51fee4a5:10868
+workLoopSync @ react-dom_client.js?v=51fee4a5:10728
+renderRootSync @ react-dom_client.js?v=51fee4a5:10711
+performWorkOnRoot @ react-dom_client.js?v=51fee4a5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=51fee4a5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=51fee4a5:36
 <AppWithToast>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=fbfea576:250
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=d4b2e88e:250
 App @ App.tsx:1806
-react-stack-bottom-frame @ react-dom_client.js?v=fbfea576:17424
-renderWithHooksAgain @ react-dom_client.js?v=fbfea576:4281
-renderWithHooks @ react-dom_client.js?v=fbfea576:4217
-updateFunctionComponent @ react-dom_client.js?v=fbfea576:6619
-beginWork @ react-dom_client.js?v=fbfea576:7654
-runWithFiberInDEV @ react-dom_client.js?v=fbfea576:1485
-performUnitOfWork @ react-dom_client.js?v=fbfea576:10874
-workLoopSync @ react-dom_client.js?v=fbfea576:10728
-renderRootSync @ react-dom_client.js?v=fbfea576:10711
-performWorkOnRoot @ react-dom_client.js?v=fbfea576:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=fbfea576:11623
-performWorkUntilDeadline @ react-dom_client.js?v=fbfea576:36
+react-stack-bottom-frame @ react-dom_client.js?v=51fee4a5:17424
+renderWithHooksAgain @ react-dom_client.js?v=51fee4a5:4281
+renderWithHooks @ react-dom_client.js?v=51fee4a5:4217
+updateFunctionComponent @ react-dom_client.js?v=51fee4a5:6619
+beginWork @ react-dom_client.js?v=51fee4a5:7654
+runWithFiberInDEV @ react-dom_client.js?v=51fee4a5:1485
+performUnitOfWork @ react-dom_client.js?v=51fee4a5:10868
+workLoopSync @ react-dom_client.js?v=51fee4a5:10728
+renderRootSync @ react-dom_client.js?v=51fee4a5:10711
+performWorkOnRoot @ react-dom_client.js?v=51fee4a5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=51fee4a5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=51fee4a5:36
 <App>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=fbfea576:250
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=d4b2e88e:250
 (anonymous) @ index.tsx:14
-App.tsx:335 Error in fetchData: {url: 'http://localhost:8000/api/v1/reports/depo-kira-rapor/', errorMessage: 'Not Found', statusCode: undefined, type: 'general', severity: 'medium', …}
-fetchData @ App.tsx:335
-await in fetchData
-loadAndFetchData @ App.tsx:434
-(anonymous) @ App.tsx:477
-react-stack-bottom-frame @ react-dom_client.js?v=fbfea576:17478
-runWithFiberInDEV @ react-dom_client.js?v=fbfea576:1485
-commitHookEffectListMount @ react-dom_client.js?v=fbfea576:8460
-commitHookPassiveMountEffects @ react-dom_client.js?v=fbfea576:8518
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9887
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9984
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9881
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9984
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9881
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9881
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9984
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9899
-flushPassiveEffects @ react-dom_client.js?v=fbfea576:11302
-(anonymous) @ react-dom_client.js?v=fbfea576:11060
-performWorkUntilDeadline @ react-dom_client.js?v=fbfea576:36
-<DataProvider>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=fbfea576:250
-AppWithToast @ App.tsx:1735
-react-stack-bottom-frame @ react-dom_client.js?v=fbfea576:17424
-renderWithHooksAgain @ react-dom_client.js?v=fbfea576:4281
-renderWithHooks @ react-dom_client.js?v=fbfea576:4217
-updateFunctionComponent @ react-dom_client.js?v=fbfea576:6619
-beginWork @ react-dom_client.js?v=fbfea576:7654
-runWithFiberInDEV @ react-dom_client.js?v=fbfea576:1485
-performUnitOfWork @ react-dom_client.js?v=fbfea576:10874
-workLoopSync @ react-dom_client.js?v=fbfea576:10728
-renderRootSync @ react-dom_client.js?v=fbfea576:10711
-performWorkOnRoot @ react-dom_client.js?v=fbfea576:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=fbfea576:11623
-performWorkUntilDeadline @ react-dom_client.js?v=fbfea576:36
+App.tsx:1786 An error occurred in the <BayiKarlilikRaporuPage> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+defaultOnUncaughtError @ react-dom_client.js?v=51fee4a5:6229
+logUncaughtError @ react-dom_client.js?v=51fee4a5:6283
+runWithFiberInDEV @ react-dom_client.js?v=51fee4a5:1485
+lane.callback @ react-dom_client.js?v=51fee4a5:6311
+callCallback @ react-dom_client.js?v=51fee4a5:4097
+commitCallbacks @ react-dom_client.js?v=51fee4a5:4109
+runWithFiberInDEV @ react-dom_client.js?v=51fee4a5:1487
+commitLayoutEffectOnFiber @ react-dom_client.js?v=51fee4a5:9029
+flushLayoutEffects @ react-dom_client.js?v=51fee4a5:11174
+commitRoot @ react-dom_client.js?v=51fee4a5:11080
+commitRootWhenReady @ react-dom_client.js?v=51fee4a5:10512
+performWorkOnRoot @ react-dom_client.js?v=51fee4a5:10457
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=51fee4a5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=51fee4a5:36
+<BayiKarlilikRaporuPage>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=d4b2e88e:250
+AppWithToast @ App.tsx:1786
+react-stack-bottom-frame @ react-dom_client.js?v=51fee4a5:17424
+renderWithHooksAgain @ react-dom_client.js?v=51fee4a5:4281
+renderWithHooks @ react-dom_client.js?v=51fee4a5:4217
+updateFunctionComponent @ react-dom_client.js?v=51fee4a5:6619
+beginWork @ react-dom_client.js?v=51fee4a5:7654
+runWithFiberInDEV @ react-dom_client.js?v=51fee4a5:1485
+performUnitOfWork @ react-dom_client.js?v=51fee4a5:10868
+workLoopSync @ react-dom_client.js?v=51fee4a5:10728
+renderRootSync @ react-dom_client.js?v=51fee4a5:10711
+performWorkOnRoot @ react-dom_client.js?v=51fee4a5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=51fee4a5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=51fee4a5:36
 <AppWithToast>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=fbfea576:250
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=d4b2e88e:250
 App @ App.tsx:1806
-react-stack-bottom-frame @ react-dom_client.js?v=fbfea576:17424
-renderWithHooksAgain @ react-dom_client.js?v=fbfea576:4281
-renderWithHooks @ react-dom_client.js?v=fbfea576:4217
-updateFunctionComponent @ react-dom_client.js?v=fbfea576:6619
-beginWork @ react-dom_client.js?v=fbfea576:7654
-runWithFiberInDEV @ react-dom_client.js?v=fbfea576:1485
-performUnitOfWork @ react-dom_client.js?v=fbfea576:10874
-workLoopSync @ react-dom_client.js?v=fbfea576:10728
-renderRootSync @ react-dom_client.js?v=fbfea576:10711
-performWorkOnRoot @ react-dom_client.js?v=fbfea576:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=fbfea576:11623
-performWorkUntilDeadline @ react-dom_client.js?v=fbfea576:36
+react-stack-bottom-frame @ react-dom_client.js?v=51fee4a5:17424
+renderWithHooksAgain @ react-dom_client.js?v=51fee4a5:4281
+renderWithHooks @ react-dom_client.js?v=51fee4a5:4217
+updateFunctionComponent @ react-dom_client.js?v=51fee4a5:6619
+beginWork @ react-dom_client.js?v=51fee4a5:7654
+runWithFiberInDEV @ react-dom_client.js?v=51fee4a5:1485
+performUnitOfWork @ react-dom_client.js?v=51fee4a5:10868
+workLoopSync @ react-dom_client.js?v=51fee4a5:10728
+renderRootSync @ react-dom_client.js?v=51fee4a5:10711
+performWorkOnRoot @ react-dom_client.js?v=51fee4a5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=51fee4a5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=51fee4a5:36
 <App>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=fbfea576:250
-(anonymous) @ index.tsx:14
-App.tsx:352 General error: Not Found
-fetchData @ App.tsx:352
-await in fetchData
-loadAndFetchData @ App.tsx:434
-(anonymous) @ App.tsx:477
-react-stack-bottom-frame @ react-dom_client.js?v=fbfea576:17478
-runWithFiberInDEV @ react-dom_client.js?v=fbfea576:1485
-commitHookEffectListMount @ react-dom_client.js?v=fbfea576:8460
-commitHookPassiveMountEffects @ react-dom_client.js?v=fbfea576:8518
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9887
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9984
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9881
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9984
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9881
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9881
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9984
-recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=fbfea576:9868
-commitPassiveMountOnFiber @ react-dom_client.js?v=fbfea576:9899
-flushPassiveEffects @ react-dom_client.js?v=fbfea576:11302
-(anonymous) @ react-dom_client.js?v=fbfea576:11060
-performWorkUntilDeadline @ react-dom_client.js?v=fbfea576:36
-<DataProvider>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=fbfea576:250
-AppWithToast @ App.tsx:1735
-react-stack-bottom-frame @ react-dom_client.js?v=fbfea576:17424
-renderWithHooksAgain @ react-dom_client.js?v=fbfea576:4281
-renderWithHooks @ react-dom_client.js?v=fbfea576:4217
-updateFunctionComponent @ react-dom_client.js?v=fbfea576:6619
-beginWork @ react-dom_client.js?v=fbfea576:7654
-runWithFiberInDEV @ react-dom_client.js?v=fbfea576:1485
-performUnitOfWork @ react-dom_client.js?v=fbfea576:10874
-workLoopSync @ react-dom_client.js?v=fbfea576:10728
-renderRootSync @ react-dom_client.js?v=fbfea576:10711
-performWorkOnRoot @ react-dom_client.js?v=fbfea576:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=fbfea576:11623
-performWorkUntilDeadline @ react-dom_client.js?v=fbfea576:36
-<AppWithToast>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=fbfea576:250
-App @ App.tsx:1806
-react-stack-bottom-frame @ react-dom_client.js?v=fbfea576:17424
-renderWithHooksAgain @ react-dom_client.js?v=fbfea576:4281
-renderWithHooks @ react-dom_client.js?v=fbfea576:4217
-updateFunctionComponent @ react-dom_client.js?v=fbfea576:6619
-beginWork @ react-dom_client.js?v=fbfea576:7654
-runWithFiberInDEV @ react-dom_client.js?v=fbfea576:1485
-performUnitOfWork @ react-dom_client.js?v=fbfea576:10874
-workLoopSync @ react-dom_client.js?v=fbfea576:10728
-renderRootSync @ react-dom_client.js?v=fbfea576:10711
-performWorkOnRoot @ react-dom_client.js?v=fbfea576:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=fbfea576:11623
-performWorkUntilDeadline @ react-dom_client.js?v=fbfea576:36
-<App>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=fbfea576:250
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=d4b2e88e:250
 (anonymous) @ index.tsx:14
