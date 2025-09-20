@@ -2520,8 +2520,10 @@ def get_bolunmus_faturalar(db: Session):
         t.Fatura_Numarasi AS Bolunmus_Fatura,
         s.Fatura_Numarasi AS Ana_Fatura,
         s.Tutar AS Ana_Tutar,
+        k_t.Kategori_Adi AS Kategori_Adi,
         t.*
     FROM SilverCloud.e_Fatura t
+    LEFT JOIN SilverCloud.Kategori k_t ON t.Kategori_ID = k_t.Kategori_ID
     INNER JOIN SilverCloud.e_Fatura s
         ON t.Fatura_Numarasi LIKE CONCAT(s.Fatura_Numarasi, '-%') AND t.Fatura_Numarasi != s.Fatura_Numarasi
     INNER JOIN SilverCloud.Kategori k

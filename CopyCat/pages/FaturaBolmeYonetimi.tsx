@@ -48,7 +48,7 @@ const FaturaBolmeYonetimiPage = () => {
             id: fatura.Fatura_ID,
             faturaNo: fatura.Bolunmus_Fatura,
             tutar: parseFloat(fatura.Tutar),
-            kategori: fatura.Kategori_ID ? `Kat ID: ${fatura.Kategori_ID}` : 'Kategorisiz',
+            kategori: fatura.Kategori_Adi || 'Kategorisiz',
             ozel: fatura.Ozel,
           });
 
@@ -434,27 +434,7 @@ const FaturaBolmeYonetimiPage = () => {
 
                 {fatura.acik && (
                   <div className="px-6 py-4">
-                    <div className="mb-4 grid grid-cols-5 gap-4 text-sm text-gray-600 bg-gray-50 px-4 py-2 rounded">
-                      <div>Fatura No</div>
-                      <div>Alıcı Ünvanı</div>
-                      <div>Fatura Tarihi</div>
-                      <div>Dönem</div>
-                      <div>Günlük</div>
-                    </div>
-                    <div className="mb-4 grid grid-cols-5 gap-4 text-sm px-4 py-2">
-                      <div className="font-medium text-gray-400 line-through">{fatura.orijinalFaturaNo}</div>
-                      <div>{fatura.aliciUnvani}</div>
-                      <div>{fatura.faturaTarihi}</div>
-                      <div>{donemFormatla(fatura.donem)}</div>
-                      <div>
-                        <input
-                          type="checkbox"
-                          checked={fatura.gunluk}
-                          readOnly
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
-                        />
-                      </div>
-                    </div>
+
 
                     <div className="border-t pt-4">
                       <div className="flex justify-between items-center mb-4">

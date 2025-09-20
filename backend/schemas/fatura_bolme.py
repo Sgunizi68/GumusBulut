@@ -14,6 +14,7 @@ class FaturaBolmeBase(BaseModel):
     Alici_VKN_TCKN: Optional[str] = None
     Tutar: Decimal
     Kategori_ID: Optional[int] = None
+    Kategori_Adi: Optional[str] = None
     Aciklama: Optional[str] = None
     Donem: int
     Ozel: bool
