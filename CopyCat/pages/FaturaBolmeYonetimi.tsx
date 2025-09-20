@@ -714,7 +714,7 @@ const FaturaBolmeYonetimiPage = () => {
                                       ))}
                                     </select>
                                   ) : (
-                                    donemFormatla(fatura.donem)
+                                    donemFormatla(detay.donem)
                                   )}
                                   </td>
                                 <td className="px-4 py-2">
