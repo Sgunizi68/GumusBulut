@@ -325,7 +325,8 @@ const FaturaBolmeYonetimiPage = () => {
         aciklama: fatura.Aciklama,
         donem: fatura.Donem.toString(),
         gunluk: fatura.Gunluk_Harcama,
-        ozel: fatura.Ozel
+        ozel: fatura.Ozel,
+        originalFaturaId: fatura.Fatura_ID
       });
       setYeniFaturaModal(true);
     } catch (error) {
@@ -405,10 +406,45 @@ const FaturaBolmeYonetimiPage = () => {
       }
     }
 
+    // Update the frontend state with the saved details
     setBolunmusFaturalar(prevFaturalar => [
       ...prevFaturalar,
       { ...yeniFatura, detaylar: savedDetaylar }
     ]);
+
+    // After saving split details, update the original invoice's Kategori_ID
+    if (yeniFaturaData.originalFaturaId) {
+      const originalInvoiceUpdatePayload = {
+        Kategori_ID: 88, // 'Bölünmüş Fatura'
+        Fatura_Tarihi: yeniFaturaData.faturaTarihi,
+        Fatura_Numarasi: yeniFaturaData.orijinalFaturaNo,
+        Alici_Unvani: yeniFaturaData.aliciUnvani,
+        Tutar: yeniFaturaData.toplamTutar,
+        Aciklama: yeniFaturaData.aciklama,
+        Donem: yeniFaturaData.donem,
+        Ozel: yeniFaturaData.ozel,
+        Gunluk_Harcama: yeniFaturaData.gunluk,
+        Giden_Fatura: false, // Assuming default
+        Sube_ID: 1 // Assuming default
+      };
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/e-faturalar/${yeniFaturaData.originalFaturaId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(originalInvoiceUpdatePayload),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ message: 'No error message from server' }));
+          console.error('Ana fatura güncellenirken API Hatası:', response.status, response.statusText, errorData);
+          alert(`Ana fatura güncellenemedi: ${JSON.stringify(errorData.detail, null, 2) || errorData.message || response.statusText}`);
+        }
+      } catch (error) {
+        console.error('Ana fatura güncelleme hatası:', error);
+        alert(`Ana fatura güncellenemedi: ${error.message}`);
+      }
+    }
 
     setYeniFaturaModal(false);
     setYeniFaturaNo('');
