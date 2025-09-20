@@ -112,7 +112,7 @@ const FaturaBolmeYonetimiPage = () => {
           id: Date.now() + Math.random(),
           faturaNo: `${fatura.orijinalFaturaNo}-${yeniSiraNo}`,
           tutar: Math.min(1000, kalanTutar > 0 ? kalanTutar : 0),
-          kategori: fatura.kategori,
+          kategori: 'Yeni Detay',
           ozel: false
         };
 

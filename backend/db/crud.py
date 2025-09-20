@@ -2521,7 +2521,20 @@ def get_bolunmus_faturalar(db: Session):
         s.Fatura_Numarasi AS Ana_Fatura,
         s.Tutar AS Ana_Tutar,
         k_t.Kategori_Adi AS Kategori_Adi,
-        t.*
+        t.Fatura_ID,
+        t.Fatura_Tarihi,
+        t.Fatura_Numarasi,
+        t.Alici_Unvani,
+        t.Alici_VKN_TCKN,
+        t.Tutar,
+        t.Kategori_ID,
+        t.Aciklama,
+        t.Donem,
+        t.Ozel,
+        t.Gunluk_Harcama,
+        t.Giden_Fatura,
+        t.Sube_ID,
+        t.Kayit_Tarihi
     FROM SilverCloud.e_Fatura t
     LEFT JOIN SilverCloud.Kategori k_t ON t.Kategori_ID = k_t.Kategori_ID
     INNER JOIN SilverCloud.e_Fatura s
