@@ -25,6 +25,13 @@ def read_efatura(efatura_id: int, db: Session = Depends(database.get_db)):
         raise HTTPException(status_code=404, detail="EFatura not found")
     return db_efatura
 
+@router.get("/e-faturalar/fatura-no/{fatura_numarasi}", response_model=e_fatura.EFaturaInDB)
+def read_efatura_by_fatura_numarasi(fatura_numarasi: str, db: Session = Depends(database.get_db)):
+    db_efatura = crud.get_efatura_by_fatura_numarasi(db, fatura_numarasi=fatura_numarasi)
+    if db_efatura is None:
+        raise HTTPException(status_code=404, detail="EFatura not found")
+    return db_efatura
+
 @router.put("/e-faturalar/{efatura_id}", response_model=e_fatura.EFaturaInDB)
 def update_existing_efatura(efatura_id: int, efatura: e_fatura.EFaturaUpdate, db: Session = Depends(database.get_db)):
     db_efatura = crud.update_efatura(db=db, efatura_id=efatura_id, efatura=efatura)

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Icons } from '../constants';
 import { API_BASE_URL } from '../constants';
+import { useDataContext } from '../App';
 
 const FaturaBolmeYonetimiPage = () => {
+  const { kategoriList } = useDataContext();
   const [bolunmusFaturalar, setBolunmusFaturalar] = useState([]);
   const [editingDetay, setEditingDetay] = useState(null);
   const [tempValues, setTempValues] = useState({});
@@ -149,12 +151,15 @@ const FaturaBolmeYonetimiPage = () => {
     }));
   };
 
-  const editDetayBaslat = (detay) => {
+  const filteredKategoriler = kategoriList.filter(k => k.Tip === 'Gider' || k.Tip === 'Bilgi');
+
+  const editDetayBaslat = (detay, fatura) => {
     setEditingDetay(detay.id);
     setTempValues({
       tutar: detay.tutar,
       kategori: detay.kategori,
-      ozel: detay.ozel
+      ozel: detay.ozel,
+      donem: fatura.donem
     });
   };
 
@@ -184,7 +189,7 @@ const FaturaBolmeYonetimiPage = () => {
           return detay;
         });
         
-        return { ...fatura, detaylar: guncelDetaylar };
+        return { ...fatura, detaylar: guncelDetaylar, donem: tempValues.donem };
       }
       return fatura;
     }));
@@ -198,26 +203,34 @@ const FaturaBolmeYonetimiPage = () => {
     setTempValues({});
   };
 
-  const yeniFaturaBul = () => {
+  const yeniFaturaBul = async () => {
     if (!yeniFaturaNo.trim()) {
       alert('Lütfen bir fatura numarası giriniz!');
       return;
     }
 
-    // Simüle edilmiş fatura bulma
-    const bulunanFatura = {
-      orijinalFaturaNo: yeniFaturaNo,
-      aliciUnvani: 'Bulunan Şirket A.Ş.',
-      faturaTarihi: '2024-03-20',
-      toplamTutar: 20000,
-      kategori: 'Normal Fatura',
-      aciklama: 'Bulunan Fatura Açıklaması',
-      donem: '2403',
-      gunluk: false
-    };
+    try {
+      const response = await fetch(`${API_BASE_URL}/e-faturalar/fatura-no/${yeniFaturaNo}`);
+      if (!response.ok) {
+        throw new Error('Fatura bulunamadı');
+      }
+      const fatura = await response.json();
 
-    setYeniFaturaData(bulunanFatura);
-    setYeniFaturaModal(true);
+      setYeniFaturaData({
+        orijinalFaturaNo: fatura.Fatura_Numarasi,
+        aliciUnvani: fatura.Alici_Unvani,
+        faturaTarihi: fatura.Fatura_Tarihi,
+        toplamTutar: parseFloat(fatura.Tutar),
+        kategori: fatura.Kategori_Adi || 'Kategorisiz',
+        aciklama: fatura.Aciklama,
+        donem: fatura.Donem.toString(),
+        gunluk: fatura.Gunluk_Harcama,
+        ozel: fatura.Ozel
+      });
+      setYeniFaturaModal(true);
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   const yeniFaturaKaydet = () => {
@@ -490,19 +503,31 @@ const FaturaBolmeYonetimiPage = () => {
                                       onChange={(e) => setTempValues({...tempValues, kategori: e.target.value})}
                                       className="px-2 py-1 border border-gray-300 rounded text-sm"
                                     >
-                                      <option value="Bölünmüş Fatura">Bölünmüş Fatura</option>
-                                      <option value="Yazılım Geliştirme">Yazılım Geliştirme</option>
-                                      <option value="Danışmanlık">Danışmanlık</option>
-                                      <option value="Eğitim">Eğitim</option>
-                                      <option value="Hizmet">Hizmet</option>
-                                      <option value="Malzeme">Malzeme</option>
+                                      <option value="">Kategori Seçin</option>
+                                      {filteredKategoriler.map(kat => (
+                                        <option key={kat.Kategori_ID} value={kat.Kategori_Adi}>{kat.Kategori_Adi}</option>
+                                      ))}
                                     </select>
                                   ) : (
                                     detay.kategori
                                   )}
                                 </td>
                                 <td className="px-4 py-2">{fatura.aciklama}</td>
-                                <td className="px-4 py-2">{donemFormatla(fatura.donem)}</td>
+                                <td className="px-4 py-2">
+                                  {editingDetay === detay.id ? (
+                                     <select
+                                      value={tempValues.donem || ''}
+                                      onChange={(e) => setTempValues({...tempValues, donem: e.target.value})}
+                                      className="w-24 px-2 py-1 border border-gray-300 rounded text-sm"
+                                    >
+                                      {benzersizDonemler.map(donem => (
+                                        <option key={donem} value={donem}>{donemFormatla(donem)}</option>
+                                      ))}
+                                    </select>
+                                  ) : (
+                                    donemFormatla(fatura.donem)
+                                  )}
+                                  </td>
                                 <td className="px-4 py-2">
                                   <input
                                     type="checkbox"

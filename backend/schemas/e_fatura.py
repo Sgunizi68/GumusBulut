@@ -32,6 +32,7 @@ class EFaturaUpdate(EFaturaBase):
 class EFaturaInDB(EFaturaBase):
     Fatura_ID: int
     Kayit_Tarihi: datetime
+    Kategori_Adi: Optional[str] = None
 
     class Config:
         from_attributes = True

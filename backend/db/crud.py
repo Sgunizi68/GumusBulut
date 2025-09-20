@@ -258,6 +258,14 @@ def delete_efatura(db: Session, efatura_id: int):
         db.commit()
     return db_efatura
 
+def get_efatura_by_fatura_numarasi(db: Session, fatura_numarasi: str):
+    result = db.query(models.EFatura, models.Kategori.Kategori_Adi).outerjoin(models.Kategori, models.EFatura.Kategori_ID == models.Kategori.Kategori_ID).filter(models.EFatura.Fatura_Numarasi == fatura_numarasi).first()
+    if result:
+        efatura, kategori_adi = result
+        efatura.Kategori_Adi = kategori_adi
+        return efatura
+    return None
+
 
 # --- RolYetki CRUD ---
 def get_rol_yetki(db: Session, rol_id: int, yetki_id: int):
