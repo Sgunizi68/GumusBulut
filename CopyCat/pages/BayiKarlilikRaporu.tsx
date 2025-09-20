@@ -67,6 +67,8 @@ const moreRows = [
   { label: "Paket Komisyon ve Lojistik Giderleri", values: Array(12).fill(null), total: null, category: "komisyon" },
   { label: "Paket Komisyon ve Lojistik (Paket Satış) %", values: Array(12).fill(null), total: null, category: "komisyon" },
   { label: "Diğer Giderler", values: Array(12).fill(null), total: null, category: "gider" },
+  { label: "Kredi Kartı Komisyon Giderleri", values: Array(12).fill(null), total: null, category: "komisyon" },
+  { label: "Yemek Kartı Komisyon Giderleri", values: Array(12).fill(null), total: null, category: "komisyon" },
   { label: "Tavuk Dünyası Lojistik Giderleri", values: Array(12).fill(null), total: null, category: "gider" },
   { label: "Toplam Diğer Giderler", values: Array(12).fill(null), total: null, category: "gider" },
   { label: "Diğer Giderler %", values: Array(12).fill(null), total: null, category: "gider" },
@@ -727,6 +729,12 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         }
         if (row.label === "Diğer Giderler") {
             return { ...row, values: digerGiderlerValues, total: totalDigerGiderler };
+        }
+        if (row.label === "Kredi Kartı Komisyon Giderleri") {
+            return { ...row, values: komisyonGiderleriValues, total: totalKomisyonGiderleri };
+        }
+        if (row.label === "Yemek Kartı Komisyon Giderleri") {
+            return { ...row, values: komisyonGiderleriValues, total: totalKomisyonGiderleri };
         }
         return row;
     });
