@@ -684,6 +684,28 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     });
     const totalToplamDigerGiderler = toplamDigerGiderlerValues.reduce((a, b) => a + b, 0);
 
+    // Calculate Toplam Kar / Zarar
+    const karZararValues = months.map((_, i) => {
+        const ciro = toplamCiroValues[i] || 0;
+        const maliyet = maliyetValues[i] || 0;
+        const personelMaas = personelMaasGiderleriValues[i] || 0;
+        const kira = toplamKiraValues[i] || 0;
+        const paketKomisyon = paketKomisyonLojistikGiderleriValues[i] || 0;
+        const digerGiderler = toplamDigerGiderlerValues[i] || 0;
+        const ciroReklamPrimi = ciroPrimiVeReklamPrimiValues[i] || 0;
+
+        return ciro - maliyet - personelMaas - kira - paketKomisyon - digerGiderler - ciroReklamPrimi;
+    });
+    const totalKarZarar = karZararValues.reduce((a, b) => a + b, 0);
+
+    // Calculate Toplam Kar / Zarar %
+    const karZararYuzdeValues = months.map((_, i) => {
+        const karZarar = karZararValues[i] || 0;
+        const ciro = toplamCiroValues[i] || 0;
+        return ciro > 0 ? parseFloat(((karZarar / ciro) * 100).toFixed(2)) : 0;
+    });
+    const totalKarZararYuzde = totalToplamCiro > 0 ? parseFloat(((totalKarZarar / totalToplamCiro) * 100).toFixed(2)) : 0;
+
 
     // --- Row Processing ---
     const newExcelRows = excelRows.map(row => {
@@ -786,6 +808,12 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         }
         if (row.label === "Yemek Kartı Komisyon Giderleri") {
             return { ...row, values: yemekKartiKomisyonGiderleriValues, total: totalYemekKartiKomisyonGiderleri };
+        }
+        if (row.label === "Toplam Kar / Zarar") {
+            return { ...row, values: karZararValues, total: totalKarZarar };
+        }
+        if (row.label === "Toplam Kar / Zarar %") {
+            return { ...row, values: karZararYuzdeValues, total: totalKarZararYuzde };
         }
         return row;
     });
