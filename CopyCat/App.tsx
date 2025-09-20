@@ -16,6 +16,7 @@ import { FaturaDigerHarcamaRaporuPage } from './pages/FaturaDigerHarcamaRaporu';
 import { POSKontrolDashboardPage } from './pages/POSKontrolDashboard';
 import { VPSDashboardPage } from './pages/VPSDashboard';
 import { BayiKarlilikRaporuPage } from './pages/BayiKarlilikRaporu';
+import FaturaBolmeYonetimiPage from './pages/FaturaBolmeYonetimi';
 
 import { Input, Select } from './components'; 
 
@@ -1757,7 +1758,7 @@ const AppWithToast: React.FC = () => {
                       <Route path="/kategoriler" element={<KategorilerPage />} />
                       <Route path="/invoice-upload" element={<InvoiceUploadPage />} />
                       <Route path="/invoice-category-assignment" element={<InvoiceCategoryAssignmentPage />} />
-                      <Route path="/fatura-bolme-yonetimi" element={<PlaceholderPage title="Fatura Bölme Yönetimi" />} />
+                      <Route path="/fatura-bolme-yonetimi" element={<FaturaBolmeYonetimiPage />} />
                       <Route path="/b2b-upload" element={<B2BUploadPage />} />
                       <Route path="/b2b-category-assignment" element={<B2BCategoryAssignmentPage />} />
                       <Route path="/odeme-yukleme" element={<OdemeYuklemePage />} />
