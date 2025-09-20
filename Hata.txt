@@ -3,117 +3,113 @@
 (anonymous) @ (index):64
 client:789 [vite] connecting...
 client:912 [vite] connected.
-react-dom_client.js?v=51fee4a5:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
-BayiKarlilikRaporu.tsx:761 Uncaught ReferenceError: i is not defined
-    at BayiKarlilikRaporu.tsx:761:53
-    at Array.map (<anonymous>)
-    at BayiKarlilikRaporu.tsx:744:34
-    at mountMemo (react-dom_client.js?v=51fee4a5:5052:25)
-    at Object.useMemo (react-dom_client.js?v=51fee4a5:16513:20)
-    at exports.useMemo (chunk-UGC3UZ7L.js?v=3446e18c:915:36)
-    at BayiKarlilikRaporuPage (BayiKarlilikRaporu.tsx:112:73)
-    at react-stack-bottom-frame (react-dom_client.js?v=51fee4a5:17424:20)
-    at renderWithHooks (react-dom_client.js?v=51fee4a5:4206:24)
-    at updateFunctionComponent (react-dom_client.js?v=51fee4a5:6619:21)
-(anonymous) @ BayiKarlilikRaporu.tsx:761
-(anonymous) @ BayiKarlilikRaporu.tsx:744
-mountMemo @ react-dom_client.js?v=51fee4a5:5052
-useMemo @ react-dom_client.js?v=51fee4a5:16513
-exports.useMemo @ chunk-UGC3UZ7L.js?v=3446e18c:915
-BayiKarlilikRaporuPage @ BayiKarlilikRaporu.tsx:112
-react-stack-bottom-frame @ react-dom_client.js?v=51fee4a5:17424
-renderWithHooks @ react-dom_client.js?v=51fee4a5:4206
-updateFunctionComponent @ react-dom_client.js?v=51fee4a5:6619
-beginWork @ react-dom_client.js?v=51fee4a5:7654
-runWithFiberInDEV @ react-dom_client.js?v=51fee4a5:1485
-performUnitOfWork @ react-dom_client.js?v=51fee4a5:10868
-workLoopSync @ react-dom_client.js?v=51fee4a5:10728
-renderRootSync @ react-dom_client.js?v=51fee4a5:10711
-performWorkOnRoot @ react-dom_client.js?v=51fee4a5:10359
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=51fee4a5:11623
-performWorkUntilDeadline @ react-dom_client.js?v=51fee4a5:36
-<BayiKarlilikRaporuPage>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=d4b2e88e:250
-AppWithToast @ App.tsx:1786
-react-stack-bottom-frame @ react-dom_client.js?v=51fee4a5:17424
-renderWithHooksAgain @ react-dom_client.js?v=51fee4a5:4281
-renderWithHooks @ react-dom_client.js?v=51fee4a5:4217
-updateFunctionComponent @ react-dom_client.js?v=51fee4a5:6619
-beginWork @ react-dom_client.js?v=51fee4a5:7654
-runWithFiberInDEV @ react-dom_client.js?v=51fee4a5:1485
-performUnitOfWork @ react-dom_client.js?v=51fee4a5:10868
-workLoopSync @ react-dom_client.js?v=51fee4a5:10728
-renderRootSync @ react-dom_client.js?v=51fee4a5:10711
-performWorkOnRoot @ react-dom_client.js?v=51fee4a5:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=51fee4a5:11623
-performWorkUntilDeadline @ react-dom_client.js?v=51fee4a5:36
+react-dom_client.js?v=5668b85e:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+react-dom_client.js?v=5668b85e:16 [Violation] 'message' handler took 156ms
+FaturaBolmeYonetimi.tsx:252 Uncaught ReferenceError: donemFiltresi is not defined
+    at FaturaBolmeYonetimiPage (FaturaBolmeYonetimi.tsx:252:24)
+    at react-stack-bottom-frame (react-dom_client.js?v=5668b85e:17424:20)
+    at renderWithHooks (react-dom_client.js?v=5668b85e:4206:24)
+    at updateFunctionComponent (react-dom_client.js?v=5668b85e:6619:21)
+    at beginWork (react-dom_client.js?v=5668b85e:7654:20)
+    at runWithFiberInDEV (react-dom_client.js?v=5668b85e:1485:72)
+    at performUnitOfWork (react-dom_client.js?v=5668b85e:10868:98)
+    at workLoopSync (react-dom_client.js?v=5668b85e:10728:43)
+    at renderRootSync (react-dom_client.js?v=5668b85e:10711:13)
+    at performWorkOnRoot (react-dom_client.js?v=5668b85e:10359:46)
+FaturaBolmeYonetimiPage @ FaturaBolmeYonetimi.tsx:252
+react-stack-bottom-frame @ react-dom_client.js?v=5668b85e:17424
+renderWithHooks @ react-dom_client.js?v=5668b85e:4206
+updateFunctionComponent @ react-dom_client.js?v=5668b85e:6619
+beginWork @ react-dom_client.js?v=5668b85e:7654
+runWithFiberInDEV @ react-dom_client.js?v=5668b85e:1485
+performUnitOfWork @ react-dom_client.js?v=5668b85e:10868
+workLoopSync @ react-dom_client.js?v=5668b85e:10728
+renderRootSync @ react-dom_client.js?v=5668b85e:10711
+performWorkOnRoot @ react-dom_client.js?v=5668b85e:10359
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=5668b85e:11623
+performWorkUntilDeadline @ react-dom_client.js?v=5668b85e:36
+<FaturaBolmeYonetimiPage>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=5668b85e:250
+AppWithToast @ App.tsx:1761
+react-stack-bottom-frame @ react-dom_client.js?v=5668b85e:17424
+renderWithHooksAgain @ react-dom_client.js?v=5668b85e:4281
+renderWithHooks @ react-dom_client.js?v=5668b85e:4217
+updateFunctionComponent @ react-dom_client.js?v=5668b85e:6619
+beginWork @ react-dom_client.js?v=5668b85e:7654
+runWithFiberInDEV @ react-dom_client.js?v=5668b85e:1485
+performUnitOfWork @ react-dom_client.js?v=5668b85e:10868
+workLoopSync @ react-dom_client.js?v=5668b85e:10728
+renderRootSync @ react-dom_client.js?v=5668b85e:10711
+performWorkOnRoot @ react-dom_client.js?v=5668b85e:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=5668b85e:11623
+performWorkUntilDeadline @ react-dom_client.js?v=5668b85e:36
 <AppWithToast>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=d4b2e88e:250
-App @ App.tsx:1806
-react-stack-bottom-frame @ react-dom_client.js?v=51fee4a5:17424
-renderWithHooksAgain @ react-dom_client.js?v=51fee4a5:4281
-renderWithHooks @ react-dom_client.js?v=51fee4a5:4217
-updateFunctionComponent @ react-dom_client.js?v=51fee4a5:6619
-beginWork @ react-dom_client.js?v=51fee4a5:7654
-runWithFiberInDEV @ react-dom_client.js?v=51fee4a5:1485
-performUnitOfWork @ react-dom_client.js?v=51fee4a5:10868
-workLoopSync @ react-dom_client.js?v=51fee4a5:10728
-renderRootSync @ react-dom_client.js?v=51fee4a5:10711
-performWorkOnRoot @ react-dom_client.js?v=51fee4a5:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=51fee4a5:11623
-performWorkUntilDeadline @ react-dom_client.js?v=51fee4a5:36
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=5668b85e:250
+App @ App.tsx:1808
+react-stack-bottom-frame @ react-dom_client.js?v=5668b85e:17424
+renderWithHooksAgain @ react-dom_client.js?v=5668b85e:4281
+renderWithHooks @ react-dom_client.js?v=5668b85e:4217
+updateFunctionComponent @ react-dom_client.js?v=5668b85e:6619
+beginWork @ react-dom_client.js?v=5668b85e:7654
+runWithFiberInDEV @ react-dom_client.js?v=5668b85e:1485
+performUnitOfWork @ react-dom_client.js?v=5668b85e:10868
+workLoopSync @ react-dom_client.js?v=5668b85e:10728
+renderRootSync @ react-dom_client.js?v=5668b85e:10711
+performWorkOnRoot @ react-dom_client.js?v=5668b85e:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=5668b85e:11623
+performWorkUntilDeadline @ react-dom_client.js?v=5668b85e:36
 <App>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=d4b2e88e:250
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=5668b85e:250
 (anonymous) @ index.tsx:14
-App.tsx:1786 An error occurred in the <BayiKarlilikRaporuPage> component.
+App.tsx:1761 An error occurred in the <FaturaBolmeYonetimiPage> component.
 
 Consider adding an error boundary to your tree to customize error handling behavior.
 Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
 
-defaultOnUncaughtError @ react-dom_client.js?v=51fee4a5:6229
-logUncaughtError @ react-dom_client.js?v=51fee4a5:6283
-runWithFiberInDEV @ react-dom_client.js?v=51fee4a5:1485
-lane.callback @ react-dom_client.js?v=51fee4a5:6311
-callCallback @ react-dom_client.js?v=51fee4a5:4097
-commitCallbacks @ react-dom_client.js?v=51fee4a5:4109
-runWithFiberInDEV @ react-dom_client.js?v=51fee4a5:1487
-commitLayoutEffectOnFiber @ react-dom_client.js?v=51fee4a5:9029
-flushLayoutEffects @ react-dom_client.js?v=51fee4a5:11174
-commitRoot @ react-dom_client.js?v=51fee4a5:11080
-commitRootWhenReady @ react-dom_client.js?v=51fee4a5:10512
-performWorkOnRoot @ react-dom_client.js?v=51fee4a5:10457
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=51fee4a5:11623
-performWorkUntilDeadline @ react-dom_client.js?v=51fee4a5:36
-<BayiKarlilikRaporuPage>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=d4b2e88e:250
-AppWithToast @ App.tsx:1786
-react-stack-bottom-frame @ react-dom_client.js?v=51fee4a5:17424
-renderWithHooksAgain @ react-dom_client.js?v=51fee4a5:4281
-renderWithHooks @ react-dom_client.js?v=51fee4a5:4217
-updateFunctionComponent @ react-dom_client.js?v=51fee4a5:6619
-beginWork @ react-dom_client.js?v=51fee4a5:7654
-runWithFiberInDEV @ react-dom_client.js?v=51fee4a5:1485
-performUnitOfWork @ react-dom_client.js?v=51fee4a5:10868
-workLoopSync @ react-dom_client.js?v=51fee4a5:10728
-renderRootSync @ react-dom_client.js?v=51fee4a5:10711
-performWorkOnRoot @ react-dom_client.js?v=51fee4a5:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=51fee4a5:11623
-performWorkUntilDeadline @ react-dom_client.js?v=51fee4a5:36
+defaultOnUncaughtError @ react-dom_client.js?v=5668b85e:6229
+logUncaughtError @ react-dom_client.js?v=5668b85e:6283
+runWithFiberInDEV @ react-dom_client.js?v=5668b85e:1485
+lane.callback @ react-dom_client.js?v=5668b85e:6311
+callCallback @ react-dom_client.js?v=5668b85e:4097
+commitCallbacks @ react-dom_client.js?v=5668b85e:4109
+runWithFiberInDEV @ react-dom_client.js?v=5668b85e:1487
+commitLayoutEffectOnFiber @ react-dom_client.js?v=5668b85e:9029
+flushLayoutEffects @ react-dom_client.js?v=5668b85e:11174
+commitRoot @ react-dom_client.js?v=5668b85e:11080
+commitRootWhenReady @ react-dom_client.js?v=5668b85e:10512
+performWorkOnRoot @ react-dom_client.js?v=5668b85e:10457
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=5668b85e:11623
+performWorkUntilDeadline @ react-dom_client.js?v=5668b85e:36
+<FaturaBolmeYonetimiPage>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=5668b85e:250
+AppWithToast @ App.tsx:1761
+react-stack-bottom-frame @ react-dom_client.js?v=5668b85e:17424
+renderWithHooksAgain @ react-dom_client.js?v=5668b85e:4281
+renderWithHooks @ react-dom_client.js?v=5668b85e:4217
+updateFunctionComponent @ react-dom_client.js?v=5668b85e:6619
+beginWork @ react-dom_client.js?v=5668b85e:7654
+runWithFiberInDEV @ react-dom_client.js?v=5668b85e:1485
+performUnitOfWork @ react-dom_client.js?v=5668b85e:10868
+workLoopSync @ react-dom_client.js?v=5668b85e:10728
+renderRootSync @ react-dom_client.js?v=5668b85e:10711
+performWorkOnRoot @ react-dom_client.js?v=5668b85e:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=5668b85e:11623
+performWorkUntilDeadline @ react-dom_client.js?v=5668b85e:36
 <AppWithToast>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=d4b2e88e:250
-App @ App.tsx:1806
-react-stack-bottom-frame @ react-dom_client.js?v=51fee4a5:17424
-renderWithHooksAgain @ react-dom_client.js?v=51fee4a5:4281
-renderWithHooks @ react-dom_client.js?v=51fee4a5:4217
-updateFunctionComponent @ react-dom_client.js?v=51fee4a5:6619
-beginWork @ react-dom_client.js?v=51fee4a5:7654
-runWithFiberInDEV @ react-dom_client.js?v=51fee4a5:1485
-performUnitOfWork @ react-dom_client.js?v=51fee4a5:10868
-workLoopSync @ react-dom_client.js?v=51fee4a5:10728
-renderRootSync @ react-dom_client.js?v=51fee4a5:10711
-performWorkOnRoot @ react-dom_client.js?v=51fee4a5:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=51fee4a5:11623
-performWorkUntilDeadline @ react-dom_client.js?v=51fee4a5:36
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=5668b85e:250
+App @ App.tsx:1808
+react-stack-bottom-frame @ react-dom_client.js?v=5668b85e:17424
+renderWithHooksAgain @ react-dom_client.js?v=5668b85e:4281
+renderWithHooks @ react-dom_client.js?v=5668b85e:4217
+updateFunctionComponent @ react-dom_client.js?v=5668b85e:6619
+beginWork @ react-dom_client.js?v=5668b85e:7654
+runWithFiberInDEV @ react-dom_client.js?v=5668b85e:1485
+performUnitOfWork @ react-dom_client.js?v=5668b85e:10868
+workLoopSync @ react-dom_client.js?v=5668b85e:10728
+renderRootSync @ react-dom_client.js?v=5668b85e:10711
+performWorkOnRoot @ react-dom_client.js?v=5668b85e:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=5668b85e:11623
+performWorkUntilDeadline @ react-dom_client.js?v=5668b85e:36
 <App>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=d4b2e88e:250
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=5668b85e:250
 (anonymous) @ index.tsx:14

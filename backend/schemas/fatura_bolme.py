@@ -6,6 +6,7 @@ from typing import Optional
 class FaturaBolmeBase(BaseModel):
     Bolunmus_Fatura: str
     Ana_Fatura: str
+    Ana_Tutar: Decimal
     Fatura_ID: int
     Fatura_Tarihi: date
     Fatura_Numarasi: str

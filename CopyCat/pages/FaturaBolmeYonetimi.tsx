@@ -4,6 +4,21 @@ import { API_BASE_URL } from '../constants';
 
 const FaturaBolmeYonetimiPage = () => {
   const [bolunmusFaturalar, setBolunmusFaturalar] = useState([]);
+  const [editingDetay, setEditingDetay] = useState(null);
+  const [tempValues, setTempValues] = useState({});
+  const [donemFiltresi, setDonemFiltresi] = useState('');
+  const [yeniFaturaNo, setYeniFaturaNo] = useState('');
+  const [yeniFaturaModal, setYeniFaturaModal] = useState(false);
+  const [yeniFaturaData, setYeniFaturaData] = useState({
+    aliciUnvani: '',
+    faturaTarihi: '',
+    toplamTutar: 0,
+    kategori: 'Bölünmüş Fatura',
+    aciklama: '',
+    donem: '',
+    gunluk: false,
+    ozel: false
+  });
 
   useEffect(() => {
     const fetchBolunmusFaturalar = async () => {
@@ -32,7 +47,7 @@ const FaturaBolmeYonetimiPage = () => {
           acc[anaFaturaNo].detaylar.push({
             id: fatura.Fatura_ID,
             faturaNo: fatura.Bolunmus_Fatura,
-            tutar: fatura.Tutar,
+            tutar: parseFloat(fatura.Tutar),
             kategori: fatura.Kategori_ID ? `Kat ID: ${fatura.Kategori_ID}` : 'Kategorisiz',
             ozel: fatura.Ozel,
           });
@@ -42,7 +57,7 @@ const FaturaBolmeYonetimiPage = () => {
 
         // Calculate total amount for each main invoice
         for (const key in groupedFaturalar) {
-          groupedFaturalar[key].toplamTutar = groupedFaturalar[key].detaylar.reduce((sum, detay) => sum + parseFloat(detay.tutar), 0);
+          groupedFaturalar[key].toplamTutar = groupedFaturalar[key].detaylar.reduce((sum, detay) => sum + detay.tutar, 0);
         }
 
         setBolunmusFaturalar(Object.values(groupedFaturalar));
@@ -53,22 +68,6 @@ const FaturaBolmeYonetimiPage = () => {
 
     fetchBolunmusFaturalar();
   }, []);
-
-  const [editingDetay, setEditingDetay] = useState(null);
-  const [tempValues, setTempValues] = useState({});
-  const [donemFiltresi, setDonemFiltresi] = useState('');
-  const [yeniFaturaNo, setYeniFaturaNo] = useState('');
-  const [yeniFaturaModal, setYeniFaturaModal] = useState(false);
-  const [yeniFaturaData, setYeniFaturaData] = useState({
-    aliciUnvani: '',
-    faturaTarihi: '',
-    toplamTutar: 0,
-    kategori: 'Bölünmüş Fatura',
-    aciklama: '',
-    donem: '',
-    gunluk: '',
-    ozel: false
-  });
 
   // Dönem formatını dönüştürme fonksiyonu
   const donemFormatla = (donem) => {
@@ -99,7 +98,7 @@ const FaturaBolmeYonetimiPage = () => {
   };
 
   const detayTutarToplami = (detaylar) => {
-    return detaylar.reduce((toplam, detay) => toplam + detay.tutar, 0);
+    return detaylar.reduce((toplam, detay) => toplam + (parseFloat(detay.tutar) || 0), 0);
   };
 
   const yeniDetayEkle = (faturaId) => {
