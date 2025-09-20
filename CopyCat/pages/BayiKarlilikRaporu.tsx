@@ -679,6 +679,11 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     });
     const totalDigerDetayToplami = digerDetayToplamiValues.reduce((a, b) => a + b, 0);
 
+    const toplamDigerGiderlerValues = months.map((_, i) => {
+        return (digerDetayToplamiValues[i] || 0) + (tavukDunyasiLojistikGiderleriValues[i] || 0);
+    });
+    const totalToplamDigerGiderler = toplamDigerGiderlerValues.reduce((a, b) => a + b, 0);
+
 
     // --- Row Processing ---
     const newExcelRows = excelRows.map(row => {
@@ -748,6 +753,18 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         }
         if (row.label === "Tavuk Dünyası Lojistik Giderleri") {
             return { ...row, values: tavukDunyasiLojistikGiderleriValues, total: totalTavukDunyasiLojistikGiderleri };
+        }
+        if (row.label === "Toplam Diğer Giderler") {
+            return { ...row, values: toplamDigerGiderlerValues, total: totalToplamDigerGiderler };
+        }
+        if (row.label === "Diğer Giderler %") {
+            const digerGiderlerYuzdeValues = months.map((_, i) => {
+                const gider = toplamDigerGiderlerValues[i] || 0;
+                const ciro = toplamCiroValues[i] || 0;
+                return ciro > 0 ? parseFloat(((gider / ciro) * 100).toFixed(2)) : 0;
+            });
+            const totalDigerGiderlerYuzde = totalToplamCiro > 0 ? parseFloat(((toplamDigerGiderlerValues.reduce((a, b) => a + b, 0) / totalToplamCiro) * 100).toFixed(2)) : 0;
+            return { ...row, values: digerGiderlerYuzdeValues, total: totalDigerGiderlerYuzde };
         }
         if (row.label === "Tavuk Dünyası Ciro Primi") {
             return { ...row, values: tavukDunyasiCiroPrimiValues, total: totalTavukDunyasiCiroPrimi };

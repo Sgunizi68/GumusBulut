@@ -4,23 +4,23 @@
 client:789 [vite] connecting...
 client:912 [vite] connected.
 react-dom_client.js?v=51fee4a5:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
-BayiKarlilikRaporu.tsx:745 Uncaught ReferenceError: dogalgazGideriValues is not defined
-    at BayiKarlilikRaporu.tsx:745:38
+BayiKarlilikRaporu.tsx:761 Uncaught ReferenceError: i is not defined
+    at BayiKarlilikRaporu.tsx:761:53
     at Array.map (<anonymous>)
-    at BayiKarlilikRaporu.tsx:734:48
+    at BayiKarlilikRaporu.tsx:744:34
     at mountMemo (react-dom_client.js?v=51fee4a5:5052:25)
     at Object.useMemo (react-dom_client.js?v=51fee4a5:16513:20)
     at exports.useMemo (chunk-UGC3UZ7L.js?v=3446e18c:915:36)
-    at BayiKarlilikRaporuPage (BayiKarlilikRaporu.tsx:109:73)
+    at BayiKarlilikRaporuPage (BayiKarlilikRaporu.tsx:112:73)
     at react-stack-bottom-frame (react-dom_client.js?v=51fee4a5:17424:20)
     at renderWithHooks (react-dom_client.js?v=51fee4a5:4206:24)
     at updateFunctionComponent (react-dom_client.js?v=51fee4a5:6619:21)
-(anonymous) @ BayiKarlilikRaporu.tsx:745
-(anonymous) @ BayiKarlilikRaporu.tsx:734
+(anonymous) @ BayiKarlilikRaporu.tsx:761
+(anonymous) @ BayiKarlilikRaporu.tsx:744
 mountMemo @ react-dom_client.js?v=51fee4a5:5052
 useMemo @ react-dom_client.js?v=51fee4a5:16513
 exports.useMemo @ chunk-UGC3UZ7L.js?v=3446e18c:915
-BayiKarlilikRaporuPage @ BayiKarlilikRaporu.tsx:109
+BayiKarlilikRaporuPage @ BayiKarlilikRaporu.tsx:112
 react-stack-bottom-frame @ react-dom_client.js?v=51fee4a5:17424
 renderWithHooks @ react-dom_client.js?v=51fee4a5:4206
 updateFunctionComponent @ react-dom_client.js?v=51fee4a5:6619
