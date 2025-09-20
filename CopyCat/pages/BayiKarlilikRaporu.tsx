@@ -93,6 +93,28 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [showDigerDetayi, setShowDigerDetayi] = useState(false);
   const [compactView, setCompactView] = useState(false);
+  const [allExpensesByCategory, setAllExpensesByCategory] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchAllExpenses = async () => {
+      const currentYearYYMM = `${String(year).slice(2)}01`; // Assuming we need a YYMM format for the API
+      try {
+        const response = await fetch(`${API_BASE_URL}/report/all-expenses-by-category/${currentYearYYMM}`);
+        if (response.ok) {
+          const data = await response.json();
+          setAllExpensesByCategory(data);
+        } else {
+          console.error('Error fetching all expenses by category:', response.status, await response.text());
+          setAllExpensesByCategory([]);
+        }
+      } catch (error) {
+        console.error('Network error fetching all expenses by category:', error);
+        setAllExpensesByCategory([]);
+      }
+    };
+
+    fetchAllExpenses();
+  }, [year]); // Re-fetch when year changes
 
   const yearOptions = useMemo(() => {
     const currentYear = new Date().getFullYear();
@@ -115,12 +137,17 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
 
   const headers = months.map((m) => `${m}${String(year).slice(2)}`);
 
-  const { processedExcelRows, processedDigerRows, processedMoreRows } = useMemo(() => {
-    const calculateWorkingDays = (monthIndex: number, year: number) => new Date(year, monthIndex + 1, 0).getDate();
-
-    // --- Main Calculations ---
-    const workingDaysValues = months.map((_, index) => calculateWorkingDays(index, year));
-    const totalWorkingDays = workingDaysValues.reduce((sum, days) => sum + days, 0);
+      const { processedExcelRows, processedDigerRows, processedMoreRows } = useMemo(() => {
+      const calculateWorkingDays = (monthIndex: number, year: number) => new Date(year, monthIndex + 1, 0).getDate();
+  
+      // Map fetched expenses by category for easier lookup
+      const expensesMap = new Map<number, number>();
+      allExpensesByCategory.forEach(item => {
+          expensesMap.set(item.Kategori_ID, item.Toplam_Tutar);
+      });
+  
+      // --- Main Calculations ---
+      const workingDaysValues = months.map((_, index) => calculateWorkingDays(index, year));    const totalWorkingDays = workingDaysValues.reduce((sum, days) => sum + days, 0);
 
     const tabakSayisiValues = Array(12).fill(0);
     const toplamCiroValues = Array(12).fill(0);
@@ -825,15 +852,12 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     });
 
     const newDigerDetayiRows = digerDetayiRows.map(row => {
-        if (row.label === "Elektrik") {
-            return { ...row, values: elektrikValues, total: totalElektrik };
-        }
-        if (row.label === "Su") {
-            return { ...row, values: suValues, total: totalSu };
-        }
-
-        if (row.label === "Doğalgaz Gideri") {
-            return { ...row, values: digerGiderlerValues, total: totalDigerGiderler };
+        const kategori = kategoriList.find(k => k.Kategori_Adi === row.label);
+        if (kategori) {
+            const kategoriId = kategori.Kategori_ID;
+            const totalForCategory = expensesMap.get(kategoriId) || 0;
+            // Distribute total across months for display purposes
+            return { ...row, total: totalForCategory, values: Array(12).fill(totalForCategory / 12) };
         }
         return row;
     });
@@ -843,7 +867,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         processedDigerRows: newDigerDetayiRows,
         processedMoreRows: newMoreRows
     };
-  }, [year, depoKiraRapor, gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList, calisanList, ustKategoriList, digerHarcamaList, eFaturaList]);
+  }, [year, depoKiraRapor, gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList, calisanList, ustKategoriList, digerHarcamaList, eFaturaList, allExpensesByCategory]);
 
   const formatCell = (v: any) => {
     if (v === null || v === undefined || v === '' || v === 0) return '';

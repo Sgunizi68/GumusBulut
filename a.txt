@@ -1,11 +1,49 @@
+WITH X_kategorileri AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Tip = 'Gider'
+),
+tumunu_veriler AS (
+    SELECT dh.Kategori_ID, dh.Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    WHERE dh.Donem = Ekran.Donem
+
+    UNION ALL
+
+    SELECT ef.Kategori_ID, ef.Tutar
+    FROM SilverCloud.e_Fatura ef
+    WHERE ef.Donem = Ekran.Donem
+)
 SELECT
-    t.Fatura_Numarasi AS Bolunmus_Fatura,
-    s.Fatura_Numarasi AS Ana_Fatura,
-    t.*
-FROM SilverCloud.e_Fatura t
-INNER JOIN SilverCloud.e_Fatura s
-    ON t.Fatura_Numarasi LIKE CONCAT('%', s.Fatura_Numarasi, '%')
-INNER JOIN SilverCloud.Kategori k
-    ON s.Kategori_ID = k.Kategori_ID
-WHERE k.Kategori_Adi = 'Bölünmüş Fatura'
-ORDER BY t.Fatura_Numarasi;
+    x.Kategori_ID,
+    COALESCE(SUM(t.Tutar), 0) AS Toplam_Tutar
+FROM X_kategorileri x
+LEFT JOIN tumunu_veriler t
+       ON x.Kategori_ID = t.Kategori_ID
+GROUP BY x.Kategori_ID
+ORDER BY x.Kategori_ID;
+Örnek
+WITH X_kategorileri AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Tip = 'Gider'
+),
+tumunu_veriler AS (
+    SELECT dh.Kategori_ID, dh.Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    WHERE dh.Donem = 2508
+
+    UNION ALL
+
+    SELECT ef.Kategori_ID, ef.Tutar
+    FROM SilverCloud.e_Fatura ef
+    WHERE ef.Donem = 2508
+)
+SELECT
+    x.Kategori_ID,
+    COALESCE(SUM(t.Tutar), 0) AS Toplam_Tutar
+FROM X_kategorileri x
+LEFT JOIN tumunu_veriler t
+       ON x.Kategori_ID = t.Kategori_ID
+GROUP BY x.Kategori_ID
+ORDER BY x.Kategori_ID;

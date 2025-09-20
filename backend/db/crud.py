@@ -2529,6 +2529,60 @@ def get_depo_kira_rapor(db: Session):
 
     return formatted_results 
 
+def get_all_expenses_by_category_for_donem(db: Session, donem: int):
+    """
+    Fetches all expenses grouped by category for a given period (Donem).
+    Combines data from Diger_Harcama and e_Fatura tables.
+    """
+    from sqlalchemy import text
+    from decimal import Decimal
+    import logging
+    logger = logging.getLogger(__name__)
+
+    sql_query = """
+    WITH X_kategorileri AS (
+        SELECT Kategori_ID
+        FROM SilverCloud.Kategori
+        WHERE Tip = 'Gider'
+    ),
+    tumunu_veriler AS (
+        SELECT dh.Kategori_ID, dh.Tutar
+        FROM SilverCloud.Diger_Harcama dh
+        WHERE dh.Donem = :donem_param
+
+        UNION ALL
+
+        SELECT ef.Kategori_ID, ef.Tutar
+        FROM SilverCloud.e_Fatura ef
+        WHERE ef.Donem = :donem_param
+    )
+    SELECT
+        x.Kategori_ID,
+        COALESCE(SUM(t.Tutar), 0) AS Toplam_Tutar
+    FROM X_kategorileri x
+    LEFT JOIN tumunu_veriler t
+           ON x.Kategori_ID = t.Kategori_ID
+    GROUP BY x.Kategori_ID
+    ORDER BY x.Kategori_ID;
+    """
+    try:
+        logger.info(f"Executing get_all_expenses_by_category_for_donem for Donem: {donem}")
+        result = db.execute(text(sql_query), {"donem_param": donem})
+        
+        # Fetch all results and convert to a list of dictionaries
+        # Assuming the result has Kategori_ID and Toplam_Tutar
+        expenses_data = []
+        for row in result:
+            expenses_data.append({
+                "Kategori_ID": row.Kategori_ID,
+                "Toplam_Tutar": float(row.Toplam_Tutar) # Convert Decimal to float for JSON serialization
+            })
+        logger.info(f"Found {len(expenses_data)} expense categories for Donem: {donem}")
+        return expenses_data
+    except Exception as e:
+        logger.error(f"Error in get_all_expenses_by_category_for_donem: {e}")
+        return []
+
 def get_bolunmus_faturalar(db: Session):
     sql_query = """
     SELECT

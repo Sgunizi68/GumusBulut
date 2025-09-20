@@ -216,8 +216,24 @@ def get_pos_kontrol_dashboard(
         
     except HTTPException:
         raise
+
+@router.get("/all-expenses-by-category/{donem}", response_model=List[Dict[str, Any]])
+def get_all_expenses_by_category(donem: int, db: Session = Depends(get_db)):
+    """
+    Fetches all expenses grouped by category for a given period.
+    """
+    logger.info(f"Getting all expenses by category for Donem: {donem}")
+    try:
+        if donem <= 0 or len(str(donem)) != 4:
+            raise HTTPException(status_code=400, detail="Invalid donem format. Expected YYMM (4-digit) format.")
+        
+        expenses_data = crud.get_all_expenses_by_category_for_donem(db=db, donem=donem)
+        logger.info(f"Successfully fetched {len(expenses_data)} expense categories for Donem: {donem}")
+        return expenses_data
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Error in get_pos_kontrol_dashboard: {e}")
+        logger.error(f"Error in get_all_expenses_by_category: {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 @router.get("/depo-kira-rapor/", response_model=List[Dict[str, Any]])
