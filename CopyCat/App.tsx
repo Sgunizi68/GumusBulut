@@ -16,6 +16,7 @@ import { FaturaDigerHarcamaRaporuPage } from './pages/FaturaDigerHarcamaRaporu';
 import { POSKontrolDashboardPage } from './pages/POSKontrolDashboard';
 import { VPSDashboardPage } from './pages/VPSDashboard';
 import { BayiKarlilikRaporuPage } from './pages/BayiKarlilikRaporu';
+import { OzetKontrolRaporuPage } from './pages/OzetKontrolRaporuPage';
 import FaturaBolmeYonetimiPage from './pages/FaturaBolmeYonetimi';
 
 import { Input, Select } from './components'; 
@@ -1786,6 +1787,7 @@ const AppWithToast: React.FC = () => {
                       <Route path="/yemek-ceki-kontrol-dashboard" element={<YemekCekiKontrolDashboardPage />} />
                       <Route path="/vps-dashboard" element={<VPSDashboardPage />} />
                       <Route path="/bayi-karlilik-raporu" element={<BayiKarlilikRaporuPage />} />
+                      <Route path="/ozet-kontrol-raporu" element={<OzetKontrolRaporuPage />} />
                       
                       <Route path="*" element={<Navigate to="/" />} />
                     </Routes>

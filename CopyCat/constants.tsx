@@ -123,6 +123,7 @@ export const TABAK_SAYISI_YUKLEME_EKRANI_YETKI_ADI = 'Tabak Sayısı Yükleme Ek
 export const VPS_DASHBOARD_YETKI_ADI = 'VPS Dashboard Görüntüleme';
 export const BAYI_KARLILIK_RAPORU_YETKI_ADI = 'Bayi Karlılık Raporu Görüntüleme';
 export const FATURA_BOLME_YONETIMI_EKRANI_YETKI_ADI = 'Fatura Bölme Yönetimi Ekranı Görüntüleme';
+export const OZET_KONTROL_RAPORU_YETKI_ADI = 'Özet Kontrol Raporu Görüntüleme';
 
 
 // --- MENU STRUCTURE ---
@@ -202,6 +203,7 @@ export const MENU_GROUPS = [
             { label: 'Yemek Çeki Kontrol Dashboard', path: '/yemek-ceki-kontrol-dashboard', icon: Icons.Report, permission: YEMEK_CEKI_KONTROL_DASHBOARD_YETKI_ADI },
             { label: 'VPS Dashboard', path: '/vps-dashboard', icon: Icons.Report, permission: VPS_DASHBOARD_YETKI_ADI },
             { label: 'Bayi Karlılık Raporu', path: '/bayi-karlilik-raporu', icon: Icons.DocumentReport, permission: BAYI_KARLILIK_RAPORU_YETKI_ADI },
+            { label: 'Özet Kontrol Raporu', path: '/ozet-kontrol-raporu', icon: Icons.Report, permission: OZET_KONTROL_RAPORU_YETKI_ADI },
         ]
     }
 ];
