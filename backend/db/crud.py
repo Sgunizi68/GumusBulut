@@ -2635,3 +2635,34 @@ def get_robotpos_tutar(db: Session, donem: int, sube_id: int) -> float:
     ).scalar()
     
     return total_tutar or 0.0
+
+def get_toplam_satis_gelirleri(db: Session, donem: int, sube_id: int) -> float:
+    """
+    Calculates the sum of Toplam Satis Gelirleri for a given period and branch.
+    """
+    from sqlalchemy import func
+
+    if len(str(donem)) == 6:
+        # Convert YYYYMM to YYMM
+        donem_str = str(donem)
+        donem = int(donem_str[2:])
+
+    ust_kategori_names = ['E-Ticaret Kredi Kart', 'Kredi Kartı', 'Nakit', 'Yemek Çeki']
+    
+    ust_kategori_ids = db.query(models.UstKategori.UstKategori_ID).filter(
+        models.UstKategori.UstKategori_Adi.in_(ust_kategori_names)
+    ).all()
+    ust_kategori_ids = [id[0] for id in ust_kategori_ids]
+
+    kategori_ids = db.query(models.Kategori.Kategori_ID).filter(
+        models.Kategori.Ust_Kategori_ID.in_(ust_kategori_ids)
+    ).all()
+    kategori_ids = [id[0] for id in kategori_ids]
+
+    total_tutar = db.query(func.sum(models.Gelir.Tutar)).filter(
+        models.Gelir.Sube_ID == sube_id,
+        func.date_format(models.Gelir.Tarih, '%y%m') == str(donem),
+        models.Gelir.Kategori_ID.in_(kategori_ids)
+    ).scalar()
+    
+    return total_tutar or 0.0

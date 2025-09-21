@@ -17,6 +17,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
     const pageTitle = "Özet Kontrol Raporu";
     const requiredPermission = OZET_KONTROL_RAPORU_YETKI_ADI;
     const [robotposTutar, setRobotposTutar] = useState<number>(0);
+    const [toplamSatis, setToplamSatis] = useState<number>(0);
     const [periodOptions, setPeriodOptions] = useState<string[]>([]);
 
     useEffect(() => {
@@ -44,7 +45,16 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                     setRobotposTutar(data);
                     const robotposTutarEl = document.getElementById('robotposTutar');
                     if(robotposTutarEl) robotposTutarEl.textContent = formatCurrency(data);
-                    performCalculations(data);
+                    performCalculations(data, toplamSatis);
+                });
+            
+            fetch(`${API_BASE_URL}/ozet-kontrol-raporu/toplam-satis-gelirleri/${selectedBranch.Sube_ID}/${currentPeriod}`)
+                .then(response => response.json())
+                .then(data => {
+                    setToplamSatis(data);
+                    const toplamSatisEl = document.getElementById('toplamSatis');
+                    if(toplamSatisEl) toplamSatisEl.textContent = formatCurrency(data);
+                    performCalculations(robotposTutar, data);
                 });
         }
 
@@ -81,11 +91,11 @@ export const OzetKontrolRaporuPage: React.FC = () => {
             }
         }
 
-        function performCalculations(robotposTutar: number) {
+        function performCalculations(robotposTutar: number, toplamSatis: number) {
             // Simulate database values (these would come from actual database)
             const data = {
                 robotposTutar: robotposTutar,
-                toplamSatis: 15200,
+                toplamSatis: toplamSatis,
                 nakit: 8500,
                 gunlukHarcamaEFatura: 1200,
                 gunlukHarcamaDiger: 800,
@@ -625,7 +635,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
 
                             <div className="data-item">
                                 <div className="data-label">Toplam Satış Gelirleri</div>
-                                <div className="data-value" id="toplamSatis">₺ 15,200.00</div>
+                                <div className="data-value" id="toplamSatis">₺ 0.00</div>
                             </div>
 
                             <div className="data-item">

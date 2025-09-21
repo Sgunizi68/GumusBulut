@@ -1,11 +1,47 @@
-
 SELECT
-    SUM(RobotPos_Tutar) AS Robotpos_Tutar
-    FROM SilverCloud.GelirEkstra
-WHERE DATE_FORMAT(Tarih, '%y%m') = Ekran.Donem;
+    SUM(Tutar) AS Toplam_Satis_Gelirleri
+FROM SilverCloud.Gelir
+WHERE DATE_FORMAT(Tarih, '%y%m')=Ekran.Dönem
+  AND Kategori_ID IN (
+        SELECT Kategori_ID
+        FROM SilverCloud.Kategori
+        WHERE Ust_Kategori_ID IN (
+            SELECT UstKategori_ID
+            FROM SilverCloud.UstKategori
+            WHERE UstKategori_Adi IN ('E-Ticaret Kredi Kart', 'Kredi Kartı', 'Nakit', 'Yemek Çeki')
+        )
+  );
 
 Örnek
+Dönem 2508 seçildiğinde
+
 SELECT
-    SUM(RobotPos_Tutar) AS Robotpos_Tutar
-    FROM SilverCloud.GelirEkstra
-WHERE DATE_FORMAT(Tarih, '%y%m') = '2509';
+    SUM(Tutar) AS Toplam_Satis_Gelirleri
+FROM SilverCloud.Gelir
+WHERE DATE_FORMAT(Tarih, '%y%m')=2508
+  AND Kategori_ID IN (
+        SELECT Kategori_ID
+        FROM SilverCloud.Kategori
+        WHERE Ust_Kategori_ID IN (
+            SELECT UstKategori_ID
+            FROM SilverCloud.UstKategori
+            WHERE UstKategori_Adi IN ('E-Ticaret Kredi Kart', 'Kredi Kartı', 'Nakit', 'Yemek Çeki')
+        )
+  );
+
+Örnek
+Dönem 2507 seçildiğinde
+
+SELECT
+    SUM(Tutar) AS Toplam_Satis_Gelirleri
+FROM SilverCloud.Gelir
+WHERE DATE_FORMAT(Tarih, '%y%m')=2507
+  AND Kategori_ID IN (
+        SELECT Kategori_ID
+        FROM SilverCloud.Kategori
+        WHERE Ust_Kategori_ID IN (
+            SELECT UstKategori_ID
+            FROM SilverCloud.UstKategori
+            WHERE UstKategori_Adi IN ('E-Ticaret Kredi Kart', 'Kredi Kartı', 'Nakit', 'Yemek Çeki')
+        )
+  );

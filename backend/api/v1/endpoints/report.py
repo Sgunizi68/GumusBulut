@@ -268,5 +268,19 @@ def get_robotpos_tutar_endpoint(sube_id: int, donem: int, db: Session = Depends(
         logger.info(f"Successfully fetched Robotpos Tutar: {tutar}")
         return tutar
     except Exception as e:
-        logger.error(f"Error in get_robotpos_tutar_endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@router.get("/ozet-kontrol-raporu/toplam-satis-gelirleri/{sube_id}/{donem}", response_model=float)
+def get_toplam_satis_gelirleri_endpoint(sube_id: int, donem: int, db: Session = Depends(get_db)):
+    """
+    Get the total Toplam Satis Gelirleri for a given period and branch.
+    """
+    logger.info(f"Getting Toplam Satis Gelirleri for Sube_ID: {sube_id}, Donem: {donem}")
+    
+    try:
+        tutar = crud.get_toplam_satis_gelirleri(db=db, sube_id=sube_id, donem=donem)
+        logger.info(f"Successfully fetched Toplam Satis Gelirleri: {tutar}")
+        return tutar
+    except Exception as e:
+        logger.error(f"Error in get_toplam_satis_gelirleri_endpoint: {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
