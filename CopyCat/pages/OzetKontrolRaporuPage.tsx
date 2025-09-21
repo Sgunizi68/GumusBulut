@@ -18,6 +18,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
     const requiredPermission = OZET_KONTROL_RAPORU_YETKI_ADI;
     const [robotposTutar, setRobotposTutar] = useState<number>(0);
     const [toplamSatis, setToplamSatis] = useState<number>(0);
+    const [nakit, setNakit] = useState<number>(0);
     const [periodOptions, setPeriodOptions] = useState<string[]>([]);
 
     useEffect(() => {
@@ -39,23 +40,26 @@ export const OzetKontrolRaporuPage: React.FC = () => {
 
     useEffect(() => {
         if (selectedBranch && currentPeriod) {
-            fetch(`${API_BASE_URL}/ozet-kontrol-raporu/robotpos-tutar/${selectedBranch.Sube_ID}/${currentPeriod}`)
-                .then(response => response.json())
-                .then(data => {
-                    setRobotposTutar(data);
-                    const robotposTutarEl = document.getElementById('robotposTutar');
-                    if(robotposTutarEl) robotposTutarEl.textContent = formatCurrency(data);
-                    performCalculations(data, toplamSatis);
-                });
-            
-            fetch(`${API_BASE_URL}/ozet-kontrol-raporu/toplam-satis-gelirleri/${selectedBranch.Sube_ID}/${currentPeriod}`)
-                .then(response => response.json())
-                .then(data => {
-                    setToplamSatis(data);
-                    const toplamSatisEl = document.getElementById('toplamSatis');
-                    if(toplamSatisEl) toplamSatisEl.textContent = formatCurrency(data);
-                    performCalculations(robotposTutar, data);
-                });
+            Promise.all([
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/robotpos-tutar/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/toplam-satis-gelirleri/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/nakit/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json())
+            ]).then(([robotposData, toplamSatisData, nakitData]) => {
+                setRobotposTutar(robotposData);
+                setToplamSatis(toplamSatisData);
+                setNakit(nakitData);
+
+                const robotposTutarEl = document.getElementById('robotposTutar');
+                if(robotposTutarEl) robotposTutarEl.textContent = formatCurrency(robotposData);
+
+                const toplamSatisEl = document.getElementById('toplamSatis');
+                if(toplamSatisEl) toplamSatisEl.textContent = formatCurrency(toplamSatisData);
+
+                const nakitEl = document.getElementById('nakit');
+                if(nakitEl) nakitEl.textContent = formatCurrency(nakitData);
+
+                performCalculations(robotposData, toplamSatisData, nakitData);
+            });
         }
 
         // Simulate real-time database updates
@@ -91,12 +95,12 @@ export const OzetKontrolRaporuPage: React.FC = () => {
             }
         }
 
-        function performCalculations(robotposTutar: number, toplamSatis: number) {
+        function performCalculations(robotposTutar: number, toplamSatis: number, nakit: number) {
             // Simulate database values (these would come from actual database)
             const data = {
                 robotposTutar: robotposTutar,
                 toplamSatis: toplamSatis,
-                nakit: 8500,
+                nakit: nakit,
                 gunlukHarcamaEFatura: 1200,
                 gunlukHarcamaDiger: 800,
                 kalanNakit: 6500,
@@ -111,7 +115,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
 
             // Perform calculations based on the table formulas
             const calculations: { [key: string]: number } = {
-                gelirFark: data.robotposTutar - data.toplamSatis,
+                gelirFark: data.toplamSatis - data.robotposTutar,
                 nakitCalculated: data.nakit - data.gunlukHarcamaEFatura - data.gunlukHarcamaDiger,
                 nakitFark: data.kalanNakit - data.bankayaYatan,
                 krediKartiFark: data.gelirPOS - data.posHareketleri,
@@ -640,7 +644,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
 
                             <div className="data-item">
                                 <div className="data-label">Nakit</div>
-                                <div className="data-value" id="nakit">₺ 8,500.00</div>
+                                <div className="data-value" id="nakit">₺ 0.00</div>
                             </div>
 
                             <div className="data-item">
@@ -718,7 +722,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                                     Gelir Fark
                                     <span className="status-indicator status-positive" id="gelirFarkStatus"></span>
                                 </div>
-                                <div className="calculation-formula">Robotpos Tutar - Toplam Satış Gelirleri</div>
+                                <div className="calculation-formula">Toplam Satış Gelirleri - Robotpos Tutar</div>
                                 <div className="calculation-value positive" id="gelirFark">₺ 550.00</div>
                             </div>
 
