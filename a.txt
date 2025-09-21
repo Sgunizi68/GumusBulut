@@ -1,49 +1,11 @@
-WITH X_kategorileri AS (
-    SELECT Kategori_ID
-    FROM SilverCloud.Kategori
-    WHERE Tip = 'Gider'
-),
-tumunu_veriler AS (
-    SELECT dh.Kategori_ID, dh.Tutar
-    FROM SilverCloud.Diger_Harcama dh
-    WHERE dh.Donem = Ekran.Donem
 
-    UNION ALL
-
-    SELECT ef.Kategori_ID, ef.Tutar
-    FROM SilverCloud.e_Fatura ef
-    WHERE ef.Donem = Ekran.Donem
-)
 SELECT
-    x.Kategori_ID,
-    COALESCE(SUM(t.Tutar), 0) AS Toplam_Tutar
-FROM X_kategorileri x
-LEFT JOIN tumunu_veriler t
-       ON x.Kategori_ID = t.Kategori_ID
-GROUP BY x.Kategori_ID
-ORDER BY x.Kategori_ID;
+    SUM(RobotPos_Tutar) AS Robotpos_Tutar
+    FROM SilverCloud.GelirEkstra
+WHERE DATE_FORMAT(Tarih, '%y%m') = Ekran.Donem;
+
 Örnek
-WITH X_kategorileri AS (
-    SELECT Kategori_ID
-    FROM SilverCloud.Kategori
-    WHERE Tip = 'Gider'
-),
-tumunu_veriler AS (
-    SELECT dh.Kategori_ID, dh.Tutar
-    FROM SilverCloud.Diger_Harcama dh
-    WHERE dh.Donem = 2508
-
-    UNION ALL
-
-    SELECT ef.Kategori_ID, ef.Tutar
-    FROM SilverCloud.e_Fatura ef
-    WHERE ef.Donem = 2508
-)
 SELECT
-    x.Kategori_ID,
-    COALESCE(SUM(t.Tutar), 0) AS Toplam_Tutar
-FROM X_kategorileri x
-LEFT JOIN tumunu_veriler t
-       ON x.Kategori_ID = t.Kategori_ID
-GROUP BY x.Kategori_ID
-ORDER BY x.Kategori_ID;
+    SUM(RobotPos_Tutar) AS Robotpos_Tutar
+    FROM SilverCloud.GelirEkstra
+WHERE DATE_FORMAT(Tarih, '%y%m') = '2509';

@@ -2616,3 +2616,22 @@ def get_bolunmus_faturalar(db: Session):
     from sqlalchemy import text
     result = db.execute(text(sql_query))
     return result.fetchall()
+
+
+def get_robotpos_tutar(db: Session, donem: int, sube_id: int) -> float:
+    """
+    Calculates the sum of RobotPos_Tutar for a given period and branch.
+    """
+    from sqlalchemy import func
+
+    if len(str(donem)) == 6:
+        # Convert YYYYMM to YYMM
+        donem_str = str(donem)
+        donem = int(donem_str[2:])
+
+    total_tutar = db.query(func.sum(models.GelirEkstra.RobotPos_Tutar)).filter(
+        models.GelirEkstra.Sube_ID == sube_id,
+        func.date_format(models.GelirEkstra.Tarih, '%y%m') == str(donem)
+    ).scalar()
+    
+    return total_tutar or 0.0

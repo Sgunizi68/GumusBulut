@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card } from '../components';
 import { useAppContext } from '../App';
-import { OZET_KONTROL_RAPORU_YETKI_ADI } from '../constants';
+import { OZET_KONTROL_RAPORU_YETKI_ADI, API_BASE_URL } from '../constants';
 
 const AccessDenied: React.FC<{ title: string }> = ({ title }) => (
     <Card title={title}>
@@ -13,11 +13,41 @@ const AccessDenied: React.FC<{ title: string }> = ({ title }) => (
 );
 
 export const OzetKontrolRaporuPage: React.FC = () => {
-    const { hasPermission } = useAppContext();
+    const { hasPermission, selectedBranch, currentPeriod, setPeriod } = useAppContext();
     const pageTitle = "Özet Kontrol Raporu";
     const requiredPermission = OZET_KONTROL_RAPORU_YETKI_ADI;
+    const [robotposTutar, setRobotposTutar] = useState<number>(0);
+    const [periodOptions, setPeriodOptions] = useState<string[]>([]);
 
     useEffect(() => {
+        const startYear = 25;
+        const startMonth = 7;
+        const currentYear = new Date().getFullYear() % 100;
+        const currentMonth = new Date().getMonth() + 1;
+
+        const options: string[] = [];
+        for (let y = startYear; y <= currentYear; y++) {
+            const mStart = (y === startYear) ? startMonth : 1;
+            const mEnd = (y === currentYear) ? currentMonth : 12;
+            for (let m = mStart; m <= mEnd; m++) {
+                options.push(`${y}${m.toString().padStart(2, '0')}`);
+            }
+        }
+        setPeriodOptions(options.reverse());
+    }, []);
+
+    useEffect(() => {
+        if (selectedBranch && currentPeriod) {
+            fetch(`${API_BASE_URL}/ozet-kontrol-raporu/robotpos-tutar/${selectedBranch.Sube_ID}/${currentPeriod}`)
+                .then(response => response.json())
+                .then(data => {
+                    setRobotposTutar(data);
+                    const robotposTutarEl = document.getElementById('robotposTutar');
+                    if(robotposTutarEl) robotposTutarEl.textContent = formatCurrency(data);
+                    performCalculations(data);
+                });
+        }
+
         // Simulate real-time database updates
         function formatCurrency(amount: number) {
             return new Intl.NumberFormat('tr-TR', {
@@ -51,10 +81,10 @@ export const OzetKontrolRaporuPage: React.FC = () => {
             }
         }
 
-        function performCalculations() {
+        function performCalculations(robotposTutar: number) {
             // Simulate database values (these would come from actual database)
             const data = {
-                robotposTutar: 15750,
+                robotposTutar: robotposTutar,
                 toplamSatis: 15200,
                 nakit: 8500,
                 gunlukHarcamaEFatura: 1200,
@@ -96,71 +126,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                 }
             });
         }
-
-        // Initialize the report
-        function initializeReport() {
-            performCalculations();
-        }
-
-        initializeReport();
-
-        function showNotification(message: string, type = 'info') {
-            // Create notification element
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 20px;
-                border-radius: 8px;
-                color: white;
-                font-weight: 600;
-                z-index: 9999;
-                animation: slideIn 0.3s ease;
-                max-width: 300px;
-            `;
-            
-            // Set color based on type
-            switch(type) {
-                case 'success':
-                    notification.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
-                    notification.innerHTML = `✅ ${message}`;
-                    break;
-                case 'error':
-                    notification.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
-                    notification.innerHTML = `❌ ${message}`;
-                    break;
-                default:
-                    notification.style.background = 'linear-gradient(135deg, #3498db, #2980b9)';
-                    notification.innerHTML = `ℹ️ ${message}`;
-            }
-            
-            document.body.appendChild(notification);
-            
-            // Remove after 3 seconds
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
         
-        (window as any).updatePeriod = () => {
-            const periodSelect = document.getElementById('periodSelect') as HTMLSelectElement;
-            const selectedValue = periodSelect.value;
-            const selectedText = periodSelect.options[periodSelect.selectedIndex].text;
-            
-            // Update current period display
-            const currentPeriodEl = document.getElementById('currentPeriod');
-            if(currentPeriodEl) currentPeriodEl.textContent = selectedText;
-            
-            // Simulate data refresh for new period
-            setTimeout(() => {
-                performCalculations();
-                
-                // Show success message
-                showNotification(`Dönem ${selectedText} için veriler güncellendi`, 'success');
-            }, 1500);
-        };
-
         (window as any).exportReport = () => {
             const currentPeriodEl = document.getElementById('currentPeriod');
             const period = currentPeriodEl ? currentPeriodEl.textContent : '';
@@ -172,7 +138,11 @@ export const OzetKontrolRaporuPage: React.FC = () => {
             }, 2000);
         };
 
-    }, []);
+    }, [selectedBranch, currentPeriod]);
+
+    const handlePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setPeriod(e.target.value);
+    }
 
     if (!hasPermission(requiredPermission)) {
         return <AccessDenied title={pageTitle} />;
@@ -617,7 +587,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                     <div className="header-content">
                         <div>
                             <h1>📊 Özet Kontrol Raporu</h1>
-                            <p>Otomatik Hesaplama ve Analiz Raporu <span className="current-period" id="currentPeriod">2508 - Ağustos 2025</span></p>
+                            <p>Otomatik Hesaplama ve Analiz Raporu <span className="current-period" id="currentPeriod">{currentPeriod}</span></p>
                         </div>
                     </div>
                 </div>
@@ -631,19 +601,10 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                             <div className="filter-controls">
                                 <div className="filter-group">
                                     <label htmlFor="periodSelect">Dönem Seçin:</label>
-                                    <select id="periodSelect" onChange={() => (window as any).updatePeriod()}>
-                                        <option value="2508">2508 - Ağustos 2025</option>
-                                        <option value="2507">2507 - Temmuz 2025</option>
-                                        <option value="2506">2506 - Haziran 2025</option>
-                                        <option value="2505">2505 - Mayıs 2025</option>
-                                        <option value="2504">2504 - Nisan 2025</option>
-                                        <option value="2503">2503 - Mart 2025</option>
-                                        <option value="2502">2502 - Şubat 2025</option>
-                                        <option value="2501">2501 - Ocak 2025</option>
-                                        <option value="2412">2412 - Aralık 2024</option>
-                                        <option value="2411">2411 - Kasım 2024</option>
-                                        <option value="2410">2410 - Ekim 2024</option>
-                                        <option value="2409">2409 - Eylül 2024</option>
+                                    <select id="periodSelect" value={currentPeriod} onChange={handlePeriodChange}>
+                                        {periodOptions.map(period => (
+                                            <option key={period} value={period}>{`${period.substring(0, 2)}${period.substring(2, 4)} - ${new Date(2000 + parseInt(period.substring(0, 2)), parseInt(period.substring(2, 4)) - 1).toLocaleString('tr-TR', { month: 'long' })} ${2000 + parseInt(period.substring(0, 2))}`}</option>
+                                        ))}
                                     </select>
                                 </div>
                                 <div className="filter-actions">
@@ -659,7 +620,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                         <div className="data-grid">
                             <div className="data-item">
                                 <div className="data-label">Robotpos Tutar</div>
-                                <div className="data-value" id="robotposTutar">₺ 15,750.00</div>
+                                <div className="data-value" id="robotposTutar">₺ 0.00</div>
                             </div>
 
                             <div className="data-item">

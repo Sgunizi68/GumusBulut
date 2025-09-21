@@ -254,3 +254,19 @@ def get_depo_kira_rapor(db: Session = Depends(get_db)):
     except Exception as e:
         logger.error(f"Error in get_depo_kira_rapor: {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+
+@router.get("/ozet-kontrol-raporu/robotpos-tutar/{sube_id}/{donem}", response_model=float)
+def get_robotpos_tutar_endpoint(sube_id: int, donem: int, db: Session = Depends(get_db)):
+    """
+    Get the total Robotpos Tutar for a given period and branch.
+    """
+    logger.info(f"Getting Robotpos Tutar for Sube_ID: {sube_id}, Donem: {donem}")
+    
+    try:
+        tutar = crud.get_robotpos_tutar(db=db, sube_id=sube_id, donem=donem)
+        logger.info(f"Successfully fetched Robotpos Tutar: {tutar}")
+        return tutar
+    except Exception as e:
+        logger.error(f"Error in get_robotpos_tutar_endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
