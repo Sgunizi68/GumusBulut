@@ -284,3 +284,18 @@ def get_toplam_satis_gelirleri_endpoint(sube_id: int, donem: int, db: Session = 
     except Exception as e:
         logger.error(f"Error in get_toplam_satis_gelirleri_endpoint: {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@router.get("/ozet-kontrol-raporu/nakit/{sube_id}/{donem}", response_model=float)
+def get_nakit_endpoint(sube_id: int, donem: int, db: Session = Depends(get_db)):
+    """
+    Get the total Nakit for a given period and branch.
+    """
+    logger.info(f"Getting Nakit for Sube_ID: {sube_id}, Donem: {donem}")
+    
+    try:
+        tutar = crud.get_nakit_gelirleri(db=db, sube_id=sube_id, donem=donem)
+        logger.info(f"Successfully fetched Nakit: {tutar}")
+        return tutar
+    except Exception as e:
+        logger.error(f"Error in get_nakit_endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
