@@ -117,7 +117,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
             const calculations: { [key: string]: number } = {
                 gelirFark: data.toplamSatis - data.robotposTutar,
                 nakitCalculated: data.nakit - data.gunlukHarcamaEFatura - data.gunlukHarcamaDiger,
-                nakitFark: data.kalanNakit - data.bankayaYatan,
+                nakitFark: data.bankayaYatan - data.kalanNakit,
                 krediKartiFark: data.gelirPOS - data.posHareketleri,
                 onlineFark: data.gelirToplam - data.virmanToplam,
                 yemekCekiFark: data.aylikGelir - data.toplamDonem
