@@ -118,9 +118,9 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                 gelirFark: data.toplamSatis - data.robotposTutar,
                 nakitCalculated: data.nakit - data.gunlukHarcamaEFatura - data.gunlukHarcamaDiger,
                 nakitFark: data.bankayaYatan - data.kalanNakit,
-                krediKartiFark: data.gelirPOS - data.posHareketleri,
-                onlineFark: data.gelirToplam - data.virmanToplam,
-                yemekCekiFark: data.aylikGelir - data.toplamDonem
+                krediKartiFark: data.posHareketleri - data.gelirPOS,
+                onlineFark: data.virmanToplam - data.gelirToplam,
+                yemekCekiFark: data.toplamDonem - data.aylikGelir
             };
 
             calculations.toplamFark = calculations.gelirFark + calculations.nakitFark + 
