@@ -2697,3 +2697,23 @@ def get_nakit_gelirleri(db: Session, donem: int, sube_id: int) -> float:
     ).scalar()
     
     return total_tutar or 0.0
+
+def get_gunluk_harcama_diger(db: Session, donem: int, sube_id: int) -> float:
+    """
+    Calculates the sum of Tutar from Diger_Harcama for a given period and branch
+    where Gunluk_Harcama is true.
+    """
+    from sqlalchemy import func
+
+    if len(str(donem)) == 6:
+        # Convert YYYYMM to YYMM
+        donem_str = str(donem)
+        donem = int(donem_str[2:])
+
+    total_tutar = db.query(func.sum(models.DigerHarcama.Tutar)).filter(
+        models.DigerHarcama.Sube_ID == sube_id,
+        models.DigerHarcama.Donem == donem,
+        models.DigerHarcama.Gunluk_Harcama == True
+    ).scalar()
+
+    return total_tutar or 0.0
