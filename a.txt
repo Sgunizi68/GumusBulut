@@ -9,7 +9,7 @@ And Donem =Ekran.Donem;
 SELECT sum(Tutar) FROM SilverCloud.Nakit
 where Tip='Bankaya Yatan'
 And Donem = 2507
-------------------------
+------------------
 Bankaya Yatan Toplam
 SELECT Sum(Tutar) FROM SilverCloud.Odeme
 where Donem = Ekran.Donem
