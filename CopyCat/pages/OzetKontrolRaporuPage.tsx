@@ -13,7 +13,8 @@ const AccessDenied: React.FC<{ title: string }> = ({ title }) => (
 );
 
 export const OzetKontrolRaporuPage: React.FC = () => {
-    const { hasPermission, selectedBranch, currentPeriod, setPeriod } = useAppContext();
+    const { hasPermission, selectedBranch, currentPeriod } = useAppContext();
+    const [reportPeriod, setReportPeriod] = useState(currentPeriod);
     const pageTitle = "Özet Kontrol Raporu";
     const requiredPermission = OZET_KONTROL_RAPORU_YETKI_ADI;
     const [periodOptions, setPeriodOptions] = useState<string[]>([]);
@@ -52,21 +53,21 @@ export const OzetKontrolRaporuPage: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (selectedBranch && currentPeriod) {
+        if (selectedBranch && reportPeriod) {
             Promise.all([
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/robotpos-tutar/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/toplam-satis-gelirleri/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/nakit/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/gunluk-harcama-diger/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/gunluk-harcama-efatura/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/nakit-girisi-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/bankaya-yatan-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/gelir-pos-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/pos-hareketleri-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/online-gelir-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/online-virman-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/yemek-ceki-aylik-gelir-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/yemek-ceki-donem-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json())
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/robotpos-tutar/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/toplam-satis-gelirleri/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/nakit/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/gunluk-harcama-diger/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/gunluk-harcama-efatura/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/nakit-girisi-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/bankaya-yatan-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/gelir-pos-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/pos-hareketleri-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/online-gelir-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/online-virman-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/yemek-ceki-aylik-gelir-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/yemek-ceki-donem-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json())
             ]).then(data => {
                 setDatabaseData({
                     robotposTutar: data[0],
@@ -85,7 +86,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                 });
             });
         }
-    }, [selectedBranch, currentPeriod]);
+    }, [selectedBranch, reportPeriod]);
 
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('tr-TR', {
@@ -146,7 +147,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
     }, [calculations]);
 
     const handlePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setPeriod(e.target.value);
+        setReportPeriod(e.target.value);
     }
 
     if (!hasPermission(requiredPermission)) {
@@ -592,7 +593,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                     <div className="header-content">
                         <div>
                             <h1>📊 Özet Kontrol Raporu</h1>
-                            <p>Otomatik Hesaplama ve Analiz Raporu <span className="current-period" id="currentPeriod">{currentPeriod}</span></p>
+                            <p>Otomatik Hesaplama ve Analiz Raporu <span className="current-period" id="currentPeriod">{reportPeriod}</span></p>
                         </div>
                     </div>
                 </div>
@@ -606,7 +607,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                             <div className="filter-controls">
                                 <div className="filter-group">
                                     <label htmlFor="periodSelect">Dönem Seçin:</label>
-                                    <select id="periodSelect" value={currentPeriod} onChange={handlePeriodChange}>
+                                    <select id="periodSelect" value={reportPeriod} onChange={handlePeriodChange}>
                                         {periodOptions.map(period => (
                                             <option key={period} value={period}>{`${period.substring(0, 2)}${period.substring(2, 4)} - ${new Date(2000 + parseInt(period.substring(0, 2)), parseInt(period.substring(2, 4)) - 1).toLocaleString('tr-TR', { month: 'long' })} ${2000 + parseInt(period.substring(0, 2))}`}</option>
                                         ))}
