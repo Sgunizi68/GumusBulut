@@ -2717,3 +2717,23 @@ def get_gunluk_harcama_diger(db: Session, donem: int, sube_id: int) -> float:
     ).scalar()
 
     return total_tutar or 0.0
+
+def get_gunluk_harcama_efatura(db: Session, donem: int, sube_id: int) -> float:
+    """
+    Calculates the sum of Tutar from e_Fatura for a given period and branch
+    where Gunluk_Harcama is true.
+    """
+    from sqlalchemy import func
+
+    if len(str(donem)) == 6:
+        # Convert YYYYMM to YYMM
+        donem_str = str(donem)
+        donem = int(donem_str[2:])
+
+    total_tutar = db.query(func.sum(models.EFatura.Tutar)).filter(
+        models.EFatura.Sube_ID == sube_id,
+        models.EFatura.Donem == donem,
+        models.EFatura.Gunluk_Harcama == True
+    ).scalar()
+
+    return total_tutar or 0.0

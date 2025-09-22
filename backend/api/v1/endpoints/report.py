@@ -314,3 +314,18 @@ def get_gunluk_harcama_diger_endpoint(sube_id: int, donem: int, db: Session = De
     except Exception as e:
         logger.error(f"Error in get_gunluk_harcama_diger_endpoint: {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@router.get("/ozet-kontrol-raporu/gunluk-harcama-efatura/{sube_id}/{donem}", response_model=float)
+def get_gunluk_harcama_efatura_endpoint(sube_id: int, donem: int, db: Session = Depends(get_db)):
+    """
+    Get the total Gunluk Harcama eFatura for a given period and branch.
+    """
+    logger.info(f"Getting Gunluk Harcama eFatura for Sube_ID: {sube_id}, Donem: {donem}")
+
+    try:
+        tutar = crud.get_gunluk_harcama_efatura(db=db, sube_id=sube_id, donem=donem)
+        logger.info(f"Successfully fetched Gunluk Harcama eFatura: {tutar}")
+        return tutar
+    except Exception as e:
+        logger.error(f"Error in get_gunluk_harcama_efatura_endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
