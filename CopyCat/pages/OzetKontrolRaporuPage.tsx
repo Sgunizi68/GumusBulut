@@ -613,9 +613,6 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                                         ))}
                                     </select>
                                 </div>
-                                <div className="filter-actions">
-                                    <button className="filter-btn secondary" onClick={() => (window as any).exportReport()}>📊 Raporu Dışa Aktar</button>
-                                </div>
                             </div>
                         </div>
                     </div>
