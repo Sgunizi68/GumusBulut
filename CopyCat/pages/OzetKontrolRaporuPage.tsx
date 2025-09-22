@@ -21,6 +21,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
     const [nakit, setNakit] = useState<number>(0);
     const [gunlukHarcamaDiger, setGunlukHarcamaDiger] = useState<number>(0);
     const [gunlukHarcamaEFatura, setGunlukHarcamaEFatura] = useState<number>(0);
+    const [nakitGirisiToplam, setNakitGirisiToplam] = useState<number>(0);
     const [periodOptions, setPeriodOptions] = useState<string[]>([]);
 
     useEffect(() => {
@@ -47,13 +48,15 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                 fetch(`${API_BASE_URL}/ozet-kontrol-raporu/toplam-satis-gelirleri/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
                 fetch(`${API_BASE_URL}/ozet-kontrol-raporu/nakit/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
                 fetch(`${API_BASE_URL}/ozet-kontrol-raporu/gunluk-harcama-diger/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/gunluk-harcama-efatura/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json())
-            ]).then(([robotposData, toplamSatisData, nakitData, gunlukHarcamaDigerData, gunlukHarcamaEFaturaData]) => {
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/gunluk-harcama-efatura/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/nakit-girisi-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json())
+            ]).then(([robotposData, toplamSatisData, nakitData, gunlukHarcamaDigerData, gunlukHarcamaEFaturaData, nakitGirisiToplamData]) => {
                 setRobotposTutar(robotposData);
                 setToplamSatis(toplamSatisData);
                 setNakit(nakitData);
                 setGunlukHarcamaDiger(gunlukHarcamaDigerData);
                 setGunlukHarcamaEFatura(gunlukHarcamaEFaturaData);
+                setNakitGirisiToplam(nakitGirisiToplamData);
 
                 const robotposTutarEl = document.getElementById('robotposTutar');
                 if(robotposTutarEl) robotposTutarEl.textContent = formatCurrency(robotposData);
@@ -70,7 +73,10 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                 const gunlukHarcamaEFaturaEl = document.getElementById('gunlukHarcamaEFatura');
                 if(gunlukHarcamaEFaturaEl) gunlukHarcamaEFaturaEl.textContent = formatCurrency(gunlukHarcamaEFaturaData);
 
-                performCalculations(robotposData, toplamSatisData, nakitData, gunlukHarcamaDigerData, gunlukHarcamaEFaturaData);
+                const nakitGirisiEl = document.getElementById('nakitGirisi');
+                if(nakitGirisiEl) nakitGirisiEl.textContent = formatCurrency(nakitGirisiToplamData);
+
+                performCalculations(robotposData, toplamSatisData, nakitData, gunlukHarcamaDigerData, gunlukHarcamaEFaturaData, nakitGirisiToplamData);
             });
         }
 
@@ -107,7 +113,12 @@ export const OzetKontrolRaporuPage: React.FC = () => {
             }
         }
 
-        function performCalculations(robotposTutar: number, toplamSatis: number, nakit: number, gunlukHarcamaDiger: number, gunlukHarcamaEFatura: number) {
+        function performCalculations(robotposTutar: number, toplamSatis: number, nakit: number, gunlukHarcamaDiger: number, gunlukHarcamaEFatura: number, nakitGirisiToplam: number) {
+            const kalanNakitCalculated = nakit - gunlukHarcamaEFatura - gunlukHarcamaDiger;
+
+            const kalanNakitEl = document.getElementById('kalanNakit');
+            if(kalanNakitEl) kalanNakitEl.textContent = formatCurrency(kalanNakitCalculated);
+
             // Simulate database values (these would come from actual database)
             const data = {
                 robotposTutar: robotposTutar,
@@ -115,24 +126,15 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                 nakit: nakit,
                 gunlukHarcamaEFatura: gunlukHarcamaEFatura,
                 gunlukHarcamaDiger: gunlukHarcamaDiger,
-                kalanNakit: 6500,
+                kalanNakit: kalanNakitCalculated,
                 bankayaYatan: 6200,
+                nakitGirisi: nakitGirisiToplam,
                 gelirPOS: 9800,
                 posHareketleri: 9650,
                 gelirToplam: 22100,
                 virmanToplam: 21850,
                 aylikGelir: 3400,
                 toplamDonem: 3200
-            };
-
-            // Perform calculations based on the table formulas
-            const calculations: { [key: string]: number } = {
-                gelirFark: data.toplamSatis - data.robotposTutar,
-                nakitCalculated: data.nakit - data.gunlukHarcamaEFatura - data.gunlukHarcamaDiger,
-                nakitFark: data.bankayaYatan - data.kalanNakit,
-                krediKartiFark: data.posHareketleri - data.gelirPOS,
-                onlineFark: data.virmanToplam - data.gelirToplam,
-                yemekCekiFark: data.toplamDonem - data.aylikGelir
             };
 
             calculations.toplamFark = calculations.gelirFark + calculations.nakitFark + 

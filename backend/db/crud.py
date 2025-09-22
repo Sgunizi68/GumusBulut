@@ -2737,3 +2737,23 @@ def get_gunluk_harcama_efatura(db: Session, donem: int, sube_id: int) -> float:
     ).scalar()
 
     return total_tutar or 0.0
+
+def get_nakit_girisi_toplam(db: Session, donem: int, sube_id: int) -> float:
+    """
+    Calculates the sum of Tutar from Nakit for a given period and branch
+    where Tip is 'Bankaya Yatan'.
+    """
+    from sqlalchemy import func
+
+    if len(str(donem)) == 6:
+        # Convert YYYYMM to YYMM
+        donem_str = str(donem)
+        donem = int(donem_str[2:])
+
+    total_tutar = db.query(func.sum(models.Nakit.Tutar)).filter(
+        models.Nakit.Sube_ID == sube_id,
+        models.Nakit.Donem == donem,
+        models.Nakit.Tip == 'Bankaya Yatan'
+    ).scalar()
+
+    return total_tutar or 0.0

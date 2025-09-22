@@ -1,14 +1,11 @@
 Not: Ekran.Dönem ekrandaki seçilen dönem demektir. Buna göre değer değişir.
 
-Günlük Harcama-eFatura
-
-içindeki formSELECT sum(Tutar)
-FROM SilverCloud.e_Fatura
-where Gunluk_Harcama=1
-and Donem =Ekran.Donem;
+Nakit Girişi Toplam
+SELECT sum(Tutar) FROM SilverCloud.Nakit
+where Tip='Bankaya Yatan'
+And Donem =Ekran.Donem;
 
 Örnek Donem =2507
-SELECT sum(Tutar)
-FROM SilverCloud.e_Fatura
-where Gunluk_Harcama=1
-and Donem =2507;
+SELECT sum(Tutar) FROM SilverCloud.Nakit
+where Tip='Bankaya Yatan'
+And Donem = 2507
