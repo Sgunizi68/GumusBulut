@@ -125,9 +125,9 @@ export const OzetKontrolRaporuPage: React.FC = () => {
     const calculations = {
         gelirFark: databaseData.toplamSatis - databaseData.robotposTutar,
         nakitFark: databaseData.bankayaYatan - kalanNakitCalculated,
-        krediKartiFark: databaseData.gelirPOS - databaseData.posHareketleri,
-        onlineFark: databaseData.onlineGelirToplam - databaseData.onlineVirmanToplam,
-        yemekCekiFark: databaseData.yemekCekiAylikGelir - databaseData.yemekCekiDonemToplam,
+        krediKartiFark: databaseData.posHareketleri - databaseData.gelirPOS,
+        onlineFark: databaseData.onlineVirmanToplam - databaseData.onlineGelirToplam,
+        yemekCekiFark: databaseData.yemekCekiDonemToplam - databaseData.yemekCekiAylikGelir,
         get toplamFark() {
             return this.gelirFark + this.nakitFark + this.krediKartiFark + this.onlineFark + this.yemekCekiFark;
         }
@@ -732,7 +732,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                                     Kredi Kartı Fark
                                     <span className="status-indicator status-positive" id="krediKartiFarkStatus"></span>
                                 </div>
-                                <div className="calculation-formula">Gelir POS - POS Hareketleri</div>
+                                <div className="calculation-formula">POS Hareketleri - Gelir POS</div>
                                 <div className="calculation-value positive" id="krediKartiFark">{formatCurrency(calculations.krediKartiFark)}</div>
                             </div>
 
@@ -741,7 +741,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                                     Online Fark
                                     <span className="status-indicator status-positive" id="onlineFarkStatus"></span>
                                 </div>
-                                <div className="calculation-formula">Online Gelir Toplam - Online Virman Toplam</div>
+                                <div className="calculation-formula">Online Virman Toplam - Online Gelir Toplam</div>
                                 <div className="calculation-value positive" id="onlineFark">{formatCurrency(calculations.onlineFark)}</div>
                             </div>
 
@@ -750,7 +750,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                                     Yemek Çeki Fark
                                     <span className="status-indicator status-positive" id="yemekCekiFarkStatus"></span>
                                 </div>
-                                <div className="calculation-formula">Yemek Çeki Aylık Gelir - Yemek Çeki Dönem Toplamı</div>
+                                <div className="calculation-formula">Yemek Çeki Dönem Toplamı - Yemek Çeki Aylık Gelir</div>
                                 <div className="calculation-value positive" id="yemekCekiFark">{formatCurrency(calculations.yemekCekiFark)}</div>
                             </div>
                         </div>
