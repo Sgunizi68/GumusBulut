@@ -124,7 +124,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
 
     const calculations = {
         gelirFark: databaseData.toplamSatis - databaseData.robotposTutar,
-        nakitFark: kalanNakitCalculated - databaseData.bankayaYatan,
+        nakitFark: databaseData.bankayaYatan - kalanNakitCalculated,
         krediKartiFark: databaseData.gelirPOS - databaseData.posHareketleri,
         onlineFark: databaseData.onlineGelirToplam - databaseData.onlineVirmanToplam,
         yemekCekiFark: databaseData.yemekCekiAylikGelir - databaseData.yemekCekiDonemToplam,
@@ -723,7 +723,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                                     Nakit Fark
                                     <span className="status-indicator status-positive" id="nakitFarkStatus"></span>
                                 </div>
-                                <div className="calculation-formula">Kalan Nakit - Bankaya Yatan Toplam</div>
+                                <div className="calculation-formula">Bankaya Yatan Toplam - Kalan Nakit</div>
                                 <div className="calculation-value positive" id="nakitFark">{formatCurrency(calculations.nakitFark)}</div>
                             </div>
 
