@@ -1,4 +1,3 @@
-
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -2869,7 +2868,7 @@ def get_online_virman_toplam(db: Session, donem: int, sube_id: int) -> float:
         donem_str = str(donem)
         donem = int(donem_str[2:])
 
-    total_tutar = db.query(func.sum(models.B2BEkstre.Tutar)).filter(
+    total_tutar = db.query(func.sum(models.B2BEkstre.Alacak) * -1).filter(
         models.B2BEkstre.Sube_ID == sube_id,
         models.B2BEkstre.Donem == donem,
         models.B2BEkstre.Aciklama.like('%Online Alacak Virman%')
