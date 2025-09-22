@@ -329,3 +329,123 @@ def get_gunluk_harcama_efatura_endpoint(sube_id: int, donem: int, db: Session = 
     except Exception as e:
         logger.error(f"Error in get_gunluk_harcama_efatura_endpoint: {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@router.get("/ozet-kontrol-raporu/nakit-girisi-toplam/{sube_id}/{donem}", response_model=float)
+def get_nakit_girisi_toplam_endpoint(sube_id: int, donem: int, db: Session = Depends(get_db)):
+    """
+    Get the total Nakit Girisi Toplam for a given period and branch.
+    """
+    logger.info(f"Getting Nakit Girisi Toplam for Sube_ID: {sube_id}, Donem: {donem}")
+
+    try:
+        tutar = crud.get_nakit_girisi_toplam(db=db, sube_id=sube_id, donem=donem)
+        logger.info(f"Successfully fetched Nakit Girisi Toplam: {tutar}")
+        return tutar
+    except Exception as e:
+        logger.error(f"Error in get_nakit_girisi_toplam_endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@router.get("/ozet-kontrol-raporu/bankaya-yatan-toplam/{sube_id}/{donem}", response_model=float)
+def get_bankaya_yatan_toplam_endpoint(sube_id: int, donem: int, db: Session = Depends(get_db)):
+    """
+    Get the total Bankaya Yatan Toplam for a given period and branch.
+    """
+    logger.info(f"Getting Bankaya Yatan Toplam for Sube_ID: {sube_id}, Donem: {donem}")
+
+    try:
+        tutar = crud.get_bankaya_yatan_toplam(db=db, sube_id=sube_id, donem=donem)
+        logger.info(f"Successfully fetched Bankaya Yatan Toplam: {tutar}")
+        return tutar
+    except Exception as e:
+        logger.error(f"Error in get_bankaya_yatan_toplam_endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@router.get("/ozet-kontrol-raporu/gelir-pos-toplam/{sube_id}/{donem}", response_model=float)
+def get_gelir_pos_toplam_endpoint(sube_id: int, donem: int, db: Session = Depends(get_db)):
+    """
+    Get the total Gelir POS Toplam for a given period and branch.
+    """
+    logger.info(f"Getting Gelir POS Toplam for Sube_ID: {sube_id}, Donem: {donem}")
+
+    try:
+        tutar = crud.get_gelir_pos_toplam(db=db, sube_id=sube_id, donem=donem)
+        logger.info(f"Successfully fetched Gelir POS Toplam: {tutar}")
+        return tutar
+    except Exception as e:
+        logger.error(f"Error in get_gelir_pos_toplam_endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@router.get("/ozet-kontrol-raporu/pos-hareketleri-toplam/{sube_id}/{donem}", response_model=float)
+def get_pos_hareketleri_toplam_endpoint(sube_id: int, donem: int, db: Session = Depends(get_db)):
+    """
+    Get the total POS Hareketleri Toplam for a given period and branch.
+    """
+    logger.info(f"Getting POS Hareketleri Toplam for Sube_ID: {sube_id}, Donem: {donem}")
+
+    try:
+        tutar = crud.get_pos_hareketleri_toplam(db=db, sube_id=sube_id, donem=donem)
+        logger.info(f"Successfully fetched POS Hareketleri Toplam: {tutar}")
+        return tutar
+    except Exception as e:
+        logger.error(f"Error in get_pos_hareketleri_toplam_endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@router.get("/ozet-kontrol-raporu/online-gelir-toplam/{sube_id}/{donem}", response_model=float)
+def get_online_gelir_toplam_endpoint(sube_id: int, donem: int, db: Session = Depends(get_db)):
+    """
+    Get the total Online Gelir Toplam for a given period and branch.
+    """
+    logger.info(f"Getting Online Gelir Toplam for Sube_ID: {sube_id}, Donem: {donem}")
+
+    try:
+        tutar = crud.get_online_gelir_toplam(db=db, sube_id=sube_id, donem=donem)
+        logger.info(f"Successfully fetched Online Gelir Toplam: {tutar}")
+        return tutar
+    except Exception as e:
+        logger.error(f"Error in get_online_gelir_toplam_endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@router.get("/ozet-kontrol-raporu/online-virman-toplam/{sube_id}/{donem}", response_model=float)
+def get_online_virman_toplam_endpoint(sube_id: int, donem: int, db: Session = Depends(get_db)):
+    """
+    Get the total Online Virman Toplam for a given period and branch.
+    """
+    logger.info(f"Getting Online Virman Toplam for Sube_ID: {sube_id}, Donem: {donem}")
+
+    try:
+        tutar = crud.get_online_virman_toplam(db=db, sube_id=sube_id, donem=donem)
+        logger.info(f"Successfully fetched Online Virman Toplam: {tutar}")
+        return tutar
+    except Exception as e:
+        logger.error(f"Error in get_online_virman_toplam_endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@router.get("/ozet-kontrol-raporu/yemek-ceki-aylik-gelir-toplam/{sube_id}/{donem}", response_model=float)
+def get_yemek_ceki_aylik_gelir_toplam_endpoint(sube_id: int, donem: int, db: Session = Depends(get_db)):
+    """
+    Get the total Yemek Ceki Aylik Gelir Toplam for a given period and branch.
+    """
+    logger.info(f"Getting Yemek Ceki Aylik Gelir Toplam for Sube_ID: {sube_id}, Donem: {donem}")
+
+    try:
+        tutar = crud.get_yemek_ceki_aylik_gelir_toplam(db=db, sube_id=sube_id, donem=donem)
+        logger.info(f"Successfully fetched Yemek Ceki Aylik Gelir Toplam: {tutar}")
+        return tutar
+    except Exception as e:
+        logger.error(f"Error in get_yemek_ceki_aylik_gelir_toplam_endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@router.get("/ozet-kontrol-raporu/yemek-ceki-donem-toplam/{sube_id}/{donem}", response_model=float)
+def get_yemek_ceki_donem_toplam_endpoint(sube_id: int, donem: int, db: Session = Depends(get_db)):
+    """
+    Get the total Yemek Ceki Donem Toplam for a given period and branch.
+    """
+    logger.info(f"Getting Yemek Ceki Donem Toplam for Sube_ID: {sube_id}, Donem: {donem}")
+
+    try:
+        tutar = crud.get_yemek_ceki_donem_toplam(db=db, sube_id=sube_id, donem=donem)
+        logger.info(f"Successfully fetched Yemek Ceki Donem Toplam: {tutar}")
+        return tutar
+    except Exception as e:
+        logger.error(f"Error in get_yemek_ceki_donem_toplam_endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")

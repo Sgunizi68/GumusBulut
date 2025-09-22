@@ -16,13 +16,23 @@ export const OzetKontrolRaporuPage: React.FC = () => {
     const { hasPermission, selectedBranch, currentPeriod, setPeriod } = useAppContext();
     const pageTitle = "Özet Kontrol Raporu";
     const requiredPermission = OZET_KONTROL_RAPORU_YETKI_ADI;
-    const [robotposTutar, setRobotposTutar] = useState<number>(0);
-    const [toplamSatis, setToplamSatis] = useState<number>(0);
-    const [nakit, setNakit] = useState<number>(0);
-    const [gunlukHarcamaDiger, setGunlukHarcamaDiger] = useState<number>(0);
-    const [gunlukHarcamaEFatura, setGunlukHarcamaEFatura] = useState<number>(0);
-    const [nakitGirisiToplam, setNakitGirisiToplam] = useState<number>(0);
     const [periodOptions, setPeriodOptions] = useState<string[]>([]);
+
+    const [databaseData, setDatabaseData] = useState({
+        robotposTutar: 0,
+        toplamSatis: 0,
+        nakit: 0,
+        gunlukHarcamaDiger: 0,
+        gunlukHarcamaEFatura: 0,
+        nakitGirisiToplam: 0,
+        bankayaYatan: 0,
+        gelirPOS: 0,
+        posHareketleri: 0,
+        onlineGelirToplam: 0,
+        onlineVirmanToplam: 0,
+        yemekCekiAylikGelir: 0,
+        yemekCekiDonemToplam: 0,
+    });
 
     useEffect(() => {
         const startYear = 25;
@@ -49,124 +59,91 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                 fetch(`${API_BASE_URL}/ozet-kontrol-raporu/nakit/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
                 fetch(`${API_BASE_URL}/ozet-kontrol-raporu/gunluk-harcama-diger/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
                 fetch(`${API_BASE_URL}/ozet-kontrol-raporu/gunluk-harcama-efatura/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/nakit-girisi-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json())
-            ]).then(([robotposData, toplamSatisData, nakitData, gunlukHarcamaDigerData, gunlukHarcamaEFaturaData, nakitGirisiToplamData]) => {
-                setRobotposTutar(robotposData);
-                setToplamSatis(toplamSatisData);
-                setNakit(nakitData);
-                setGunlukHarcamaDiger(gunlukHarcamaDigerData);
-                setGunlukHarcamaEFatura(gunlukHarcamaEFaturaData);
-                setNakitGirisiToplam(nakitGirisiToplamData);
-
-                const robotposTutarEl = document.getElementById('robotposTutar');
-                if(robotposTutarEl) robotposTutarEl.textContent = formatCurrency(robotposData);
-
-                const toplamSatisEl = document.getElementById('toplamSatis');
-                if(toplamSatisEl) toplamSatisEl.textContent = formatCurrency(toplamSatisData);
-
-                const nakitEl = document.getElementById('nakit');
-                if(nakitEl) nakitEl.textContent = formatCurrency(nakitData);
-
-                const gunlukHarcamaDigerEl = document.getElementById('gunlukHarcamaDiger');
-                if(gunlukHarcamaDigerEl) gunlukHarcamaDigerEl.textContent = formatCurrency(gunlukHarcamaDigerData);
-
-                const gunlukHarcamaEFaturaEl = document.getElementById('gunlukHarcamaEFatura');
-                if(gunlukHarcamaEFaturaEl) gunlukHarcamaEFaturaEl.textContent = formatCurrency(gunlukHarcamaEFaturaData);
-
-                const nakitGirisiEl = document.getElementById('nakitGirisi');
-                if(nakitGirisiEl) nakitGirisiEl.textContent = formatCurrency(nakitGirisiToplamData);
-
-                performCalculations(robotposData, toplamSatisData, nakitData, gunlukHarcamaDigerData, gunlukHarcamaEFaturaData, nakitGirisiToplamData);
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/nakit-girisi-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/bankaya-yatan-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/gelir-pos-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/pos-hareketleri-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/online-gelir-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/online-virman-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/yemek-ceki-aylik-gelir-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/yemek-ceki-donem-toplam/${selectedBranch.Sube_ID}/${currentPeriod}`).then(res => res.json())
+            ]).then(data => {
+                setDatabaseData({
+                    robotposTutar: data[0],
+                    toplamSatis: data[1],
+                    nakit: data[2],
+                    gunlukHarcamaDiger: data[3],
+                    gunlukHarcamaEFatura: data[4],
+                    nakitGirisiToplam: data[5],
+                    bankayaYatan: data[6],
+                    gelirPOS: data[7],
+                    posHareketleri: data[8],
+                    onlineGelirToplam: data[9],
+                    onlineVirmanToplam: data[10],
+                    yemekCekiAylikGelir: data[11],
+                    yemekCekiDonemToplam: data[12],
+                });
             });
         }
-
-        // Simulate real-time database updates
-        function formatCurrency(amount: number) {
-            return new Intl.NumberFormat('tr-TR', {
-                style: 'currency',
-                currency: 'TRY',
-                minimumFractionDigits: 2
-            }).format(amount || 0);
-        }
-
-        function updateStatusIndicator(value: number, statusElementId: string) {
-            const statusElement = document.getElementById(statusElementId);
-            if (!statusElement) return;
-            if (value > 0) {
-                statusElement.className = 'status-indicator status-positive';
-            } else if (value < 0) {
-                statusElement.className = 'status-indicator status-negative';
-            } else {
-                statusElement.className = 'status-indicator status-zero';
-            }
-        }
-
-        function updateValueColor(value: number, elementId: string) {
-            const element = document.getElementById(elementId);
-            if (!element) return;
-            if (value > 0) {
-                element.className = 'calculation-value positive';
-            } else if (value < 0) {
-                element.className = 'calculation-value negative';
-            } else {
-                element.className = 'calculation-value zero';
-            }
-        }
-
-        function performCalculations(robotposTutar: number, toplamSatis: number, nakit: number, gunlukHarcamaDiger: number, gunlukHarcamaEFatura: number, nakitGirisiToplam: number) {
-            const kalanNakitCalculated = nakit - gunlukHarcamaEFatura - gunlukHarcamaDiger;
-
-            const kalanNakitEl = document.getElementById('kalanNakit');
-            if(kalanNakitEl) kalanNakitEl.textContent = formatCurrency(kalanNakitCalculated);
-
-            // Simulate database values (these would come from actual database)
-            const data = {
-                robotposTutar: robotposTutar,
-                toplamSatis: toplamSatis,
-                nakit: nakit,
-                gunlukHarcamaEFatura: gunlukHarcamaEFatura,
-                gunlukHarcamaDiger: gunlukHarcamaDiger,
-                kalanNakit: kalanNakitCalculated,
-                bankayaYatan: 6200,
-                nakitGirisi: nakitGirisiToplam,
-                gelirPOS: 9800,
-                posHareketleri: 9650,
-                gelirToplam: 22100,
-                virmanToplam: 21850,
-                aylikGelir: 3400,
-                toplamDonem: 3200
-            };
-
-            calculations.toplamFark = calculations.gelirFark + calculations.nakitFark + 
-                                    calculations.krediKartiFark + calculations.onlineFark + 
-                                    calculations.yemekCekiFark;
-
-            // Update display values
-            Object.keys(calculations).forEach(key => {
-                const element = document.getElementById(key);
-                if (element) {
-                    element.textContent = formatCurrency(calculations[key]);
-                    updateValueColor(calculations[key], key);
-                    
-                    // Update status indicators
-                    const statusId = key + 'Status';
-                    updateStatusIndicator(calculations[key], statusId);
-                }
-            });
-        }
-        
-        (window as any).exportReport = () => {
-            const currentPeriodEl = document.getElementById('currentPeriod');
-            const period = currentPeriodEl ? currentPeriodEl.textContent : '';
-            showNotification(`${period} dönemi raporu dışa aktarılıyor...`, 'info');
-            
-            // Simulate export process
-            setTimeout(() => {
-                showNotification('Rapor başarıyla dışa aktarıldı', 'success');
-            }, 2000);
-        };
-
     }, [selectedBranch, currentPeriod]);
+
+    const formatCurrency = (amount: number) => {
+        return new Intl.NumberFormat('tr-TR', {
+            style: 'currency',
+            currency: 'TRY',
+            minimumFractionDigits: 2
+        }).format(amount || 0);
+    };
+
+    const updateStatusIndicator = (value: number, statusElementId: string) => {
+        const statusElement = document.getElementById(statusElementId);
+        if (!statusElement) return;
+        if (value > 0) {
+            statusElement.className = 'status-indicator status-positive';
+        } else if (value < 0) {
+            statusElement.className = 'status-indicator status-negative';
+        } else {
+            statusElement.className = 'status-indicator status-zero';
+        }
+    };
+
+    const updateValueColor = (value: number, elementId: string) => {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+        if (value > 0) {
+            element.className = 'calculation-value positive';
+        } else if (value < 0) {
+            element.className = 'calculation-value negative';
+        } else {
+            element.className = 'calculation-value zero';
+        }
+    };
+
+    const kalanNakitCalculated = databaseData.nakit - databaseData.gunlukHarcamaEFatura - databaseData.gunlukHarcamaDiger;
+
+    const calculations = {
+        gelirFark: databaseData.toplamSatis - databaseData.robotposTutar,
+        nakitFark: kalanNakitCalculated - databaseData.bankayaYatan,
+        krediKartiFark: databaseData.gelirPOS - databaseData.posHareketleri,
+        onlineFark: databaseData.onlineGelirToplam - databaseData.onlineVirmanToplam,
+        yemekCekiFark: databaseData.yemekCekiAylikGelir - databaseData.yemekCekiDonemToplam,
+        get toplamFark() {
+            return this.gelirFark + this.nakitFark + this.krediKartiFark + this.onlineFark + this.yemekCekiFark;
+        }
+    };
+
+    useEffect(() => {
+        Object.keys(calculations).forEach(key => {
+            const value = calculations[key as keyof typeof calculations];
+            const element = document.getElementById(key);
+            if (element) {
+                element.textContent = formatCurrency(value);
+                updateValueColor(value, key);
+                const statusId = key + 'Status';
+                updateStatusIndicator(value, statusId);
+            }
+        });
+    }, [calculations]);
 
     const handlePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setPeriod(e.target.value);
@@ -648,72 +625,72 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                         <div className="data-grid">
                             <div className="data-item">
                                 <div className="data-label">Robotpos Tutar</div>
-                                <div className="data-value" id="robotposTutar">₺ 0.00</div>
+                                <div className="data-value" id="robotposTutar">{formatCurrency(databaseData.robotposTutar)}</div>
                             </div>
 
                             <div className="data-item">
                                 <div className="data-label">Toplam Satış Gelirleri</div>
-                                <div className="data-value" id="toplamSatis">₺ 0.00</div>
+                                <div className="data-value" id="toplamSatis">{formatCurrency(databaseData.toplamSatis)}</div>
                             </div>
 
                             <div className="data-item">
                                 <div className="data-label">Nakit</div>
-                                <div className="data-value" id="nakit">₺ 0.00</div>
+                                <div className="data-value" id="nakit">{formatCurrency(databaseData.nakit)}</div>
                             </div>
 
                             <div className="data-item">
                                 <div className="data-label">Günlük Harcama-eFatura</div>
-                                <div className="data-value" id="gunlukHarcamaEFatura">₺ 1,200.00</div>
+                                <div className="data-value" id="gunlukHarcamaEFatura">{formatCurrency(databaseData.gunlukHarcamaEFatura)}</div>
                             </div>
 
                             <div className="data-item">
                                 <div className="data-label">Günlük Harcama-Diğer</div>
-                                <div className="data-value" id="gunlukHarcamaDiger">₺ 800.00</div>
+                                <div className="data-value" id="gunlukHarcamaDiger">{formatCurrency(databaseData.gunlukHarcamaDiger)}</div>
                             </div>
 
                             <div className="data-item">
                                 <div className="data-label">Kalan Nakit</div>
-                                <div className="data-value" id="kalanNakit">₺ 6,500.00</div>
+                                <div className="data-value" id="kalanNakit">{formatCurrency(kalanNakitCalculated)}</div>
                             </div>
 
                             <div className="data-item">
                                 <div className="data-label">Nakit Girişi Toplam</div>
-                                <div className="data-value" id="nakitGirisi">₺ 12,300.00</div>
+                                <div className="data-value" id="nakitGirisi">{formatCurrency(databaseData.nakitGirisiToplam)}</div>
                             </div>
 
                             <div className="data-item">
                                 <div className="data-label">Bankaya Yatan Toplam</div>
-                                <div className="data-value" id="bankayaYatan">₺ 6,200.00</div>
+                                <div className="data-value" id="bankayaYatan">{formatCurrency(databaseData.bankayaYatan)}</div>
                             </div>
 
                             <div className="data-item">
                                 <div className="data-label">Gelir POS</div>
-                                <div className="data-value" id="gelirPOS">₺ 9,800.00</div>
+                                <div className="data-value" id="gelirPOS">{formatCurrency(databaseData.gelirPOS)}</div>
                             </div>
 
                             <div className="data-item">
                                 <div className="data-label">POS Hareketleri</div>
-                                <div className="data-value" id="posHareketleri">₺ 9,650.00</div>
+                                <div className="data-value" id="posHareketleri">{formatCurrency(databaseData.posHareketleri)}</div>
                             </div>
 
                             <div className="data-item">
                                 <div className="data-label">Online Gelir Toplam</div>
-                                <div className="data-value" id="gelirToplam">₺ 22,100.00</div>
+                                <div className="data-value" id="gelirToplam">{formatCurrency(databaseData.onlineGelirToplam)}</div>
                             </div>
 
                             <div className="data-item">
                                 <div className="data-label">Online Virman Toplam</div>
-                                <div className="data-value" id="virmanToplam">₺ 21,850.00</div>
+                                <div className="data-value" id="virmanToplam">{formatCurrency(databaseData.onlineVirmanToplam)}</div>
                             </div>
 
                             <div className="data-item">
                                 <div className="data-label">Yemek Çeki Aylık Gelir</div>
-                                <div className="data-value" id="aylikGelir">₺ 3,400.00</div>
+                                <div className="data-value" id="aylikGelir">{formatCurrency(databaseData.yemekCekiAylikGelir)}</div>
                             </div>
 
                             <div className="data-item">
                                 <div className="data-label">Yemek Çeki Dönem Toplamı</div>
-                                <div className="data-value" id="toplamDonem">₺ 3,200.00</div>
+                                <div className="data-value" id="toplamDonem">{formatCurrency(databaseData.yemekCekiDonemToplam)}</div>
                             </div>
                         </div>
                     </div>
@@ -728,7 +705,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                                     <span className="status-indicator status-positive" id="toplamFarkStatus"></span>
                                 </div>
                                 <div className="calculation-formula">Gelir Fark + Nakit Fark + Kredi Kartı Fark + Online Fark + Yemek Çeki Fark</div>
-                                <div className="calculation-value positive" id="toplamFark">₺ 1,100.00</div>
+                                <div className="calculation-value positive" id="toplamFark">{formatCurrency(calculations.toplamFark)}</div>
                             </div>
 
                             <div className="calculation-item">
@@ -737,7 +714,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                                     <span className="status-indicator status-positive" id="gelirFarkStatus"></span>
                                 </div>
                                 <div className="calculation-formula">Toplam Satış Gelirleri - Robotpos Tutar</div>
-                                <div className="calculation-value positive" id="gelirFark">₺ 550.00</div>
+                                <div className="calculation-value positive" id="gelirFark">{formatCurrency(calculations.gelirFark)}</div>
                             </div>
 
                             <div className="calculation-item">
@@ -746,7 +723,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                                     <span className="status-indicator status-positive" id="nakitFarkStatus"></span>
                                 </div>
                                 <div className="calculation-formula">Kalan Nakit - Bankaya Yatan Toplam</div>
-                                <div className="calculation-value positive" id="nakitFark">₺ 300.00</div>
+                                <div className="calculation-value positive" id="nakitFark">{formatCurrency(calculations.nakitFark)}</div>
                             </div>
 
                             <div className="calculation-item">
@@ -755,7 +732,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                                     <span className="status-indicator status-positive" id="krediKartiFarkStatus"></span>
                                 </div>
                                 <div className="calculation-formula">Gelir POS - POS Hareketleri</div>
-                                <div className="calculation-value positive" id="krediKartiFark">₺ 150.00</div>
+                                <div className="calculation-value positive" id="krediKartiFark">{formatCurrency(calculations.krediKartiFark)}</div>
                             </div>
 
                             <div className="calculation-item">
@@ -764,7 +741,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                                     <span className="status-indicator status-positive" id="onlineFarkStatus"></span>
                                 </div>
                                 <div className="calculation-formula">Online Gelir Toplam - Online Virman Toplam</div>
-                                <div className="calculation-value positive" id="onlineFark">₺ 250.00</div>
+                                <div className="calculation-value positive" id="onlineFark">{formatCurrency(calculations.onlineFark)}</div>
                             </div>
 
                             <div className="calculation-item">
@@ -773,7 +750,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                                     <span className="status-indicator status-positive" id="yemekCekiFarkStatus"></span>
                                 </div>
                                 <div className="calculation-formula">Yemek Çeki Aylık Gelir - Yemek Çeki Dönem Toplamı</div>
-                                <div className="calculation-value positive" id="yemekCekiFark">₺ 200.00</div>
+                                <div className="calculation-value positive" id="yemekCekiFark">{formatCurrency(calculations.yemekCekiFark)}</div>
                             </div>
                         </div>
                     </div>

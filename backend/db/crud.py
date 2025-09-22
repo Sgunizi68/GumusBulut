@@ -2757,3 +2757,202 @@ def get_nakit_girisi_toplam(db: Session, donem: int, sube_id: int) -> float:
     ).scalar()
 
     return total_tutar or 0.0
+
+def get_bankaya_yatan_toplam(db: Session, donem: int, sube_id: int) -> float:
+    """
+    Calculates the sum of Tutar from Odeme for a given period and branch
+    where Kategori_Adi is 'ATM Para Yatırma'.
+    """
+    from sqlalchemy import func
+
+    if len(str(donem)) == 6:
+        # Convert YYYYMM to YYMM
+        donem_str = str(donem)
+        donem = int(donem_str[2:])
+
+    kategori_id = db.query(models.Kategori.Kategori_ID).filter(
+        models.Kategori.Kategori_Adi == 'ATM Para Yatırma'
+    ).scalar()
+
+    total_tutar = db.query(func.sum(models.Odeme.Tutar)).filter(
+        models.Odeme.Sube_ID == sube_id,
+        models.Odeme.Donem == donem,
+        models.Odeme.Kategori_ID == kategori_id
+    ).scalar()
+
+    return total_tutar or 0.0
+
+def get_gelir_pos_toplam(db: Session, donem: int, sube_id: int) -> float:
+    """
+    Calculates the sum of Tutar from Gelir for a given period and branch
+    where Kategori_Adi is 'POS'.
+    """
+    from sqlalchemy import func
+
+    if len(str(donem)) == 6:
+        # Convert YYYYMM to YYMM
+        donem_str = str(donem)
+        donem = int(donem_str[2:])
+
+    kategori_id = db.query(models.Kategori.Kategori_ID).filter(
+        models.Kategori.Kategori_Adi == 'POS'
+    ).scalar()
+
+    total_tutar = db.query(func.sum(models.Gelir.Tutar)).filter(
+        models.Gelir.Sube_ID == sube_id,
+        func.date_format(models.Gelir.Tarih, '%y%m') == str(donem),
+        models.Gelir.Kategori_ID == kategori_id
+    ).scalar()
+    
+    return total_tutar or 0.0
+
+def get_pos_hareketleri_toplam(db: Session, donem: int, sube_id: int) -> float:
+    """
+    Calculates the sum of Islem_Tutari from POS_Hareketleri for a given period and branch.
+    """
+    from sqlalchemy import func
+
+    if len(str(donem)) == 6:
+        # Convert YYYYMM to YYMM
+        donem_str = str(donem)
+        donem = int(donem_str[2:])
+
+    total_tutar = db.query(func.sum(models.POSHareketleri.Islem_Tutari)).filter(
+        models.POSHareketleri.Sube_ID == sube_id,
+        func.date_format(models.POSHareketleri.Islem_Tarihi, '%y%m') == str(donem)
+    ).scalar()
+    
+    return total_tutar or 0.0
+
+def get_online_gelir_toplam(db: Session, donem: int, sube_id: int) -> float:
+    """
+    Calculates the sum of Tutar from Gelir for a given period and branch
+    where UstKategori is 'E-Ticaret Kredi Kart'.
+    """
+    from sqlalchemy import func
+
+    if len(str(donem)) == 6:
+        # Convert YYYYMM to YYMM
+        donem_str = str(donem)
+        donem = int(donem_str[2:])
+
+    ust_kategori_names = ['E-Ticaret Kredi Kart']
+    
+    ust_kategori_ids = db.query(models.UstKategori.UstKategori_ID).filter(
+        models.UstKategori.UstKategori_Adi.in_(ust_kategori_names)
+    ).all()
+    ust_kategori_ids = [id[0] for id in ust_kategori_ids]
+
+    kategori_ids = db.query(models.Kategori.Kategori_ID).filter(
+        models.Kategori.Ust_Kategori_ID.in_(ust_kategori_ids)
+    ).all()
+    kategori_ids = [id[0] for id in kategori_ids]
+
+    total_tutar = db.query(func.sum(models.Gelir.Tutar)).filter(
+        models.Gelir.Sube_ID == sube_id,
+        func.date_format(models.Gelir.Tarih, '%y%m') == str(donem),
+        models.Gelir.Kategori_ID.in_(kategori_ids)
+    ).scalar()
+    
+    return total_tutar or 0.0
+
+def get_online_virman_toplam(db: Session, donem: int, sube_id: int) -> float:
+    """
+    Calculates the sum of Tutar from B2B_Ekstre for a given period and branch
+    where Aciklama is like '%Online Alacak Virman%'.
+    """
+    from sqlalchemy import func
+
+    if len(str(donem)) == 6:
+        # Convert YYYYMM to YYMM
+        donem_str = str(donem)
+        donem = int(donem_str[2:])
+
+    total_tutar = db.query(func.sum(models.B2BEkstre.Tutar)).filter(
+        models.B2BEkstre.Sube_ID == sube_id,
+        models.B2BEkstre.Donem == donem,
+        models.B2BEkstre.Aciklama.like('%Online Alacak Virman%')
+    ).scalar()
+    
+    return total_tutar or 0.0
+
+def get_yemek_ceki_aylik_gelir_toplam(db: Session, donem: int, sube_id: int) -> float:
+    """
+    Calculates the sum of Tutar from Gelir for a given period and branch
+    where UstKategori is 'Yemek Çeki'.
+    """
+    from sqlalchemy import func
+
+    if len(str(donem)) == 6:
+        # Convert YYYYMM to YYMM
+        donem_str = str(donem)
+        donem = int(donem_str[2:])
+
+    ust_kategori_names = ['Yemek Çeki']
+    
+    ust_kategori_ids = db.query(models.UstKategori.UstKategori_ID).filter(
+        models.UstKategori.UstKategori_Adi.in_(ust_kategori_names)
+    ).all()
+    ust_kategori_ids = [id[0] for id in ust_kategori_ids]
+
+    kategori_ids = db.query(models.Kategori.Kategori_ID).filter(
+        models.Kategori.Ust_Kategori_ID.in_(ust_kategori_ids)
+    ).all()
+    kategori_ids = [id[0] for id in kategori_ids]
+
+    total_tutar = db.query(func.sum(models.Gelir.Tutar)).filter(
+        models.Gelir.Sube_ID == sube_id,
+        func.date_format(models.Gelir.Tarih, '%y%m') == str(donem),
+        models.Gelir.Kategori_ID.in_(kategori_ids)
+    ).scalar()
+    
+    return total_tutar or 0.0
+
+def get_yemek_ceki_donem_toplam(db: Session, donem: int, sube_id: int) -> float:
+    """
+    Calculates the sum of Tutar from YemekCeki for a given period and branch.
+    """
+    from sqlalchemy import func, text
+
+    if len(str(donem)) == 6:
+        # Convert YYYYMM to YYMM
+        donem_str = str(donem)
+        donem = int(donem_str[2:])
+
+    sql = text("""
+    WITH Aktif_YemekCeki AS (
+        SELECT
+            Kategori_ID,
+            Ilk_Tarih,
+            Son_Tarih,
+            Tutar
+        FROM SilverCloud.Yemek_Ceki
+        WHERE CAST(DATE_FORMAT(Ilk_Tarih, '%y%m') AS UNSIGNED) <= :donem
+          AND CAST(DATE_FORMAT(Son_Tarih, '%y%m') AS UNSIGNED) >= :donem
+          AND Sube_ID = :sube_id
+    ),
+    Excluded AS (
+        SELECT
+            SUM(g.Tutar) AS Excluded_Tutar
+        FROM Aktif_YemekCeki y
+        JOIN SilverCloud.Gelir g
+          ON g.Kategori_ID = y.Kategori_ID
+         AND CAST(DATE_FORMAT(g.Tarih, '%y%m') AS UNSIGNED) <> :donem
+         AND g.Tarih >= y.Ilk_Tarih
+         AND g.Tarih <= y.Son_Tarih
+         AND g.Sube_ID = :sube_id
+    ),
+    Included AS (
+        SELECT
+            SUM(Tutar) AS Included_Tutar
+        FROM Aktif_YemekCeki
+    )
+    SELECT
+        i.Included_Tutar - COALESCE(e.Excluded_Tutar,0) AS Donem_Tutar
+    FROM Included i
+    CROSS JOIN Excluded e;
+    """)
+
+    result = db.execute(sql, {"donem": donem, "sube_id": sube_id}).scalar()
+    
+    return result or 0.0
