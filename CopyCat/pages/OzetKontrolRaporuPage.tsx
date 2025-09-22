@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Card } from '../components';
+import { Card, Button } from '../components';
 import { useAppContext } from '../App';
-import { OZET_KONTROL_RAPORU_YETKI_ADI, API_BASE_URL } from '../constants';
+import { OZET_KONTROL_RAPORU_YETKI_ADI, API_BASE_URL, EXCELE_AKTAR_YETKISI_ADI, Icons } from '../constants';
+import * as XLSX from 'xlsx';
 
 const AccessDenied: React.FC<{ title: string }> = ({ title }) => (
     <Card title={title}>
@@ -17,6 +18,7 @@ export const OzetKontrolRaporuPage: React.FC = () => {
     const [reportPeriod, setReportPeriod] = useState(currentPeriod);
     const pageTitle = "Özet Kontrol Raporu";
     const requiredPermission = OZET_KONTROL_RAPORU_YETKI_ADI;
+    const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
     const [periodOptions, setPeriodOptions] = useState<string[]>([]);
 
     const [databaseData, setDatabaseData] = useState({
@@ -149,6 +151,44 @@ export const OzetKontrolRaporuPage: React.FC = () => {
     const handlePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setReportPeriod(e.target.value);
     }
+
+    const handleExportToExcel = () => {
+        const wb = XLSX.utils.book_new();
+
+        const databaseVerileri = [
+            { "Veri": "Robotpos Tutar", "Tutar": databaseData.robotposTutar },
+            { "Veri": "Toplam Satış Gelirleri", "Tutar": databaseData.toplamSatis },
+            { "Veri": "Nakit", "Tutar": databaseData.nakit },
+            { "Veri": "Günlük Harcama-eFatura", "Tutar": databaseData.gunlukHarcamaEFatura },
+            { "Veri": "Günlük Harcama-Diğer", "Tutar": databaseData.gunlukHarcamaDiger },
+            { "Veri": "Kalan Nakit", "Tutar": kalanNakitCalculated },
+            { "Veri": "Nakit Girişi Toplam", "Tutar": databaseData.nakitGirisiToplam },
+            { "Veri": "Bankaya Yatan Toplam", "Tutar": databaseData.bankayaYatan },
+            { "Veri": "Gelir POS", "Tutar": databaseData.gelirPOS },
+            { "Veri": "POS Hareketleri", "Tutar": databaseData.posHareketleri },
+            { "Veri": "Online Gelir Toplam", "Tutar": databaseData.onlineGelirToplam },
+            { "Veri": "Online Virman Toplam", "Tutar": databaseData.onlineVirmanToplam },
+            { "Veri": "Yemek Çeki Aylık Gelir", "Tutar": databaseData.yemekCekiAylikGelir },
+            { "Veri": "Yemek Çeki Dönem Toplamı", "Tutar": databaseData.yemekCekiDonemToplam },
+        ];
+
+        const otomatikHesaplamalar = [
+            { "Hesaplama": "Gelir Fark", "Tutar": calculations.gelirFark },
+            { "Hesaplama": "Nakit Fark", "Tutar": calculations.nakitFark },
+            { "Hesaplama": "Kredi Kartı Fark", "Tutar": calculations.krediKartiFark },
+            { "Hesaplama": "Online Fark", "Tutar": calculations.onlineFark },
+            { "Hesaplama": "Yemek Çeki Fark", "Tutar": calculations.yemekCekiFark },
+            { "Hesaplama": "Toplam Fark", "Tutar": calculations.toplamFark },
+        ];
+
+        const ws1 = XLSX.utils.json_to_sheet(databaseVerileri);
+        const ws2 = XLSX.utils.json_to_sheet(otomatikHesaplamalar);
+
+        XLSX.utils.book_append_sheet(wb, ws1, "Database Verileri");
+        XLSX.utils.book_append_sheet(wb, ws2, "Otomatik Hesaplamalar");
+
+        XLSX.writeFile(wb, `Ozet_Kontrol_Raporu_${selectedBranch?.Sube_Adi}_${reportPeriod}.xlsx`);
+    };
 
     if (!hasPermission(requiredPermission)) {
         return <AccessDenied title={pageTitle} />;
@@ -612,6 +652,13 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                                             <option key={period} value={period}>{`${period.substring(0, 2)}${period.substring(2, 4)} - ${new Date(2000 + parseInt(period.substring(0, 2)), parseInt(period.substring(2, 4)) - 1).toLocaleString('tr-TR', { month: 'long' })} ${2000 + parseInt(period.substring(0, 2))}`}</option>
                                         ))}
                                     </select>
+                                </div>
+                                <div className="filter-actions">
+                                    {canExportExcel && (
+                                        <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
+                                            <Icons.Download className="w-5 h-5" />
+                                        </Button>
+                                    )}
                                 </div>
                             </div>
                         </div>
