@@ -140,14 +140,9 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
       const { processedExcelRows, processedDigerRows, processedMoreRows } = useMemo(() => {
       const calculateWorkingDays = (monthIndex: number, year: number) => new Date(year, monthIndex + 1, 0).getDate();
   
-      // Map fetched expenses by category for easier lookup
-      const expensesMap = new Map<number, number>();
-      allExpensesByCategory.forEach(item => {
-          expensesMap.set(item.Kategori_ID, item.Toplam_Tutar);
-      });
-  
       // --- Main Calculations ---
-      const workingDaysValues = months.map((_, index) => calculateWorkingDays(index, year));    const totalWorkingDays = workingDaysValues.reduce((sum, days) => sum + days, 0);
+      const workingDaysValues = months.map((_, index) => calculateWorkingDays(index, year));
+      const totalWorkingDays = workingDaysValues.reduce((sum, days) => sum + days, 0);
 
     const tabakSayisiValues = Array(12).fill(0);
     const toplamCiroValues = Array(12).fill(0);
@@ -851,20 +846,56 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         return row;
     });
 
-    const newDigerDetayiRows = digerDetayiRows.map(row => {
-        const kategori = kategoriList.find(k => k.Kategori_Adi === row.label);
-        if (kategori) {
+    const processedDigerRows = digerDetayiRows.map(row => {
+        const categoriesToCalculate = [
+            "Su", "Elektrik", "Doğalgaz Gideri", "İnternet ve Telefon",
+            "Personel Yemek Giderleri", "Temizlik Giderleri", "Bakım Onarım",
+            "Personel Tazminat (Kıdem, İhbar vb.)", "İlaçlama", "Baca Temizliği",
+            "ÇTV, İşgaliye, İlan Reklam Vergi Bedelleri", "Kırtasiye",
+            "Müşavirlik Ücreti", "HIJYEN DENETİMİ", "İşyeri Sigorta Gideri"
+        ];
+
+        if (categoriesToCalculate.includes(row.label)) {
+            let categoryNameToSearch = row.label;
+            if (row.label === "HIJYEN DENETİMİ") {
+                categoryNameToSearch = "Hijyen / Gizli Müşteri Denetimi";
+            }
+
+            const kategori = kategoriList.find(k => k.Kategori_Adi === categoryNameToSearch);
+            if (!kategori) {
+                return { ...row, values: Array(12).fill(0), total: 0 };
+            }
             const kategoriId = kategori.Kategori_ID;
-            const totalForCategory = expensesMap.get(kategoriId) || 0;
-            // Distribute total across months for display purposes
-            return { ...row, total: totalForCategory, values: Array(12).fill(totalForCategory / 12) };
+
+            const monthlyValues = Array(12).fill(0);
+
+            const processList = (list: any[]) => {
+                if (!list) return;
+                list.forEach(item => {
+                    if (item.Kategori_ID === kategoriId) {
+                        const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                        if (itemYear === year) {
+                            const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                            if (monthIndex >= 0 && monthIndex < 12) {
+                                monthlyValues[monthIndex] += item.Tutar;
+                            }
+                        }
+                    }
+                });
+            };
+
+            processList(digerHarcamaList);
+            processList(eFaturaList);
+
+            const total = monthlyValues.reduce((a, b) => a + b, 0);
+            return { ...row, values: monthlyValues, total: total };
         }
         return row;
     });
 
     return {
         processedExcelRows: newExcelRows,
-        processedDigerRows: newDigerDetayiRows,
+        processedDigerRows: processedDigerRows,
         processedMoreRows: newMoreRows
     };
   }, [year, depoKiraRapor, gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList, calisanList, ustKategoriList, digerHarcamaList, eFaturaList, allExpensesByCategory]);
