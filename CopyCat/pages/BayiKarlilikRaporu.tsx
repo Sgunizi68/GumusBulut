@@ -61,7 +61,7 @@ const excelRows = [
 ];
 
 const digerDetayiRows = [
-  "Elektrik", "Su", "Doğalgaz Gideri", "İnternet ve Telefon", "Demirbaş Sayılmayan Giderler", "Komisyon Giderleri", "Personel Yemek Giderleri", "Temizlik Giderleri", "Bakım Onarım", "Personel Tazminat (Kıdem, İhbar vb.)",
+  "Elektrik", "Su", "Doğalgaz Gideri", "İnternet ve Telefon", "Demirbaş Sayılmayan Giderler", "Kredi Kartı Komisyon Giderleri", "Yemek Kartı Komisyon Giderleri", "Personel Yemek Giderleri", "Temizlik Giderleri", "Bakım Onarım", "Personel Tazminat (Kıdem, İhbar vb.)",
   "İlaçlama", "Baca Temizliği", "ÇTV, İşgaliye, İlan Reklam Vergi Bedelleri", "Kırtasiye", "İş güvenliği Uzmanı", "Müşavirlik Ücreti",
   "HIJYEN DENETİMİ", "İşyeri Sigorta Gideri"
 ].map((label) => ({ label, values: Array(12).fill(null), total: null, category: "diger" }));

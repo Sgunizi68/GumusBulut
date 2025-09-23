@@ -1,15 +1,439 @@
 Not: Ekran.Donem ekrandaki seçilen dönem  ve Ekran.Sube_ID ekrandaki şube kodu demektir.
-Online Virman Toplam
-SELECT -1*sum(Alacak) as Online_Virman_Toplam
-FROM SilverCloud.B2B_Ekstre
-where Aciklama like '%Online Alacak Virman%'
-and donem =Ekran.Donem
-and Sube_ID = Ekran.Sube_ID
+--------------------------
+Su
+
+SET @DDonem = Ekran.Donem;
+SET @Sube_ID = Ekran.Sube;
+
+WITH MatchingKategori AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'Su'
+),
+tumunu_veriler AS (
+    SELECT SUM(dh.Tutar) AS Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    JOIN MatchingKategori k ON dh.Kategori_ID = k.Kategori_ID
+    WHERE dh.Donem = @DDonem
+    And dh.Sube_ID = @Sube_ID
+
+    UNION ALL
+
+    SELECT SUM(ef.Tutar) AS Tutar
+    FROM SilverCloud.e_Fatura ef
+    JOIN MatchingKategori k ON ef.Kategori_ID = k.Kategori_ID
+    WHERE ef.Donem = @DDonem
+    and ef.Sube_Id = @Sube_ID
+)
+SELECT COALESCE(SUM(Tutar),0) AS Toplam_Tutar
+FROM tumunu_veriler;
+
+--------------------------
+Elektrik
+
+SET @DDonem = Ekran.Donem;
+SET @Sube_ID = Ekran.Sube;
+
+WITH MatchingKategori AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'Elektrik'
+),
+tumunu_veriler AS (
+    SELECT SUM(dh.Tutar) AS Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    JOIN MatchingKategori k ON dh.Kategori_ID = k.Kategori_ID
+    WHERE dh.Donem = @DDonem
+    And dh.Sube_ID = @Sube_ID
+
+    UNION ALL
+
+    SELECT SUM(ef.Tutar) AS Tutar
+    FROM SilverCloud.e_Fatura ef
+    JOIN MatchingKategori k ON ef.Kategori_ID = k.Kategori_ID
+    WHERE ef.Donem = @DDonem
+    and ef.Sube_Id = @Sube_ID
+)
+SELECT COALESCE(SUM(Tutar),0) AS Toplam_Tutar
+FROM tumunu_veriler;
+
+--------------------------
+Doğalgaz Gideri
+
+SET @DDonem = Ekran.Donem;
+SET @Sube_ID = Ekran.Sube;
+
+WITH MatchingKategori AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'Doğalgaz Gideri'
+),
+tumunu_veriler AS (
+    SELECT SUM(dh.Tutar) AS Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    JOIN MatchingKategori k ON dh.Kategori_ID = k.Kategori_ID
+    WHERE dh.Donem = @DDonem
+    And dh.Sube_ID = @Sube_ID
+
+    UNION ALL
+
+    SELECT SUM(ef.Tutar) AS Tutar
+    FROM SilverCloud.e_Fatura ef
+    JOIN MatchingKategori k ON ef.Kategori_ID = k.Kategori_ID
+    WHERE ef.Donem = @DDonem
+    and ef.Sube_Id = @Sube_ID
+)
+SELECT COALESCE(SUM(Tutar),0) AS Toplam_Tutar
+FROM tumunu_veriler;
 
 
-Örnek Donem =2508
-SELECT -1*sum(Alacak) as Online_Virman_Toplam
-FROM SilverCloud.B2B_Ekstre
-where Aciklama like '%Online Alacak Virman%'
-and donem =2508
-and Sube_ID = 1
+--------------------------
+İnternet ve Telefon
+
+SET @DDonem = Ekran.Donem;
+SET @Sube_ID = Ekran.Sube;
+
+WITH MatchingKategori AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'İnternet ve Telefon'
+),
+tumunu_veriler AS (
+    SELECT SUM(dh.Tutar) AS Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    JOIN MatchingKategori k ON dh.Kategori_ID = k.Kategori_ID
+    WHERE dh.Donem = @DDonem
+    And dh.Sube_ID = @Sube_ID
+
+    UNION ALL
+
+    SELECT SUM(ef.Tutar) AS Tutar
+    FROM SilverCloud.e_Fatura ef
+    JOIN MatchingKategori k ON ef.Kategori_ID = k.Kategori_ID
+    WHERE ef.Donem = @DDonem
+    and ef.Sube_Id = @Sube_ID
+)
+SELECT COALESCE(SUM(Tutar),0) AS Toplam_Tutar
+FROM tumunu_veriler;
+-------------------------
+Personel Yemek Giderleri
+
+SET @DDonem = Ekran.Donem;
+SET @Sube_ID = Ekran.Sube;
+
+WITH MatchingKategori AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'Personel Yemek Giderleri'
+),
+tumunu_veriler AS (
+    SELECT SUM(dh.Tutar) AS Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    JOIN MatchingKategori k ON dh.Kategori_ID = k.Kategori_ID
+    WHERE dh.Donem = @DDonem
+    And dh.Sube_ID = @Sube_ID
+
+    UNION ALL
+
+    SELECT SUM(ef.Tutar) AS Tutar
+    FROM SilverCloud.e_Fatura ef
+    JOIN MatchingKategori k ON ef.Kategori_ID = k.Kategori_ID
+    WHERE ef.Donem = @DDonem
+    and ef.Sube_Id = @Sube_ID
+)
+SELECT COALESCE(SUM(Tutar),0) AS Toplam_Tutar
+FROM tumunu_veriler;
+
+-------------------------
+Temizlik Giderleri
+
+SET @DDonem = Ekran.Donem;
+SET @Sube_ID = Ekran.Sube;
+
+WITH MatchingKategori AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'Temizlik Giderleri'
+),
+tumunu_veriler AS (
+    SELECT SUM(dh.Tutar) AS Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    JOIN MatchingKategori k ON dh.Kategori_ID = k.Kategori_ID
+    WHERE dh.Donem = @DDonem
+    And dh.Sube_ID = @Sube_ID
+
+    UNION ALL
+
+    SELECT SUM(ef.Tutar) AS Tutar
+    FROM SilverCloud.e_Fatura ef
+    JOIN MatchingKategori k ON ef.Kategori_ID = k.Kategori_ID
+    WHERE ef.Donem = @DDonem
+    and ef.Sube_Id = @Sube_ID
+)
+SELECT COALESCE(SUM(Tutar),0) AS Toplam_Tutar
+FROM tumunu_veriler;
+
+-------------------------
+Bakım Onarım
+
+SET @DDonem = Ekran.Donem;
+SET @Sube_ID = Ekran.Sube;
+
+WITH MatchingKategori AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'Bakım Onarım'
+),
+tumunu_veriler AS (
+    SELECT SUM(dh.Tutar) AS Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    JOIN MatchingKategori k ON dh.Kategori_ID = k.Kategori_ID
+    WHERE dh.Donem = @DDonem
+    And dh.Sube_ID = @Sube_ID
+
+    UNION ALL
+
+    SELECT SUM(ef.Tutar) AS Tutar
+    FROM SilverCloud.e_Fatura ef
+    JOIN MatchingKategori k ON ef.Kategori_ID = k.Kategori_ID
+    WHERE ef.Donem = @DDonem
+    and ef.Sube_Id = @Sube_ID
+)
+SELECT COALESCE(SUM(Tutar),0) AS Toplam_Tutar
+FROM tumunu_veriler;
+
+
+-------------------------
+Personel Tazminat (Kıdem, İhbar vb.)
+
+SET @DDonem = Ekran.Donem;
+SET @Sube_ID = Ekran.Sube;
+
+WITH MatchingKategori AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'Personel Tazminat (Kıdem, İhbar vb.)'
+),
+tumunu_veriler AS (
+    SELECT SUM(dh.Tutar) AS Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    JOIN MatchingKategori k ON dh.Kategori_ID = k.Kategori_ID
+    WHERE dh.Donem = @DDonem
+    And dh.Sube_ID = @Sube_ID
+
+    UNION ALL
+
+    SELECT SUM(ef.Tutar) AS Tutar
+    FROM SilverCloud.e_Fatura ef
+    JOIN MatchingKategori k ON ef.Kategori_ID = k.Kategori_ID
+    WHERE ef.Donem = @DDonem
+    and ef.Sube_Id = @Sube_ID
+)
+SELECT COALESCE(SUM(Tutar),0) AS Toplam_Tutar
+FROM tumunu_veriler;
+
+-------------------------
+İlaçlama
+
+SET @DDonem = Ekran.Donem;
+SET @Sube_ID = Ekran.Sube;
+
+WITH MatchingKategori AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'İlaçlama'
+),
+tumunu_veriler AS (
+    SELECT SUM(dh.Tutar) AS Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    JOIN MatchingKategori k ON dh.Kategori_ID = k.Kategori_ID
+    WHERE dh.Donem = @DDonem
+    And dh.Sube_ID = @Sube_ID
+
+    UNION ALL
+
+    SELECT SUM(ef.Tutar) AS Tutar
+    FROM SilverCloud.e_Fatura ef
+    JOIN MatchingKategori k ON ef.Kategori_ID = k.Kategori_ID
+    WHERE ef.Donem = @DDonem
+    and ef.Sube_Id = @Sube_ID
+)
+SELECT COALESCE(SUM(Tutar),0) AS Toplam_Tutar
+FROM tumunu_veriler;
+
+-----------------------------
+Baca Temizliği
+
+SET @DDonem = Ekran.Donem;
+SET @Sube_ID = Ekran.Sube;
+
+WITH MatchingKategori AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'Baca Temizliği'
+),
+tumunu_veriler AS (
+    SELECT SUM(dh.Tutar) AS Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    JOIN MatchingKategori k ON dh.Kategori_ID = k.Kategori_ID
+    WHERE dh.Donem = @DDonem
+    And dh.Sube_ID = @Sube_ID
+
+    UNION ALL
+
+    SELECT SUM(ef.Tutar) AS Tutar
+    FROM SilverCloud.e_Fatura ef
+    JOIN MatchingKategori k ON ef.Kategori_ID = k.Kategori_ID
+    WHERE ef.Donem = @DDonem
+    and ef.Sube_Id = @Sube_ID
+)
+SELECT COALESCE(SUM(Tutar),0) AS Toplam_Tutar
+FROM tumunu_veriler;
+
+-----------------------------
+ÇTV, İşgaliye, İlan Reklam Vergi Bedelleri
+
+SET @DDonem = Ekran.Donem;
+SET @Sube_ID = Ekran.Sube;
+
+WITH MatchingKategori AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'ÇTV, İşgaliye, İlan Reklam Vergi Bedelleri'
+),
+tumunu_veriler AS (
+    SELECT SUM(dh.Tutar) AS Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    JOIN MatchingKategori k ON dh.Kategori_ID = k.Kategori_ID
+    WHERE dh.Donem = @DDonem
+    And dh.Sube_ID = @Sube_ID
+
+    UNION ALL
+
+    SELECT SUM(ef.Tutar) AS Tutar
+    FROM SilverCloud.e_Fatura ef
+    JOIN MatchingKategori k ON ef.Kategori_ID = k.Kategori_ID
+    WHERE ef.Donem = @DDonem
+    and ef.Sube_Id = @Sube_ID
+)
+SELECT COALESCE(SUM(Tutar),0) AS Toplam_Tutar
+FROM tumunu_veriler;
+
+
+-----------------------------
+Kırtasiye
+
+SET @DDonem = Ekran.Donem;
+SET @Sube_ID = Ekran.Sube;
+
+WITH MatchingKategori AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'Kırtasiye'
+),
+tumunu_veriler AS (
+    SELECT SUM(dh.Tutar) AS Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    JOIN MatchingKategori k ON dh.Kategori_ID = k.Kategori_ID
+    WHERE dh.Donem = @DDonem
+    And dh.Sube_ID = @Sube_ID
+
+    UNION ALL
+
+    SELECT SUM(ef.Tutar) AS Tutar
+    FROM SilverCloud.e_Fatura ef
+    JOIN MatchingKategori k ON ef.Kategori_ID = k.Kategori_ID
+    WHERE ef.Donem = @DDonem
+    and ef.Sube_Id = @Sube_ID
+)
+SELECT COALESCE(SUM(Tutar),0) AS Toplam_Tutar
+FROM tumunu_veriler;
+
+
+-----------------------------
+Müşavirlik Ücreti
+
+SET @DDonem = Ekran.Donem;
+SET @Sube_ID = Ekran.Sube;
+
+WITH MatchingKategori AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'Müşavirlik Ücreti'
+),
+tumunu_veriler AS (
+    SELECT SUM(dh.Tutar) AS Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    JOIN MatchingKategori k ON dh.Kategori_ID = k.Kategori_ID
+    WHERE dh.Donem = @DDonem
+    And dh.Sube_ID = @Sube_ID
+
+    UNION ALL
+
+    SELECT SUM(ef.Tutar) AS Tutar
+    FROM SilverCloud.e_Fatura ef
+    JOIN MatchingKategori k ON ef.Kategori_ID = k.Kategori_ID
+    WHERE ef.Donem = @DDonem
+    and ef.Sube_Id = @Sube_ID
+)
+SELECT COALESCE(SUM(Tutar),0) AS Toplam_Tutar
+FROM tumunu_veriler;
+
+
+-----------------------------
+HIJYEN DENETİMİ
+
+SET @DDonem = Ekran.Donem;
+SET @Sube_ID = Ekran.Sube;
+
+WITH MatchingKategori AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'Hijyen / Gizli Müşteri Denetimi'
+),
+tumunu_veriler AS (
+    SELECT SUM(dh.Tutar) AS Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    JOIN MatchingKategori k ON dh.Kategori_ID = k.Kategori_ID
+    WHERE dh.Donem = @DDonem
+    And dh.Sube_ID = @Sube_ID
+
+    UNION ALL
+
+    SELECT SUM(ef.Tutar) AS Tutar
+    FROM SilverCloud.e_Fatura ef
+    JOIN MatchingKategori k ON ef.Kategori_ID = k.Kategori_ID
+    WHERE ef.Donem = @DDonem
+    and ef.Sube_Id = @Sube_ID
+)
+SELECT COALESCE(SUM(Tutar),0) AS Toplam_Tutar
+FROM tumunu_veriler;
+
+-----------------------------
+İşyeri Sigorta Gideri
+
+SET @DDonem = Ekran.Donem;
+SET @Sube_ID = Ekran.Sube;
+
+WITH MatchingKategori AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'İşyeri Sigorta Gideri'
+),
+tumunu_veriler AS (
+    SELECT SUM(dh.Tutar) AS Tutar
+    FROM SilverCloud.Diger_Harcama dh
+    JOIN MatchingKategori k ON dh.Kategori_ID = k.Kategori_ID
+    WHERE dh.Donem = @DDonem
+    And dh.Sube_ID = @Sube_ID
+
+    UNION ALL
+
+    SELECT SUM(ef.Tutar) AS Tutar
+    FROM SilverCloud.e_Fatura ef
+    JOIN MatchingKategori k ON ef.Kategori_ID = k.Kategori_ID
+    WHERE ef.Donem = @DDonem
+    and ef.Sube_Id = @Sube_ID
+)
+SELECT COALESCE(SUM(Tutar),0) AS Toplam_Tutar
+FROM tumunu_veriler;
