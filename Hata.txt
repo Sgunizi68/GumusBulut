@@ -1,89 +1,170 @@
-2025-09-23T20:30:16.108280379Z ==> Deploying...
-2025-09-23T20:30:44.625476762Z ==> Running 'gunicorn -c backend/gunicorn_config.py backend.main:app '
-2025-09-23T20:30:49.715317047Z Traceback (most recent call last):
-2025-09-23T20:30:49.716861934Z   File "/opt/render/project/src/.venv/bin/gunicorn", line 7, in <module>
-2025-09-23T20:30:49.716921229Z     sys.exit(run())
-2025-09-23T20:30:49.716924909Z              ~~~^^
-2025-09-23T20:30:49.71693016Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/wsgiapp.py", line 66, in run
-2025-09-23T20:30:49.71693571Z     WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]", prog=prog).run()
-2025-09-23T20:30:49.71693872Z     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
-2025-09-23T20:30:49.716941371Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/base.py", line 235, in run
-2025-09-23T20:30:49.716944151Z     super().run()
-2025-09-23T20:30:49.716946751Z     ~~~~~~~~~~~^^
-2025-09-23T20:30:49.716949241Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/base.py", line 71, in run
-2025-09-23T20:30:49.716951481Z     Arbiter(self).run()
-2025-09-23T20:30:49.716953772Z     ~~~~~~~^^^^^^
-2025-09-23T20:30:49.716956282Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/arbiter.py", line 57, in __init__
-2025-09-23T20:30:49.716958622Z     self.setup(app)
-2025-09-23T20:30:49.716960932Z     ~~~~~~~~~~^^^^^
-2025-09-23T20:30:49.716963022Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/arbiter.py", line 117, in setup
-2025-09-23T20:30:49.716965502Z     self.app.wsgi()
-2025-09-23T20:30:49.716968082Z     ~~~~~~~~~~~~~^^
-2025-09-23T20:30:49.716970533Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/base.py", line 66, in wsgi
-2025-09-23T20:30:49.716973573Z     self.callable = self.load()
-2025-09-23T20:30:49.716975973Z                     ~~~~~~~~~^^
-2025-09-23T20:30:49.716978613Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/wsgiapp.py", line 57, in load
-2025-09-23T20:30:49.716980823Z     return self.load_wsgiapp()
-2025-09-23T20:30:49.716983324Z            ~~~~~~~~~~~~~~~~~^^
-2025-09-23T20:30:49.716986464Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/wsgiapp.py", line 47, in load_wsgiapp
-2025-09-23T20:30:49.716990394Z     return util.import_app(self.app_uri)
-2025-09-23T20:30:49.716993064Z            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
-2025-09-23T20:30:49.717003545Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/util.py", line 370, in import_app
-2025-09-23T20:30:49.717006365Z     mod = importlib.import_module(module)
-2025-09-23T20:30:49.717009086Z   File "/opt/render/project/python/Python-3.13.4/lib/python3.13/importlib/__init__.py", line 88, in import_module
-2025-09-23T20:30:49.717013006Z     return _bootstrap._gcd_import(name[level:], package, level)
-2025-09-23T20:30:49.717015596Z            ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2025-09-23T20:30:49.717018306Z   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
-2025-09-23T20:30:49.717021037Z   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-2025-09-23T20:30:49.717023837Z   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
-2025-09-23T20:30:49.717026447Z   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
-2025-09-23T20:30:49.717029007Z   File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
-2025-09-23T20:30:49.717032127Z   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-2025-09-23T20:30:49.717034998Z   File "/opt/render/project/src/backend/main.py", line 4, in <module>
-2025-09-23T20:30:49.717055799Z     from db.database import engine, Base
-2025-09-23T20:30:49.71706927Z ModuleNotFoundError: No module named 'db'
-2025-09-23T20:30:50.998935557Z ==> Exited with status 1
-2025-09-23T20:30:51.015699656Z ==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys
-2025-09-23T20:30:56.62020741Z ==> Running 'gunicorn -c backend/gunicorn_config.py backend.main:app '
-2025-09-23T20:31:01.918506155Z Traceback (most recent call last):
-2025-09-23T20:31:01.92026768Z   File "/opt/render/project/src/.venv/bin/gunicorn", line 7, in <module>
-2025-09-23T20:31:01.920281481Z     sys.exit(run())
-2025-09-23T20:31:01.920286121Z              ~~~^^
-2025-09-23T20:31:01.920303802Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/wsgiapp.py", line 66, in run
-2025-09-23T20:31:01.920309533Z     WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]", prog=prog).run()
-2025-09-23T20:31:01.920313703Z     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
-2025-09-23T20:31:01.920317893Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/base.py", line 235, in run
-2025-09-23T20:31:01.920322064Z     super().run()
-2025-09-23T20:31:01.920325904Z     ~~~~~~~~~~~^^
-2025-09-23T20:31:01.920329804Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/base.py", line 71, in run
-2025-09-23T20:31:01.920333635Z     Arbiter(self).run()
-2025-09-23T20:31:01.920337545Z     ~~~~~~~^^^^^^
-2025-09-23T20:31:01.920341355Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/arbiter.py", line 57, in __init__
-2025-09-23T20:31:01.920345186Z     self.setup(app)
-2025-09-23T20:31:01.920348936Z     ~~~~~~~~~~^^^^^
-2025-09-23T20:31:01.920352806Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/arbiter.py", line 117, in setup
-2025-09-23T20:31:01.920369657Z     self.app.wsgi()
-2025-09-23T20:31:01.920375208Z     ~~~~~~~~~~~~~^^
-2025-09-23T20:31:01.920379208Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/base.py", line 66, in wsgi
-2025-09-23T20:31:01.920383398Z     self.callable = self.load()
-2025-09-23T20:31:01.920387099Z                     ~~~~~~~~~^^
-2025-09-23T20:31:01.920391419Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/wsgiapp.py", line 57, in load
-2025-09-23T20:31:01.920395349Z     return self.load_wsgiapp()
-2025-09-23T20:31:01.92039936Z            ~~~~~~~~~~~~~~~~~^^
-2025-09-23T20:31:01.92040405Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/app/wsgiapp.py", line 47, in load_wsgiapp
-2025-09-23T20:31:01.9204085Z     return util.import_app(self.app_uri)
-2025-09-23T20:31:01.920412461Z            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
-2025-09-23T20:31:01.920416521Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/util.py", line 370, in import_app
-2025-09-23T20:31:01.920420561Z     mod = importlib.import_module(module)
-2025-09-23T20:31:01.920424632Z   File "/opt/render/project/python/Python-3.13.4/lib/python3.13/importlib/__init__.py", line 88, in import_module
-2025-09-23T20:31:01.920428912Z     return _bootstrap._gcd_import(name[level:], package, level)
-2025-09-23T20:31:01.920432842Z            ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2025-09-23T20:31:01.920436822Z   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
-2025-09-23T20:31:01.920440743Z   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-2025-09-23T20:31:01.920444683Z   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
-2025-09-23T20:31:01.920448593Z   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
-2025-09-23T20:31:01.920452364Z   File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
-2025-09-23T20:31:01.920456134Z   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-2025-09-23T20:31:01.920460194Z   File "/opt/render/project/src/backend/main.py", line 4, in <module>
-2025-09-23T20:31:01.920478246Z     from db.database import engine, Base
-2025-09-23T20:31:01.920614076Z ModuleNotFoundError: No module named 'db'
+ cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
+(anonymous) @ (index):64
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/diger-harcamalar/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/diger-harcamalar/:1  Failed to load resource: net::ERR_FAILED
+ Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/e-faturalar/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/e-faturalar/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/degerler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/degerler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/Odeme_Referans/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/Odeme_Referans/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/subeler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/subeler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/stoklar/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/stoklar/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/stok-fiyatlar/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/stok-fiyatlar/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/calisanlar/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/calisanlar/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/b2b-ekstreler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/b2b-ekstreler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/stok-sayimlar/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/stok-sayimlar/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/puantajlar/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/puantajlar/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/gelir-ekstra/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/gelir-ekstra/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/gelirler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/gelirler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/ust-kategoriler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/ust-kategoriler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/kategoriler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/kategoriler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/avans-istekler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/avans-istekler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/users/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/users/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/kullanici-rolleri/?kullanici_id=1' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/kullanici-rolleri/?kullanici_id=1:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/roles/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/roles/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/yetkiler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/yetkiler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/nakit/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/nakit/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/Odeme/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/Odeme/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/depo-kira-rapor/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/depo-kira-rapor/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/kullanici-rolleri/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/kullanici-rolleri/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/rol-yetkileri/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/rol-yetkileri/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/e-fatura-referans/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/e-fatura-referans/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/yemek-cekiler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/yemek-cekiler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/puantaj-secimi/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/puantaj-secimi/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
