@@ -1,8 +1,170 @@
-[plugin:vite:css] [postcss] It looks like you're trying to use `tailwindcss` directly as a PostCSS plugin. The PostCSS plugin has moved to a separate package, so to continue using Tailwind CSS with PostCSS you'll need to install `@tailwindcss/postcss` and update your PostCSS configuration.
-    at gn (file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/tailwindcss/dist/chunk-U5SIPDGO.mjs:35:2121)
-    at LazyResult.runOnRoot (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:361:16)
-    at LazyResult.runAsync (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:290:26)
-    at LazyResult.async (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:192:30)
-    at LazyResult.then (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:436:17
-Click outside, press Esc key, or fix the code to dismiss.
-You can also disable this overlay by setting server.hmr.overlay to false in vite.config.ts.
+ cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
+(anonymous) @ (index):64
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/diger-harcamalar/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/diger-harcamalar/:1  Failed to load resource: net::ERR_FAILED
+ Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/e-faturalar/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/e-faturalar/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/degerler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/degerler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/Odeme_Referans/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/Odeme_Referans/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/subeler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/subeler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/stoklar/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/stoklar/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/stok-fiyatlar/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/stok-fiyatlar/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/calisanlar/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/calisanlar/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/b2b-ekstreler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/b2b-ekstreler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/stok-sayimlar/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/stok-sayimlar/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/puantajlar/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/puantajlar/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/gelir-ekstra/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/gelir-ekstra/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/gelirler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/gelirler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/ust-kategoriler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/ust-kategoriler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/kategoriler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/kategoriler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/avans-istekler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/avans-istekler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/users/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/users/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/kullanici-rolleri/?kullanici_id=1' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/kullanici-rolleri/?kullanici_id=1:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/roles/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/roles/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/yetkiler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/yetkiler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/nakit/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/nakit/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/Odeme/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/Odeme/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/depo-kira-rapor/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/depo-kira-rapor/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/kullanici-rolleri/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/kullanici-rolleri/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/rol-yetkileri/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/rol-yetkileri/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/e-fatura-referans/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/e-fatura-referans/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/yemek-cekiler/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/yemek-cekiler/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
+GumusBulut/:1 Access to fetch at 'https://gumusbulut.onrender.com/api/v1/puantaj-secimi/' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+gumusbulut.onrender.com/api/v1/puantaj-secimi/:1  Failed to load resource: net::ERR_FAILED
+index-aPEARSdc.js:978 Error in fetchData: Object
+wt @ index-aPEARSdc.js:978
+index-aPEARSdc.js:978 General error: Failed to fetch
+wt @ index-aPEARSdc.js:978
