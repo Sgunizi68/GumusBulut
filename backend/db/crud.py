@@ -2861,14 +2861,14 @@ def get_online_virman_toplam(db: Session, donem: int, sube_id: int) -> float:
     Calculates the sum of Tutar from B2B_Ekstre for a given period and branch
     where Aciklama is like '%Online Alacak Virman%'.
     """
-    from sqlalchemy import func
+    from sqlalchemy import func, coalesce
 
     if len(str(donem)) == 6:
         # Convert YYYYMM to YYMM
         donem_str = str(donem)
         donem = int(donem_str[2:])
 
-    total_tutar = db.query(func.sum(models.B2BEkstre.Alacak) * -1).filter(
+    total_tutar = db.query(func.coalesce(func.sum(models.B2BEkstre.Alacak), 0) * -1).filter(
         models.B2BEkstre.Sube_ID == sube_id,
         models.B2BEkstre.Donem == donem,
         models.B2BEkstre.Aciklama.like('%Online Alacak Virman%')

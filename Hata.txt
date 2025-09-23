@@ -1,57 +1,8 @@
-←[32mINFO←[0m:     Will watch for changes in these directories: ['C:\\Users\\Gokova\\OneDrive - CELEBI HAVACILIK HOLDING A.S\\Personel\\Programming\\Python\\backend']
-←[32mINFO←[0m:     Loading environment from '..\.env.local'
-←[32mINFO←[0m:     Uvicorn running on ←[1mhttp://127.0.0.1:8000←[0m (Press CTRL+C to quit)
-←[32mINFO←[0m:     Started reloader process [←[36m←[1m22280←[0m] using ←[36m←[1mWatchFiles←[0m
-C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_config.py:373: UserWarning: Valid config keys have changed in V2:
-* 'orm_mode' has been renamed to 'from_attributes'
-  warnings.warn(message, UserWarning)
-Process SpawnProcess-1:
-Traceback (most recent call last):
-  File "C:\Python313\Lib\multiprocessing\process.py", line 313, in _bootstrap
-    self.run()
-    ~~~~~~~~^^
-  File "C:\Python313\Lib\multiprocessing\process.py", line 108, in run
-    self._target(*self._args, **self._kwargs)
-    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\_subprocess.py", line 80, in subprocess_started
-    target(sockets=sockets)
-    ~~~~~~^^^^^^^^^^^^^^^^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\server.py", line 67, in run
-    return asyncio.run(self.serve(sockets=sockets))
-           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Python313\Lib\asyncio\runners.py", line 195, in run
-    return runner.run(main)
-           ~~~~~~~~~~^^^^^^
-  File "C:\Python313\Lib\asyncio\runners.py", line 118, in run
-    return self._loop.run_until_complete(task)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
-  File "C:\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
-    return future.result()
-           ~~~~~~~~~~~~~^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\server.py", line 71, in serve
-    await self._serve(sockets)
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\server.py", line 78, in _serve
-    config.load()
-    ~~~~~~~~~~~^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\config.py", line 436, in load
-    self.loaded_app = import_from_string(self.app)
-                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
-    module = importlib.import_module(module_str)
-  File "C:\Python313\Lib\importlib\__init__.py", line 88, in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
-  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
-  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
-  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
-  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\main.py", line 5, in <module>
-    from api.v1.endpoints import (
-    ...<2 lines>...
-    )
-  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\api\v1\endpoints\report.py", line 215
-    return report_data
-    ^^^^^^
-SyntaxError: expected 'except' or 'finally' block
+[plugin:vite:css] [postcss] It looks like you're trying to use `tailwindcss` directly as a PostCSS plugin. The PostCSS plugin has moved to a separate package, so to continue using Tailwind CSS with PostCSS you'll need to install `@tailwindcss/postcss` and update your PostCSS configuration.
+    at gn (file:///C:/Users/Gokova/OneDrive%20-%20CELEBI%20HAVACILIK%20HOLDING%20A.S/Personel/Programming/Python/CopyCat/node_modules/tailwindcss/dist/chunk-U5SIPDGO.mjs:35:2121)
+    at LazyResult.runOnRoot (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:361:16)
+    at LazyResult.runAsync (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:290:26)
+    at LazyResult.async (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:192:30)
+    at LazyResult.then (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\postcss\lib\lazy-result.js:436:17
+Click outside, press Esc key, or fix the code to dismiss.
+You can also disable this overlay by setting server.hmr.overlay to false in vite.config.ts.

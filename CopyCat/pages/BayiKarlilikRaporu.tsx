@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { ChevronDown, ChevronUp, Calendar, TrendingUp, Eye, EyeOff } from "lucide-react";
 import { useAppContext, useDataContext } from '../App';
 import { Card } from '../components';
