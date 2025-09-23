@@ -847,6 +847,13 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     });
 
     const processedDigerRows = digerDetayiRows.map(row => {
+        if (row.label === "Kredi Kartı Komisyon Giderleri") {
+            return { ...row, values: krediKartiKomisyonGiderleriValues, total: totalKrediKartiKomisyonGiderleri };
+        }
+        if (row.label === "Yemek Kartı Komisyon Giderleri") {
+            return { ...row, values: yemekKartiKomisyonGiderleriValues, total: totalYemekKartiKomisyonGiderleri };
+        }
+
         const categoriesToCalculate = [
             "Su", "Elektrik", "Doğalgaz Gideri", "İnternet ve Telefon",
             "Personel Yemek Giderleri", "Temizlik Giderleri", "Bakım Onarım",
