@@ -1,15 +1,28 @@
-Not: Ekran.Donem ekrandaki seçilen dönem  ve Ekran.Sube_ID ekrandaki şube kodu demektir.
-Online Virman Toplam
-SELECT -1*sum(Alacak) as Online_Virman_Toplam
-FROM SilverCloud.B2B_Ekstre
-where Aciklama like '%Online Alacak Virman%'
-and donem =Ekran.Donem
-and Sube_ID = Ekran.Sube_ID
+---------------------------------------------
+
+Yemeksepeti Komisyon ve Lojistik Giderleri
+
+Not: Ekran.Yil ekrandaki seçilen yılı  ve Ekran.Sube_ID ekrandaki şube kodu demektir.
+
+WHERE Kategori_ID = (
+    SELECT Kategori_ID
+    FROM Kategori
+    WHERE Kategori_Adi = 'Yemek Sepeti (Online) Komisyonu'
+)
+AND Aciklama like '%Yemek Sepeti%'
+nd YEAR(STR_TO_DATE(CONCAT(Donem, '01'), '%y%m%d')) = Ekran.Yil
+AND Sube_ID= Ekran.Sube_ID
+Group by Donem
+Order by Donem;
 
 
-Örnek Donem =2508
-SELECT -1*sum(Alacak) as Online_Virman_Toplam
-FROM SilverCloud.B2B_Ekstre
-where Aciklama like '%Online Alacak Virman%'
-and donem =2508
-and Sube_ID = 1
+WHERE Kategori_ID = (
+    SELECT Kategori_ID
+    FROM Kategori
+    WHERE Kategori_Adi = 'Yemek Sepeti (Online) Komisyonu'
+)
+AND Aciklama like '%Yemek Sepeti%'
+and YEAR(STR_TO_DATE(CONCAT(Donem, '01'), '%y%m%d')) =2025
+AND Sube_ID= 1
+Group by Donem
+Order by Donem;

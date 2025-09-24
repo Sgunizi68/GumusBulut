@@ -734,6 +734,24 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     });
     const totalKarZararYuzde = totalToplamCiro > 0 ? parseFloat(((totalKarZarar / totalToplamCiro) * 100).toFixed(2)) : 0;
 
+    const yemeksepetiKomisyonVeLojistikGiderleriValues = Array(12).fill(0);
+    if (yemekSepetiKomisyonKategoriId && eFaturaList) {
+        eFaturaList.forEach(item => {
+            const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+            if (
+                itemYear === year &&
+                item.Kategori_ID === yemekSepetiKomisyonKategoriId &&
+                item.Aciklama && item.Aciklama.toLowerCase().includes('yemek sepeti')
+            ) {
+                const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                if (monthIndex >= 0 && monthIndex < 12) {
+                    yemeksepetiKomisyonVeLojistikGiderleriValues[monthIndex] += item.Tutar;
+                }
+            }
+        });
+    }
+    const totalYemeksepetiKomisyonVeLojistikGiderleri = yemeksepetiKomisyonVeLojistikGiderleriValues.reduce((a, b) => a + b, 0);
+
 
     // --- Row Processing ---
     const newExcelRows = excelRows.map(row => {
@@ -786,6 +804,8 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
                 return { ...row, values: toplamKiraValues, total: totalToplamKira };
             case "Toplam Kira %":
                 return { ...row, values: toplamKiraYuzdeValues, total: totalToplamKiraYuzde };
+            case "Yemeksepeti Komisyon ve Lojistik Giderleri":
+                return { ...row, values: yemeksepetiKomisyonVeLojistikGiderleriValues, total: totalYemeksepetiKomisyonVeLojistikGiderleri };
             default:
                 return row;
         }
