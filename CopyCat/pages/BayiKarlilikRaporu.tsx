@@ -926,7 +926,9 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         return row;
     });
 
-    const processedDigerRows = digerDetayiRows.map(row => {
+    let tempProcessedDigerRows = digerDetayiRows.map(row => {
+        if (row.label === "Demirbaş Sayılmayan Giderler") return row;
+
         if (row.label === "Kredi Kartı Komisyon Giderleri") {
             return { ...row, values: krediKartiKomisyonGiderleriValues, total: totalKrediKartiKomisyonGiderleri };
         }
@@ -976,6 +978,27 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
 
             const total = monthlyValues.reduce((a, b) => a + b, 0);
             return { ...row, values: monthlyValues, total: total };
+        }
+        return row;
+    });
+
+    const sumOfOtherDigerRowsValues = Array(12).fill(0);
+    tempProcessedDigerRows.forEach(row => {
+        if (row.label !== "Demirbaş Sayılmayan Giderler") {
+            for (let i=0; i<12; i++) {
+                sumOfOtherDigerRowsValues[i] += row.values[i] || 0;
+            }
+        }
+    });
+
+    const demirbasSayilmayanGiderlerValues = months.map((_, i) => {
+        return digerDetayToplamiValues[i] - sumOfOtherDigerRowsValues[i];
+    });
+    const totalDemirbasSayilmayanGiderler = demirbasSayilmayanGiderlerValues.reduce((a, b) => a + b, 0);
+
+    const processedDigerRows = tempProcessedDigerRows.map(row => {
+        if (row.label === "Demirbaş Sayılmayan Giderler") {
+            return { ...row, values: demirbasSayilmayanGiderlerValues, total: totalDemirbasSayilmayanGiderler };
         }
         return row;
     });
