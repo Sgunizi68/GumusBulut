@@ -81,8 +81,8 @@ export const OzetKontrolRaporuPage: React.FC = () => {
                     bankayaYatan: data[6],
                     gelirPOS: data[7],
                     posHareketleri: data[8],
-                    onlineGelirToplam: data[9],
-                    onlineVirmanToplam: data[10],
+                    onlineGelirToplam: data[9] || 0,
+                    onlineVirmanToplam: data[10] || 0,
                     yemekCekiAylikGelir: data[11],
                     yemekCekiDonemToplam: data[12],
                 });
