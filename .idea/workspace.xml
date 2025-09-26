@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="364c7c9f-f57e-4db9-a56f-92c279098407" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3ScreenShot.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CopyCat/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CopyCat/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CopyCat/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CopyCat/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/vite.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Newly upload Files.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/a.txt" beforeDir="false" afterPath="$PROJECT_DIR$/a.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bayi_karlilik.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_server.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_server.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Özet Kontrol Raporu.html" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="322xDXN33aV1r324EW4IQ4AvHkf" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="364c7c9f-f57e-4db9-a56f-92c279098407" name="Changes" comment="" />
+      <created>1756632357234</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1756632357234</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Deneme">
+      <created>1758228919417</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1758228919417</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Deneme" />
+    <option name="LAST_COMMIT_MESSAGE" value="Deneme" />
+  </component>
+</project>

@@ -161,7 +161,7 @@ const Sidebar: React.FC = () => {
         })}
       </nav>
       <div className="p-2 text-center text-xs text-slate-400">
-        Version: 4.0.0
+        Version: {import.meta.env.APP_VERSION}
       </div>
     </div>
   );

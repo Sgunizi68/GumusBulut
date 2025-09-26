@@ -1,28 +1,7 @@
----------------------------------------------
 
-Migros Hemen Komisyon ve Lojistik Giderleri
-
-Not: Ekran.Yil ekrandaki seçilen yılı  ve Ekran.Sube_ID ekrandaki şube kodu demektir.
-
-WHERE Kategori_ID = (
-    SELECT Kategori_ID
-    FROM Kategori
-    WHERE Kategori_Adi = 'Yemek Sepeti (Online) Komisyonu'
-)
-AND Aciklama like '%Migros%'
-nd YEAR(STR_TO_DATE(CONCAT(Donem, '01'), '%y%m%d')) = Ekran.Yil
-AND Sube_ID= Ekran.Sube_ID
-Group by Donem
-Order by Donem;
-
-
-WHERE Kategori_ID = (
-    SELECT Kategori_ID
-    FROM Kategori
-    WHERE Kategori_Adi = 'Yemek Sepeti (Online) Komisyonu'
-)
-AND Aciklama like '%Migros%'
-and YEAR(STR_TO_DATE(CONCAT(Donem, '01'), '%y%m%d')) =2025
-AND Sube_ID= 1
-Group by Donem
-Order by Donem;
+e-Fatura Yükleme
+B2B Ekstre Yükleme
+Ödeme Yükleme
+POS Hareketleri Yükleme
+Tabak Sayısı Yükleme
+Tek tek yukarıdaki yükleme ekranlarının çalışma mantığını, yüklenen dosyaların formatını alan adlarıyla yaz.

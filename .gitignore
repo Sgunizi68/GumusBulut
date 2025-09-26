@@ -2,7 +2,7 @@
 .env.local
 CopyCat/.env.development
 .env.*
-
+gumusbulut.md
 CMD Backend job run command.txt
 CopyCat/dist
 CopyCat/node_modules
