@@ -5,19 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="364c7c9f-f57e-4db9-a56f-92c279098407" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/3ScreenShot.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CopyCat/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CopyCat/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CopyCat/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CopyCat/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/vite.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Newly upload Files.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/a.txt" beforeDir="false" afterPath="$PROJECT_DIR$/a.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bayi_karlilik.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_server.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Özet Kontrol Raporu.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CopyCat/constants.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/constants.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CopyCat/pages.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/pages.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Hata.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Hata.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,13 +27,13 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

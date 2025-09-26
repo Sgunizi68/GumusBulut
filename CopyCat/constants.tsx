@@ -124,6 +124,7 @@ export const VPS_DASHBOARD_YETKI_ADI = 'VPS Dashboard Görüntüleme';
 export const BAYI_KARLILIK_RAPORU_YETKI_ADI = 'Bayi Karlılık Raporu Görüntüleme';
 export const FATURA_BOLME_YONETIMI_EKRANI_YETKI_ADI = 'Fatura Bölme Yönetimi Ekranı Görüntüleme';
 export const OZET_KONTROL_RAPORU_YETKI_ADI = 'Özet Kontrol Raporu Görüntüleme';
+export const CALISAN_TALEP_EKRANI_YETKI_ADI = 'Çalışan Talep Ekranı Görüntüleme';
 
 
 // --- MENU STRUCTURE ---
@@ -189,6 +190,7 @@ export const MENU_GROUPS = [
             { label: 'Puantaj Seçim Yönetimi', path: '/puantaj-secim', icon: Icons.Timesheet, permission: PUANTAJ_SECIM_YONETIMI_EKRANI_YETKI_ADI },
             { label: 'Puantaj Girişi', path: '/puantaj', icon: Icons.Timesheet, permission: PUANTAJ_GIRISI_EKRANI_YETKI_ADI },
             { label: 'Avans Talebi', path: '/avans', icon: Icons.Advance, permission: AVANS_TALEBI_EKRANI_YETKI_ADI },
+            { label: 'Çalışan Talep', path: '/calisan-talep', icon: Icons.Employee, permission: CALISAN_TALEP_EKRANI_YETKI_ADI },
         ]
     },
     {

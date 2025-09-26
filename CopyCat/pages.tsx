@@ -31,7 +31,7 @@ import { Kullanici, Rol, Yetki, KullaniciRol, RolYetki, KullaniciFormData, RolFo
 
 // --- HELPER COMPONENTS & FUNCTIONS ---
 
-const AccessDenied: React.FC<{ title: string }> = ({ title }) => (
+export const AccessDenied: React.FC<{ title: string }> = ({ title }) => (
     <Card title={title}>
         <div className="text-center py-10">
             <h3 className="text-xl font-bold text-blue-600">Şu an bağlantıları yapıyorum, lütfen bekleyin</h3>
