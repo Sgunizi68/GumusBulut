@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Check, X, FileText, Users } from 'lucide-react';
-import { useAppContext } from '../App';
+import { useAppContext, useDataContext } from '../App';
 import { CALISAN_TALEP_ISE_GIRIS_ONAYI_YETKI_ADI, CALISAN_TALEP_SSK_ONAYI_YETKI_ADI } from '../constants';
 
 // Types
@@ -46,6 +46,7 @@ interface ActiveEmployee {
 
 const CalisanTalepSistemi: React.FC = () => {
   const { hasPermission, currentUser } = useAppContext();
+  const { calisanTalepList } = useDataContext();
   const isCurrentUserAdmin = currentUser?.Kullanici_Adi.toLowerCase() === 'sgunizi';
   const [talepler, setTalepler] = useState<CalisanTalep[]>([]);
   const [activeEmployees, setActiveEmployees] = useState<ActiveEmployee[]>([]);
@@ -91,49 +92,11 @@ const CalisanTalepSistemi: React.FC = () => {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  // Mock data initialization
   useEffect(() => {
-    const mockTalepler: CalisanTalep[] = [
-      {
-        Calisan_Talep_ID: 1,
-        TC_No: '12345678901',
-        Adi: 'Mehmet',
-        Soyadi: 'Yılmaz',
-        Ilk_Soyadi: 'Yılmaz',
-        Cinsiyet: 'Erkek',
-        Medeni_Hali: 'Evli',
-        Adres_Bilgileri: 'İstanbul Kadıköy',
-        SSK_Cikis_Nedeni: '',
-        Talep: 'İşe Giriş',
-        Sube_ID: 1,
-        Kayit_Tarih: '2024-01-15T10:00:00',
-        status: 'pending'
-      },
-      {
-        Calisan_Talep_ID: 2,
-        TC_No: '98765432109',
-        Adi: 'Ayşe',
-        Soyadi: 'Demir',
-        Ilk_Soyadi: 'Kaya',
-        Cinsiyet: 'Kadın',
-        Medeni_Hali: 'Bekar',
-        Adres_Bilgileri: 'Ankara Çankaya',
-        SSK_Cikis_Nedeni: '',
-        Talep: 'İşe Giriş',
-        Sube_ID: 1,
-        Kayit_Tarih: '2024-01-16T14:30:00',
-        status: 'hr_approved'
-      }
-    ];
-
-    const mockActiveEmployees: ActiveEmployee[] = [
-      { id: 1, TC_No: '11111111111', Adi: 'Ali', Soyadi: 'Veli', Gorevi: 'Muhasebeci' },
-      { id: 2, TC_No: '22222222222', Adi: 'Fatma', Soyadi: 'Şahin', Gorevi: 'İnsan Kaynakları' }
-    ];
-
-    setTalepler(mockTalepler);
-    setActiveEmployees(mockActiveEmployees);
-  }, []);
+    if (calisanTalepList) {
+      setTalepler(calisanTalepList);
+    }
+  }, [calisanTalepList]);
 
   const resetForm = () => {
     setFormData({

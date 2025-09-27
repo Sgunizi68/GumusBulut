@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from db import models
-from schemas import sube, user, role, permission, kullanici_rol, rol_yetki, e_fatura, b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, stok_fiyat, stok_sayim, calisan, puantaj_secimi, puantaj, avans_istek, ust_kategori, kategori, deger, e_fatura_referans, nakit, odeme, odeme_referans, pos_hareketleri, yemek_ceki
+from schemas import sube, user, role, permission, kullanici_rol, rol_yetki, e_fatura, b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, stok_fiyat, stok_sayim, calisan, puantaj_secimi, puantaj, avans_istek, ust_kategori, kategori, deger, e_fatura_referans, nakit, odeme, odeme_referans, pos_hareketleri, yemek_ceki, calisan_talep
 from core.security import verify_password, get_password_hash
 
 def authenticate_user(db: Session, username: str, password: str):
@@ -755,6 +755,13 @@ def delete_calisan(db: Session, tc_no: str):
         db.delete(db_calisan)
         db.commit()
     return db_calisan
+
+# --- CalisanTalep CRUD ---
+def get_calisan_talep(db: Session, talep_id: int):
+    return db.query(models.CalisanTalep).filter(models.CalisanTalep.Calisan_Talep_ID == talep_id).first()
+
+def get_calisan_talepler(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.CalisanTalep).offset(skip).limit(limit).all()
 
 # --- PuantajSecimi CRUD ---
 def get_puantaj_secimi(db: Session, secim_id: int):

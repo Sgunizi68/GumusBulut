@@ -1,6 +1,6 @@
 import React, { useState, createContext, useContext, useCallback, ReactNode, useEffect, useMemo } from 'react';
 import { HashRouter, Routes, Route, Link, NavLink, Navigate, useLocation } from 'react-router-dom';
-import { AppContextType, Sube, Kullanici, EFatura, InvoiceAssignmentFormData, DataContextType, RolYetki, B2BEkstre, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, Puantaj, PuantajEntry, Gelir, GelirEkstra, AvansIstek, Rol, Yetki, KullaniciRol, Deger, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, Nakit, NakitFormData, EFaturaReferans, EFaturaReferansFormData, OdemeReferans, OdemeReferansFormData, Odeme, OdemeAssignmentFormData } from './types';
+import { AppContextType, Sube, Kullanici, EFatura, InvoiceAssignmentFormData, DataContextType, RolYetki, B2BEkstre, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, Puantaj, PuantajEntry, Gelir, GelirEkstra, AvansIstek, Rol, Yetki, KullaniciRol, Deger, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, Nakit, NakitFormData, EFaturaReferans, EFaturaReferansFormData, OdemeReferans, OdemeReferansFormData, Odeme, OdemeAssignmentFormData, CalisanTalep } from './types';
 
 import { MENU_GROUPS, DASHBOARD_ITEM, Icons, DEFAULT_PERIOD, OZEL_FATURA_YETKI_ADI, PUANTAJ_HISTORY_ACCESS_YETKI_ADI, GELIR_GECMISI_YETKI_ADI, DEFAULT_END_DATE, STORAGE_KEYS } from './constants';
 import { ErrorProvider, useErrorContext, classifyError } from './contexts/ErrorContext';
@@ -389,6 +389,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [odemeList, setOdemeList] = useState<Odeme[]>([]);
     const [yemekCekiList, setYemekCekiList] = useState<YemekCeki[]>([]);
     const [depoKiraRapor, setDepoKiraRapor] = useState<any[]>([]);
+    const [calisanTalepList, setCalisanTalepList] = useState<CalisanTalep[]>([]);
 
     // Initial data fetching with caching
     useEffect(() => {
@@ -406,7 +407,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 stokSayimlar, calisanlar, puantajSecimleri, puantajlar, gelirler,
                 gelirEkstralar, avansIstekler, ustKategoriler, kategoriler, degerler,
                 users, roles, permissions, userRoles, rolePermissions, eFaturaReferanslar, odemeReferanslar, nakitler, odemeler, yemekCekiler,
-                depoKiraData
+                depoKiraData, calisanTalepler
             ] = await Promise.all([
                 fetchData<Sube[]>(`${API_BASE_URL}/subeler/`),
                 fetchData<EFatura[]>(`${API_BASE_URL}/e-faturalar/`),
@@ -435,6 +436,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 fetchData<Odeme[]>(`${API_BASE_URL}/Odeme/`),
                 fetchData<YemekCeki[]>(`${API_BASE_URL}/yemek-cekiler/`),
                 fetchData<any[]>(`${API_BASE_URL}/depo-kira-rapor/`),
+                fetchData<CalisanTalep[]>(`${API_BASE_URL}/calisan-talepler/`)
             ]);
 
             // 3. Update state and cache - Be selective to avoid quota errors
@@ -469,6 +471,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             if (odemeler) setOdemeList(odemeler);
             if (yemekCekiler) setYemekCekiList(yemekCekiler);
             if (depoKiraData) setDepoKiraRapor(depoKiraData);
+            if (calisanTalepler) setCalisanTalepList(calisanTalepler);
 
             try {
                 localStorage.setItem(STORAGE_KEYS.DATA_STATE, JSON.stringify(newDataToCache));
@@ -1496,7 +1499,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const dataContextValue: DataContextType = useMemo(() => ({
-    depoKiraRapor,
+    calisanTalepList,
     yemekCekiList,
     addYemekCeki,
     updateYemekCeki,

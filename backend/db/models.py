@@ -25,6 +25,7 @@ class Sube(Base):
     nakitler = relationship("Nakit", back_populates="sube")
     odemeler = relationship("Odeme", back_populates="sube")
     pos_hareketleri = relationship("POSHareketleri", back_populates="sube")
+    calisan_talepler = relationship("CalisanTalep", back_populates="sube")
 
 class Kullanici(Base):
     __tablename__ = "Kullanici"
@@ -38,6 +39,8 @@ class Kullanici(Base):
     Aktif_Pasif = Column(Boolean, default=True)
 
     kullanici_rolleri = relationship("KullaniciRol", back_populates="kullanici")
+    is_onay_veren_talepler = relationship("CalisanTalep", foreign_keys="[CalisanTalep.Is_Onay_Veren_Kullanici_ID]", back_populates="is_onay_veren_kullanici")
+    ssk_onay_veren_talepler = relationship("CalisanTalep", foreign_keys="[CalisanTalep.SSK_Onay_Veren_Kullanici_ID]", back_populates="ssk_onay_veren_kullanici")
 
 class Rol(Base):
     __tablename__ = "Rol"
@@ -394,3 +397,42 @@ class YemekCeki(Base):
 
     kategori = relationship("Kategori")
     sube = relationship("Sube")
+
+class CalisanTalep(Base):
+    __tablename__ = "Calisan_Talep"
+
+    Calisan_Talep_ID = Column(Integer, primary_key=True, autoincrement=True)
+    Talep = Column(Enum('İşten Çıkış', 'İşe Giriş'), default='İşe Giriş')
+    TC_No = Column(String(11), nullable=False)
+    Adi = Column(String(50), nullable=False)
+    Soyadi = Column(String(50), nullable=False)
+    Ilk_Soyadi = Column(String(50), nullable=False)
+    Hesap_No = Column(String(30), nullable=True)
+    IBAN = Column(String(26), nullable=True)
+    Ogrenim_Durumu = Column(String(26), nullable=True)
+    Cinsiyet = Column(Enum('Erkek', 'Kadın'), default='Erkek')
+    Gorevi = Column(String(26), nullable=True)
+    Anne_Adi = Column(String(26), nullable=True)
+    Baba_Adi = Column(String(26), nullable=True)
+    Dogum_Yeri = Column(String(26), nullable=True)
+    Dogum_Tarihi = Column(Date, nullable=True)
+    Medeni_Hali = Column(Enum('Bekar', 'Evli'), default='Bekar')
+    Cep_No = Column(String(16), nullable=True)
+    Adres_Bilgileri = Column(String(50), nullable=True)
+    Gelir_Vergisi_Matrahi = Column(DECIMAL(15, 2), nullable=True)
+    SSK_Cikis_Nedeni = Column(String(50), nullable=True)
+    Net_Maas = Column(DECIMAL(10, 2), nullable=True)
+    Sigorta_Giris = Column(Date, nullable=True)
+    Sigorta_Cikis = Column(Date, nullable=True)
+    Is_Onay_Veren_Kullanici_ID = Column(Integer, ForeignKey("Kullanici.Kullanici_ID"), nullable=True)
+    Is_Onay_Tarih = Column(DateTime, nullable=True)
+    SSK_Onay_Veren_Kullanici_ID = Column(Integer, ForeignKey("Kullanici.Kullanici_ID"), nullable=True)
+    SSK_Onay_Tarih = Column(DateTime, nullable=True)
+    Sube_ID = Column(Integer, ForeignKey("Sube.Sube_ID"), nullable=False)
+    Imaj_Adi = Column(String(255), nullable=True)
+    Imaj = Column(LargeBinary, nullable=True)
+    Kayit_Tarih = Column(DateTime, default=func.now())
+
+    sube = relationship("Sube", back_populates="calisan_talepler")
+    is_onay_veren_kullanici = relationship("Kullanici", foreign_keys=[Is_Onay_Veren_Kullanici_ID], back_populates="is_onay_veren_talepler")
+    ssk_onay_veren_kullanici = relationship("Kullanici", foreign_keys=[SSK_Onay_Veren_Kullanici_ID], back_populates="ssk_onay_veren_talepler")

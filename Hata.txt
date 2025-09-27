@@ -1,61 +1,61 @@
-[plugin:vite:react-babel] C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\pages\CalisanTalepPage.tsx: Unexpected token (620:53)
-  623 |                   {selectedFile && (
-C:/Users/Gokova/OneDrive - CELEBI HAVACILIK HOLDING A.S/Personel/Programming/Python/CopyCat/pages/CalisanTalepPage.tsx:620:53
-618|                      type="file"
-619|                      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-620|                      onChange={(e) => setSelectedFile(.target.files?.[0] || null)}
-   |                                                       ^
-621|                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-622|                    />
-    at constructor (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:367:19)
-    at TypeScriptParserMixin.raise (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:6630:19)
-    at TypeScriptParserMixin.unexpected (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:6650:16)
-    at TypeScriptParserMixin.parseExprAtom (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:11451:16)
-    at TypeScriptParserMixin.parseExprAtom (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:4797:20)
-    at TypeScriptParserMixin.parseExprSubscripts (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:11085:23)
-    at TypeScriptParserMixin.parseUpdate (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:11070:21)
-    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:11050:23)
-    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:9857:18)
-    at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:10903:61)
-    at TypeScriptParserMixin.parseExprOps (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:10908:23)
-    at TypeScriptParserMixin.parseMaybeConditional (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:10885:23)
-    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:10835:21)
-    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:9806:20)
-    at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:10804:39
-    at TypeScriptParserMixin.allowInAnd (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:12436:12)
-    at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:10804:17)
-    at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:12503:17)
-    at TypeScriptParserMixin.parseExprListItem (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:12185:18)
-    at TypeScriptParserMixin.parseCallExpressionArguments (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:11256:22)
-    at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:11190:29)
-    at TypeScriptParserMixin.parseSubscript (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:11124:19)
-    at TypeScriptParserMixin.parseSubscript (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:9358:18)
-    at TypeScriptParserMixin.parseSubscripts (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:11098:19)
-    at TypeScriptParserMixin.parseExprSubscripts (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:11089:17)
-    at TypeScriptParserMixin.parseUpdate (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:11070:21)
-    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:11050:23)
-    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:9857:18)
-    at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:10903:61)
-    at TypeScriptParserMixin.parseExprOps (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:10908:23)
-    at TypeScriptParserMixin.parseMaybeConditional (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:10885:23)
-    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:10835:21)
-    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:9806:20)
-    at TypeScriptParserMixin.parseFunctionBody (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:12103:24)
-    at TypeScriptParserMixin.parseArrowExpression (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:12085:10)
-    at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:11695:12)
-    at TypeScriptParserMixin.parseExprAtom (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:11335:23)
-    at TypeScriptParserMixin.parseExprAtom (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:4797:20)
-    at TypeScriptParserMixin.parseExprSubscripts (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:11085:23)
-    at TypeScriptParserMixin.parseUpdate (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:11070:21)
-    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:11050:23)
-    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:9857:18)
-    at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:10903:61)
-    at TypeScriptParserMixin.parseExprOps (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:10908:23)
-    at TypeScriptParserMixin.parseMaybeConditional (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:10885:23)
-    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:10835:21)
-    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:9806:20)
-    at TypeScriptParserMixin.parseExpressionBase (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:10788:23)
-    at C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:10784:39
-    at TypeScriptParserMixin.allowInAnd (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\CopyCat\node_modules\@babel\parser\lib\index.js:12436:12
-Click outside, press Esc key, or fix the code to dismiss.
-You can also disable this overlay by setting server.hmr.overlay to false in vite.config.ts.
+
+(venv) C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend>uvicorn main:app --reload  --env-file "..\.env.local"
+←[32mINFO←[0m:     Will watch for changes in these directories: ['C:\\Users\\Gokova\\OneDrive - CELEBI HAVACILIK HOLDING A.S\\Personel\\Programming\\Python\\backend']
+←[32mINFO←[0m:     Loading environment from '..\.env.local'
+←[32mINFO←[0m:     Uvicorn running on ←[1mhttp://127.0.0.1:8000←[0m (Press CTRL+C to quit)
+←[32mINFO←[0m:     Started reloader process [←[36m←[1m20332←[0m] using ←[36m←[1mWatchFiles←[0m
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_config.py:373: UserWarning: Valid config keys have changed in V2:
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_config.py:373: UserWarning: Valid config keys have changed in V2:
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "C:\Python313\Lib\multiprocessing\process.py", line 313, in _bootstrap
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Python313\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    ~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\server.py", line 67, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\server.py", line 71, in serve
+    await self._serve(sockets)
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\server.py", line 78, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\config.py", line 436, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\main.py", line 5, in <module>
+    from api.v1.endpoints import (
+    ...<2 lines>...
+    )
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\api\v1\endpoints\calisan_talep.py", line 7, in <module>
+    from api.v1.deps import get_db
+ImportError: cannot import name 'get_db' from 'api.v1.deps' (C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\api\v1\deps.py)
