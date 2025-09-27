@@ -763,6 +763,15 @@ def get_calisan_talep(db: Session, talep_id: int):
 def get_calisan_talepler(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.CalisanTalep).offset(skip).limit(limit).all()
 
+def update_calisan_talep(db: Session, talep_id: int, talep: calisan_talep.CalisanTalepUpdate):
+    db_talep = db.query(models.CalisanTalep).filter(models.CalisanTalep.Calisan_Talep_ID == talep_id).first()
+    if db_talep:
+        for key, value in talep.dict(exclude_unset=True).items():
+            setattr(db_talep, key, value)
+        db.commit()
+        db.refresh(db_talep)
+    return db_talep
+
 # --- PuantajSecimi CRUD ---
 def get_puantaj_secimi(db: Session, secim_id: int):
     return db.query(models.PuantajSecimi).filter(models.PuantajSecimi.Secim_ID == secim_id).first()

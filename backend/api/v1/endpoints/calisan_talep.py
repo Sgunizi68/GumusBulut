@@ -18,3 +18,10 @@ def read_calisan_talep(talep_id: int, db: Session = Depends(database.get_db)):
     if db_talep is None:
         raise HTTPException(status_code=404, detail="Calisan Talep not found")
     return db_talep
+
+@router.put("/calisan-talepler/{talep_id}", response_model=calisan_talep.CalisanTalep)
+def update_calisan_talep(talep_id: int, talep: calisan_talep.CalisanTalepUpdate, db: Session = Depends(database.get_db)):
+    db_talep = crud.update_calisan_talep(db, talep_id=talep_id, talep=talep)
+    if db_talep is None:
+        raise HTTPException(status_code=404, detail="Calisan Talep not found")
+    return db_talep

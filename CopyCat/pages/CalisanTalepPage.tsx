@@ -45,7 +45,7 @@ interface ActiveEmployee {
 
 const CalisanTalepSistemi: React.FC = () => {
   const { hasPermission, currentUser } = useAppContext();
-  const { calisanTalepList } = useDataContext();
+  const { calisanTalepList, updateCalisanTalep } = useDataContext();
   const isCurrentUserAdmin = currentUser?.Kullanici_Adi.toLowerCase() === 'sgunizi';
   const [talepler, setTalepler] = useState<CalisanTalep[]>([]);
   const [activeEmployees, setActiveEmployees] = useState<ActiveEmployee[]>([]);
@@ -139,11 +139,9 @@ const CalisanTalepSistemi: React.FC = () => {
       
       setTalepler([...talepler, newTalep]);
     } else {
-      setTalepler(talepler.map(t => 
-        t.Calisan_Talep_ID === selectedTalep?.Calisan_Talep_ID 
-          ? { ...t, ...formData, Imaj_Adi: selectedFile?.name || t.Imaj_Adi }
-          : t
-      ));
+      if (selectedTalep) {
+        updateCalisanTalep(selectedTalep.Calisan_Talep_ID, formData);
+      }
     }
     
     setShowModal(false);
