@@ -333,6 +333,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   <tr className="border-b border-gray-200">
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">TC No</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Ad Soyad</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Net Maaş</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Talep Türü</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Tarih</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Durum</th>
@@ -344,6 +345,7 @@ const CalisanTalepSistemi: React.FC = () => {
                     <tr key={talep.Calisan_Talep_ID} className="border-b border-gray-100 hover:bg-gray-50">
                       <td className="py-3 px-4">{talep.TC_No}</td>
                       <td className="py-3 px-4">{`${talep.Adi} ${talep.Soyadi}`}</td>
+                      <td className="py-3 px-4">{talep.Net_Maas}</td>
                       <td className="py-3 px-4">
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                           talep.Talep === 'İşe Giriş' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
