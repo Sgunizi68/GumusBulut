@@ -4714,18 +4714,18 @@ export const PuantajPage: React.FC = () => {
     const { selectedBranch, currentPeriod, hasPermission } = useAppContext();
     const { calisanList, puantajSecimiList, puantajList, getPuantajEntry, addOrUpdatePuantajEntry } = useDataContext();
 
+    const [viewedPeriod, setViewedPeriod] = useState(currentPeriod);
+    const [isEditingDisabled, setIsEditingDisabled] = useState(false);
+    const [popoverState, setPopoverState] = useState<{ tcNo: string; dateString: string; top: number; left: number } | null>(null);
+    const tableContainerRef = useRef<HTMLDivElement>(null);
+    const overflowContainerRef = useRef<HTMLDivElement>(null); // Added
+
     if (!hasPermission(PUANTAJ_GIRISI_EKRANI_YETKI_ADI)) {
         return <AccessDenied title="Puantaj Girişi" />;
     }
     const canAccessHistory = hasPermission(PUANTAJ_HISTORY_ACCESS_YETKI_ADI);
     const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
     const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
-
-    const [viewedPeriod, setViewedPeriod] = useState(currentPeriod);
-    const [isEditingDisabled, setIsEditingDisabled] = useState(false);
-    const [popoverState, setPopoverState] = useState<{ tcNo: string; dateString: string; top: number; left: number } | null>(null);
-    const tableContainerRef = useRef<HTMLDivElement>(null);
-    const overflowContainerRef = useRef<HTMLDivElement>(null); // Added
 
     const handleExportToExcelForPuantaj = () => {
         if (!selectedBranch) return;
