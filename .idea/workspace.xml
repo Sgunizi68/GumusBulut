@@ -5,6 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="364c7c9f-f57e-4db9-a56f-92c279098407" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/1ScreenShot.png" beforeDir="false" afterPath="$PROJECT_DIR$/1ScreenShot.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2ScreenShot.png" beforeDir="false" afterPath="$PROJECT_DIR$/2ScreenShot.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CopyCat/constants.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/constants.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CopyCat/pages/CalisanTalepPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/CopyCat/pages/CalisanTalepPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

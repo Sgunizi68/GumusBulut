@@ -79,6 +79,8 @@ export const GELIR_GECMISI_YETKI_ADI = "Gelir Geçmiş Veri Erişimi";
 export const GIZLI_KATEGORI_YETKISI_ADI = "Gizli Kategori Veri Erişimi";
 export const YAZDIRMA_YETKISI_ADI = "Yazdırma Yetkisi";
 export const EXCELE_AKTAR_YETKISI_ADI = "Excele Aktar";
+export const CALISAN_TALEP_ISE_GIRIS_ONAYI_YETKI_ADI = 'İşe Giriş Onayı (İşlem)';
+export const CALISAN_TALEP_SSK_ONAYI_YETKI_ADI = 'SSK Onayı (İşlem)';
 
 // Screen view permissions
 export const DASHBOARD_EKRANI_YETKI_ADI = 'Dashboard Ekranı Görüntüleme';

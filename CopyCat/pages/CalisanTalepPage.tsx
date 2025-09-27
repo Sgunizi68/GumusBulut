@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Check, X, FileText, Users } from 'lucide-react';
+import { useAppContext } from '../App';
+import { CALISAN_TALEP_ISE_GIRIS_ONAYI_YETKI_ADI, CALISAN_TALEP_SSK_ONAYI_YETKI_ADI } from '../constants';
 
 // Types
 interface CalisanTalep {
@@ -43,6 +45,8 @@ interface ActiveEmployee {
 }
 
 const CalisanTalepSistemi: React.FC = () => {
+  const { hasPermission, currentUser } = useAppContext();
+  const isCurrentUserAdmin = currentUser?.Kullanici_Adi.toLowerCase() === 'sgunizi';
   const [talepler, setTalepler] = useState<CalisanTalep[]>([]);
   const [activeEmployees, setActiveEmployees] = useState<ActiveEmployee[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -371,7 +375,7 @@ const CalisanTalepSistemi: React.FC = () => {
                             <Edit className="w-4 h-4" />
                           </button>
                           
-                          {talep.status === 'pending' && (
+                          {talep.status === 'pending' && (isCurrentUserAdmin || hasPermission(CALISAN_TALEP_ISE_GIRIS_ONAYI_YETKI_ADI)) && (
                             <>
                               <button
                                 onClick={() => handleDelete(talep.Calisan_Talep_ID)}
@@ -390,7 +394,7 @@ const CalisanTalepSistemi: React.FC = () => {
                             </>
                           )}
                           
-                          {talep.status === 'hr_approved' && (
+                          {talep.status === 'hr_approved' && (isCurrentUserAdmin || hasPermission(CALISAN_TALEP_SSK_ONAYI_YETKI_ADI)) && (
                             <button
                               onClick={() => handleSSKApproval(talep.Calisan_Talep_ID)}
                               className="text-green-600 hover:text-green-800 p-1"
