@@ -36,7 +36,7 @@ interface CalisanTalep {
 }
 
 interface ActiveEmployee {
-  id: number;
+  id: string;
   TC_No: string;
   Adi: string;
   Soyadi: string;
@@ -45,7 +45,7 @@ interface ActiveEmployee {
 
 const CalisanTalepSistemi: React.FC = () => {
   const { hasPermission, currentUser } = useAppContext();
-  const { calisanTalepList, updateCalisanTalep } = useDataContext();
+  const { calisanTalepList, updateCalisanTalep, calisanList } = useDataContext();
   const isCurrentUserAdmin = currentUser?.Kullanici_Adi.toLowerCase() === 'sgunizi';
   const [talepler, setTalepler] = useState<CalisanTalep[]>([]);
   const [activeEmployees, setActiveEmployees] = useState<ActiveEmployee[]>([]);
@@ -55,6 +55,9 @@ const CalisanTalepSistemi: React.FC = () => {
   const [selectedTalep, setSelectedTalep] = useState<CalisanTalep | null>(null);
   const [filter, setFilter] = useState<'all' | 'İşe Giriş' | 'İşten Çıkış'>('all');
   const [showOnlyApproved, setShowOnlyApproved] = useState(false);
+
+  const today = new Date();
+  const todayISO = today.toISOString().split('T')[0];
 
   const [formData, setFormData] = useState<Partial<CalisanTalep>>({
     TC_No: '',
@@ -83,8 +86,8 @@ const CalisanTalepSistemi: React.FC = () => {
   });
 
   const [exitFormData, setExitFormData] = useState({
-    employeeId: 0,
-    exitDate: '',
+    employeeId: '',
+    exitDate: todayISO,
     exitReason: ''
   });
 
@@ -95,6 +98,25 @@ const CalisanTalepSistemi: React.FC = () => {
       setTalepler(calisanTalepList);
     }
   }, [calisanTalepList]);
+
+  useEffect(() => {
+    if (calisanList) {
+      const today = new Date();
+      const active = calisanList.filter(calisan => {
+        // If Sigorta_Cikis is not set, or is in the future, consider them active
+        if (!calisan.Sigorta_Cikis) return true;
+        const cikisDate = new Date(calisan.Sigorta_Cikis);
+        return cikisDate > today;
+      }).map(calisan => ({
+        id: calisan.TC_No,
+        TC_No: calisan.TC_No,
+        Adi: calisan.Adi,
+        Soyadi: calisan.Soyadi,
+        Gorevi: calisan.Gorevi
+      }));
+      setActiveEmployees(active);
+    }
+  }, [calisanList]);
 
   const resetForm = () => {
     setFormData({
@@ -155,26 +177,43 @@ const CalisanTalepSistemi: React.FC = () => {
     const employee = activeEmployees.find(emp => emp.id === exitFormData.employeeId);
     if (!employee) return;
 
+    const fullEmployeeData = calisanList.find(c => c.TC_No === employee.TC_No);
+    if (!fullEmployeeData) return; // Should not happen if activeEmployees is derived from calisanList
+
     const newExitRequest: CalisanTalep = {
-      Calisan_Talep_ID: talepler.length + 1,
-      TC_No: employee.TC_No,
-      Adi: employee.Adi,
-      Soyadi: employee.Soyadi,
-      Ilk_Soyadi: employee.Soyadi,
-      Cinsiyet: 'Erkek',
-      Medeni_Hali: 'Bekar',
-      Adres_Bilgileri: '',
+      Calisan_Talep_ID: 0, // Will be set by backend
+      TC_No: fullEmployeeData.TC_No,
+      Adi: fullEmployeeData.Adi,
+      Soyadi: fullEmployeeData.Soyadi,
+      Ilk_Soyadi: fullEmployeeData.Ilk_Soyadi || '',
+      Hesap_No: fullEmployeeData.Hesap_No || '',
+      IBAN: fullEmployeeData.IBAN || '',
+      Ogrenim_Durumu: fullEmployeeData.Ogrenim_Durumu || '',
+      Cinsiyet: fullEmployeeData.Cinsiyet || 'Erkek',
+      Gorevi: fullEmployeeData.Gorevi || '',
+      Anne_Adi: fullEmployeeData.Anne_Adi || '',
+      Baba_Adi: fullEmployeeData.Baba_Adi || '',
+      Dogum_Yeri: fullEmployeeData.Dogum_Yeri || '',
+      Dogum_Tarihi: fullEmployeeData.Dogum_Tarihi || '',
+      Medeni_Hali: fullEmployeeData.Medeni_Hali || 'Bekar',
+      Cep_No: fullEmployeeData.Cep_No || '',
+      Adres_Bilgileri: fullEmployeeData.Adres_Bilgileri || '',
+      Gelir_Vergisi_Matrahi: fullEmployeeData.Gelir_Vergisi_Matrahi || 0,
       SSK_Cikis_Nedeni: exitFormData.exitReason,
+      Net_Maas: fullEmployeeData.Net_Maas || 0,
+      Sigorta_Giris: fullEmployeeData.Sigorta_Giris || '',
       Sigorta_Cikis: exitFormData.exitDate,
       Talep: 'İşten Çıkış',
-      Sube_ID: 1,
+      Sube_ID: fullEmployeeData.Sube_ID,
+      Imaj_Adi: '', // Not applicable for exit request
       Kayit_Tarih: new Date().toISOString(),
-      status: 'pending'
+      Is_Onay_Tarih: null,
+      SSK_Onay_Tarih: null,
     };
 
     setTalepler([...talepler, newExitRequest]);
     setShowExitModal(false);
-    setExitFormData({ employeeId: 0, exitDate: '', exitReason: '' });
+    setExitFormData({ employeeId: '', exitDate: todayISO, exitReason: '' });
   };
 
   const handleEdit = (talep: CalisanTalep) => {
@@ -639,10 +678,10 @@ const CalisanTalepSistemi: React.FC = () => {
                   <select
                     required
                     value={exitFormData.employeeId}
-                    onChange={(e) => setExitFormData({...exitFormData, employeeId: parseInt(e.target.value)})}
+                    onChange={(e) => setExitFormData({...exitFormData, employeeId: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
-                    <option value={0}>Çalışan seçin...</option>
+                    <option value="">Çalışan seçin...</option>
                     {activeEmployees.map(emp => (
                       <option key={emp.id} value={emp.id}>
                         {emp.Adi} {emp.Soyadi} - {emp.TC_No} ({emp.Gorevi})
@@ -686,7 +725,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   type="button"
                   onClick={() => {
                     setShowExitModal(false);
-                    setExitFormData({ employeeId: 0, exitDate: '', exitReason: '' });
+                    setExitFormData({ employeeId: '', exitDate: todayISO, exitReason: '' });
                   }}
                   className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
                 >
