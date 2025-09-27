@@ -31,9 +31,8 @@ interface CalisanTalep {
   Sube_ID: number;
   Imaj_Adi?: string;
   Kayit_Tarih: string;
-  Is_Giris_Onay?: boolean;
-  SSK_Onay?: boolean;
-  status: 'pending' | 'hr_approved' | 'ssk_approved' | 'completed';
+  Is_Onay_Tarih?: string | null;
+  SSK_Onay_Tarih?: string | null;
 }
 
 interface ActiveEmployee {
@@ -80,8 +79,7 @@ const CalisanTalepSistemi: React.FC = () => {
     Sigorta_Giris: '',
     Sigorta_Cikis: '',
     Talep: 'İşe Giriş',
-    Sube_ID: 1,
-    status: 'pending'
+    Sube_ID: 1
   });
 
   const [exitFormData, setExitFormData] = useState({
@@ -208,27 +206,36 @@ const CalisanTalepSistemi: React.FC = () => {
     ));
   };
 
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'pending': return 'Beklemede';
-      case 'hr_approved': return 'İşe Giriş Onaylandı';
-      case 'ssk_approved': return 'SSK Onaylandı';
-      default: return 'Bilinmeyen';
+  const getStatusText = (talep: CalisanTalep): string => {
+    if (talep.Talep === 'İşe Giriş') {
+      if (!talep.Is_Onay_Tarih) {
+        return 'İşe Giriş Onayı Bekleniyor';
+      }
+      if (!talep.SSK_Onay_Tarih) {
+        return 'SSK Onayı Bekleniyor';
+      }
+      return 'SSK Onaylandı';
+    } else { // İşten Çıkış
+      if (!talep.SSK_Onay_Tarih) {
+        return 'SSK Onayı Bekleniyor';
+      }
+      return 'SSK Onaylandı';
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (talep: CalisanTalep): string => {
+    const status = getStatusText(talep);
     switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'hr_approved': return 'bg-blue-100 text-blue-800';
-      case 'ssk_approved': return 'bg-green-100 text-green-800';
+      case 'İşe Giriş Onayı Bekleniyor': return 'bg-yellow-100 text-yellow-800';
+      case 'SSK Onayı Bekleniyor': return 'bg-blue-100 text-blue-800';
+      case 'SSK Onaylandı': return 'bg-green-100 text-green-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   const filteredTalepler = talepler.filter(talep => {
     const typeMatch = filter === 'all' || talep.Talep === filter;
-    const approvalMatch = showOnlyApproved ? talep.status === 'ssk_approved' : talep.status !== 'ssk_approved';
+    const approvalMatch = showOnlyApproved ? getStatusText(talep) === 'SSK Onaylandı' : getStatusText(talep) !== 'SSK Onaylandı';
     return typeMatch && approvalMatch;
   });
 
@@ -324,8 +331,8 @@ const CalisanTalepSistemi: React.FC = () => {
                         {new Date(talep.Kayit_Tarih).toLocaleDateString('tr-TR')}
                       </td>
                       <td className="py-3 px-4">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(talep.status)}`}>
-                          {getStatusText(talep.status)}
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(talep)}`}>
+                          {getStatusText(talep)}
                         </span>
                       </td>
                       <td className="py-3 px-4">
@@ -338,7 +345,7 @@ const CalisanTalepSistemi: React.FC = () => {
                             <Edit className="w-4 h-4" />
                           </button>
                           
-                          {talep.status === 'pending' && (isCurrentUserAdmin || hasPermission(CALISAN_TALEP_ISE_GIRIS_ONAYI_YETKI_ADI)) && (
+                          {!talep.Is_Onay_Tarih && (isCurrentUserAdmin || hasPermission(CALISAN_TALEP_ISE_GIRIS_ONAYI_YETKI_ADI)) && (
                             <>
                               <button
                                 onClick={() => handleDelete(talep.Calisan_Talep_ID)}
@@ -357,7 +364,7 @@ const CalisanTalepSistemi: React.FC = () => {
                             </>
                           )}
                           
-                          {talep.status === 'hr_approved' && (isCurrentUserAdmin || hasPermission(CALISAN_TALEP_SSK_ONAYI_YETKI_ADI)) && (
+                                                    {((talep.Talep === 'İşe Giriş' && talep.Is_Onay_Tarih && !talep.SSK_Onay_Tarih) || (talep.Talep === 'İşten Çıkış' && !talep.SSK_Onay_Tarih)) && (isCurrentUserAdmin || hasPermission(CALISAN_TALEP_SSK_ONAYI_YETKI_ADI)) && (
                             <button
                               onClick={() => handleSSKApproval(talep.Calisan_Talep_ID)}
                               className="text-green-600 hover:text-green-800 p-1"
