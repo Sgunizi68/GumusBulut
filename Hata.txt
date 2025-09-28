@@ -4,33 +4,36 @@
 client:789 [vite] connecting...
 client:912 [vite] connected.
 react-dom_client.js?v=63268ab5:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
-pages.tsx:4724 React has detected a change in the order of Hooks called by PuantajPage. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks
-
-   Previous render            Next render
-   ------------------------------------------------------
-1. useContext                 useContext
-2. useContext                 useContext
-3. undefined                  useState
-   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-updateHookTypesDev @ react-dom_client.js?v=63268ab5:4146
-useState @ react-dom_client.js?v=63268ab5:16661
-exports.useState @ chunk-UGC3UZ7L.js?v=63268ab5:927
-PuantajPage @ pages.tsx:4724
-react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
-renderWithHooks @ react-dom_client.js?v=63268ab5:4206
-updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
-beginWork @ react-dom_client.js?v=63268ab5:7654
+GumusBulut/#/calisan-talep:1 Access to fetch at 'http://localhost:8000/api/v1/diger-harcamalar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+App.tsx:309  GET http://localhost:8000/api/v1/diger-harcamalar/ net::ERR_FAILED 500 (Internal Server Error)
+fetchData @ App.tsx:309
+loadAndFetchData @ App.tsx:415
+(anonymous) @ App.tsx:483
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17478
 runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
-performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
-workLoopSync @ react-dom_client.js?v=63268ab5:10728
-renderRootSync @ react-dom_client.js?v=63268ab5:10711
-performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+commitHookEffectListMount @ react-dom_client.js?v=63268ab5:8460
+commitHookPassiveMountEffects @ react-dom_client.js?v=63268ab5:8518
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9887
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9899
+flushPassiveEffects @ react-dom_client.js?v=63268ab5:11302
+(anonymous) @ react-dom_client.js?v=63268ab5:11060
 performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
-<PuantajPage>
+<DataProvider>
 exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
-AppWithToast @ App.tsx?t=1759004373917:2111
+AppWithToast @ App.tsx:1756
 react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
 renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
 renderWithHooks @ react-dom_client.js?v=63268ab5:4217
@@ -45,7 +48,7 @@ performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
 performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
 <AppWithToast>
 exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
-App @ App.tsx?t=1759004373917:2299
+App @ App.tsx:1830
 react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
 renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
 renderWithHooks @ react-dom_client.js?v=63268ab5:4217
@@ -61,21 +64,36 @@ performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
 <App>
 exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
 (anonymous) @ index.tsx:14
-App.tsx?t=1759004373917:2111 Internal React error: Expected static flag was missing. Please notify the React team.
-finishRenderingHooks @ react-dom_client.js?v=63268ab5:4242
-renderWithHooks @ react-dom_client.js?v=63268ab5:4227
-updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
-beginWork @ react-dom_client.js?v=63268ab5:7654
+App.tsx:338 Error in fetchData: {url: 'http://localhost:8000/api/v1/diger-harcamalar/', errorMessage: 'Failed to fetch', statusCode: 0, type: 'general', severity: 'medium', …}
+fetchData @ App.tsx:338
+await in fetchData
+loadAndFetchData @ App.tsx:415
+(anonymous) @ App.tsx:483
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17478
 runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
-performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
-workLoopSync @ react-dom_client.js?v=63268ab5:10728
-renderRootSync @ react-dom_client.js?v=63268ab5:10711
-performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
-performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+commitHookEffectListMount @ react-dom_client.js?v=63268ab5:8460
+commitHookPassiveMountEffects @ react-dom_client.js?v=63268ab5:8518
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9887
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9899
+flushPassiveEffects @ react-dom_client.js?v=63268ab5:11302
+(anonymous) @ react-dom_client.js?v=63268ab5:11060
 performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
-<PuantajPage>
+<DataProvider>
 exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
-AppWithToast @ App.tsx?t=1759004373917:2111
+AppWithToast @ App.tsx:1756
 react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
 renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
 renderWithHooks @ react-dom_client.js?v=63268ab5:4217
@@ -90,7 +108,7 @@ performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
 performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
 <AppWithToast>
 exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
-App @ App.tsx?t=1759004373917:2299
+App @ App.tsx:1830
 react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
 renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
 renderWithHooks @ react-dom_client.js?v=63268ab5:4217
@@ -106,48 +124,36 @@ performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
 <App>
 exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
 (anonymous) @ index.tsx:14
-CalisanTalepPage.tsx?t=1759004373917:1243 Each child in a list should have a unique "key" prop.
-
-Check the render method of `select`. It was passed a child from CalisanTalepSistemi. See https://react.dev/link/warning-keys for more information.
-(anonymous) @ react-dom_client.js?v=63268ab5:17517
+App.tsx:355 General error: Failed to fetch
+fetchData @ App.tsx:355
+await in fetchData
+loadAndFetchData @ App.tsx:415
+(anonymous) @ App.tsx:483
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17478
 runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
-warnForMissingKey @ react-dom_client.js?v=63268ab5:17516
-warnOnInvalidKey @ react-dom_client.js?v=63268ab5:5736
-reconcileChildrenArray @ react-dom_client.js?v=63268ab5:5789
-reconcileChildFibersImpl @ react-dom_client.js?v=63268ab5:5995
-(anonymous) @ react-dom_client.js?v=63268ab5:6061
-reconcileChildren @ react-dom_client.js?v=63268ab5:6444
-beginWork @ react-dom_client.js?v=63268ab5:7872
-runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
-performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
-workLoopSync @ react-dom_client.js?v=63268ab5:10728
-renderRootSync @ react-dom_client.js?v=63268ab5:10711
-performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
-performSyncWorkOnRoot @ react-dom_client.js?v=63268ab5:11635
-flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=63268ab5:11536
-processRootScheduleInMicrotask @ react-dom_client.js?v=63268ab5:11558
-(anonymous) @ react-dom_client.js?v=63268ab5:11649
-<option>
+commitHookEffectListMount @ react-dom_client.js?v=63268ab5:8460
+commitHookPassiveMountEffects @ react-dom_client.js?v=63268ab5:8518
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9887
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9899
+flushPassiveEffects @ react-dom_client.js?v=63268ab5:11302
+(anonymous) @ react-dom_client.js?v=63268ab5:11060
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<DataProvider>
 exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
-(anonymous) @ CalisanTalepPage.tsx?t=1759004373917:1243
-CalisanTalepSistemi @ CalisanTalepPage.tsx?t=1759004373917:1242
-react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
-renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
-renderWithHooks @ react-dom_client.js?v=63268ab5:4217
-updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
-beginWork @ react-dom_client.js?v=63268ab5:7654
-runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
-performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
-workLoopSync @ react-dom_client.js?v=63268ab5:10728
-renderRootSync @ react-dom_client.js?v=63268ab5:10711
-performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
-performSyncWorkOnRoot @ react-dom_client.js?v=63268ab5:11635
-flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=63268ab5:11536
-processRootScheduleInMicrotask @ react-dom_client.js?v=63268ab5:11558
-(anonymous) @ react-dom_client.js?v=63268ab5:11649
-<CalisanTalepSistemi>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
-AppWithToast @ App.tsx?t=1759004373917:2228
+AppWithToast @ App.tsx:1756
 react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
 renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
 renderWithHooks @ react-dom_client.js?v=63268ab5:4217
@@ -162,7 +168,7 @@ performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
 performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
 <AppWithToast>
 exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
-App @ App.tsx?t=1759004373917:2299
+App @ App.tsx:1830
 react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
 renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
 renderWithHooks @ react-dom_client.js?v=63268ab5:4217
@@ -178,109 +184,750 @@ performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
 <App>
 exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
 (anonymous) @ index.tsx:14
- Received NaN for the `value` attribute. If this is expected, cast the value to a string.
-validateProperty @ react-dom_client.js?v=63268ab5:2395
-warnUnknownProperties @ react-dom_client.js?v=63268ab5:2545
-validatePropertiesInDevelopment @ react-dom_client.js?v=63268ab5:12240
-updateProperties @ react-dom_client.js?v=63268ab5:12902
-commitUpdate @ react-dom_client.js?v=63268ab5:13956
+GumusBulut/#/calisan-talep:1 Access to fetch at 'http://localhost:8000/api/v1/e-faturalar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+App.tsx:309  GET http://localhost:8000/api/v1/e-faturalar/ net::ERR_FAILED 500 (Internal Server Error)
+fetchData @ App.tsx:309
+loadAndFetchData @ App.tsx:413
+(anonymous) @ App.tsx:483
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17478
 runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
-commitHostUpdate @ react-dom_client.js?v=63268ab5:8730
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9513
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9502
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9502
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9502
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9502
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9502
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9502
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9374
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9655
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9374
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9374
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9502
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9502
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9502
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9374
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9374
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9655
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9374
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9374
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9655
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9655
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9374
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9374
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9655
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9374
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9655
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9374
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9655
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9374
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9374
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9655
-recursivelyTraverseMutationEffects @ react-dom_client.js?v=63268ab5:9365
-commitMutationEffectsOnFiber @ react-dom_client.js?v=63268ab5:9551
-flushMutationEffects @ react-dom_client.js?v=63268ab5:11098
-commitRoot @ react-dom_client.js?v=63268ab5:11079
-commitRootWhenReady @ react-dom_client.js?v=63268ab5:10512
-performWorkOnRoot @ react-dom_client.js?v=63268ab5:10457
-performSyncWorkOnRoot @ react-dom_client.js?v=63268ab5:11635
-flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=63268ab5:11536
-flushSyncWork$1 @ react-dom_client.js?v=63268ab5:10567
-batchedUpdates$1 @ react-dom_client.js?v=63268ab5:2632
+commitHookEffectListMount @ react-dom_client.js?v=63268ab5:8460
+commitHookPassiveMountEffects @ react-dom_client.js?v=63268ab5:8518
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9887
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9899
+flushPassiveEffects @ react-dom_client.js?v=63268ab5:11302
+(anonymous) @ react-dom_client.js?v=63268ab5:11060
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<DataProvider>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+AppWithToast @ App.tsx:1756
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+App @ App.tsx:1830
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+(anonymous) @ index.tsx:14
+App.tsx:338 Error in fetchData: {url: 'http://localhost:8000/api/v1/e-faturalar/', errorMessage: 'Failed to fetch', statusCode: 0, type: 'general', severity: 'medium', …}
+fetchData @ App.tsx:338
+await in fetchData
+loadAndFetchData @ App.tsx:413
+(anonymous) @ App.tsx:483
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17478
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+commitHookEffectListMount @ react-dom_client.js?v=63268ab5:8460
+commitHookPassiveMountEffects @ react-dom_client.js?v=63268ab5:8518
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9887
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9899
+flushPassiveEffects @ react-dom_client.js?v=63268ab5:11302
+(anonymous) @ react-dom_client.js?v=63268ab5:11060
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<DataProvider>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+AppWithToast @ App.tsx:1756
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+App @ App.tsx:1830
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+(anonymous) @ index.tsx:14
+App.tsx:355 General error: Failed to fetch
+fetchData @ App.tsx:355
+await in fetchData
+loadAndFetchData @ App.tsx:413
+(anonymous) @ App.tsx:483
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17478
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+commitHookEffectListMount @ react-dom_client.js?v=63268ab5:8460
+commitHookPassiveMountEffects @ react-dom_client.js?v=63268ab5:8518
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9887
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9899
+flushPassiveEffects @ react-dom_client.js?v=63268ab5:11302
+(anonymous) @ react-dom_client.js?v=63268ab5:11060
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<DataProvider>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+AppWithToast @ App.tsx:1756
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+App @ App.tsx:1830
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+(anonymous) @ index.tsx:14
+GumusBulut/#/calisan-talep:1 Access to fetch at 'http://localhost:8000/api/v1/b2b-ekstreler/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+App.tsx:309  GET http://localhost:8000/api/v1/b2b-ekstreler/ net::ERR_FAILED 500 (Internal Server Error)
+fetchData @ App.tsx:309
+loadAndFetchData @ App.tsx:414
+(anonymous) @ App.tsx:483
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17478
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+commitHookEffectListMount @ react-dom_client.js?v=63268ab5:8460
+commitHookPassiveMountEffects @ react-dom_client.js?v=63268ab5:8518
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9887
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9899
+flushPassiveEffects @ react-dom_client.js?v=63268ab5:11302
+(anonymous) @ react-dom_client.js?v=63268ab5:11060
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<DataProvider>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+AppWithToast @ App.tsx:1756
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+App @ App.tsx:1830
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+(anonymous) @ index.tsx:14
+App.tsx:338 Error in fetchData: {url: 'http://localhost:8000/api/v1/b2b-ekstreler/', errorMessage: 'Failed to fetch', statusCode: 0, type: 'general', severity: 'medium', …}
+fetchData @ App.tsx:338
+await in fetchData
+loadAndFetchData @ App.tsx:414
+(anonymous) @ App.tsx:483
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17478
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+commitHookEffectListMount @ react-dom_client.js?v=63268ab5:8460
+commitHookPassiveMountEffects @ react-dom_client.js?v=63268ab5:8518
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9887
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9899
+flushPassiveEffects @ react-dom_client.js?v=63268ab5:11302
+(anonymous) @ react-dom_client.js?v=63268ab5:11060
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<DataProvider>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+AppWithToast @ App.tsx:1756
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+App @ App.tsx:1830
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+(anonymous) @ index.tsx:14
+App.tsx:355 General error: Failed to fetch
+fetchData @ App.tsx:355
+await in fetchData
+loadAndFetchData @ App.tsx:414
+(anonymous) @ App.tsx:483
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17478
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+commitHookEffectListMount @ react-dom_client.js?v=63268ab5:8460
+commitHookPassiveMountEffects @ react-dom_client.js?v=63268ab5:8518
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9887
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9899
+flushPassiveEffects @ react-dom_client.js?v=63268ab5:11302
+(anonymous) @ react-dom_client.js?v=63268ab5:11060
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<DataProvider>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+AppWithToast @ App.tsx:1756
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+App @ App.tsx:1830
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+(anonymous) @ index.tsx:14
+GumusBulut/#/calisan-talep:1 Access to fetch at 'http://localhost:8000/api/v1/stoklar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+App.tsx:309  GET http://localhost:8000/api/v1/stoklar/ net::ERR_FAILED 500 (Internal Server Error)
+fetchData @ App.tsx:309
+loadAndFetchData @ App.tsx:416
+(anonymous) @ App.tsx:483
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17478
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+commitHookEffectListMount @ react-dom_client.js?v=63268ab5:8460
+commitHookPassiveMountEffects @ react-dom_client.js?v=63268ab5:8518
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9887
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9899
+flushPassiveEffects @ react-dom_client.js?v=63268ab5:11302
+(anonymous) @ react-dom_client.js?v=63268ab5:11060
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<DataProvider>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+AppWithToast @ App.tsx:1756
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+App @ App.tsx:1830
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+(anonymous) @ index.tsx:14
+App.tsx:338 Error in fetchData: {url: 'http://localhost:8000/api/v1/stoklar/', errorMessage: 'Failed to fetch', statusCode: 0, type: 'general', severity: 'medium', …}
+fetchData @ App.tsx:338
+await in fetchData
+loadAndFetchData @ App.tsx:416
+(anonymous) @ App.tsx:483
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17478
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+commitHookEffectListMount @ react-dom_client.js?v=63268ab5:8460
+commitHookPassiveMountEffects @ react-dom_client.js?v=63268ab5:8518
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9887
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9899
+flushPassiveEffects @ react-dom_client.js?v=63268ab5:11302
+(anonymous) @ react-dom_client.js?v=63268ab5:11060
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<DataProvider>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+AppWithToast @ App.tsx:1756
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+App @ App.tsx:1830
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+(anonymous) @ index.tsx:14
+App.tsx:355 General error: Failed to fetch
+fetchData @ App.tsx:355
+await in fetchData
+loadAndFetchData @ App.tsx:416
+(anonymous) @ App.tsx:483
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17478
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+commitHookEffectListMount @ react-dom_client.js?v=63268ab5:8460
+commitHookPassiveMountEffects @ react-dom_client.js?v=63268ab5:8518
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9887
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9899
+flushPassiveEffects @ react-dom_client.js?v=63268ab5:11302
+(anonymous) @ react-dom_client.js?v=63268ab5:11060
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<DataProvider>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+AppWithToast @ App.tsx:1756
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+App @ App.tsx:1830
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+(anonymous) @ index.tsx:14
+GumusBulut/#/calisan-talep:1 Access to fetch at 'http://localhost:8000/api/v1/stok-sayimlar/' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+App.tsx:309  GET http://localhost:8000/api/v1/stok-sayimlar/ net::ERR_FAILED 500 (Internal Server Error)
+fetchData @ App.tsx:309
+loadAndFetchData @ App.tsx:418
+(anonymous) @ App.tsx:483
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17478
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+commitHookEffectListMount @ react-dom_client.js?v=63268ab5:8460
+commitHookPassiveMountEffects @ react-dom_client.js?v=63268ab5:8518
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9887
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9899
+flushPassiveEffects @ react-dom_client.js?v=63268ab5:11302
+(anonymous) @ react-dom_client.js?v=63268ab5:11060
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<DataProvider>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+AppWithToast @ App.tsx:1756
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+App @ App.tsx:1830
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+(anonymous) @ index.tsx:14
+App.tsx:338 Error in fetchData: {url: 'http://localhost:8000/api/v1/stok-sayimlar/', errorMessage: 'Failed to fetch', statusCode: 0, type: 'general', severity: 'medium', …}
+fetchData @ App.tsx:338
+await in fetchData
+loadAndFetchData @ App.tsx:418
+(anonymous) @ App.tsx:483
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17478
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+commitHookEffectListMount @ react-dom_client.js?v=63268ab5:8460
+commitHookPassiveMountEffects @ react-dom_client.js?v=63268ab5:8518
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9887
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9899
+flushPassiveEffects @ react-dom_client.js?v=63268ab5:11302
+(anonymous) @ react-dom_client.js?v=63268ab5:11060
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<DataProvider>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+AppWithToast @ App.tsx:1756
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+App @ App.tsx:1830
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+(anonymous) @ index.tsx:14
+App.tsx:355 General error: Failed to fetch
+fetchData @ App.tsx:355
+await in fetchData
+loadAndFetchData @ App.tsx:418
+(anonymous) @ App.tsx:483
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17478
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+commitHookEffectListMount @ react-dom_client.js?v=63268ab5:8460
+commitHookPassiveMountEffects @ react-dom_client.js?v=63268ab5:8518
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9887
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9881
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9984
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=63268ab5:9868
+commitPassiveMountOnFiber @ react-dom_client.js?v=63268ab5:9899
+flushPassiveEffects @ react-dom_client.js?v=63268ab5:11302
+(anonymous) @ react-dom_client.js?v=63268ab5:11060
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<DataProvider>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+AppWithToast @ App.tsx:1756
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+App @ App.tsx:1830
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
+(anonymous) @ index.tsx:14
+react-dom_client.js?v=63268ab5:16 [Violation] 'message' handler took 548ms
+react-dom_client.js?v=63268ab5:16 [Violation] 'message' handler took 884ms
+pages.tsx:5465 NakitPage - nakitList changed: (51) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+pages.tsx:5465 NakitPage - nakitList changed: (51) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+pages.tsx:5465 NakitPage - nakitList changed: (51) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+react-dom_client.js?v=63268ab5:16 [Violation] 'message' handler took 479ms
+react-dom_client.js?v=63268ab5:16 [Violation] 'message' handler took 641ms
+App.tsx:309  PUT http://localhost:8000/api/v1/calisan-talepler/1 422 (Unprocessable Content)
+fetchData @ App.tsx:309
+(anonymous) @ App.tsx:1187
+handleHRApproval @ CalisanTalepPage.tsx:233
+onClick @ CalisanTalepPage.tsx:395
+executeDispatch @ react-dom_client.js?v=63268ab5:11736
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+processDispatchQueue @ react-dom_client.js?v=63268ab5:11772
+(anonymous) @ react-dom_client.js?v=63268ab5:12182
+batchedUpdates$1 @ react-dom_client.js?v=63268ab5:2628
 dispatchEventForPluginEventSystem @ react-dom_client.js?v=63268ab5:11877
 dispatchEvent @ react-dom_client.js?v=63268ab5:14792
 dispatchDiscreteEvent @ react-dom_client.js?v=63268ab5:14773
-handleMouseUp_ @ unknown
-<select>
+<button>
 exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
-CalisanTalepSistemi @ CalisanTalepPage.tsx?t=1759004373917:1229
-react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
-renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
-renderWithHooks @ react-dom_client.js?v=63268ab5:4217
-updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
-beginWork @ react-dom_client.js?v=63268ab5:7654
-runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
-performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
-workLoopSync @ react-dom_client.js?v=63268ab5:10728
-renderRootSync @ react-dom_client.js?v=63268ab5:10711
-performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
-performSyncWorkOnRoot @ react-dom_client.js?v=63268ab5:11635
-flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=63268ab5:11536
-processRootScheduleInMicrotask @ react-dom_client.js?v=63268ab5:11558
-(anonymous) @ react-dom_client.js?v=63268ab5:11649
-<CalisanTalepSistemi>
-exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
-AppWithToast @ App.tsx?t=1759004373917:2228
+(anonymous) @ CalisanTalepPage.tsx:394
+CalisanTalepSistemi @ CalisanTalepPage.tsx:355
 react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
 renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
 renderWithHooks @ react-dom_client.js?v=63268ab5:4217
@@ -293,9 +940,24 @@ renderRootSync @ react-dom_client.js?v=63268ab5:10711
 performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
 performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
 performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
-<AppWithToast>
+App.tsx:338 Error in fetchData: {url: 'http://localhost:8000/api/v1/calisan-talepler/1', errorMessage: 'body -> Talep: Field required\nbody -> TC_No: Field…i: Field required\nbody -> Sube_ID: Field required', statusCode: undefined, type: 'general', severity: 'medium', …}
+fetchData @ App.tsx:338
+await in fetchData
+(anonymous) @ App.tsx:1187
+handleHRApproval @ CalisanTalepPage.tsx:233
+onClick @ CalisanTalepPage.tsx:395
+executeDispatch @ react-dom_client.js?v=63268ab5:11736
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+processDispatchQueue @ react-dom_client.js?v=63268ab5:11772
+(anonymous) @ react-dom_client.js?v=63268ab5:12182
+batchedUpdates$1 @ react-dom_client.js?v=63268ab5:2628
+dispatchEventForPluginEventSystem @ react-dom_client.js?v=63268ab5:11877
+dispatchEvent @ react-dom_client.js?v=63268ab5:14792
+dispatchDiscreteEvent @ react-dom_client.js?v=63268ab5:14773
+<button>
 exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
-App @ App.tsx?t=1759004373917:2299
+(anonymous) @ CalisanTalepPage.tsx:394
+CalisanTalepSistemi @ CalisanTalepPage.tsx:355
 react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
 renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
 renderWithHooks @ react-dom_client.js?v=63268ab5:4217
@@ -308,25 +970,40 @@ renderRootSync @ react-dom_client.js?v=63268ab5:10711
 performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
 performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
 performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36
-<App>
+App.tsx:355 General error: body -> Talep: Field required
+body -> TC_No: Field required
+body -> Adi: Field required
+body -> Soyadi: Field required
+body -> Ilk_Soyadi: Field required
+body -> Cinsiyet: Field required
+body -> Medeni_Hali: Field required
+body -> Sube_ID: Field required
+fetchData @ App.tsx:355
+await in fetchData
+(anonymous) @ App.tsx:1187
+handleHRApproval @ CalisanTalepPage.tsx:233
+onClick @ CalisanTalepPage.tsx:395
+executeDispatch @ react-dom_client.js?v=63268ab5:11736
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+processDispatchQueue @ react-dom_client.js?v=63268ab5:11772
+(anonymous) @ react-dom_client.js?v=63268ab5:12182
+batchedUpdates$1 @ react-dom_client.js?v=63268ab5:2628
+dispatchEventForPluginEventSystem @ react-dom_client.js?v=63268ab5:11877
+dispatchEvent @ react-dom_client.js?v=63268ab5:14792
+dispatchDiscreteEvent @ react-dom_client.js?v=63268ab5:14773
+<button>
 exports.jsxDEV @ react_jsx-dev-runtime.js?v=63268ab5:250
-(anonymous) @ index.tsx:14
-client:883 [vite] hot updated: /pages/CalisanTalepPage.tsx
-client:883 [vite] hot updated: /App.tsx
-[Violation] 'setTimeout' handler took <N>ms
-[Violation] 'setTimeout' handler took <N>ms
-[Violation] 'setTimeout' handler took <N>ms
-[Violation] 'setTimeout' handler took <N>ms
-[Violation] 'setTimeout' handler took <N>ms
-[Violation] 'setTimeout' handler took <N>ms
-[Violation] 'setTimeout' handler took <N>ms
-[Violation] 'setTimeout' handler took <N>ms
-client:883 [vite] hot updated: /pages/CalisanTalepPage.tsx
-client:883 [vite] hot updated: /pages/CalisanTalepPage.tsx
-client:883 [vite] hot updated: /pages/CalisanTalepPage.tsx
-client:883 [vite] hot updated: /pages/CalisanTalepPage.tsx
-client:883 [vite] hot updated: /pages/CalisanTalepPage.tsx
-client:883 [vite] hot updated: /pages/CalisanTalepPage.tsx
-client:883 [vite] hot updated: /pages/CalisanTalepPage.tsx
-client:883 [vite] hot updated: /pages/CalisanTalepPage.tsx
-client:883 [vite] hot updated: /pages/CalisanTalepPage.tsx
+(anonymous) @ CalisanTalepPage.tsx:394
+CalisanTalepSistemi @ CalisanTalepPage.tsx:355
+react-stack-bottom-frame @ react-dom_client.js?v=63268ab5:17424
+renderWithHooksAgain @ react-dom_client.js?v=63268ab5:4281
+renderWithHooks @ react-dom_client.js?v=63268ab5:4217
+updateFunctionComponent @ react-dom_client.js?v=63268ab5:6619
+beginWork @ react-dom_client.js?v=63268ab5:7654
+runWithFiberInDEV @ react-dom_client.js?v=63268ab5:1485
+performUnitOfWork @ react-dom_client.js?v=63268ab5:10868
+workLoopSync @ react-dom_client.js?v=63268ab5:10728
+renderRootSync @ react-dom_client.js?v=63268ab5:10711
+performWorkOnRoot @ react-dom_client.js?v=63268ab5:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=63268ab5:11623
+performWorkUntilDeadline @ react-dom_client.js?v=63268ab5:36

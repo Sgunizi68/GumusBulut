@@ -33,6 +33,8 @@ interface CalisanTalep {
   Kayit_Tarih: string;
   Is_Onay_Tarih?: string | null;
   SSK_Onay_Tarih?: string | null;
+  Is_Onay_Veren_Kullanici_ID?: number;
+  SSK_Onay_Veren_Kullanici_ID?: number;
 }
 
 interface ActiveEmployee {
@@ -228,19 +230,17 @@ const CalisanTalepSistemi: React.FC = () => {
   };
 
   const handleHRApproval = (id: number) => {
-    setTalepler(talepler.map(t => 
-      t.Calisan_Talep_ID === id 
-        ? { ...t, status: 'hr_approved', Is_Giris_Onay: true }
-        : t
-    ));
+    updateCalisanTalep(id, {
+      Is_Onay_Tarih: new Date().toISOString(),
+      Is_Onay_Veren_Kullanici_ID: currentUser?.Kullanici_ID,
+    });
   };
 
   const handleSSKApproval = (id: number) => {
-    setTalepler(talepler.map(t => 
-      t.Calisan_Talep_ID === id 
-        ? { ...t, status: 'ssk_approved', SSK_Onay: true }
-        : t
-    ));
+    updateCalisanTalep(id, {
+      SSK_Onay_Tarih: new Date().toISOString(),
+      SSK_Onay_Veren_Kullanici_ID: currentUser?.Kullanici_ID,
+    });
   };
 
   const getStatusText = (talep: CalisanTalep): string => {
@@ -356,7 +356,7 @@ const CalisanTalepSistemi: React.FC = () => {
                     <tr key={talep.Calisan_Talep_ID} className="border-b border-gray-100 hover:bg-gray-50">
                       <td className="py-3 px-4">{talep.TC_No}</td>
                       <td className="py-3 px-4">{`${talep.Adi} ${talep.Soyadi}`}</td>
-                      <td className="py-3 px-4">{talep.Net_Maas}</td>
+                      <td className="py-3 px-4">{(talep.Net_Maas || 0).toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</td>
                       <td className="py-3 px-4">
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                           talep.Talep === 'İşe Giriş' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
@@ -382,7 +382,7 @@ const CalisanTalepSistemi: React.FC = () => {
                             <Edit className="w-4 h-4" />
                           </button>
                           
-                          {!talep.Is_Onay_Tarih && (isCurrentUserAdmin || hasPermission(CALISAN_TALEP_ISE_GIRIS_ONAYI_YETKI_ADI)) && (
+                          {talep.Talep === 'İşe Giriş' && !talep.Is_Onay_Tarih && (isCurrentUserAdmin || hasPermission(CALISAN_TALEP_ISE_GIRIS_ONAYI_YETKI_ADI)) && (
                             <>
                               <button
                                 onClick={() => handleDelete(talep.Calisan_Talep_ID)}
@@ -468,10 +468,9 @@ const CalisanTalepSistemi: React.FC = () => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">İlk Soyad *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">İlk Soyad</label>
                   <input
                     type="text"
-                    required
                     value={formData.Ilk_Soyadi}
                     onChange={(e) => setFormData({...formData, Ilk_Soyadi: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -594,10 +593,11 @@ const CalisanTalepSistemi: React.FC = () => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Net Maaş</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Net Maaş *</label>
                   <input
                     type="number"
                     step="0.01"
+                    required
                     value={formData.Net_Maas}
                     onChange={(e) => setFormData({...formData, Net_Maas: parseFloat(e.target.value)})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -605,9 +605,10 @@ const CalisanTalepSistemi: React.FC = () => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Sigorta Giriş Tarihi</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Sigorta Giriş Tarihi *</label>
                   <input
                     type="date"
+                    required
                     value={formData.Sigorta_Giris}
                     onChange={(e) => setFormData({...formData, Sigorta_Giris: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
