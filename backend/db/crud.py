@@ -772,6 +772,13 @@ def update_calisan_talep(db: Session, talep_id: int, talep: calisan_talep.Calisa
         db.refresh(db_talep)
     return db_talep
 
+def create_calisan_talep(db: Session, talep: calisan_talep.CalisanTalepCreate):
+    db_talep = models.CalisanTalep(**talep.dict())
+    db.add(db_talep)
+    db.commit()
+    db.refresh(db_talep)
+    return db_talep
+
 # --- PuantajSecimi CRUD ---
 def get_puantaj_secimi(db: Session, secim_id: int):
     return db.query(models.PuantajSecimi).filter(models.PuantajSecimi.Secim_ID == secim_id).first()

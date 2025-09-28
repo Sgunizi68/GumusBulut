@@ -1197,6 +1197,19 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
         return { success: false, message: "Çalışan talebi güncellenirken bir hata oluştu." };
     }, [setCalisanTalepList]);
+
+  const addCalisanTalep = useCallback(async (talep: Partial<CalisanTalep>) => {
+    const newTalep = await fetchData<CalisanTalep>(`${API_BASE_URL}/calisan-talepler/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(talep),
+    });
+    if (newTalep) {
+      setCalisanTalepList(prev => [...prev, newTalep]);
+      return { success: true, data: newTalep };
+    }
+    return { success: false, message: "Çalışan talebi eklenirken bir hata oluştu." };
+  }, [setCalisanTalepList]);
   const addUstKategori = useCallback(async (data: UstKategoriFormData) => {
     const newUstKategori = await fetchData<UstKategori>(`${API_BASE_URL}/ust-kategoriler/`, {
       method: 'POST',
@@ -1514,6 +1527,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const dataContextValue: DataContextType = useMemo(() => ({
     calisanTalepList,
+    addCalisanTalep,
     updateCalisanTalep,
     yemekCekiList,
     addYemekCeki,

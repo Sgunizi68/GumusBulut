@@ -47,7 +47,7 @@ interface ActiveEmployee {
 
 const CalisanTalepSistemi: React.FC = () => {
   const { hasPermission, currentUser } = useAppContext();
-  const { calisanTalepList, updateCalisanTalep, calisanList } = useDataContext();
+  const { calisanTalepList, addCalisanTalep, updateCalisanTalep, calisanList } = useDataContext();
   const isCurrentUserAdmin = currentUser?.Kullanici_Adi.toLowerCase() === 'sgunizi';
   const [talepler, setTalepler] = useState<CalisanTalep[]>([]);
   const [activeEmployees, setActiveEmployees] = useState<ActiveEmployee[]>([]);
@@ -150,18 +150,18 @@ const CalisanTalepSistemi: React.FC = () => {
     setSelectedFile(null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (modalType === 'add') {
       const newTalep: CalisanTalep = {
         ...formData,
-        Calisan_Talep_ID: talepler.length + 1,
+        Calisan_Talep_ID: 0, // Will be set by backend
         Kayit_Tarih: new Date().toISOString(),
         Imaj_Adi: selectedFile?.name
       } as CalisanTalep;
       
-      setTalepler([...talepler, newTalep]);
+      await addCalisanTalep(newTalep);
     } else {
       if (selectedTalep) {
         updateCalisanTalep(selectedTalep.Calisan_Talep_ID, formData);
@@ -173,7 +173,7 @@ const CalisanTalepSistemi: React.FC = () => {
     setSelectedTalep(null);
   };
 
-  const handleExitSubmit = (e: React.FormEvent) => {
+  const handleExitSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     const employee = activeEmployees.find(emp => emp.id === exitFormData.employeeId);
@@ -196,7 +196,7 @@ const CalisanTalepSistemi: React.FC = () => {
       Anne_Adi: fullEmployeeData.Anne_Adi || '',
       Baba_Adi: fullEmployeeData.Baba_Adi || '',
       Dogum_Yeri: fullEmployeeData.Dogum_Yeri || '',
-      Dogum_Tarihi: fullEmployeeData.Dogum_Tarihi || '',
+      Dogum_Tarihi: todayISO, // Per user request, defaulting to today. This is unusual.
       Medeni_Hali: fullEmployeeData.Medeni_Hali || 'Bekar',
       Cep_No: fullEmployeeData.Cep_No || '',
       Adres_Bilgileri: fullEmployeeData.Adres_Bilgileri || '',
@@ -213,7 +213,7 @@ const CalisanTalepSistemi: React.FC = () => {
       SSK_Onay_Tarih: null,
     };
 
-    setTalepler([...talepler, newExitRequest]);
+    await addCalisanTalep(newExitRequest);
     setShowExitModal(false);
     setExitFormData({ employeeId: '', exitDate: todayISO, exitReason: '' });
   };
