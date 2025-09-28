@@ -230,17 +230,25 @@ const CalisanTalepSistemi: React.FC = () => {
   };
 
   const handleHRApproval = (id: number) => {
-    updateCalisanTalep(id, {
-      Is_Onay_Tarih: new Date().toISOString(),
-      Is_Onay_Veren_Kullanici_ID: currentUser?.Kullanici_ID,
-    });
+    const talepToUpdate = talepler.find(t => t.Calisan_Talep_ID === id);
+    if (talepToUpdate) {
+      updateCalisanTalep(id, {
+        ...talepToUpdate,
+        Is_Onay_Tarih: new Date().toISOString(),
+        Is_Onay_Veren_Kullanici_ID: currentUser?.Kullanici_ID,
+      });
+    }
   };
 
   const handleSSKApproval = (id: number) => {
-    updateCalisanTalep(id, {
-      SSK_Onay_Tarih: new Date().toISOString(),
-      SSK_Onay_Veren_Kullanici_ID: currentUser?.Kullanici_ID,
-    });
+    const talepToUpdate = talepler.find(t => t.Calisan_Talep_ID === id);
+    if (talepToUpdate) {
+      updateCalisanTalep(id, {
+        ...talepToUpdate,
+        SSK_Onay_Tarih: new Date().toISOString(),
+        SSK_Onay_Veren_Kullanici_ID: currentUser?.Kullanici_ID,
+      });
+    }
   };
 
   const getStatusText = (talep: CalisanTalep): string => {
@@ -374,13 +382,15 @@ const CalisanTalepSistemi: React.FC = () => {
                       </td>
                       <td className="py-3 px-4">
                         <div className="flex gap-2">
-                          <button
-                            onClick={() => handleEdit(talep)}
-                            className="text-blue-600 hover:text-blue-800 p-1"
-                            title="Düzenle"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </button>
+                          {!talep.Is_Onay_Tarih && !talep.SSK_Onay_Tarih && (
+                            <button
+                              onClick={() => handleEdit(talep)}
+                              className="text-blue-600 hover:text-blue-800 p-1"
+                              title="Düzenle"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                          )}
                           
                           {talep.Talep === 'İşe Giriş' && !talep.Is_Onay_Tarih && (isCurrentUserAdmin || hasPermission(CALISAN_TALEP_ISE_GIRIS_ONAYI_YETKI_ADI)) && (
                             <>
