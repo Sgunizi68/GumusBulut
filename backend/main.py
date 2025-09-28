@@ -68,6 +68,10 @@ app.include_router(avans_istek.router, prefix="/api/v1", tags=["Avans Istek"])
 app.include_router(report.router, prefix="/api/v1", tags=["Reports"])
 app.include_router(fatura_diger_harcama_rapor.router, prefix="/api/v1/fatura-diger-harcama-rapor", tags=["Reports"])
 
+@app.get("/health", tags=["Health Check"])
+async def health_check():
+    return {"status": "ok"}
+
 @app.get("/", tags=["Root"])
 async def read_root():
     return {"message": "Welcome to SilverCloud Backend API"}
