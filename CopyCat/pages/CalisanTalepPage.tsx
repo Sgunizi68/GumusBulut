@@ -523,10 +523,10 @@ const CalisanTalepSistemi: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">İlk Soyad</label>
                       <input
                         type="text"
-                        value={formData.Ilk_Soyadi}
-                        onChange={(e) => setFormData({...formData, Ilk_Soyadi: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
+                    value={formData.Ilk_Soyadi}
+                    onChange={(e) => setFormData({...formData, Ilk_Soyadi: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
                     </div>
                     
                     <div>
