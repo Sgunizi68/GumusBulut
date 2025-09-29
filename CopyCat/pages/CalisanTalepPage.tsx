@@ -401,6 +401,16 @@ const CalisanTalepSistemi: React.FC = () => {
                             </button>
                           )}
                           
+                          {talep.Talep === 'İşten Çıkış' && !talep.Is_Onay_Tarih && !talep.SSK_Onay_Tarih && (isCurrentUserAdmin || hasPermission(CALISAN_TALEP_ISE_GIRIS_ONAYI_YETKI_ADI)) && (
+                            <button
+                              onClick={() => handleDelete(talep.Calisan_Talep_ID)}
+                              className="text-red-600 hover:text-red-800 p-1"
+                              title="Sil"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
+
                           {talep.Talep === 'İşe Giriş' && !talep.Is_Onay_Tarih && (isCurrentUserAdmin || hasPermission(CALISAN_TALEP_ISE_GIRIS_ONAYI_YETKI_ADI)) && (
                             <>
                               <button
