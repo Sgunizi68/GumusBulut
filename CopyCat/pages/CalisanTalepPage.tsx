@@ -30,6 +30,7 @@ interface CalisanTalep {
   Talep: 'İşten Çıkış' | 'İşe Giriş';
   Sube_ID: number;
   Imaj_Adi?: string;
+  Imaj?: string;
   Kayit_Tarih: string;
   Is_Onay_Tarih?: string | null;
   SSK_Onay_Tarih?: string | null;
@@ -82,7 +83,7 @@ const CalisanTalepSistemi: React.FC = () => {
     SSK_Cikis_Nedeni: '',
     Net_Maas: 0,
     Sigorta_Giris: '',
-    Sigorta_Cikis: '',
+    Sigorta_Cikis: '2099-01-01',
     Talep: 'İşe Giriş',
     Sube_ID: 1
   });
@@ -142,7 +143,7 @@ const CalisanTalepSistemi: React.FC = () => {
       SSK_Cikis_Nedeni: '',
       Net_Maas: 0,
       Sigorta_Giris: '',
-      Sigorta_Cikis: '',
+      Sigorta_Cikis: '2099-01-01',
       Talep: 'İşe Giriş',
       Sube_ID: 1,
       status: 'pending'
@@ -260,6 +261,18 @@ const CalisanTalepSistemi: React.FC = () => {
     }
   };
 
+  const handleViewFile = (talep: CalisanTalep) => {
+    if (talep.Imaj && talep.Imaj_Adi) {
+        const extension = talep.Imaj_Adi.split('.').pop()?.toLowerCase();
+        let mimeType = 'application/octet-stream';
+        if (extension === 'pdf') mimeType = 'application/pdf';
+        else if (['jpg', 'jpeg', 'png', 'gif'].includes(extension || '')) mimeType = `image/${extension}`;
+        
+        const dataUrl = `data:${mimeType};base64,${talep.Imaj}`;
+        window.open(dataUrl, '_blank');
+    }
+  };
+
   const getStatusText = (talep: CalisanTalep): string => {
     if (talep.Talep === 'İşe Giriş') {
       if (!talep.Is_Onay_Tarih) {
@@ -365,6 +378,7 @@ const CalisanTalepSistemi: React.FC = () => {
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Talep Türü</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Tarih</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Durum</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Dosya</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">İşlemler</th>
                   </tr>
                 </thead>
@@ -388,6 +402,17 @@ const CalisanTalepSistemi: React.FC = () => {
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(talep)}`}>
                           {getStatusText(talep)}
                         </span>
+                      </td>
+                      <td className="py-3 px-4">
+                        {talep.Imaj_Adi && (
+                            <button
+                                onClick={() => handleViewFile(talep)}
+                                className="text-blue-600 hover:text-blue-800 p-1"
+                                title="Dosyayı Görüntüle"
+                            >
+                                <FileText className="w-4 h-4" />
+                            </button>
+                        )}
                       </td>
                       <td className="py-3 px-4">
                         <div className="flex gap-2">
@@ -510,7 +535,7 @@ const CalisanTalepSistemi: React.FC = () => {
                         type="text"
                         required
                         maxLength={11}
-                        value={formData.TC_No}
+                        value={formData.TC_No || ''}
                         onChange={(e) => setFormData({...formData, TC_No: e.target.value})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -521,7 +546,7 @@ const CalisanTalepSistemi: React.FC = () => {
                       <input
                         type="text"
                         required
-                        value={formData.Adi}
+                        value={formData.Adi || ''}
                         onChange={(e) => setFormData({...formData, Adi: e.target.value})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -532,7 +557,7 @@ const CalisanTalepSistemi: React.FC = () => {
                       <input
                         type="text"
                         required
-                        value={formData.Soyadi}
+                        value={formData.Soyadi || ''}
                         onChange={(e) => setFormData({...formData, Soyadi: e.target.value})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -542,7 +567,7 @@ const CalisanTalepSistemi: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">İlk Soyad</label>
                       <input
                         type="text"
-                    value={formData.Ilk_Soyadi}
+                    value={formData.Ilk_Soyadi || ''}
                     onChange={(e) => setFormData({...formData, Ilk_Soyadi: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -551,7 +576,7 @@ const CalisanTalepSistemi: React.FC = () => {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Cinsiyet</label>
                       <select
-                        value={formData.Cinsiyet}
+                        value={formData.Cinsiyet || ''}
                         onChange={(e) => setFormData({...formData, Cinsiyet: e.target.value as 'Erkek' | 'Kadın'})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       >
@@ -563,7 +588,7 @@ const CalisanTalepSistemi: React.FC = () => {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Medeni Hal</label>
                       <select
-                        value={formData.Medeni_Hali}
+                        value={formData.Medeni_Hali || ''}
                         onChange={(e) => setFormData({...formData, Medeni_Hali: e.target.value as 'Bekar' | 'Evli'})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       >
@@ -576,7 +601,7 @@ const CalisanTalepSistemi: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Doğum Tarihi</label>
                       <input
                         type="date"
-                        value={formData.Dogum_Tarihi}
+                        value={formData.Dogum_Tarihi || ''}
                         onChange={(e) => setFormData({...formData, Dogum_Tarihi: e.target.value})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -586,7 +611,7 @@ const CalisanTalepSistemi: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Doğum Yeri</label>
                       <input
                         type="text"
-                        value={formData.Dogum_Yeri}
+                        value={formData.Dogum_Yeri || ''}
                         onChange={(e) => setFormData({...formData, Dogum_Yeri: e.target.value})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -596,7 +621,7 @@ const CalisanTalepSistemi: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Anne Adı</label>
                       <input
                         type="text"
-                        value={formData.Anne_Adi}
+                        value={formData.Anne_Adi || ''}
                         onChange={(e) => setFormData({...formData, Anne_Adi: e.target.value})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -606,7 +631,7 @@ const CalisanTalepSistemi: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Baba Adı</label>
                       <input
                         type="text"
-                        value={formData.Baba_Adi}
+                        value={formData.Baba_Adi || ''}
                         onChange={(e) => setFormData({...formData, Baba_Adi: e.target.value})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -616,7 +641,7 @@ const CalisanTalepSistemi: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Cep Telefonu</label>
                       <input
                         type="tel"
-                        value={formData.Cep_No}
+                        value={formData.Cep_No || ''}
                         onChange={(e) => setFormData({...formData, Cep_No: e.target.value})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -626,7 +651,7 @@ const CalisanTalepSistemi: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Görev</label>
                       <input
                         type="text"
-                        value={formData.Gorevi}
+                        value={formData.Gorevi || ''}
                         onChange={(e) => setFormData({...formData, Gorevi: e.target.value})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -636,7 +661,7 @@ const CalisanTalepSistemi: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Öğrenim Durumu</label>
                       <input
                         type="text"
-                        value={formData.Ogrenim_Durumu}
+                        value={formData.Ogrenim_Durumu || ''}
                         onChange={(e) => setFormData({...formData, Ogrenim_Durumu: e.target.value})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -647,7 +672,7 @@ const CalisanTalepSistemi: React.FC = () => {
                       <input
                         type="text"
                         maxLength={26}
-                        value={formData.IBAN}
+                        value={formData.IBAN || ''}
                         onChange={(e) => setFormData({...formData, IBAN: e.target.value})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -657,7 +682,7 @@ const CalisanTalepSistemi: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Hesap No</label>
                       <input
                         type="text"
-                        value={formData.Hesap_No}
+                        value={formData.Hesap_No || ''}
                         onChange={(e) => setFormData({...formData, Hesap_No: e.target.value})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -669,7 +694,7 @@ const CalisanTalepSistemi: React.FC = () => {
                         type="number"
                         step="0.01"
                         required
-                        value={formData.Net_Maas}
+                        value={formData.Net_Maas || ''}
                         onChange={(e) => setFormData({...formData, Net_Maas: parseFloat(e.target.value)})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -680,7 +705,7 @@ const CalisanTalepSistemi: React.FC = () => {
                       <input
                         type="date"
                         required
-                        value={formData.Sigorta_Giris}
+                        value={formData.Sigorta_Giris || ''}
                         onChange={(e) => setFormData({...formData, Sigorta_Giris: e.target.value})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -691,7 +716,7 @@ const CalisanTalepSistemi: React.FC = () => {
                       <textarea
                         required
                         rows={3}
-                        value={formData.Adres_Bilgileri}
+                        value={formData.Adres_Bilgileri || ''}
                         onChange={(e) => setFormData({...formData, Adres_Bilgileri: e.target.value})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -699,6 +724,19 @@ const CalisanTalepSistemi: React.FC = () => {
                     
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-1">Dosya Ekle</label>
+                      {selectedTalep?.Imaj_Adi && (
+                        <div className="flex items-center gap-2 mb-2">
+                          <p className="text-sm text-gray-600">Mevcut Dosya: {selectedTalep.Imaj_Adi}</p>
+                          <button
+                            type="button"
+                            onClick={() => handleViewFile(selectedTalep)}
+                            className="text-blue-600 hover:text-blue-800 p-1"
+                            title="Mevcut Dosyayı Görüntüle"
+                          >
+                            <FileText className="w-4 h-4" />
+                          </button>
+                        </div>
+                      )}
                       <input
                         type="file"
                         accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
