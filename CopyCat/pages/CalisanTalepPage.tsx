@@ -152,10 +152,15 @@ const CalisanTalepSistemi: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    const preparedData: Partial<CalisanTalep> = { ...formData };
+    if (preparedData.Dogum_Tarihi === '') preparedData.Dogum_Tarihi = null;
+    if (preparedData.Sigorta_Giris === '') preparedData.Sigorta_Giris = null;
+    if (preparedData.Sigorta_Cikis === '') preparedData.Sigorta_Cikis = null;
+
     if (modalType === 'add') {
       const newTalep: CalisanTalep = {
-        ...formData,
+        ...preparedData,
         Calisan_Talep_ID: 0, // Will be set by backend
         Kayit_Tarih: new Date().toISOString(),
         Imaj_Adi: selectedFile?.name
@@ -164,7 +169,7 @@ const CalisanTalepSistemi: React.FC = () => {
       await addCalisanTalep(newTalep);
     } else {
       if (selectedTalep) {
-        updateCalisanTalep(selectedTalep.Calisan_Talep_ID, formData);
+        updateCalisanTalep(selectedTalep.Calisan_Talep_ID, preparedData);
       }
     }
     
@@ -182,7 +187,7 @@ const CalisanTalepSistemi: React.FC = () => {
     const fullEmployeeData = calisanList.find(c => c.TC_No === employee.TC_No);
     if (!fullEmployeeData) return; // Should not happen if activeEmployees is derived from calisanList
 
-    const newExitRequest: CalisanTalep = {
+    const newExitRequest: Partial<CalisanTalep> = {
       Calisan_Talep_ID: 0, // Will be set by backend
       TC_No: fullEmployeeData.TC_No,
       Adi: fullEmployeeData.Adi,
@@ -196,14 +201,14 @@ const CalisanTalepSistemi: React.FC = () => {
       Anne_Adi: fullEmployeeData.Anne_Adi || '',
       Baba_Adi: fullEmployeeData.Baba_Adi || '',
       Dogum_Yeri: fullEmployeeData.Dogum_Yeri || '',
-      Dogum_Tarihi: todayISO, // Per user request, defaulting to today. This is unusual.
+      Dogum_Tarihi: fullEmployeeData.Dogum_Tarihi,
       Medeni_Hali: fullEmployeeData.Medeni_Hali || 'Bekar',
       Cep_No: fullEmployeeData.Cep_No || '',
       Adres_Bilgileri: fullEmployeeData.Adres_Bilgileri || '',
       Gelir_Vergisi_Matrahi: fullEmployeeData.Gelir_Vergisi_Matrahi || 0,
       SSK_Cikis_Nedeni: exitFormData.exitReason,
       Net_Maas: fullEmployeeData.Net_Maas || 0,
-      Sigorta_Giris: fullEmployeeData.Sigorta_Giris || '',
+      Sigorta_Giris: fullEmployeeData.Sigorta_Giris,
       Sigorta_Cikis: exitFormData.exitDate,
       Talep: 'İşten Çıkış',
       Sube_ID: fullEmployeeData.Sube_ID,
@@ -212,6 +217,10 @@ const CalisanTalepSistemi: React.FC = () => {
       Is_Onay_Tarih: null,
       SSK_Onay_Tarih: null,
     };
+
+    if (newExitRequest.Dogum_Tarihi === '') newExitRequest.Dogum_Tarihi = null;
+    if (newExitRequest.Sigorta_Giris === '') newExitRequest.Sigorta_Giris = null;
+
 
     await addCalisanTalep(newExitRequest);
     setShowExitModal(false);
