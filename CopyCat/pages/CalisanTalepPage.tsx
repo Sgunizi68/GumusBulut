@@ -30,6 +30,7 @@ interface CalisanTalep {
   Talep: 'İşten Çıkış' | 'İşe Giriş';
   Sube_ID: number;
   Imaj_Adi?: string;
+  Imaj?: string;
   Kayit_Tarih: string;
   Is_Onay_Tarih?: string | null;
   SSK_Onay_Tarih?: string | null;
@@ -44,6 +45,25 @@ interface ActiveEmployee {
   Soyadi: string;
   Gorevi?: string;
 }
+
+const getMimeType = (fileName: string = ''): string => {
+  const extension = fileName.split('.').pop()?.toLowerCase();
+  switch (extension) {
+    case 'pdf':
+      return 'application/pdf';
+    case 'doc':
+      return 'application/msword';
+    case 'docx':
+      return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    case 'jpg':
+    case 'jpeg':
+      return 'image/jpeg';
+    case 'png':
+      return 'image/png';
+    default:
+      return 'application/octet-stream';
+  }
+};
 
 const CalisanTalepSistemi: React.FC = () => {
   const { hasPermission, currentUser } = useAppContext();
@@ -150,24 +170,36 @@ const CalisanTalepSistemi: React.FC = () => {
     setSelectedFile(null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    let talepData = { ...formData };
+
+    if (selectedFile) {
+      const fileAsBase64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve((reader.result as string).split(',')[1]);
+        reader.onerror = (error) => reject(error);
+        reader.readAsDataURL(selectedFile);
+      });
+      talepData.Imaj = fileAsBase64;
+      talepData.Imaj_Adi = selectedFile.name;
+    }
+
     if (modalType === 'add') {
       const newTalep: CalisanTalep = {
-        ...formData,
-        Calisan_Talep_ID: talepler.length + 1,
+        ...talepData,
+        Calisan_Talep_ID: talepler.length + 1, // This might need to be handled by the backend
         Kayit_Tarih: new Date().toISOString(),
-        Imaj_Adi: selectedFile?.name
       } as CalisanTalep;
-      
-      setTalepler([...talepler, newTalep]);
+      // This should be a call to a create function, e.g., createCalisanTalep(newTalep)
+      setTalepler([...talepler, newTalep]); 
     } else {
       if (selectedTalep) {
-        updateCalisanTalep(selectedTalep.Calisan_Talep_ID, formData);
+        updateCalisanTalep(selectedTalep.Calisan_Talep_ID, talepData);
       }
     }
-    
+
     setShowModal(false);
     resetForm();
     setSelectedTalep(null);
@@ -647,6 +679,25 @@ const CalisanTalepSistemi: React.FC = () => {
                   {selectedFile && (
                     <p className="mt-1 text-sm text-gray-600">Seçilen dosya: {selectedFile.name}</p>
                   )}
+                  {modalType === 'edit' && formData.Imaj && (() => {
+                    const mimeType = getMimeType(formData.Imaj_Adi);
+                    const isImage = mimeType.startsWith('image/');
+                    return (
+                      <div className="mt-2">
+                        <p className="text-sm font-medium text-gray-700">Mevcut Dosya:</p>
+                        <a href={`data:${mimeType};base64,${formData.Imaj}`} download={formData.Imaj_Adi || 'Mevcut Dosya'} target="_blank" rel="noopener noreferrer">
+                          {isImage ? (
+                            <img src={`data:${mimeType};base64,${formData.Imaj}`} alt="Mevcut Dosya" className="mt-1 max-h-40 rounded-lg" />
+                          ) : (
+                            <div className="mt-1 flex items-center gap-2 text-blue-600 hover:text-blue-800">
+                              <FileText className="w-6 h-6" />
+                              <span>{formData.Imaj_Adi || 'Mevcut Dosya'}</span>
+                            </div>
+                          )}
+                        </a>
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
               

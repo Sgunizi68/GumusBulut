@@ -760,6 +760,9 @@ def delete_calisan(db: Session, tc_no: str):
 def get_calisan_talep(db: Session, talep_id: int):
     return db.query(models.CalisanTalep).filter(models.CalisanTalep.Calisan_Talep_ID == talep_id).first()
 
+def get_calisan_talep_by_tc_no(db: Session, tc_no: str):
+    return db.query(models.CalisanTalep).filter(models.CalisanTalep.TC_No == tc_no).first()
+
 def get_calisan_talepler(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.CalisanTalep).offset(skip).limit(limit).all()
 

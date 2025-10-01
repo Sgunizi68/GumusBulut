@@ -41,6 +41,7 @@ class CalisanTalepUpdate(CalisanTalepBase):
 class CalisanTalep(CalisanTalepBase):
     Calisan_Talep_ID: int
     Kayit_Tarih: datetime
+    Imaj: Optional[str] = None
 
     class Config:
         orm_mode = True
