@@ -1183,20 +1183,24 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     return { success: false, message: "Ödeme referansı silinirken bir hata oluştu." };
   }, []);
 
-  const updateCalisanTalep = useCallback(async (talepId: number, talep: Partial<CalisanTalep>) => {
+  const updateCalisanTalep = useCallback(async (talepId: number, data: Partial<CalisanTalep> | FormData) => {
+    const isFormData = data instanceof FormData;
+    const body = isFormData ? data : JSON.stringify(data);
+
     const updatedTalep = await fetchData<CalisanTalep>(`${API_BASE_URL}/calisan-talepler/${talepId}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(talep),
+      body: body,
+      headers: isFormData ? {} : { 'Content-Type': 'application/json' },
     });
+
     if (updatedTalep) {
       setCalisanTalepList(prev =>
         prev.map(t => (t.Calisan_Talep_ID === talepId ? updatedTalep : t))
       );
       return { success: true, data: updatedTalep };
     }
-        return { success: false, message: "Çalışan talebi güncellenirken bir hata oluştu." };
-    }, [setCalisanTalepList]);
+    return { success: false, message: "Çalışan talebi güncellenirken bir hata oluştu." };
+  }, [setCalisanTalepList]);
   const addUstKategori = useCallback(async (data: UstKategoriFormData) => {
     const newUstKategori = await fetchData<UstKategori>(`${API_BASE_URL}/ust-kategoriler/`, {
       method: 'POST',

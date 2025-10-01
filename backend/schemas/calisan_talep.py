@@ -36,7 +36,7 @@ class CalisanTalepCreate(CalisanTalepBase):
     pass
 
 class CalisanTalepUpdate(CalisanTalepBase):
-    pass
+    Imaj: Optional[bytes] = None
 
 class CalisanTalep(CalisanTalepBase):
     Calisan_Talep_ID: int

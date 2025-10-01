@@ -173,30 +173,53 @@ const CalisanTalepSistemi: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    let talepData = { ...formData };
+    // If we are in edit mode and a new file is selected, use FormData
+    if (modalType === 'edit' && selectedFile) {
+      const formDataToSend = new FormData();
+      
+      // Append all form fields from the `formData` state
+      for (const key in formData) {
+        const value = formData[key as keyof typeof formData];
+        // Don't append the old base64 'Imaj' string or its name
+        if (key === 'Imaj' || key === 'Imaj_Adi') continue;
+        if (value !== null && value !== undefined) {
+          formDataToSend.append(key, String(value));
+        }
+      }
 
-    if (selectedFile) {
-      const fileAsBase64 = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve((reader.result as string).split(',')[1]);
-        reader.onerror = (error) => reject(error);
-        reader.readAsDataURL(selectedFile);
-      });
-      talepData.Imaj = fileAsBase64;
-      talepData.Imaj_Adi = selectedFile.name;
-    }
-
-    if (modalType === 'add') {
-      const newTalep: CalisanTalep = {
-        ...talepData,
-        Calisan_Talep_ID: talepler.length + 1, // This might need to be handled by the backend
-        Kayit_Tarih: new Date().toISOString(),
-      } as CalisanTalep;
-      // This should be a call to a create function, e.g., createCalisanTalep(newTalep)
-      setTalepler([...talepler, newTalep]); 
-    } else {
+      // Append the new file
+      formDataToSend.append('Imaj', selectedFile, selectedFile.name);
+      
       if (selectedTalep) {
-        updateCalisanTalep(selectedTalep.Calisan_Talep_ID, talepData);
+        await updateCalisanTalep(selectedTalep.Calisan_Talep_ID, formDataToSend);
+      }
+    } else {
+      // Original logic for add mode or edit mode without a new file
+      let talepData = { ...formData };
+
+      if (selectedFile) { // This is for 'add' mode with a file
+        const fileAsBase64 = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve((reader.result as string).split(',')[1]);
+          reader.onerror = (error) => reject(error);
+          reader.readAsDataURL(selectedFile);
+        });
+        talepData.Imaj = fileAsBase64;
+        talepData.Imaj_Adi = selectedFile.name;
+      }
+
+      if (modalType === 'add') {
+        const newTalep: CalisanTalep = {
+          ...talepData,
+          Calisan_Talep_ID: talepler.length + 1, // This might need to be handled by the backend
+          Kayit_Tarih: new Date().toISOString(),
+        } as CalisanTalep;
+        // This should be a call to a create function, e.g., createCalisanTalep(newTalep)
+        setTalepler([...talepler, newTalep]); 
+      } else { // 'edit' without new file
+        if (selectedTalep) {
+          await updateCalisanTalep(selectedTalep.Calisan_Talep_ID, talepData);
+        }
       }
     }
 

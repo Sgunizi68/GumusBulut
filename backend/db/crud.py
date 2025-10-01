@@ -769,7 +769,13 @@ def get_calisan_talepler(db: Session, skip: int = 0, limit: int = 100):
 def update_calisan_talep(db: Session, talep_id: int, talep: calisan_talep.CalisanTalepUpdate):
     db_talep = db.query(models.CalisanTalep).filter(models.CalisanTalep.Calisan_Talep_ID == talep_id).first()
     if db_talep:
-        for key, value in talep.dict(exclude_unset=True).items():
+        update_data = talep.dict(exclude_unset=True)
+        
+        if 'Imaj' in update_data and update_data['Imaj'] is not None:
+            db_talep.Imaj = update_data['Imaj']
+            del update_data['Imaj']
+
+        for key, value in update_data.items():
             setattr(db_talep, key, value)
         db.commit()
         db.refresh(db_talep)
