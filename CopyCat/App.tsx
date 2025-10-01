@@ -391,97 +391,97 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [depoKiraRapor, setDepoKiraRapor] = useState<any[]>([]);
     const [calisanTalepList, setCalisanTalepList] = useState<CalisanTalep[]>([]);
 
-    const loadAndFetchData = useCallback(async () => {
-        // 1. Load from cache first
-        const cachedData = loadFromLocalStorage<Partial<StoredDataState>>(STORAGE_KEYS.DATA_STATE, {});
-        if (cachedData.subeList) setSubeList(cachedData.subeList);
-        if (cachedData.ustKategoriList) setUstKategoriList(cachedData.ustKategoriList);
-        if (cachedData.kategoriList) setKategoriList(cachedData.kategoriList);
-        if (cachedData.rolesList) setRolesList(cachedData.rolesList);
-
-        // 2. Then fetch from API
-        const [
-            subeler, eFaturalar, b2bEkstreler, digerHarcamalar, stoklar, stokFiyatlar,
-            stokSayimlar, calisanlar, puantajSecimleri, puantajlar, gelirler,
-            gelirEkstralar, avansIstekler, ustKategoriler, kategoriler, degerler,
-            users, roles, permissions, userRoles, rolePermissions, eFaturaReferanslar, odemeReferanslar, nakitler, odemeler, yemekCekiler,
-            depoKiraData, calisanTalepler
-        ] = await Promise.all([
-            fetchData<Sube[]>(`${API_BASE_URL}/subeler/`),
-            fetchData<EFatura[]>(`${API_BASE_URL}/e-faturalar/`),
-            fetchData<B2BEkstre[]>(`${API_BASE_URL}/b2b-ekstreler/`),
-            fetchData<DigerHarcama[]>(`${API_BASE_URL}/diger-harcamalar/`),
-            fetchData<Stok[]>(`${API_BASE_URL}/stoklar/`),
-            fetchData<StokFiyat[]>(`${API_BASE_URL}/stok-fiyatlar/`),
-            fetchData<StokSayim[]>(`${API_BASE_URL}/stok-sayimlar/`),
-            fetchData<Calisan[]>(`${API_BASE_URL}/calisanlar/`),
-            fetchData<PuantajSecimi[]>(`${API_BASE_URL}/puantaj-secimi/`),
-            fetchData<Puantaj[]>(`${API_BASE_URL}/puantajlar/`),
-            fetchData<Gelir[]>(`${API_BASE_URL}/gelirler/`),
-            fetchData<GelirEkstra[]>(`${API_BASE_URL}/gelir-ekstra/`),
-            fetchData<AvansIstek[]>(`${API_BASE_URL}/avans-istekler/`),
-            fetchData<UstKategori[]>(`${API_BASE_URL}/ust-kategoriler/`),
-            fetchData<Kategori[]>(`${API_BASE_URL}/kategoriler/`),
-            fetchData<Deger[]>(`${API_BASE_URL}/degerler/`),
-            fetchData<Kullanici[]>(`${API_BASE_URL}/users/`),
-            fetchData<Rol[]>(`${API_BASE_URL}/roles/`),
-            fetchData<Yetki[]>(`${API_BASE_URL}/yetkiler/`),
-            fetchData<KullaniciRol[]>(`${API_BASE_URL}/kullanici-rolleri/`),
-            fetchData<RolYetki[]>(`${API_BASE_URL}/rol-yetkileri/`),
-            fetchData<EFaturaReferans[]>(`${API_BASE_URL}/e-fatura-referans/`),
-            fetchData<OdemeReferans[]>(`${API_BASE_URL}/Odeme_Referans/`),
-            fetchData<Nakit[]>(`${API_BASE_URL}/nakit/`),
-            fetchData<Odeme[]>(`${API_BASE_URL}/Odeme/`),
-            fetchData<YemekCeki[]>(`${API_BASE_URL}/yemek-cekiler/`),
-            fetchData<any[]>(`${API_BASE_URL}/depo-kira-rapor/`),
-            fetchData<CalisanTalep[]>(`${API_BASE_URL}/calisan-talepler/`)
-        ]);
-
-        // 3. Update state and cache - Be selective to avoid quota errors
-        const newDataToCache: Partial<StoredDataState> = {};
-
-        if (subeler) { setSubeList(subeler); newDataToCache.subeList = subeler; }
-        if (ustKategoriler) { setUstKategoriList(ustKategoriler); newDataToCache.ustKategoriList = ustKategoriler; }
-        if (kategoriler) { setKategoriList(kategoriler); newDataToCache.kategoriList = kategoriler; }
-        if (roles) { setRolesList(roles); newDataToCache.rolesList = roles; }
-        if (degerler) setDegerList(degerler);
-        if (users) setUserList(users);
-        if (permissions) setPermissionsList(permissions);
-        if (userRoles) setUserRolesList(userRoles);
-        if (rolePermissions) setRolePermissionsList(rolePermissions);
-        if (eFaturaReferanslar) setEFaturaReferansList(eFaturaReferanslar);
-        if (odemeReferanslar) setOdemeReferansList(odemeReferanslar);
-
-        // Set large lists to state but do not cache them
-        if (eFaturalar) setEFaturaList(eFaturalar);
-        if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
-        if (digerHarcamalar) setDigerHarcamaList(digerHarcamalar);
-        if (stoklar) setStokList(stoklar);
-        if (stokFiyatlar) setStokFiyatList(stokFiyatlar);
-        if (stokSayimlar) setStokSayimList(stokSayimlar);
-        if (calisanlar) setCalisanList(calisanlar);
-        if (puantajSecimleri) setPuantajSecimiList(puantajSecimleri);
-        if (puantajlar) setPuantajList(puantajlar);
-        if (gelirler) setGelirList(gelirler);
-        if (gelirEkstralar) setGelirEkstraList(gelirEkstralar);
-        if (avansIstekler) setAvansIstekList(avansIstekler);
-        if (nakitler) setNakitList(nakitler);
-        if (odemeler) setOdemeList(odemeler);
-        if (yemekCekiler) setYemekCekiList(yemekCekiler);
-        if (depoKiraData) setDepoKiraRapor(depoKiraData);
-        if (calisanTalepler) setCalisanTalepList(calisanTalepler);
-
-        try {
-            localStorage.setItem(STORAGE_KEYS.DATA_STATE, JSON.stringify(newDataToCache));
-        } catch (error) {
-            console.warn("Could not cache app data, might be due to storage quota:", error);
-        }
-    }, []);
-
-    // Initial data fetching
+    // Initial data fetching with caching
     useEffect(() => {
+        const loadAndFetchData = async () => {
+            // 1. Load from cache first
+            const cachedData = loadFromLocalStorage<Partial<StoredDataState>>(STORAGE_KEYS.DATA_STATE, {});
+            if (cachedData.subeList) setSubeList(cachedData.subeList);
+            if (cachedData.ustKategoriList) setUstKategoriList(cachedData.ustKategoriList);
+            if (cachedData.kategoriList) setKategoriList(cachedData.kategoriList);
+            if (cachedData.rolesList) setRolesList(cachedData.rolesList);
+
+            // 2. Then fetch from API
+            const [
+                subeler, eFaturalar, b2bEkstreler, digerHarcamalar, stoklar, stokFiyatlar,
+                stokSayimlar, calisanlar, puantajSecimleri, puantajlar, gelirler,
+                gelirEkstralar, avansIstekler, ustKategoriler, kategoriler, degerler,
+                users, roles, permissions, userRoles, rolePermissions, eFaturaReferanslar, odemeReferanslar, nakitler, odemeler, yemekCekiler,
+                depoKiraData, calisanTalepler
+            ] = await Promise.all([
+                fetchData<Sube[]>(`${API_BASE_URL}/subeler/`),
+                fetchData<EFatura[]>(`${API_BASE_URL}/e-faturalar/`),
+                fetchData<B2BEkstre[]>(`${API_BASE_URL}/b2b-ekstreler/`),
+                fetchData<DigerHarcama[]>(`${API_BASE_URL}/diger-harcamalar/`),
+                fetchData<Stok[]>(`${API_BASE_URL}/stoklar/`),
+                fetchData<StokFiyat[]>(`${API_BASE_URL}/stok-fiyatlar/`),
+                fetchData<StokSayim[]>(`${API_BASE_URL}/stok-sayimlar/`),
+                fetchData<Calisan[]>(`${API_BASE_URL}/calisanlar/`),
+                fetchData<PuantajSecimi[]>(`${API_BASE_URL}/puantaj-secimi/`),
+                fetchData<Puantaj[]>(`${API_BASE_URL}/puantajlar/`),
+                fetchData<Gelir[]>(`${API_BASE_URL}/gelirler/`),
+                fetchData<GelirEkstra[]>(`${API_BASE_URL}/gelir-ekstra/`),
+                fetchData<AvansIstek[]>(`${API_BASE_URL}/avans-istekler/`),
+                fetchData<UstKategori[]>(`${API_BASE_URL}/ust-kategoriler/`),
+                fetchData<Kategori[]>(`${API_BASE_URL}/kategoriler/`),
+                fetchData<Deger[]>(`${API_BASE_URL}/degerler/`),
+                fetchData<Kullanici[]>(`${API_BASE_URL}/users/`),
+                fetchData<Rol[]>(`${API_BASE_URL}/roles/`),
+                fetchData<Yetki[]>(`${API_BASE_URL}/yetkiler/`),
+                fetchData<KullaniciRol[]>(`${API_BASE_URL}/kullanici-rolleri/`),
+                fetchData<RolYetki[]>(`${API_BASE_URL}/rol-yetkileri/`),
+                fetchData<EFaturaReferans[]>(`${API_BASE_URL}/e-fatura-referans/`),
+                fetchData<OdemeReferans[]>(`${API_BASE_URL}/Odeme_Referans/`),
+                fetchData<Nakit[]>(`${API_BASE_URL}/nakit/`),
+                fetchData<Odeme[]>(`${API_BASE_URL}/Odeme/`),
+                fetchData<YemekCeki[]>(`${API_BASE_URL}/yemek-cekiler/`),
+                fetchData<any[]>(`${API_BASE_URL}/depo-kira-rapor/`),
+                fetchData<CalisanTalep[]>(`${API_BASE_URL}/calisan-talepler/`)
+            ]);
+
+            // 3. Update state and cache - Be selective to avoid quota errors
+            const newDataToCache: Partial<StoredDataState> = {};
+
+            if (subeler) { setSubeList(subeler); newDataToCache.subeList = subeler; }
+            if (ustKategoriler) { setUstKategoriList(ustKategoriler); newDataToCache.ustKategoriList = ustKategoriler; }
+            if (kategoriler) { setKategoriList(kategoriler); newDataToCache.kategoriList = kategoriler; }
+            if (roles) { setRolesList(roles); newDataToCache.rolesList = roles; }
+            if (degerler) setDegerList(degerler);
+            if (users) setUserList(users);
+            if (permissions) setPermissionsList(permissions);
+            if (userRoles) setUserRolesList(userRoles);
+            if (rolePermissions) setRolePermissionsList(rolePermissions);
+            if (eFaturaReferanslar) setEFaturaReferansList(eFaturaReferanslar);
+            if (odemeReferanslar) setOdemeReferansList(odemeReferanslar);
+
+            // Set large lists to state but do not cache them
+            if (eFaturalar) setEFaturaList(eFaturalar);
+            if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
+            if (digerHarcamalar) setDigerHarcamaList(digerHarcamalar);
+            if (stoklar) setStokList(stoklar);
+            if (stokFiyatlar) setStokFiyatList(stokFiyatlar);
+            if (stokSayimlar) setStokSayimList(stokSayimlar);
+            if (calisanlar) setCalisanList(calisanlar);
+            if (puantajSecimleri) setPuantajSecimiList(puantajSecimleri);
+            if (puantajlar) setPuantajList(puantajlar);
+            if (gelirler) setGelirList(gelirler);
+            if (gelirEkstralar) setGelirEkstraList(gelirEkstralar);
+            if (avansIstekler) setAvansIstekList(avansIstekler);
+            if (nakitler) setNakitList(nakitler);
+            if (odemeler) setOdemeList(odemeler);
+            if (yemekCekiler) setYemekCekiList(yemekCekiler);
+            if (depoKiraData) setDepoKiraRapor(depoKiraData);
+            if (calisanTalepler) setCalisanTalepList(calisanTalepler);
+
+            try {
+                localStorage.setItem(STORAGE_KEYS.DATA_STATE, JSON.stringify(newDataToCache));
+            } catch (error) {
+                console.warn("Could not cache app data, might be due to storage quota:", error);
+            }
+        };
+
         loadAndFetchData();
-    }, [loadAndFetchData]);
+    }, []);
 
   const fetchDegerler = useCallback(async () => {
     const degerler = await fetchData<Deger[]>(`${API_BASE_URL}/degerler/`);
@@ -1098,7 +1098,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       }
     }
     return { success: false, message: "Avans isteği silinirken bir hata oluştu." };
-}, [avansIstekList]);
+  }, [avansIstekList]);
 
   const getAvansIstek = useCallback((tcNo: string, donem: number, subeId: number): AvansIstek | undefined => {
     // This function is currently used for local lookup. If direct API call is needed, it should be async.
@@ -1197,19 +1197,6 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
         return { success: false, message: "Çalışan talebi güncellenirken bir hata oluştu." };
     }, [setCalisanTalepList]);
-
-  const addCalisanTalep = useCallback(async (talep: Partial<CalisanTalep>) => {
-    const newTalep = await fetchData<CalisanTalep>(`${API_BASE_URL}/calisan-talepler/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(talep),
-    });
-    if (newTalep) {
-      setCalisanTalepList(prev => [...prev, newTalep]);
-      return { success: true, data: newTalep };
-    }
-    return { success: false, message: "Çalışan talebi eklenirken bir hata oluştu." };
-  }, [setCalisanTalepList]);
   const addUstKategori = useCallback(async (data: UstKategoriFormData) => {
     const newUstKategori = await fetchData<UstKategori>(`${API_BASE_URL}/ust-kategoriler/`, {
       method: 'POST',
@@ -1526,9 +1513,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const dataContextValue: DataContextType = useMemo(() => ({
-    reloadData: loadAndFetchData,
     calisanTalepList,
-    addCalisanTalep,
     updateCalisanTalep,
     yemekCekiList,
     addYemekCeki,
@@ -1623,10 +1608,11 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     uploadOdeme,
     uploadPosHareketleri,
     uploadTabakSayisi,
-  }), [depoKiraRapor, loadAndFetchData, yemekCekiList, addYemekCeki, updateYemekCeki, deleteYemekCeki, subeList, eFaturaList, b2bEkstreList, digerHarcamaList, stokList, stokFiyatList, stokSayimList, calisanList, puantajSecimiList, puantajList, gelirList, gelirEkstraList, avansIstekList, ustKategoriList, kategoriList, degerList, userList, rolesList, permissionsList, userRolesList, rolePermissionsList, eFaturaReferansList, odemeReferansList, nakitList, odemeList, addSube, updateSube, addEFaturas, updateEFatura, addB2BEkstreler, updateB2BEkstre, addDigerHarcama, updateDigerHarcama, deleteDigerHarcama, addStok, updateStok, addStokFiyat, updateStokFiyat, addOrUpdateStokSayim, addCalisan, updateCalisan, addUser, updateUser, addPuantajSecimi, updatePuantajSecimi, addOrUpdatePuantajEntry, getPuantajEntry, deletePuantajEntry, addOrUpdateGelirEntry, getGelirEntry, addOrUpdateGelirEkstraEntry, getGelirEkstraEntry, addOrUpdateAvansIstek, deleteAvansIstek, getAvansIstek, addUstKategori, updateUstKategori, addKategori, updateKategori, fetchDegerler, addDeger, updateDeger, addRole, updateRole, deleteRole, addPermission, updatePermission, deletePermission, addUserRole, updateUserRole, deleteUserRole, addRolePermission, updateRolePermission, deleteRolePermission, addEFaturaReferans, updateEFaturaReferans, deleteEFaturaReferans, addOdemeReferans, updateOdemeReferans, deleteOdemeReferans, addNakit, updateNakit, deleteNakit, updateOdeme,     uploadOdeme, uploadPosHareketleri, uploadTabakSayisi, calisanTalepList, updateCalisanTalep]);
+  }), [depoKiraRapor, yemekCekiList, addYemekCeki, updateYemekCeki, deleteYemekCeki, subeList, eFaturaList, b2bEkstreList, digerHarcamaList, stokList, stokFiyatList, stokSayimList, calisanList, puantajSecimiList, puantajList, gelirList, gelirEkstraList, avansIstekList, ustKategoriList, kategoriList, degerList, userList, rolesList, permissionsList, userRolesList, rolePermissionsList, eFaturaReferansList, odemeReferansList, nakitList, odemeList, addSube, updateSube, addEFaturas, updateEFatura, addB2BEkstreler, updateB2BEkstre, addDigerHarcama, updateDigerHarcama, deleteDigerHarcama, addStok, updateStok, addStokFiyat, updateStokFiyat, addOrUpdateStokSayim, addCalisan, updateCalisan, addUser, updateUser, addPuantajSecimi, updatePuantajSecimi, addOrUpdatePuantajEntry, getPuantajEntry, deletePuantajEntry, addOrUpdateGelirEntry, getGelirEntry, addOrUpdateGelirEkstraEntry, getGelirEkstraEntry, addOrUpdateAvansIstek, deleteAvansIstek, getAvansIstek, addUstKategori, updateUstKategori, addKategori, updateKategori, fetchDegerler, addDeger, updateDeger, addRole, updateRole, deleteRole, addPermission, updatePermission, deletePermission, addUserRole, updateUserRole, deleteUserRole, addRolePermission, updateRolePermission, deleteRolePermission, addEFaturaReferans, updateEFaturaReferans, deleteEFaturaReferans, addOdemeReferans, updateOdemeReferans, deleteOdemeReferans, addNakit, updateNakit, deleteNakit, updateOdeme,     uploadOdeme, uploadPosHareketleri, uploadTabakSayisi, calisanTalepList, updateCalisanTalep]);
 
   return <DataContext.Provider value={dataContextValue}>{children}</DataContext.Provider>;
 };
+
 
 // Enhanced App component with toast notifications for login
 const AppWithToast: React.FC = () => {

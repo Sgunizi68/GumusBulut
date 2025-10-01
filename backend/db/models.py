@@ -418,7 +418,7 @@ class CalisanTalep(Base):
     Dogum_Tarihi = Column(Date, nullable=True)
     Medeni_Hali = Column(Enum('Bekar', 'Evli'), default='Bekar')
     Cep_No = Column(String(16), nullable=True)
-    Adres_Bilgileri = Column(String(255), nullable=True)
+    Adres_Bilgileri = Column(String(50), nullable=True)
     Gelir_Vergisi_Matrahi = Column(DECIMAL(15, 2), nullable=True)
     SSK_Cikis_Nedeni = Column(String(50), nullable=True)
     Net_Maas = Column(DECIMAL(10, 2), nullable=True)

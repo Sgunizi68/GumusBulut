@@ -420,254 +420,210 @@ const CalisanTalepSistemi: React.FC = () => {
             
             <form onSubmit={handleSubmit} className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {(modalType === 'edit' && selectedTalep?.Talep === 'İşten Çıkış') ? (
-                  <>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">TC No</label>
-                      <input type="text" disabled value={formData.TC_No} className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2"/>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Adı</label>
-                      <input type="text" disabled value={formData.Adi} className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2"/>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Soyadı</label>
-                      <input type="text" disabled value={formData.Soyadi} className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2"/>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Sigorta Çıkış Tarihi</label>
-                      <input
-                        type="date"
-                        value={formData.Sigorta_Cikis || ''}
-                        onChange={(e) => setFormData({...formData, Sigorta_Cikis: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">SSK Çıkış Nedeni</label>
-                      <select
-                        value={formData.SSK_Cikis_Nedeni || ''}
-                        onChange={(e) => setFormData({...formData, SSK_Cikis_Nedeni: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      >
-                        <option value="">Neden seçin...</option>
-                        <option value="İstifa">İstifa</option>
-                        <option value="Fesih">Fesih</option>
-                        <option value="Emeklilik">Emeklilik</option>
-                        <option value="Ölüm">Ölüm</option>
-                        <option value="İş Sözleşmesi Sona Erme">İş Sözleşmesi Sona Erme</option>
-                        <option value="Diğer">Diğer</option>
-                      </select>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">TC No *</label>
-                      <input
-                        type="text"
-                        required
-                        maxLength={11}
-                        value={formData.TC_No}
-                        onChange={(e) => setFormData({...formData, TC_No: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Ad *</label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.Adi}
-                        onChange={(e) => setFormData({...formData, Adi: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Soyad *</label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.Soyadi}
-                        onChange={(e) => setFormData({...formData, Soyadi: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">İlk Soyad *</label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.Ilk_Soyadi}
-                        onChange={(e) => setFormData({...formData, Ilk_Soyadi: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Cinsiyet</label>
-                      <select
-                        value={formData.Cinsiyet}
-                        onChange={(e) => setFormData({...formData, Cinsiyet: e.target.value as 'Erkek' | 'Kadın'})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      >
-                        <option value="Erkek">Erkek</option>
-                        <option value="Kadın">Kadın</option>
-                      </select>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Medeni Hal</label>
-                      <select
-                        value={formData.Medeni_Hali}
-                        onChange={(e) => setFormData({...formData, Medeni_Hali: e.target.value as 'Bekar' | 'Evli'})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      >
-                        <option value="Bekar">Bekar</option>
-                        <option value="Evli">Evli</option>
-                      </select>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Doğum Tarihi</label>
-                      <input
-                        type="date"
-                        value={formData.Dogum_Tarihi}
-                        onChange={(e) => setFormData({...formData, Dogum_Tarihi: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Doğum Yeri</label>
-                      <input
-                        type="text"
-                        value={formData.Dogum_Yeri}
-                        onChange={(e) => setFormData({...formData, Dogum_Yeri: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Anne Adı</label>
-                      <input
-                        type="text"
-                        value={formData.Anne_Adi}
-                        onChange={(e) => setFormData({...formData, Anne_Adi: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Baba Adı</label>
-                      <input
-                        type="text"
-                        value={formData.Baba_Adi}
-                        onChange={(e) => setFormData({...formData, Baba_Adi: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Cep Telefonu</label>
-                      <input
-                        type="tel"
-                        value={formData.Cep_No}
-                        onChange={(e) => setFormData({...formData, Cep_No: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Görev</label>
-                      <input
-                        type="text"
-                        value={formData.Gorevi}
-                        onChange={(e) => setFormData({...formData, Gorevi: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Öğrenim Durumu</label>
-                      <input
-                        type="text"
-                        value={formData.Ogrenim_Durumu}
-                        onChange={(e) => setFormData({...formData, Ogrenim_Durumu: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">IBAN</label>
-                      <input
-                        type="text"
-                        maxLength={26}
-                        value={formData.IBAN}
-                        onChange={(e) => setFormData({...formData, IBAN: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Hesap No</label>
-                      <input
-                        type="text"
-                        value={formData.Hesap_No}
-                        onChange={(e) => setFormData({...formData, Hesap_No: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Net Maaş</label>
-                      <input
-                        type="number"
-                        step="0.01"
-                        value={formData.Net_Maas}
-                        onChange={(e) => setFormData({...formData, Net_Maas: parseFloat(e.target.value)})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Sigorta Giriş Tarihi</label>
-                      <input
-                        type="date"
-                        value={formData.Sigorta_Giris}
-                        onChange={(e) => setFormData({...formData, Sigorta_Giris: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Adres Bilgileri *</label>
-                      <textarea
-                        required
-                        rows={3}
-                        value={formData.Adres_Bilgileri}
-                        onChange={(e) => setFormData({...formData, Adres_Bilgileri: e.target.value})}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Dosya Ekle</label>
-                      <input
-                        type="file"
-                        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                        onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                      {selectedFile && (
-                        <p className="mt-1 text-sm text-gray-600">Seçilen dosya: {selectedFile.name}</p>
-                      )}
-                    </div>
-                  </>
-                )}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">TC No *</label>
+                  <input
+                    type="text"
+                    required
+                    maxLength={11}
+                    value={formData.TC_No}
+                    onChange={(e) => setFormData({...formData, TC_No: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Ad *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.Adi}
+                    onChange={(e) => setFormData({...formData, Adi: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Soyad *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.Soyadi}
+                    onChange={(e) => setFormData({...formData, Soyadi: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">İlk Soyad *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.Ilk_Soyadi}
+                    onChange={(e) => setFormData({...formData, Ilk_Soyadi: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Cinsiyet</label>
+                  <select
+                    value={formData.Cinsiyet}
+                    onChange={(e) => setFormData({...formData, Cinsiyet: e.target.value as 'Erkek' | 'Kadın'})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option value="Erkek">Erkek</option>
+                    <option value="Kadın">Kadın</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Medeni Hal</label>
+                  <select
+                    value={formData.Medeni_Hali}
+                    onChange={(e) => setFormData({...formData, Medeni_Hali: e.target.value as 'Bekar' | 'Evli'})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option value="Bekar">Bekar</option>
+                    <option value="Evli">Evli</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Doğum Tarihi</label>
+                  <input
+                    type="date"
+                    value={formData.Dogum_Tarihi}
+                    onChange={(e) => setFormData({...formData, Dogum_Tarihi: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Doğum Yeri</label>
+                  <input
+                    type="text"
+                    value={formData.Dogum_Yeri}
+                    onChange={(e) => setFormData({...formData, Dogum_Yeri: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Anne Adı</label>
+                  <input
+                    type="text"
+                    value={formData.Anne_Adi}
+                    onChange={(e) => setFormData({...formData, Anne_Adi: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Baba Adı</label>
+                  <input
+                    type="text"
+                    value={formData.Baba_Adi}
+                    onChange={(e) => setFormData({...formData, Baba_Adi: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Cep Telefonu</label>
+                  <input
+                    type="tel"
+                    value={formData.Cep_No}
+                    onChange={(e) => setFormData({...formData, Cep_No: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Görev</label>
+                  <input
+                    type="text"
+                    value={formData.Gorevi}
+                    onChange={(e) => setFormData({...formData, Gorevi: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Öğrenim Durumu</label>
+                  <input
+                    type="text"
+                    value={formData.Ogrenim_Durumu}
+                    onChange={(e) => setFormData({...formData, Ogrenim_Durumu: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">IBAN</label>
+                  <input
+                    type="text"
+                    maxLength={26}
+                    value={formData.IBAN}
+                    onChange={(e) => setFormData({...formData, IBAN: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Hesap No</label>
+                  <input
+                    type="text"
+                    value={formData.Hesap_No}
+                    onChange={(e) => setFormData({...formData, Hesap_No: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Net Maaş</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={formData.Net_Maas}
+                    onChange={(e) => setFormData({...formData, Net_Maas: parseFloat(e.target.value)})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Sigorta Giriş Tarihi</label>
+                  <input
+                    type="date"
+                    value={formData.Sigorta_Giris}
+                    onChange={(e) => setFormData({...formData, Sigorta_Giris: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Adres Bilgileri *</label>
+                  <textarea
+                    required
+                    rows={3}
+                    value={formData.Adres_Bilgileri}
+                    onChange={(e) => setFormData({...formData, Adres_Bilgileri: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Dosya Ekle</label>
+                  <input
+                    type="file"
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                    onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {selectedFile && (
+                    <p className="mt-1 text-sm text-gray-600">Seçilen dosya: {selectedFile.name}</p>
+                  )}
+                </div>
               </div>
               
               <div className="flex justify-end gap-3 mt-6">
