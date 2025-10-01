@@ -405,24 +405,28 @@ const CalisanTalepSistemi: React.FC = () => {
                       <td className="py-3 px-4">
                         <div className="flex gap-2">
                           {!talep.Is_Onay_Tarih && !talep.SSK_Onay_Tarih && (
-                            <button
-                              onClick={() => handleEdit(talep)}
-                              className="text-blue-600 hover:text-blue-800 p-1"
-                              title="Düzenle"
-                            >
-                              <Edit className="w-4 h-4" />
-                            </button>
+                            <>
+                              <button
+                                onClick={() => handleEdit(talep)}
+                                className="text-blue-600 hover:text-blue-800 p-1"
+                                title="Düzenle"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              {isCurrentUserAdmin && (
+                                <button
+                                  onClick={() => handleDelete(talep.Calisan_Talep_ID)}
+                                  className="text-red-600 hover:text-red-800 p-1"
+                                  title="Sil"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              )}
+                            </>
                           )}
                           
                           {talep.Talep === 'İşe Giriş' && !talep.Is_Onay_Tarih && (isCurrentUserAdmin || hasPermission(CALISAN_TALEP_ISE_GIRIS_ONAYI_YETKI_ADI)) && (
                             <>
-                              <button
-                                onClick={() => handleDelete(talep.Calisan_Talep_ID)}
-                                className="text-red-600 hover:text-red-800 p-1"
-                                title="Sil"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
                               <button
                                 onClick={() => handleHRApproval(talep.Calisan_Talep_ID)}
                                 className="text-green-600 hover:text-green-800 p-1"
