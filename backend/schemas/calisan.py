@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from datetime import date, datetime
+from decimal import Decimal
 
 class CalisanBase(BaseModel):
     TC_No: str
@@ -7,7 +8,7 @@ class CalisanBase(BaseModel):
     Soyadi: str
     Hesap_No: str | None = None
     IBAN: str | None = None
-    Net_Maas: float | None = None
+    Net_Maas: Decimal | None = None
     Sigorta_Giris: date | None = None
     Sigorta_Cikis: date | None = None
     Aktif_Pasif: bool = True
@@ -20,7 +21,7 @@ class CalisanUpdate(BaseModel):
     Soyadi: str | None = None
     Hesap_No: str | None = None
     IBAN: str | None = None
-    Net_Maas: float | None = None
+    Net_Maas: Decimal | None = None
     Sigorta_Giris: date | None = None
     Sigorta_Cikis: date | None = None
     Aktif_Pasif: bool | None = None

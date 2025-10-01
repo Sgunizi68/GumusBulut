@@ -33,10 +33,10 @@ class CalisanTalepBase(BaseModel):
     Imaj_Adi: Optional[str] = None
 
 class CalisanTalepCreate(CalisanTalepBase):
-    pass
+    Imaj: Optional[str] = None
 
 class CalisanTalepUpdate(CalisanTalepBase):
-    Imaj: Optional[bytes] = None
+    Imaj: Optional[str] = None
 
 class CalisanTalep(CalisanTalepBase):
     Calisan_Talep_ID: int
@@ -44,4 +44,4 @@ class CalisanTalep(CalisanTalepBase):
     Imaj: Optional[str] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True

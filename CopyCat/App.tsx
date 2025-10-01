@@ -1183,14 +1183,10 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     return { success: false, message: "Ödeme referansı silinirken bir hata oluştu." };
   }, []);
 
-  const updateCalisanTalep = useCallback(async (talepId: number, data: Partial<CalisanTalep> | FormData) => {
-    const isFormData = data instanceof FormData;
-    const body = isFormData ? data : JSON.stringify(data);
-
+  const updateCalisanTalep = useCallback(async (talepId: number, data: Partial<CalisanTalep>) => {
     const updatedTalep = await fetchData<CalisanTalep>(`${API_BASE_URL}/calisan-talepler/${talepId}`, {
       method: 'PUT',
-      body: body,
-      headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
     });
 
     if (updatedTalep) {
@@ -1201,8 +1197,19 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
     return { success: false, message: "Çalışan talebi güncellenirken bir hata oluştu." };
   }, [setCalisanTalepList]);
-  const addUstKategori = useCallback(async (data: UstKategoriFormData) => {
-    const newUstKategori = await fetchData<UstKategori>(`${API_BASE_URL}/ust-kategoriler/`, {
+
+  const addCalisanTalep = useCallback(async (data: Partial<CalisanTalep>) => {
+    const newTalep = await fetchData<CalisanTalep>(`${API_BASE_URL}/calisan-talepler/`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+
+    if (newTalep) {
+      setCalisanTalepList(prev => [...prev, newTalep]);
+      return { success: true, data: newTalep };
+    }
+    return { success: false, message: "Çalışan talebi oluşturulurken bir hata oluştu." };
+  }, [setCalisanTalepList]);      const addUstKategori = useCallback(async (data: UstKategoriFormData) => {    const newUstKategori = await fetchData<UstKategori>(`${API_BASE_URL}/ust-kategoriler/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -1518,6 +1525,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const dataContextValue: DataContextType = useMemo(() => ({
     calisanTalepList,
+    addCalisanTalep,
     updateCalisanTalep,
     yemekCekiList,
     addYemekCeki,

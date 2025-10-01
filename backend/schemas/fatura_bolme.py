@@ -25,4 +25,4 @@ class FaturaBolmeBase(BaseModel):
 
 class FaturaBolme(FaturaBolmeBase):
     class Config:
-        orm_mode = True
+        from_attributes = True

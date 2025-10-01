@@ -766,15 +766,31 @@ def get_calisan_talep_by_tc_no(db: Session, tc_no: str):
 def get_calisan_talepler(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.CalisanTalep).offset(skip).limit(limit).all()
 
+def create_calisan_talep(db: Session, talep: calisan_talep.CalisanTalepCreate):
+    talep_data = talep.dict()
+    if talep_data.get("Imaj"):
+        try:
+            talep_data["Imaj"] = base64.b64decode(talep_data["Imaj"])
+        except Exception:
+            talep_data["Imaj"] = None
+    
+    db_talep = models.CalisanTalep(**talep_data)
+    db.add(db_talep)
+    db.commit()
+    db.refresh(db_talep)
+    return db_talep
+
 def update_calisan_talep(db: Session, talep_id: int, talep: calisan_talep.CalisanTalepUpdate):
     db_talep = db.query(models.CalisanTalep).filter(models.CalisanTalep.Calisan_Talep_ID == talep_id).first()
     if db_talep:
         update_data = talep.dict(exclude_unset=True)
         
-        if 'Imaj' in update_data and update_data['Imaj'] is not None:
-            db_talep.Imaj = update_data['Imaj']
-            del update_data['Imaj']
-
+        if 'Imaj' in update_data and update_data['Imaj']:
+            try:
+                update_data['Imaj'] = base64.b64decode(update_data['Imaj'])
+            except Exception:
+                update_data['Imaj'] = None
+        
         for key, value in update_data.items():
             setattr(db_talep, key, value)
         db.commit()

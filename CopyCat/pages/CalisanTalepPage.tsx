@@ -67,7 +67,7 @@ const getMimeType = (fileName: string = ''): string => {
 
 const CalisanTalepSistemi: React.FC = () => {
   const { hasPermission, currentUser } = useAppContext();
-  const { calisanTalepList, updateCalisanTalep, calisanList } = useDataContext();
+  const { calisanTalepList, updateCalisanTalep, addCalisanTalep, calisanList } = useDataContext();
   const isCurrentUserAdmin = currentUser?.Kullanici_Adi.toLowerCase() === 'sgunizi';
   const [talepler, setTalepler] = useState<CalisanTalep[]>([]);
   const [activeEmployees, setActiveEmployees] = useState<ActiveEmployee[]>([]);
@@ -102,7 +102,7 @@ const CalisanTalepSistemi: React.FC = () => {
     SSK_Cikis_Nedeni: '',
     Net_Maas: 0,
     Sigorta_Giris: '',
-    Sigorta_Cikis: '',
+    Sigorta_Cikis: '2099-01-01',
     Talep: 'İşe Giriş',
     Sube_ID: 1
   });
@@ -162,7 +162,7 @@ const CalisanTalepSistemi: React.FC = () => {
       SSK_Cikis_Nedeni: '',
       Net_Maas: 0,
       Sigorta_Giris: '',
-      Sigorta_Cikis: '',
+      Sigorta_Cikis: '2099-01-01',
       Talep: 'İşe Giriş',
       Sube_ID: 1,
       status: 'pending'
@@ -173,53 +173,24 @@ const CalisanTalepSistemi: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // If we are in edit mode and a new file is selected, use FormData
-    if (modalType === 'edit' && selectedFile) {
-      const formDataToSend = new FormData();
-      
-      // Append all form fields from the `formData` state
-      for (const key in formData) {
-        const value = formData[key as keyof typeof formData];
-        // Don't append the old base64 'Imaj' string or its name
-        if (key === 'Imaj' || key === 'Imaj_Adi') continue;
-        if (value !== null && value !== undefined) {
-          formDataToSend.append(key, String(value));
-        }
-      }
+    let talepData: Partial<CalisanTalep> = { ...formData };
 
-      // Append the new file
-      formDataToSend.append('Imaj', selectedFile, selectedFile.name);
-      
+    if (selectedFile) {
+      const fileAsBase64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve((reader.result as string).split(',')[1]);
+        reader.onerror = (error) => reject(error);
+        reader.readAsDataURL(selectedFile);
+      });
+      talepData.Imaj = fileAsBase64;
+      talepData.Imaj_Adi = selectedFile.name;
+    }
+
+    if (modalType === 'add') {
+      await addCalisanTalep(talepData);
+    } else { // 'edit'
       if (selectedTalep) {
-        await updateCalisanTalep(selectedTalep.Calisan_Talep_ID, formDataToSend);
-      }
-    } else {
-      // Original logic for add mode or edit mode without a new file
-      let talepData = { ...formData };
-
-      if (selectedFile) { // This is for 'add' mode with a file
-        const fileAsBase64 = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve((reader.result as string).split(',')[1]);
-          reader.onerror = (error) => reject(error);
-          reader.readAsDataURL(selectedFile);
-        });
-        talepData.Imaj = fileAsBase64;
-        talepData.Imaj_Adi = selectedFile.name;
-      }
-
-      if (modalType === 'add') {
-        const newTalep: CalisanTalep = {
-          ...talepData,
-          Calisan_Talep_ID: talepler.length + 1, // This might need to be handled by the backend
-          Kayit_Tarih: new Date().toISOString(),
-        } as CalisanTalep;
-        // This should be a call to a create function, e.g., createCalisanTalep(newTalep)
-        setTalepler([...talepler, newTalep]); 
-      } else { // 'edit' without new file
-        if (selectedTalep) {
-          await updateCalisanTalep(selectedTalep.Calisan_Talep_ID, talepData);
-        }
+        await updateCalisanTalep(selectedTalep.Calisan_Talep_ID, talepData);
       }
     }
 
@@ -228,47 +199,43 @@ const CalisanTalepSistemi: React.FC = () => {
     setSelectedTalep(null);
   };
 
-  const handleExitSubmit = (e: React.FormEvent) => {
+  const handleExitSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     const employee = activeEmployees.find(emp => emp.id === exitFormData.employeeId);
     if (!employee) return;
 
     const fullEmployeeData = calisanList.find(c => c.TC_No === employee.TC_No);
-    if (!fullEmployeeData) return; // Should not happen if activeEmployees is derived from calisanList
+    if (!fullEmployeeData) return;
 
-    const newExitRequest: CalisanTalep = {
-      Calisan_Talep_ID: 0, // Will be set by backend
+    const newExitRequest: Partial<CalisanTalep> = {
       TC_No: fullEmployeeData.TC_No,
       Adi: fullEmployeeData.Adi,
       Soyadi: fullEmployeeData.Soyadi,
-      Ilk_Soyadi: fullEmployeeData.Ilk_Soyadi || '',
-      Hesap_No: fullEmployeeData.Hesap_No || '',
-      IBAN: fullEmployeeData.IBAN || '',
-      Ogrenim_Durumu: fullEmployeeData.Ogrenim_Durumu || '',
-      Cinsiyet: fullEmployeeData.Cinsiyet || 'Erkek',
-      Gorevi: fullEmployeeData.Gorevi || '',
-      Anne_Adi: fullEmployeeData.Anne_Adi || '',
-      Baba_Adi: fullEmployeeData.Baba_Adi || '',
-      Dogum_Yeri: fullEmployeeData.Dogum_Yeri || '',
-      Dogum_Tarihi: fullEmployeeData.Dogum_Tarihi || '',
-      Medeni_Hali: fullEmployeeData.Medeni_Hali || 'Bekar',
-      Cep_No: fullEmployeeData.Cep_No || '',
-      Adres_Bilgileri: fullEmployeeData.Adres_Bilgileri || '',
-      Gelir_Vergisi_Matrahi: fullEmployeeData.Gelir_Vergisi_Matrahi || 0,
+      Sube_ID: fullEmployeeData.Sube_ID,
+      Ilk_Soyadi: '',
+      Cinsiyet: 'Erkek',
+      Medeni_Hali: 'Bekar',
+      Dogum_Tarihi: todayISO,
       SSK_Cikis_Nedeni: exitFormData.exitReason,
-      Net_Maas: fullEmployeeData.Net_Maas || 0,
-      Sigorta_Giris: fullEmployeeData.Sigorta_Giris || '',
       Sigorta_Cikis: exitFormData.exitDate,
       Talep: 'İşten Çıkış',
-      Sube_ID: fullEmployeeData.Sube_ID,
-      Imaj_Adi: '', // Not applicable for exit request
-      Kayit_Tarih: new Date().toISOString(),
-      Is_Onay_Tarih: null,
-      SSK_Onay_Tarih: null,
+      Hesap_No: fullEmployeeData.Hesap_No || '',
+      IBAN: fullEmployeeData.IBAN || '',
+      Ogrenim_Durumu: '',
+      Gorevi: fullEmployeeData.Gorevi || '',
+      Anne_Adi: '',
+      Baba_Adi: '',
+      Dogum_Yeri: '',
+      Cep_No: '',
+      Adres_Bilgileri: '',
+      Gelir_Vergisi_Matrahi: 0,
+      Net_Maas: fullEmployeeData.Net_Maas || 0,
+      Sigorta_Giris: fullEmployeeData.Sigorta_Giris || '',
     };
 
-    setTalepler([...talepler, newExitRequest]);
+    await addCalisanTalep(newExitRequest);
+
     setShowExitModal(false);
     setExitFormData({ employeeId: '', exitDate: todayISO, exitReason: '' });
   };
@@ -504,7 +471,7 @@ const CalisanTalepSistemi: React.FC = () => {
                     type="text"
                     required
                     maxLength={11}
-                    value={formData.TC_No}
+                    value={formData.TC_No || ''}
                     onChange={(e) => setFormData({...formData, TC_No: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -515,7 +482,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   <input
                     type="text"
                     required
-                    value={formData.Adi}
+                    value={formData.Adi || ''}
                     onChange={(e) => setFormData({...formData, Adi: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -526,7 +493,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   <input
                     type="text"
                     required
-                    value={formData.Soyadi}
+                    value={formData.Soyadi || ''}
                     onChange={(e) => setFormData({...formData, Soyadi: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -536,7 +503,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">İlk Soyad</label>
                   <input
                     type="text"
-                    value={formData.Ilk_Soyadi}
+                    value={formData.Ilk_Soyadi || ''}
                     onChange={(e) => setFormData({...formData, Ilk_Soyadi: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -570,7 +537,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Doğum Tarihi</label>
                   <input
                     type="date"
-                    value={formData.Dogum_Tarihi}
+                    value={formData.Dogum_Tarihi || ''}
                     onChange={(e) => setFormData({...formData, Dogum_Tarihi: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -580,7 +547,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Doğum Yeri</label>
                   <input
                     type="text"
-                    value={formData.Dogum_Yeri}
+                    value={formData.Dogum_Yeri || ''}
                     onChange={(e) => setFormData({...formData, Dogum_Yeri: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -590,7 +557,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Anne Adı</label>
                   <input
                     type="text"
-                    value={formData.Anne_Adi}
+                    value={formData.Anne_Adi || ''}
                     onChange={(e) => setFormData({...formData, Anne_Adi: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -600,7 +567,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Baba Adı</label>
                   <input
                     type="text"
-                    value={formData.Baba_Adi}
+                    value={formData.Baba_Adi || ''}
                     onChange={(e) => setFormData({...formData, Baba_Adi: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -610,7 +577,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Cep Telefonu</label>
                   <input
                     type="tel"
-                    value={formData.Cep_No}
+                    value={formData.Cep_No || ''}
                     onChange={(e) => setFormData({...formData, Cep_No: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -620,7 +587,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Görev</label>
                   <input
                     type="text"
-                    value={formData.Gorevi}
+                    value={formData.Gorevi || ''}
                     onChange={(e) => setFormData({...formData, Gorevi: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -630,7 +597,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Öğrenim Durumu</label>
                   <input
                     type="text"
-                    value={formData.Ogrenim_Durumu}
+                    value={formData.Ogrenim_Durumu || ''}
                     onChange={(e) => setFormData({...formData, Ogrenim_Durumu: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -641,7 +608,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   <input
                     type="text"
                     maxLength={26}
-                    value={formData.IBAN}
+                    value={formData.IBAN || ''}
                     onChange={(e) => setFormData({...formData, IBAN: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -651,7 +618,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Hesap No</label>
                   <input
                     type="text"
-                    value={formData.Hesap_No}
+                    value={formData.Hesap_No || ''}
                     onChange={(e) => setFormData({...formData, Hesap_No: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -663,7 +630,7 @@ const CalisanTalepSistemi: React.FC = () => {
                     type="number"
                     step="0.01"
                     required
-                    value={formData.Net_Maas}
+                    value={formData.Net_Maas || 0}
                     onChange={(e) => setFormData({...formData, Net_Maas: parseFloat(e.target.value)})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -674,7 +641,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   <input
                     type="date"
                     required
-                    value={formData.Sigorta_Giris}
+                    value={formData.Sigorta_Giris || ''}
                     onChange={(e) => setFormData({...formData, Sigorta_Giris: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -685,7 +652,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   <textarea
                     required
                     rows={3}
-                    value={formData.Adres_Bilgileri}
+                    value={formData.Adres_Bilgileri || ''}
                     onChange={(e) => setFormData({...formData, Adres_Bilgileri: e.target.value})}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
