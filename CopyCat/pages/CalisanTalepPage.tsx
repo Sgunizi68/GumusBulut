@@ -67,7 +67,7 @@ const getMimeType = (fileName: string = ''): string => {
 
 const CalisanTalepSistemi: React.FC = () => {
   const { hasPermission, currentUser } = useAppContext();
-  const { calisanTalepList, updateCalisanTalep, addCalisanTalep, calisanList } = useDataContext();
+  const { calisanTalepList, updateCalisanTalep, addCalisanTalep, deleteCalisanTalep, calisanList } = useDataContext();
   const isCurrentUserAdmin = currentUser?.Kullanici_Adi.toLowerCase() === 'sgunizi';
   const [talepler, setTalepler] = useState<CalisanTalep[]>([]);
   const [activeEmployees, setActiveEmployees] = useState<ActiveEmployee[]>([]);
@@ -271,8 +271,10 @@ const CalisanTalepSistemi: React.FC = () => {
     setShowModal(true);
   };
 
-  const handleDelete = (id: number) => {
-    setTalepler(talepler.filter(t => t.Calisan_Talep_ID !== id));
+  const handleDelete = async (id: number) => {
+    if (window.confirm('Bu talebi silmek istediğinizden emin misiniz?')) {
+      await deleteCalisanTalep(id);
+    }
   };
 
   const handleHRApproval = (id: number) => {

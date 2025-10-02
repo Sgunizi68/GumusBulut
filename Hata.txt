@@ -1,20 +1,204 @@
-(index):64 cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
-(anonymous) @ (index):64
-(anonymous) @ (index):64
-client:789 [vite] connecting...
-client:912 [vite] connected.
-react-dom_client.js?v=08fa77a1:17987 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
-client:883 [vite] hot updated: /pages/CalisanTalepPage.tsx
-client:883 [vite] hot updated: /pages/CalisanTalepPage.tsx
-:8000/api/v1/calisan-talepler/:1  Failed to load resource: the server responded with a status of 422 (Unprocessable Content)
-App.tsx:338 Error in fetchData: Object
+[Violation] 'click' handler took 2331ms
+App.tsx:309  DELETE http://localhost:8000/api/v1/calisan-talepler/10 405 (Method Not Allowed)
+fetchData @ App.tsx:309
+(anonymous) @ App.tsx:1215
+handleDelete @ CalisanTalepPage.tsx:276
+onClick @ CalisanTalepPage.tsx:444
+executeDispatch @ react-dom_client.js?v=79ce1e75:11736
+runWithFiberInDEV @ react-dom_client.js?v=79ce1e75:1485
+processDispatchQueue @ react-dom_client.js?v=79ce1e75:11772
+(anonymous) @ react-dom_client.js?v=79ce1e75:12182
+batchedUpdates$1 @ react-dom_client.js?v=79ce1e75:2628
+dispatchEventForPluginEventSystem @ react-dom_client.js?v=79ce1e75:11877
+dispatchEvent @ react-dom_client.js?v=79ce1e75:14792
+dispatchDiscreteEvent @ react-dom_client.js?v=79ce1e75:14773
+<button>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=79ce1e75:250
+(anonymous) @ CalisanTalepPage.tsx:443
+CalisanTalepSistemi @ CalisanTalepPage.tsx:411
+react-stack-bottom-frame @ react-dom_client.js?v=79ce1e75:17424
+renderWithHooksAgain @ react-dom_client.js?v=79ce1e75:4281
+renderWithHooks @ react-dom_client.js?v=79ce1e75:4217
+updateFunctionComponent @ react-dom_client.js?v=79ce1e75:6619
+beginWork @ react-dom_client.js?v=79ce1e75:7654
+runWithFiberInDEV @ react-dom_client.js?v=79ce1e75:1485
+performUnitOfWork @ react-dom_client.js?v=79ce1e75:10868
+workLoopSync @ react-dom_client.js?v=79ce1e75:10728
+renderRootSync @ react-dom_client.js?v=79ce1e75:10711
+performWorkOnRoot @ react-dom_client.js?v=79ce1e75:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=79ce1e75:11623
+performWorkUntilDeadline @ react-dom_client.js?v=79ce1e75:36
+<CalisanTalepSistemi>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=79ce1e75:250
+AppWithToast @ App.tsx:1836
+react-stack-bottom-frame @ react-dom_client.js?v=79ce1e75:17424
+renderWithHooksAgain @ react-dom_client.js?v=79ce1e75:4281
+renderWithHooks @ react-dom_client.js?v=79ce1e75:4217
+updateFunctionComponent @ react-dom_client.js?v=79ce1e75:6619
+beginWork @ react-dom_client.js?v=79ce1e75:7654
+runWithFiberInDEV @ react-dom_client.js?v=79ce1e75:1485
+performUnitOfWork @ react-dom_client.js?v=79ce1e75:10868
+workLoopSync @ react-dom_client.js?v=79ce1e75:10728
+renderRootSync @ react-dom_client.js?v=79ce1e75:10711
+performWorkOnRoot @ react-dom_client.js?v=79ce1e75:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=79ce1e75:11623
+performWorkUntilDeadline @ react-dom_client.js?v=79ce1e75:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=79ce1e75:250
+App @ App.tsx:1856
+react-stack-bottom-frame @ react-dom_client.js?v=79ce1e75:17424
+renderWithHooksAgain @ react-dom_client.js?v=79ce1e75:4281
+renderWithHooks @ react-dom_client.js?v=79ce1e75:4217
+updateFunctionComponent @ react-dom_client.js?v=79ce1e75:6619
+beginWork @ react-dom_client.js?v=79ce1e75:7654
+runWithFiberInDEV @ react-dom_client.js?v=79ce1e75:1485
+performUnitOfWork @ react-dom_client.js?v=79ce1e75:10868
+workLoopSync @ react-dom_client.js?v=79ce1e75:10728
+renderRootSync @ react-dom_client.js?v=79ce1e75:10711
+performWorkOnRoot @ react-dom_client.js?v=79ce1e75:10330
+performSyncWorkOnRoot @ react-dom_client.js?v=79ce1e75:11635
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=79ce1e75:11536
+flushSyncWork$1 @ react-dom_client.js?v=79ce1e75:10567
+scheduleRoot @ react-dom_client.js?v=79ce1e75:360
+(anonymous) @ @react-refresh:208
+performReactRefresh @ @react-refresh:190
+(anonymous) @ @react-refresh:608
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=79ce1e75:250
+(anonymous) @ index.tsx:14
+App.tsx:338 Error in fetchData: {url: 'http://localhost:8000/api/v1/calisan-talepler/10', errorMessage: 'Method Not Allowed', statusCode: undefined, type: 'general', severity: 'medium', …}
 fetchData @ App.tsx:338
-App.tsx:355 General error: body -> Talep: Field required
-body -> TC_No: Field required
-body -> Adi: Field required
-body -> Soyadi: Field required
-body -> Ilk_Soyadi: Field required
-body -> Cinsiyet: Field required
-body -> Medeni_Hali: Field required
-body -> Sube_ID: Field required
+await in fetchData
+(anonymous) @ App.tsx:1215
+handleDelete @ CalisanTalepPage.tsx:276
+onClick @ CalisanTalepPage.tsx:444
+executeDispatch @ react-dom_client.js?v=79ce1e75:11736
+runWithFiberInDEV @ react-dom_client.js?v=79ce1e75:1485
+processDispatchQueue @ react-dom_client.js?v=79ce1e75:11772
+(anonymous) @ react-dom_client.js?v=79ce1e75:12182
+batchedUpdates$1 @ react-dom_client.js?v=79ce1e75:2628
+dispatchEventForPluginEventSystem @ react-dom_client.js?v=79ce1e75:11877
+dispatchEvent @ react-dom_client.js?v=79ce1e75:14792
+dispatchDiscreteEvent @ react-dom_client.js?v=79ce1e75:14773
+<button>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=79ce1e75:250
+(anonymous) @ CalisanTalepPage.tsx:443
+CalisanTalepSistemi @ CalisanTalepPage.tsx:411
+react-stack-bottom-frame @ react-dom_client.js?v=79ce1e75:17424
+renderWithHooksAgain @ react-dom_client.js?v=79ce1e75:4281
+renderWithHooks @ react-dom_client.js?v=79ce1e75:4217
+updateFunctionComponent @ react-dom_client.js?v=79ce1e75:6619
+beginWork @ react-dom_client.js?v=79ce1e75:7654
+runWithFiberInDEV @ react-dom_client.js?v=79ce1e75:1485
+performUnitOfWork @ react-dom_client.js?v=79ce1e75:10868
+workLoopSync @ react-dom_client.js?v=79ce1e75:10728
+renderRootSync @ react-dom_client.js?v=79ce1e75:10711
+performWorkOnRoot @ react-dom_client.js?v=79ce1e75:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=79ce1e75:11623
+performWorkUntilDeadline @ react-dom_client.js?v=79ce1e75:36
+<CalisanTalepSistemi>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=79ce1e75:250
+AppWithToast @ App.tsx:1836
+react-stack-bottom-frame @ react-dom_client.js?v=79ce1e75:17424
+renderWithHooksAgain @ react-dom_client.js?v=79ce1e75:4281
+renderWithHooks @ react-dom_client.js?v=79ce1e75:4217
+updateFunctionComponent @ react-dom_client.js?v=79ce1e75:6619
+beginWork @ react-dom_client.js?v=79ce1e75:7654
+runWithFiberInDEV @ react-dom_client.js?v=79ce1e75:1485
+performUnitOfWork @ react-dom_client.js?v=79ce1e75:10868
+workLoopSync @ react-dom_client.js?v=79ce1e75:10728
+renderRootSync @ react-dom_client.js?v=79ce1e75:10711
+performWorkOnRoot @ react-dom_client.js?v=79ce1e75:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=79ce1e75:11623
+performWorkUntilDeadline @ react-dom_client.js?v=79ce1e75:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=79ce1e75:250
+App @ App.tsx:1856
+react-stack-bottom-frame @ react-dom_client.js?v=79ce1e75:17424
+renderWithHooksAgain @ react-dom_client.js?v=79ce1e75:4281
+renderWithHooks @ react-dom_client.js?v=79ce1e75:4217
+updateFunctionComponent @ react-dom_client.js?v=79ce1e75:6619
+beginWork @ react-dom_client.js?v=79ce1e75:7654
+runWithFiberInDEV @ react-dom_client.js?v=79ce1e75:1485
+performUnitOfWork @ react-dom_client.js?v=79ce1e75:10868
+workLoopSync @ react-dom_client.js?v=79ce1e75:10728
+renderRootSync @ react-dom_client.js?v=79ce1e75:10711
+performWorkOnRoot @ react-dom_client.js?v=79ce1e75:10330
+performSyncWorkOnRoot @ react-dom_client.js?v=79ce1e75:11635
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=79ce1e75:11536
+flushSyncWork$1 @ react-dom_client.js?v=79ce1e75:10567
+scheduleRoot @ react-dom_client.js?v=79ce1e75:360
+(anonymous) @ @react-refresh:208
+performReactRefresh @ @react-refresh:190
+(anonymous) @ @react-refresh:608
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=79ce1e75:250
+(anonymous) @ index.tsx:14
+App.tsx:355 General error: Method Not Allowed
 fetchData @ App.tsx:355
+await in fetchData
+(anonymous) @ App.tsx:1215
+handleDelete @ CalisanTalepPage.tsx:276
+onClick @ CalisanTalepPage.tsx:444
+executeDispatch @ react-dom_client.js?v=79ce1e75:11736
+runWithFiberInDEV @ react-dom_client.js?v=79ce1e75:1485
+processDispatchQueue @ react-dom_client.js?v=79ce1e75:11772
+(anonymous) @ react-dom_client.js?v=79ce1e75:12182
+batchedUpdates$1 @ react-dom_client.js?v=79ce1e75:2628
+dispatchEventForPluginEventSystem @ react-dom_client.js?v=79ce1e75:11877
+dispatchEvent @ react-dom_client.js?v=79ce1e75:14792
+dispatchDiscreteEvent @ react-dom_client.js?v=79ce1e75:14773
+<button>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=79ce1e75:250
+(anonymous) @ CalisanTalepPage.tsx:443
+CalisanTalepSistemi @ CalisanTalepPage.tsx:411
+react-stack-bottom-frame @ react-dom_client.js?v=79ce1e75:17424
+renderWithHooksAgain @ react-dom_client.js?v=79ce1e75:4281
+renderWithHooks @ react-dom_client.js?v=79ce1e75:4217
+updateFunctionComponent @ react-dom_client.js?v=79ce1e75:6619
+beginWork @ react-dom_client.js?v=79ce1e75:7654
+runWithFiberInDEV @ react-dom_client.js?v=79ce1e75:1485
+performUnitOfWork @ react-dom_client.js?v=79ce1e75:10868
+workLoopSync @ react-dom_client.js?v=79ce1e75:10728
+renderRootSync @ react-dom_client.js?v=79ce1e75:10711
+performWorkOnRoot @ react-dom_client.js?v=79ce1e75:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=79ce1e75:11623
+performWorkUntilDeadline @ react-dom_client.js?v=79ce1e75:36
+<CalisanTalepSistemi>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=79ce1e75:250
+AppWithToast @ App.tsx:1836
+react-stack-bottom-frame @ react-dom_client.js?v=79ce1e75:17424
+renderWithHooksAgain @ react-dom_client.js?v=79ce1e75:4281
+renderWithHooks @ react-dom_client.js?v=79ce1e75:4217
+updateFunctionComponent @ react-dom_client.js?v=79ce1e75:6619
+beginWork @ react-dom_client.js?v=79ce1e75:7654
+runWithFiberInDEV @ react-dom_client.js?v=79ce1e75:1485
+performUnitOfWork @ react-dom_client.js?v=79ce1e75:10868
+workLoopSync @ react-dom_client.js?v=79ce1e75:10728
+renderRootSync @ react-dom_client.js?v=79ce1e75:10711
+performWorkOnRoot @ react-dom_client.js?v=79ce1e75:10330
+performWorkOnRootViaSchedulerTask @ react-dom_client.js?v=79ce1e75:11623
+performWorkUntilDeadline @ react-dom_client.js?v=79ce1e75:36
+<AppWithToast>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=79ce1e75:250
+App @ App.tsx:1856
+react-stack-bottom-frame @ react-dom_client.js?v=79ce1e75:17424
+renderWithHooksAgain @ react-dom_client.js?v=79ce1e75:4281
+renderWithHooks @ react-dom_client.js?v=79ce1e75:4217
+updateFunctionComponent @ react-dom_client.js?v=79ce1e75:6619
+beginWork @ react-dom_client.js?v=79ce1e75:7654
+runWithFiberInDEV @ react-dom_client.js?v=79ce1e75:1485
+performUnitOfWork @ react-dom_client.js?v=79ce1e75:10868
+workLoopSync @ react-dom_client.js?v=79ce1e75:10728
+renderRootSync @ react-dom_client.js?v=79ce1e75:10711
+performWorkOnRoot @ react-dom_client.js?v=79ce1e75:10330
+performSyncWorkOnRoot @ react-dom_client.js?v=79ce1e75:11635
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=79ce1e75:11536
+flushSyncWork$1 @ react-dom_client.js?v=79ce1e75:10567
+scheduleRoot @ react-dom_client.js?v=79ce1e75:360
+(anonymous) @ @react-refresh:208
+performReactRefresh @ @react-refresh:190
+(anonymous) @ @react-refresh:608
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=79ce1e75:250
+(anonymous) @ index.tsx:14

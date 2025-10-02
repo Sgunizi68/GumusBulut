@@ -481,6 +481,10 @@ export interface AppContextType {
 }
 
 export interface DataContextType {
+  calisanTalepList: CalisanTalep[];
+  addCalisanTalep: (data: Partial<CalisanTalep>) => Promise<{ success: boolean, data?: CalisanTalep, message?: string }>;
+  updateCalisanTalep: (talepId: number, data: Partial<CalisanTalep>) => Promise<{ success: boolean, data?: CalisanTalep, message?: string }>;
+  deleteCalisanTalep: (talepId: number) => Promise<{ success: boolean, message?: string }>;
   depoKiraRapor: any[];
   yemekCekiList: YemekCeki[];
   addYemekCeki: (formData: FormData) => Promise<{ success: boolean; message?: string }>;

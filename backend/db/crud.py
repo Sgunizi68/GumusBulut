@@ -783,6 +783,8 @@ def create_calisan_talep(db: Session, talep: calisan_talep.CalisanTalepCreate):
 def update_calisan_talep(db: Session, talep_id: int, talep: calisan_talep.CalisanTalepUpdate):
     db_talep = db.query(models.CalisanTalep).filter(models.CalisanTalep.Calisan_Talep_ID == talep_id).first()
     if db_talep:
+        original_ssk_onay = db_talep.SSK_Onay_Tarih
+
         update_data = talep.dict(exclude_unset=True)
         
         if 'Imaj' in update_data and update_data['Imaj']:
@@ -793,9 +795,25 @@ def update_calisan_talep(db: Session, talep_id: int, talep: calisan_talep.Calisa
         
         for key, value in update_data.items():
             setattr(db_talep, key, value)
+
+        if (db_talep.Talep == 'İşten Çıkış' and 
+            db_talep.SSK_Onay_Tarih is not None and 
+            original_ssk_onay is None):
+            calisan_to_update = db.query(models.Calisan).filter(models.Calisan.TC_No == db_talep.TC_No).first()
+            if calisan_to_update:
+                calisan_to_update.Sigorta_Cikis = db_talep.Sigorta_Cikis
+        
         db.commit()
         db.refresh(db_talep)
     return db_talep
+
+def delete_calisan_talep(db: Session, talep_id: int):
+    db_talep = db.query(models.CalisanTalep).filter(models.CalisanTalep.Calisan_Talep_ID == talep_id).first()
+    if db_talep:
+        db.delete(db_talep)
+        db.commit()
+        return True
+    return False
 
 # --- PuantajSecimi CRUD ---
 def get_puantaj_secimi(db: Session, secim_id: int):

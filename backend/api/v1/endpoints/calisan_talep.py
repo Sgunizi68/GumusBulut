@@ -57,3 +57,10 @@ async def update_calisan_talep(
     if db_talep.Imaj:
         db_talep.Imaj = base64.b64encode(db_talep.Imaj).decode('utf-8')
     return db_talep
+
+@router.delete("/calisan-talepler/{talep_id}", status_code=204)
+def delete_calisan_talep(talep_id: int, db: Session = Depends(database.get_db)):
+    success = crud.delete_calisan_talep(db, talep_id=talep_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Calisan Talep not found")
+    return {"ok": True}
