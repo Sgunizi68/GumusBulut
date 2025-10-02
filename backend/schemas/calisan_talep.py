@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from typing import Optional
 from datetime import date, datetime
 
@@ -34,6 +34,12 @@ class CalisanTalepBase(BaseModel):
 
 class CalisanTalepCreate(CalisanTalepBase):
     Imaj: Optional[str] = None
+
+    @validator('Dogum_Tarihi', always=True)
+    def check_dogum_tarihi(cls, v, values):
+        if values.get('Talep') == 'İşe Giriş' and v is None:
+            raise ValueError('Doğum Tarihi, İşe Giriş talepleri için zorunludur.')
+        return v
 
 class CalisanTalepUpdate(CalisanTalepBase):
     Imaj: Optional[str] = None

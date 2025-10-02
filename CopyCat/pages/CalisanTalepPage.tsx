@@ -657,9 +657,10 @@ const CalisanTalepSistemi: React.FC = () => {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Doğum Tarihi</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Doğum Tarihi *</label>
                       <input
                         type="date"
+                        required
                         value={formData.Dogum_Tarihi || ''}
                         onChange={(e) => setFormData({...formData, Dogum_Tarihi: e.target.value})}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
