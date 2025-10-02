@@ -114,6 +114,7 @@ const CalisanTalepSistemi: React.FC = () => {
   });
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [exitSelectedFile, setExitSelectedFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (calisanTalepList) {
@@ -245,10 +246,22 @@ const CalisanTalepSistemi: React.FC = () => {
       Sigorta_Giris: fullEmployeeData.Sigorta_Giris || '',
     };
 
+    if (exitSelectedFile) {
+      const fileAsBase64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve((reader.result as string).split(',')[1]);
+        reader.onerror = (error) => reject(error);
+        reader.readAsDataURL(exitSelectedFile);
+      });
+      newExitRequest.Imaj = fileAsBase64;
+      newExitRequest.Imaj_Adi = exitSelectedFile.name;
+    }
+
     await addCalisanTalep(newExitRequest);
 
     setShowExitModal(false);
     setExitFormData({ employeeId: '', exitDate: todayISO, exitReason: '' });
+    setExitSelectedFile(null);
   };
 
   const handleEdit = (talep: CalisanTalep) => {
@@ -538,6 +551,37 @@ const CalisanTalepSistemi: React.FC = () => {
                             <option value="İş Sözleşmesi Sona Erme">İş Sözleşmesi Sona Erme</option>
                             <option value="Diğer">Diğer</option>
                         </select>
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Dosya Ekle</label>
+                      <input
+                        type="file"
+                        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                        onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      {selectedFile && (
+                        <p className="mt-1 text-sm text-gray-600">Seçilen dosya: {selectedFile.name}</p>
+                      )}
+                      {modalType === 'edit' && formData.Imaj && (() => {
+                        const mimeType = getMimeType(formData.Imaj_Adi);
+                        const isImage = mimeType.startsWith('image/');
+                        return (
+                          <div className="mt-2">
+                            <p className="text-sm font-medium text-gray-700">Mevcut Dosya:</p>
+                            <a href={`data:${mimeType};base64,${formData.Imaj}`} download={formData.Imaj_Adi || 'Mevcut Dosya'} target="_blank" rel="noopener noreferrer">
+                              {isImage ? (
+                                <img src={`data:${mimeType};base64,${formData.Imaj}`} alt="Mevcut Dosya" className="mt-1 max-h-40 rounded-lg" />
+                              ) : (
+                                <div className="mt-1 flex items-center gap-2 text-blue-600 hover:text-blue-800">
+                                  <FileText className="w-6 h-6" />
+                                  <span>{formData.Imaj_Adi || 'Mevcut Dosya'}</span>
+                                </div>
+                              )}
+                            </a>
+                          </div>
+                        );
+                      })()}
                     </div>
                   </>
                 ) : (
@@ -849,6 +893,18 @@ const CalisanTalepSistemi: React.FC = () => {
                     <option value="Diğer">Diğer</option>
                   </select>
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Dosya Ekle</label>
+                  <input
+                    type="file"
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                    onChange={(e) => setExitSelectedFile(e.target.files?.[0] || null)}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {exitSelectedFile && (
+                    <p className="mt-1 text-sm text-gray-600">Seçilen dosya: {exitSelectedFile.name}</p>
+                  )}
+                </div>
               </div>
               
               <div className="flex justify-end gap-3 mt-6">
@@ -857,6 +913,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   onClick={() => {
                     setShowExitModal(false);
                     setExitFormData({ employeeId: '', exitDate: todayISO, exitReason: '' });
+                    setExitSelectedFile(null);
                   }}
                   className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
                 >
