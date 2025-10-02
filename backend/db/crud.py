@@ -796,12 +796,35 @@ def update_calisan_talep(db: Session, talep_id: int, talep: calisan_talep.Calisa
         for key, value in update_data.items():
             setattr(db_talep, key, value)
 
-        if (db_talep.Talep == 'İşten Çıkış' and 
-            db_talep.SSK_Onay_Tarih is not None and 
-            original_ssk_onay is None):
-            calisan_to_update = db.query(models.Calisan).filter(models.Calisan.TC_No == db_talep.TC_No).first()
-            if calisan_to_update:
-                calisan_to_update.Sigorta_Cikis = db_talep.Sigorta_Cikis
+        if db_talep.SSK_Onay_Tarih is not None and original_ssk_onay is None:
+            if db_talep.Talep == 'İşten Çıkış':
+                calisan_to_update = db.query(models.Calisan).filter(models.Calisan.TC_No == db_talep.TC_No).first()
+                if calisan_to_update:
+                    calisan_to_update.Sigorta_Cikis = db_talep.Sigorta_Cikis
+            
+            elif db_talep.Talep == 'İşe Giriş':
+                calisan_to_update = db.query(models.Calisan).filter(models.Calisan.TC_No == db_talep.TC_No).first()
+                if calisan_to_update:
+                    calisan_to_update.Hesap_No = db_talep.Hesap_No
+                    calisan_to_update.IBAN = db_talep.IBAN
+                    calisan_to_update.Net_Maas = db_talep.Net_Maas
+                    calisan_to_update.Sigorta_Giris = db_talep.Sigorta_Giris
+                    calisan_to_update.Sigorta_Cikis = db_talep.Sigorta_Cikis
+                    calisan_to_update.Aktif_Pasif = True
+                else:
+                    new_calisan = models.Calisan(
+                        TC_No=db_talep.TC_No,
+                        Adi=db_talep.Adi,
+                        Soyadi=db_talep.Soyadi,
+                        Hesap_No=db_talep.Hesap_No,
+                        IBAN=db_talep.IBAN,
+                        Net_Maas=db_talep.Net_Maas,
+                        Sigorta_Giris=db_talep.Sigorta_Giris,
+                        Sigorta_Cikis=db_talep.Sigorta_Cikis,
+                        Aktif_Pasif=True,
+                        Sube_ID=db_talep.Sube_ID
+                    )
+                    db.add(new_calisan)
         
         db.commit()
         db.refresh(db_talep)
