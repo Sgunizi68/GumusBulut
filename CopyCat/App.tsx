@@ -393,23 +393,57 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     // Initial data fetching with caching
     useEffect(() => {
-        const loadAndFetchData = async () => {
-            // 1. Load from cache first
+        let lastVisible = document.visibilityState === 'visible' ? Date.now() : 0;
+
+        const loadEssentialData = async () => {
+            // Load from cache
             const cachedData = loadFromLocalStorage<Partial<StoredDataState>>(STORAGE_KEYS.DATA_STATE, {});
             if (cachedData.subeList) setSubeList(cachedData.subeList);
             if (cachedData.ustKategoriList) setUstKategoriList(cachedData.ustKategoriList);
             if (cachedData.kategoriList) setKategoriList(cachedData.kategoriList);
             if (cachedData.rolesList) setRolesList(cachedData.rolesList);
 
-            // 2. Then fetch from API
+            // Fetch essential data
             const [
-                subeler, eFaturalar, b2bEkstreler, digerHarcamalar, stoklar, stokFiyatlar,
-                stokSayimlar, calisanlar, puantajSecimleri, puantajlar, gelirler,
-                gelirEkstralar, avansIstekler, ustKategoriler, kategoriler, degerler,
-                users, roles, permissions, userRoles, rolePermissions, eFaturaReferanslar, odemeReferanslar, nakitler, odemeler, yemekCekiler,
-                depoKiraData, calisanTalepler
+                subeler, ustKategoriler, kategoriler, degerler,
+                users, roles, permissions, userRoles, rolePermissions
             ] = await Promise.all([
                 fetchData<Sube[]>(`${API_BASE_URL}/subeler/`),
+                fetchData<UstKategori[]>(`${API_BASE_URL}/ust-kategoriler/`),
+                fetchData<Kategori[]>(`${API_BASE_URL}/kategoriler/`),
+                fetchData<Deger[]>(`${API_BASE_URL}/degerler/`),
+                fetchData<Kullanici[]>(`${API_BASE_URL}/users/`),
+                fetchData<Rol[]>(`${API_BASE_URL}/roles/`),
+                fetchData<Yetki[]>(`${API_BASE_URL}/yetkiler/`),
+                fetchData<KullaniciRol[]>(`${API_BASE_URL}/kullanici-rolleri/`),
+                fetchData<RolYetki[]>(`${API_BASE_URL}/rol-yetkileri/`),
+            ]);
+
+            const newDataToCache: Partial<StoredDataState> = {};
+            if (subeler) { setSubeList(subeler); newDataToCache.subeList = subeler; }
+            if (ustKategoriler) { setUstKategoriList(ustKategoriler); newDataToCache.ustKategoriList = ustKategoriler; }
+            if (kategoriler) { setKategoriList(kategoriler); newDataToCache.kategoriList = kategoriler; }
+            if (roles) { setRolesList(roles); newDataToCache.rolesList = roles; }
+            if (degerler) setDegerList(degerler);
+            if (users) setUserList(users);
+            if (permissions) setPermissionsList(permissions);
+            if (userRoles) setUserRolesList(userRoles);
+            if (rolePermissions) setRolePermissionsList(rolePermissions);
+            
+            try {
+                localStorage.setItem(STORAGE_KEYS.DATA_STATE, JSON.stringify(newDataToCache));
+            } catch (error) {
+                console.warn("Could not cache app data, might be due to storage quota:", error);
+            }
+        };
+
+        const loadNonEssentialData = async () => {
+            const [
+                eFaturalar, b2bEkstreler, digerHarcamalar, stoklar, stokFiyatlar,
+                stokSayimlar, calisanlar, puantajSecimleri, puantajlar, gelirler,
+                gelirEkstralar, avansIstekler, eFaturaReferanslar, odemeReferanslar, nakitler, odemeler, yemekCekiler,
+                depoKiraData, calisanTalepler
+            ] = await Promise.all([
                 fetchData<EFatura[]>(`${API_BASE_URL}/e-faturalar/`),
                 fetchData<B2BEkstre[]>(`${API_BASE_URL}/b2b-ekstreler/`),
                 fetchData<DigerHarcama[]>(`${API_BASE_URL}/diger-harcamalar/`),
@@ -422,14 +456,6 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 fetchData<Gelir[]>(`${API_BASE_URL}/gelirler/`),
                 fetchData<GelirEkstra[]>(`${API_BASE_URL}/gelir-ekstra/`),
                 fetchData<AvansIstek[]>(`${API_BASE_URL}/avans-istekler/`),
-                fetchData<UstKategori[]>(`${API_BASE_URL}/ust-kategoriler/`),
-                fetchData<Kategori[]>(`${API_BASE_URL}/kategoriler/`),
-                fetchData<Deger[]>(`${API_BASE_URL}/degerler/`),
-                fetchData<Kullanici[]>(`${API_BASE_URL}/users/`),
-                fetchData<Rol[]>(`${API_BASE_URL}/roles/`),
-                fetchData<Yetki[]>(`${API_BASE_URL}/yetkiler/`),
-                fetchData<KullaniciRol[]>(`${API_BASE_URL}/kullanici-rolleri/`),
-                fetchData<RolYetki[]>(`${API_BASE_URL}/rol-yetkileri/`),
                 fetchData<EFaturaReferans[]>(`${API_BASE_URL}/e-fatura-referans/`),
                 fetchData<OdemeReferans[]>(`${API_BASE_URL}/Odeme_Referans/`),
                 fetchData<Nakit[]>(`${API_BASE_URL}/nakit/`),
@@ -439,22 +465,6 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 fetchData<CalisanTalep[]>(`${API_BASE_URL}/calisan-talepler/`)
             ]);
 
-            // 3. Update state and cache - Be selective to avoid quota errors
-            const newDataToCache: Partial<StoredDataState> = {};
-
-            if (subeler) { setSubeList(subeler); newDataToCache.subeList = subeler; }
-            if (ustKategoriler) { setUstKategoriList(ustKategoriler); newDataToCache.ustKategoriList = ustKategoriler; }
-            if (kategoriler) { setKategoriList(kategoriler); newDataToCache.kategoriList = kategoriler; }
-            if (roles) { setRolesList(roles); newDataToCache.rolesList = roles; }
-            if (degerler) setDegerList(degerler);
-            if (users) setUserList(users);
-            if (permissions) setPermissionsList(permissions);
-            if (userRoles) setUserRolesList(userRoles);
-            if (rolePermissions) setRolePermissionsList(rolePermissions);
-            if (eFaturaReferanslar) setEFaturaReferansList(eFaturaReferanslar);
-            if (odemeReferanslar) setOdemeReferansList(odemeReferanslar);
-
-            // Set large lists to state but do not cache them
             if (eFaturalar) setEFaturaList(eFaturalar);
             if (b2bEkstreler) setB2BEkstreList(b2bEkstreler);
             if (digerHarcamalar) setDigerHarcamaList(digerHarcamalar);
@@ -467,20 +477,41 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             if (gelirler) setGelirList(gelirler);
             if (gelirEkstralar) setGelirEkstraList(gelirEkstralar);
             if (avansIstekler) setAvansIstekList(avansIstekler);
+            if (eFaturaReferanslar) setEFaturaReferansList(eFaturaReferanslar);
+            if (odemeReferanslar) setOdemeReferansList(odemeReferanslar);
             if (nakitler) setNakitList(nakitler);
             if (odemeler) setOdemeList(odemeler);
             if (yemekCekiler) setYemekCekiList(yemekCekiler);
             if (depoKiraData) setDepoKiraRapor(depoKiraData);
             if (calisanTalepler) setCalisanTalepList(calisanTalepler);
+        };
 
-            try {
-                localStorage.setItem(STORAGE_KEYS.DATA_STATE, JSON.stringify(newDataToCache));
-            } catch (error) {
-                console.warn("Could not cache app data, might be due to storage quota:", error);
+        const initialize = async () => {
+            await loadEssentialData();
+            loadNonEssentialData(); // no await
+        }
+
+        initialize();
+
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                const now = Date.now();
+                const timeout = 5 * 60 * 1000; // 5 minutes
+                if (now - lastVisible > timeout) {
+                    console.log("Tab was hidden for a while, refreshing data...");
+                    initialize();
+                }
+                lastVisible = now;
+            } else {
+                lastVisible = Date.now();
             }
         };
 
-        loadAndFetchData();
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
     }, []);
 
   const fetchDegerler = useCallback(async () => {
