@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Button } from '../components';
 import { useAppContext } from '../App';
-import { OZET_KONTROL_RAPORU_YETKI_ADI, API_BASE_URL, EXCELE_AKTAR_YETKISI_ADI, Icons } from '../constants';
+import { OZET_KONTROL_RAPORU_YETKI_ADI, EXCELE_AKTAR_YETKISI_ADI, Icons } from '../constants';
+import { API_BASE_URL, fetchData } from '../App';
 import * as XLSX from 'xlsx';
 
 const AccessDenied: React.FC<{ title: string }> = ({ title }) => (
@@ -57,19 +58,19 @@ export const OzetKontrolRaporuPage: React.FC = () => {
     useEffect(() => {
         if (selectedBranch && reportPeriod) {
             Promise.all([
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/robotpos-tutar/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/toplam-satis-gelirleri/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/nakit/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/gunluk-harcama-diger/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/gunluk-harcama-efatura/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/nakit-girisi-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/bankaya-yatan-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/gelir-pos-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/pos-hareketleri-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/online-gelir-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/online-virman-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/yemek-ceki-aylik-gelir-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json()),
-                fetch(`${API_BASE_URL}/ozet-kontrol-raporu/yemek-ceki-donem-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`).then(res => res.json())
+                fetchData<number>(`${API_BASE_URL}/ozet-kontrol-raporu/robotpos-tutar/${selectedBranch.Sube_ID}/${reportPeriod}`),
+                fetchData<number>(`${API_BASE_URL}/ozet-kontrol-raporu/toplam-satis-gelirleri/${selectedBranch.Sube_ID}/${reportPeriod}`),
+                fetchData<number>(`${API_BASE_URL}/ozet-kontrol-raporu/nakit/${selectedBranch.Sube_ID}/${reportPeriod}`),
+                fetchData<number>(`${API_BASE_URL}/ozet-kontrol-raporu/gunluk-harcama-diger/${selectedBranch.Sube_ID}/${reportPeriod}`),
+                fetchData<number>(`${API_BASE_URL}/ozet-kontrol-raporu/gunluk-harcama-efatura/${selectedBranch.Sube_ID}/${reportPeriod}`),
+                fetchData<number>(`${API_BASE_URL}/ozet-kontrol-raporu/nakit-girisi-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`),
+                fetchData<number>(`${API_BASE_URL}/ozet-kontrol-raporu/bankaya-yatan-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`),
+                fetchData<number>(`${API_BASE_URL}/ozet-kontrol-raporu/gelir-pos-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`),
+                fetchData<number>(`${API_BASE_URL}/ozet-kontrol-raporu/pos-hareketleri-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`),
+                fetchData<number>(`${API_BASE_URL}/ozet-kontrol-raporu/online-gelir-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`),
+                fetchData<number>(`${API_BASE_URL}/ozet-kontrol-raporu/online-virman-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`),
+                fetchData<number>(`${API_BASE_URL}/ozet-kontrol-raporu/yemek-ceki-aylik-gelir-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`),
+                fetchData<number>(`${API_BASE_URL}/ozet-kontrol-raporu/yemek-ceki-donem-toplam/${selectedBranch.Sube_ID}/${reportPeriod}`)
             ]).then(data => {
                 setDatabaseData({
                     robotposTutar: data[0],

@@ -285,7 +285,7 @@ const ProtectedRoute: React.FC<{ children: ReactNode }> = ({ children }) => {
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://gumusbulut.onrender.com/api/v1";
 
 // Enhanced fetchData with error classification and suppression
-const fetchData = async <T,>(url: string, options: RequestInit = {}, skipAuth: boolean = false): Promise<T | null> => {
+export const fetchData = async <T,>(url: string, options: RequestInit = {}, skipAuth: boolean = false): Promise<T | null> => {
   try {
     // Automatically set Content-Type for JSON, unless it's FormData
     if (options.body && !(options.body instanceof FormData)) {
