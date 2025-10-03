@@ -1,17 +1,44 @@
 import React, { useState, useMemo } from 'react';
 import { Calendar, TrendingUp, Users, Clock, Target, BarChart3, Activity } from 'lucide-react';
-import { useDataContext } from '../App';
+import { useAppContext, useDataContext } from '../App';
 
 export const VPSDashboardPage: React.FC = () => {
     const { puantajSecimiList, puantajList, gelirEkstraList, calisanList } = useDataContext();
-  const [selectedMonth, setSelectedMonth] = useState('2509');
+  const { currentPeriod } = useAppContext();
+  const [selectedMonth, setSelectedMonth] = useState(currentPeriod);
 
-  const months = [
-    { value: '2509', label: '2509 - Eylül 2025' },
-    { value: '2508', label: '2508 - Ağustos 2025' },
-    { value: '2507', label: '2507 - Temmuz 2025' },
-    { value: '2506', label: '2506 - Haziran 2025' }
-  ];
+  const months = useMemo(() => {
+    const endYear = 2000 + parseInt(currentPeriod.substring(0, 2));
+    const endMonth = parseInt(currentPeriod.substring(2, 4));
+    const startYear = 2025;
+    const startMonth = 7;
+
+    const generatedMonths = [];
+    let year = endYear;
+    let month = endMonth;
+
+    while (year > startYear || (year === startYear && month >= startMonth)) {
+        const monthStr = String(month).padStart(2, '0');
+        const yearStr = String(year).substring(2);
+        const value = `${yearStr}${monthStr}`;
+        
+        const monthNames = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+        const label = `${value} - ${monthNames[month - 1]} ${year}`;
+        
+        generatedMonths.push({ value, label });
+
+        month--;
+        if (month === 0) {
+            month = 12;
+            year--;
+        }
+    }
+    return generatedMonths;
+  }, [currentPeriod]);
+
+  React.useEffect(() => {
+    setSelectedMonth(currentPeriod);
+  }, [currentPeriod]);
 
   // Random tarih dizisi oluştur (1-30 arası)
   const dates = useMemo(() => {
