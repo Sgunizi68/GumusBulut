@@ -1,32 +1,41 @@
-GumusBulut/#/login:1  Access to fetch at 'https://gumusbulut.onrender.com/api/v1/token' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
-index-BySvOpuR.js:1003   POST https://gumusbulut.onrender.com/api/v1/token net::ERR_FAILED 500 (Internal Server Error)
-(anonymous) @ index-BySvOpuR.js:1003
-A @ index-BySvOpuR.js:369
-ly @ index-BySvOpuR.js:48
-(anonymous) @ index-BySvOpuR.js:48
-XA @ index-BySvOpuR.js:48
-bp @ index-BySvOpuR.js:48
-jp @ index-BySvOpuR.js:49
-pk @ index-BySvOpuR.js:49
-index-BySvOpuR.js:1003    Uncaught (in promise) TypeError: Failed to fetch
-    at index-BySvOpuR.js:1003:26809
-    at A (index-BySvOpuR.js:369:70281)
-    at ly (index-BySvOpuR.js:48:118920)
-    at index-BySvOpuR.js:48:124246
-    at XA (index-BySvOpuR.js:48:9071)
-    at bp (index-BySvOpuR.js:48:120185)
-    at jp (index-BySvOpuR.js:49:27007)
-    at pk (index-BySvOpuR.js:49:26829)
-(anonymous) @ index-BySvOpuR.js:1003
-A @ index-BySvOpuR.js:369
-ly @ index-BySvOpuR.js:48
-(anonymous) @ index-BySvOpuR.js:48
-XA @ index-BySvOpuR.js:48
-bp @ index-BySvOpuR.js:48
-jp @ index-BySvOpuR.js:49
-pk @ index-BySvOpuR.js:49
+(index):64  cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
+(anonymous) @ (index):64
+(anonymous) @ (index):64
 [NEW] Explain Console errors by using Copilot in Edge: click
 
          to explain an error.
         Learn more
         Don't show again
+GumusBulut/#/login:1  Access to fetch at 'https://gumusbulut.onrender.com/api/v1/token' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+index-KYoXRdFW.js:1002   POST https://gumusbulut.onrender.com/api/v1/token net::ERR_FAILED 500 (Internal Server Error)
+ut @ index-KYoXRdFW.js:1002
+(anonymous) @ index-KYoXRdFW.js:1003
+A @ index-KYoXRdFW.js:369
+ly @ index-KYoXRdFW.js:48
+(anonymous) @ index-KYoXRdFW.js:48
+XA @ index-KYoXRdFW.js:48
+bp @ index-KYoXRdFW.js:48
+jp @ index-KYoXRdFW.js:49
+pk @ index-KYoXRdFW.js:49
+index-KYoXRdFW.js:1003  Error in fetchData: {url: 'https://gumusbulut.onrender.com/api/v1/token', errorMessage: 'Failed to fetch', statusCode: 0, type: 'general', severity: 'medium', …}
+ut @ index-KYoXRdFW.js:1003
+await in ut
+(anonymous) @ index-KYoXRdFW.js:1003
+A @ index-KYoXRdFW.js:369
+ly @ index-KYoXRdFW.js:48
+(anonymous) @ index-KYoXRdFW.js:48
+XA @ index-KYoXRdFW.js:48
+bp @ index-KYoXRdFW.js:48
+jp @ index-KYoXRdFW.js:49
+pk @ index-KYoXRdFW.js:49
+index-KYoXRdFW.js:1003  General error: Failed to fetch
+ut @ index-KYoXRdFW.js:1003
+await in ut
+(anonymous) @ index-KYoXRdFW.js:1003
+A @ index-KYoXRdFW.js:369
+ly @ index-KYoXRdFW.js:48
+(anonymous) @ index-KYoXRdFW.js:48
+XA @ index-KYoXRdFW.js:48
+bp @ index-KYoXRdFW.js:48
+jp @ index-KYoXRdFW.js:49
+pk @ index-KYoXRdFW.js:49
