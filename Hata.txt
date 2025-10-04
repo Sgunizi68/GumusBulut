@@ -1,41 +1,32 @@
-(index):64 cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
-(anonymous) @ (index):64
-index-BDOs0qmb.js:1003 Tab was hidden for a while, refreshing data...
-index-BDOs0qmb.js:573 Network error fetching all expenses by category: ReferenceError: API_BASE_URL is not defined
-    at index-BDOs0qmb.js:573:19544
-    at index-BDOs0qmb.js:573:19818
-    at sh (index-BDOs0qmb.js:48:84786)
-    at Iw (index-BDOs0qmb.js:48:99650)
-    at Zl (index-BDOs0qmb.js:48:99534)
-    at Iw (index-BDOs0qmb.js:48:100395)
-    at Zl (index-BDOs0qmb.js:48:99534)
-    at Iw (index-BDOs0qmb.js:48:99630)
-    at Zl (index-BDOs0qmb.js:48:99534)
-    at Iw (index-BDOs0qmb.js:48:99630)
-(anonymous) @ index-BDOs0qmb.js:573
-gumusbulut.onrender.com/ozet-kontrol-raporu/nakit/1/2510:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/robotpos-tutar/1/2510:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/toplam-satis-gelirleri/1/2510:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/gelir-pos-toplam/1/2510:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/bankaya-yatan-toplam/1/2510:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/pos-hareketleri-toplam/1/2510:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/gunluk-harcama-diger/1/2510:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/online-gelir-toplam/1/2510:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/online-virman-toplam/1/2510:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/yemek-ceki-aylik-gelir-toplam/1/2510:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/gunluk-harcama-efatura/1/2510:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/nakit-girisi-toplam/1/2510:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/yemek-ceki-donem-toplam/1/2510:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/pos-hareketleri-toplam/1/2509:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/gunluk-harcama-diger/1/2509:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/toplam-satis-gelirleri/1/2509:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/gunluk-harcama-efatura/1/2509:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/yemek-ceki-donem-toplam/1/2509:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/yemek-ceki-aylik-gelir-toplam/1/2509:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/bankaya-yatan-toplam/1/2509:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/nakit/1/2509:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/online-virman-toplam/1/2509:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/nakit-girisi-toplam/1/2509:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/online-gelir-toplam/1/2509:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/gelir-pos-toplam/1/2509:1  Failed to load resource: the server responded with a status of 404 ()
-gumusbulut.onrender.com/ozet-kontrol-raporu/robotpos-tutar/1/2509:1  Failed to load resource: the server responded with a status of 404 ()
+GumusBulut/#/login:1  Access to fetch at 'https://gumusbulut.onrender.com/api/v1/token' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+index-BQVz0FIu.js:1003   POST https://gumusbulut.onrender.com/api/v1/token net::ERR_FAILED 500 (Internal Server Error)
+(anonymous) @ index-BQVz0FIu.js:1003
+A @ index-BQVz0FIu.js:369
+ly @ index-BQVz0FIu.js:48
+(anonymous) @ index-BQVz0FIu.js:48
+XA @ index-BQVz0FIu.js:48
+yp @ index-BQVz0FIu.js:48
+Up @ index-BQVz0FIu.js:49
+pk @ index-BQVz0FIu.js:49
+index-BQVz0FIu.js:1003    Uncaught (in promise) TypeError: Failed to fetch
+    at index-BQVz0FIu.js:1003:26809
+    at A (index-BQVz0FIu.js:369:70281)
+    at ly (index-BQVz0FIu.js:48:118920)
+    at index-BQVz0FIu.js:48:124246
+    at XA (index-BQVz0FIu.js:48:9071)
+    at yp (index-BQVz0FIu.js:48:120185)
+    at Up (index-BQVz0FIu.js:49:27007)
+    at pk (index-BQVz0FIu.js:49:26829)
+(anonymous) @ index-BQVz0FIu.js:1003
+A @ index-BQVz0FIu.js:369
+ly @ index-BQVz0FIu.js:48
+(anonymous) @ index-BQVz0FIu.js:48
+XA @ index-BQVz0FIu.js:48
+yp @ index-BQVz0FIu.js:48
+Up @ index-BQVz0FIu.js:49
+pk @ index-BQVz0FIu.js:49
+[NEW] Explain Console errors by using Copilot in Edge: click
+
+         to explain an error.
+        Learn more
+        Don't show again
