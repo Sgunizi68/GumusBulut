@@ -1,47 +1,112 @@
-App.tsx:310  PUT http://localhost:8000/api/v1/users/8 net::ERR_CONNECTION_REFUSED
-fetchData @ App.tsx:310
-(anonymous) @ App.tsx:880
-handleSubmit @ pages.tsx:1208
-handleSubmit @ components.tsx:488
-executeDispatch @ react-dom_client.js?v=b0e46c7d:11736
-runWithFiberInDEV @ react-dom_client.js?v=b0e46c7d:1485
-processDispatchQueue @ react-dom_client.js?v=b0e46c7d:11772
-(anonymous) @ react-dom_client.js?v=b0e46c7d:12182
-batchedUpdates$1 @ react-dom_client.js?v=b0e46c7d:2628
-dispatchEventForPluginEventSystem @ react-dom_client.js?v=b0e46c7d:11877
-dispatchEvent @ react-dom_client.js?v=b0e46c7d:14792
-dispatchDiscreteEvent @ react-dom_client.js?v=b0e46c7d:14773
-App.tsx:339 Error in fetchData: {url: 'http://localhost:8000/api/v1/users/8', errorMessage: 'Failed to fetch', statusCode: 0, type: 'general', severity: 'medium', …}
-fetchData @ App.tsx:339
-await in fetchData
-(anonymous) @ App.tsx:880
-handleSubmit @ pages.tsx:1208
-handleSubmit @ components.tsx:488
-executeDispatch @ react-dom_client.js?v=b0e46c7d:11736
-runWithFiberInDEV @ react-dom_client.js?v=b0e46c7d:1485
-processDispatchQueue @ react-dom_client.js?v=b0e46c7d:11772
-(anonymous) @ react-dom_client.js?v=b0e46c7d:12182
-batchedUpdates$1 @ react-dom_client.js?v=b0e46c7d:2628
-dispatchEventForPluginEventSystem @ react-dom_client.js?v=b0e46c7d:11877
-dispatchEvent @ react-dom_client.js?v=b0e46c7d:14792
-dispatchDiscreteEvent @ react-dom_client.js?v=b0e46c7d:14773
-App.tsx:356 General error: Failed to fetch
-fetchData @ App.tsx:356
-await in fetchData
-(anonymous) @ App.tsx:880
-handleSubmit @ pages.tsx:1208
-handleSubmit @ components.tsx:488
-executeDispatch @ react-dom_client.js?v=b0e46c7d:11736
-runWithFiberInDEV @ react-dom_client.js?v=b0e46c7d:1485
-processDispatchQueue @ react-dom_client.js?v=b0e46c7d:11772
-(anonymous) @ react-dom_client.js?v=b0e46c7d:12182
-batchedUpdates$1 @ react-dom_client.js?v=b0e46c7d:2628
-dispatchEventForPluginEventSystem @ react-dom_client.js?v=b0e46c7d:11877
-dispatchEvent @ react-dom_client.js?v=b0e46c7d:14792
-dispatchDiscreteEvent @ react-dom_client.js?v=b0e46c7d:14773
-client:1035 WebSocket connection to 'ws://localhost:5173/GumusBulut/GumusBulut/' failed:
-ping @ client:1035
-waitForSuccessfulPing @ client:1060
-client:1035 WebSocket connection to 'ws://localhost:5173/GumusBulut/GumusBulut/' failed:
-ping @ client:1035
-waitForSuccessfulPing @ client:1060
+2025-10-04T20:15:37.276345356Z WARNING:passlib.handlers.bcrypt:(trapped) error reading bcrypt version
+2025-10-04T20:15:37.276874785Z Traceback (most recent call last):
+2025-10-04T20:15:37.276883186Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+2025-10-04T20:15:37.276887435Z     version = _bcrypt.__about__.__version__
+2025-10-04T20:15:37.276891606Z               ^^^^^^^^^^^^^^^^^
+2025-10-04T20:15:37.276895716Z AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-10-04T20:15:37.647492911Z INFO:     82.222.120.167:0 - "POST /api/v1/token HTTP/1.1" 500 Internal Server Error
+2025-10-04T20:15:37.651230265Z ERROR:    Exception in ASGI application
+2025-10-04T20:15:37.651242275Z Traceback (most recent call last):
+2025-10-04T20:15:37.651248015Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+2025-10-04T20:15:37.651253166Z     result = await app(  # type: ignore[func-returns-value]
+2025-10-04T20:15:37.651258106Z              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-10-04T20:15:37.651262915Z         self.scope, self.receive, self.send
+2025-10-04T20:15:37.651267236Z         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-10-04T20:15:37.651271396Z     )
+2025-10-04T20:15:37.651275486Z     ^
+2025-10-04T20:15:37.651282836Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+2025-10-04T20:15:37.651287416Z     return await self.app(scope, receive, send)
+2025-10-04T20:15:37.651291636Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-10-04T20:15:37.651295516Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/fastapi/applications.py", line 1133, in __call__
+2025-10-04T20:15:37.651299446Z     await super().__call__(scope, receive, send)
+2025-10-04T20:15:37.651303146Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+2025-10-04T20:15:37.651307206Z     await self.middleware_stack(scope, receive, send)
+2025-10-04T20:15:37.651311176Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+2025-10-04T20:15:37.651315467Z     raise exc
+2025-10-04T20:15:37.651319987Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+2025-10-04T20:15:37.651324807Z     await self.app(scope, receive, _send)
+2025-10-04T20:15:37.651329437Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+2025-10-04T20:15:37.651334807Z     await self.simple_response(scope, receive, send, request_headers=headers)
+2025-10-04T20:15:37.651338947Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+2025-10-04T20:15:37.651343377Z     await self.app(scope, receive, send)
+2025-10-04T20:15:37.651347687Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+2025-10-04T20:15:37.651364507Z     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+2025-10-04T20:15:37.651366517Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+2025-10-04T20:15:37.651368317Z     raise exc
+2025-10-04T20:15:37.651370077Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+2025-10-04T20:15:37.651371808Z     await app(scope, receive, sender)
+2025-10-04T20:15:37.651373488Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+2025-10-04T20:15:37.651375217Z     await self.app(scope, receive, send)
+2025-10-04T20:15:37.651377648Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+2025-10-04T20:15:37.651379697Z     await self.middleware_stack(scope, receive, send)
+2025-10-04T20:15:37.651381518Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+2025-10-04T20:15:37.651383158Z     await route.handle(scope, receive, send)
+2025-10-04T20:15:37.651384828Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+2025-10-04T20:15:37.651386488Z     await self.app(scope, receive, send)
+2025-10-04T20:15:37.651388148Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 123, in app
+2025-10-04T20:15:37.651389858Z     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+2025-10-04T20:15:37.651391508Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+2025-10-04T20:15:37.651393148Z     raise exc
+2025-10-04T20:15:37.651394818Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+2025-10-04T20:15:37.651396488Z     await app(scope, receive, sender)
+2025-10-04T20:15:37.651398148Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 109, in app
+2025-10-04T20:15:37.651400378Z     response = await f(request)
+2025-10-04T20:15:37.651402028Z                ^^^^^^^^^^^^^^^^
+2025-10-04T20:15:37.651403678Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 387, in app
+2025-10-04T20:15:37.651405318Z     raw_response = await run_endpoint_function(
+2025-10-04T20:15:37.651407058Z                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-10-04T20:15:37.651409728Z     ...<3 lines>...
+2025-10-04T20:15:37.651411388Z     )
+2025-10-04T20:15:37.651413068Z     ^
+2025-10-04T20:15:37.651414778Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 288, in run_endpoint_function
+2025-10-04T20:15:37.651419648Z     return await dependant.call(**values)
+2025-10-04T20:15:37.651421438Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-10-04T20:15:37.651423118Z   File "/opt/render/project/src/backend/api/v1/endpoints/token.py", line 16, in login_for_access_token
+2025-10-04T20:15:37.651425288Z     user = crud.authenticate_user(db, username=form_data.username, password=form_data.password)
+2025-10-04T20:15:37.651439619Z   File "/opt/render/project/src/backend/db/crud.py", line 13, in authenticate_user
+2025-10-04T20:15:37.651441889Z     if not verify_password(password, user.Password):
+2025-10-04T20:15:37.651443609Z            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-10-04T20:15:37.651445289Z   File "/opt/render/project/src/backend/core/security.py", line 27, in verify_password
+2025-10-04T20:15:37.651451519Z     return pwd_context.verify(plain_password, hashed_password)
+2025-10-04T20:15:37.651453239Z            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-10-04T20:15:37.651454919Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/context.py", line 2347, in verify
+2025-10-04T20:15:37.651456589Z     return record.verify(secret, hash, **kwds)
+2025-10-04T20:15:37.651458199Z            ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+2025-10-04T20:15:37.651459959Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/utils/handlers.py", line 792, in verify
+2025-10-04T20:15:37.651461669Z     return consteq(self._calc_checksum(secret), chk)
+2025-10-04T20:15:37.651463379Z                    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+2025-10-04T20:15:37.651465119Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/handlers/bcrypt.py", line 591, in _calc_checksum
+2025-10-04T20:15:37.651466779Z     self._stub_requires_backend()
+2025-10-04T20:15:37.651468409Z     ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+2025-10-04T20:15:37.651470129Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/utils/handlers.py", line 2254, in _stub_requires_backend
+2025-10-04T20:15:37.651472119Z     cls.set_backend()
+2025-10-04T20:15:37.651473799Z     ~~~~~~~~~~~~~~~^^
+2025-10-04T20:15:37.651475489Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/utils/handlers.py", line 2156, in set_backend
+2025-10-04T20:15:37.651477169Z     return owner.set_backend(name, dryrun=dryrun)
+2025-10-04T20:15:37.651478809Z            ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+2025-10-04T20:15:37.651480429Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/utils/handlers.py", line 2163, in set_backend
+2025-10-04T20:15:37.651482049Z     return cls.set_backend(name, dryrun=dryrun)
+2025-10-04T20:15:37.651483649Z            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+2025-10-04T20:15:37.65148529Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/utils/handlers.py", line 2188, in set_backend
+2025-10-04T20:15:37.651486999Z     cls._set_backend(name, dryrun)
+2025-10-04T20:15:37.651488659Z     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+2025-10-04T20:15:37.65149037Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/utils/handlers.py", line 2311, in _set_backend
+2025-10-04T20:15:37.651492039Z     super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+2025-10-04T20:15:37.65149369Z     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+2025-10-04T20:15:37.65149535Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/utils/handlers.py", line 2224, in _set_backend
+2025-10-04T20:15:37.65149699Z     ok = loader(**kwds)
+2025-10-04T20:15:37.65149869Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/handlers/bcrypt.py", line 626, in _load_backend_mixin
+2025-10-04T20:15:37.65150036Z     return mixin_cls._finalize_backend_mixin(name, dryrun)
+2025-10-04T20:15:37.65150202Z            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+2025-10-04T20:15:37.65150368Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/handlers/bcrypt.py", line 421, in _finalize_backend_mixin
+2025-10-04T20:15:37.65150529Z     if detect_wrap_bug(IDENT_2A):
+2025-10-04T20:15:37.65150693Z        ~~~~~~~~~~~~~~~^^^^^^^^^^
+2025-10-04T20:15:37.6515086Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/handlers/bcrypt.py", line 380, in detect_wrap_bug
+2025-10-04T20:15:37.65151026Z     if verify(secret, bug_hash):
+2025-10-04T20:15:37.65151191Z        ~~~~~~^^^^^^^^^^^^^^^^^^
+2025-10-04T20:15:37.65151632Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/utils/handlers.py", line 792, in verify
+2025-10-04T20:15:37.65151802Z     return consteq(self._calc_checksum(secret), chk)
+2025-10-04T20:15:37.65151969Z                    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+2025-10-04T20:15:37.65152133Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/handlers/bcrypt.py", line 655, in _calc_checksum
+2025-10-04T20:15:37.65152295Z     hash = _bcrypt.hashpw(secret, config)
+2025-10-04T20:15:37.65152465Z ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])

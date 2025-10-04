@@ -3,7 +3,8 @@ uvicorn[standard]
 sqlalchemy
 mysql-connector-python
 python-dotenv
-passlib[bcrypt]
+passlib==5.5.0
+bcrypt==4.1.3
 python-multipart
 pydantic[email]
 python-jose
