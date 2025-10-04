@@ -1,9 +1,14 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Calendar, TrendingUp } from 'lucide-react';
 import { useToast } from '../contexts/ToastContext';
+import { useAppContext, fetchData } from '../App';
+import { API_BASE_URL } from '../constants';
 
 export const NakitAkisGelirRaporuPage: React.FC = () => {
   const { showError } = useToast();
+  const { selectedBranch } = useAppContext();
+  const [nakitGelirData, setNakitGelirData] = useState([]);
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   
@@ -24,20 +29,37 @@ export const NakitAkisGelirRaporuPage: React.FC = () => {
   const [startDate, setStartDate] = useState(formatDateForInput(today));
   const [endDate, setEndDate] = useState(formatDateForInput(getDefaultEndDate()));
 
-  const generateCashFlowData = (start, end) => {
+  useEffect(() => {
+    if (selectedBranch) {
+        const queryStartDate = new Date(startDate);
+        const queryEndDate = new Date(endDate);
+
+        fetchData<any[]>(`${API_BASE_URL}/gelir/nakit-tahmin?start_date=${formatDateForInput(queryStartDate)}&end_date=${formatDateForInput(queryEndDate)}&sube_id=${selectedBranch.Sube_ID}`)
+            .then(data => {
+                if (data) {
+                    setNakitGelirData(data);
+                }
+            });
+    }
+  }, [startDate, endDate, selectedBranch]);
+
+  const generateCashFlowData = (start, end, gelirData) => {
     const data = [];
     const currentDate = new Date(start);
     const endDateTime = new Date(end);
     
+    const gelirMap = new Map(gelirData.map(item => [formatDateForInput(new Date(item.Tarih)), item.Tutar]));
+
     while (currentDate <= endDateTime) {
       const dayOfWeek = currentDate.getDay();
       const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
       
-      // Hafta sonu ve hafta içi için farklı tahminler
-      const baseAmount = isWeekend ? 25000 : 18000;
-      const randomFactor = 0.8 + Math.random() * 0.4; // %80-120 arası varyasyon
+      const priorDate = new Date(currentDate);
+      priorDate.setDate(priorDate.getDate() - 28);
+      const formattedPriorDate = formatDateForInput(priorDate);
+
+      const estimatedCash = gelirMap.get(formattedPriorDate) || 0;
       
-      const estimatedCash = Math.round(baseAmount * randomFactor);
       const posPayment = Math.round(estimatedCash * (0.45 + Math.random() * 0.15));
       const mealVoucher = Math.round(estimatedCash * (0.15 + Math.random() * 0.1));
       const onlineTransfer = Math.round(estimatedCash * (0.25 + Math.random() * 0.15));
@@ -60,8 +82,8 @@ export const NakitAkisGelirRaporuPage: React.FC = () => {
   };
 
   const cashFlowData = useMemo(() => {
-    return generateCashFlowData(startDate, endDate);
-  }, [startDate, endDate]);
+    return generateCashFlowData(startDate, endDate, nakitGelirData);
+  }, [startDate, endDate, nakitGelirData]);
 
   const totals = useMemo(() => {
     return cashFlowData.reduce((acc, row) => ({

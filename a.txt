@@ -1,40 +1,28 @@
-CREATE TABLE "Calisan_Talep" (
-  "Calisan_Talep_ID" int NOT NULL AUTO_INCREMENT,
-  "Talep" enum('İşten Çıkış','İşe Giriş') CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci DEFAULT 'İşe Giriş',
-  "TC_No" varchar(11) COLLATE utf8mb4_turkish_ci NOT NULL,
-  "Adi" varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci NOT NULL,
-  "Soyadi" varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci NOT NULL,
-  "Ilk_Soyadi" varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci DEFAULT NULL,
-  "Hesap_No" varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci DEFAULT NULL,
-  "IBAN" varchar(26) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci DEFAULT NULL,
-  "Ogrenim_Durumu" varchar(26) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci DEFAULT NULL,
-  "Cinsiyet" enum('Erkek','Kadın') CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci DEFAULT 'Erkek',
-  "Gorevi" varchar(26) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci DEFAULT NULL,
-  "Anne_Adi" varchar(26) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci DEFAULT NULL,
-  "Baba_Adi" varchar(26) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci DEFAULT NULL,
-  "Dogum_Yeri" varchar(26) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci DEFAULT NULL,
-  "Dogum_Tarihi" date DEFAULT NULL,
-  "Medeni_Hali" enum('Bekar','Evli') CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci DEFAULT 'Bekar',
-  "Cep_No" varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci DEFAULT NULL,
-  "Adres_Bilgileri" varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci DEFAULT NULL,
-  "Gelir_Vergisi_Matrahi" decimal(15,2) DEFAULT NULL,
-  "SSK_Cikis_Nedeni" varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci DEFAULT NULL,
-  "Net_Maas" decimal(10,2) DEFAULT NULL,
-  "Sigorta_Giris" date DEFAULT NULL,
-  "Sigorta_Cikis" date DEFAULT '2099-01-01',
-  "Is_Onay_Veren_Kullanici_ID" int DEFAULT NULL,
-  "Is_Onay_Tarih" datetime DEFAULT NULL,
-  "SSK_Onay_Veren_Kullanici_ID" int DEFAULT NULL,
-  "SSK_Onay_Tarih" datetime DEFAULT NULL,
-  "Sube_ID" int NOT NULL,
-  "Imaj_Adi" varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci DEFAULT NULL,
-  "Imaj" longblob,
-  "Kayit_Tarih" datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY ("Calisan_Talep_ID"),
-  KEY "Sube_ID" ("Sube_ID"),
-  KEY "Calisan_Talep_ibfk_2_idx" ("Is_Onay_Veren_Kullanici_ID"),
-  KEY "Calisan_Talep_ibfk_3_idx" ("SSK_Onay_Veren_Kullanici_ID"),
-  CONSTRAINT "Calisan_Talep_ibfk_1" FOREIGN KEY ("Sube_ID") REFERENCES "Sube" ("Sube_ID"),
-  CONSTRAINT "Calisan_Talep_ibfk_2" FOREIGN KEY ("Is_Onay_Veren_Kullanici_ID") REFERENCES "Kullanici" ("Kullanici_ID"),
-  CONSTRAINT "Calisan_Talep_ibfk_3" FOREIGN KEY ("SSK_Onay_Veren_Kullanici_ID") REFERENCES "Kullanici" ("Kullanici_ID")
-)
+Tahmini Nakit
+-------------
+Örnek Ekran.Başlangıç_Tarih ='2025-08-29', Ekran.Bitiş_Tarihi ='2025-09-12', Ekran.Sube_Id=1
+SELECT Tarih + INTERVAL 28 DAY AS Gün, Tutar As Tahmini_Nakit
+from Gelir
+WHERE
+Tarih >= Ekran.Başlangıç_Tarih - INTERVAL 28 DAY And
+Tarih <= Ekran.Bitiş_Tarihi - INTERVAL 28 DAY And
+Sube_ID=Ekran.Sube_Id And
+Kategori_ID = (
+    SELECT Kategori_ID
+    FROM Kategori
+    WHERE Kategori_Adi = 'Nakit')
+
+
+
+
+Örnek Ekran.Başlangıç_Tarih ='2025-08-29', Ekran.Bitiş_Tarihi ='2025-09-12', Ekran.Sube_Id=1
+SELECT Tarih + INTERVAL 28 DAY AS Gün, Tutar As Tahmini_Nakit
+from Gelir
+WHERE
+Tarih >= '2025-08-29' - INTERVAL 28 DAY And
+Tarih <= '2025-09-12' - INTERVAL 28 DAY And
+Sube_ID=1 And
+Kategori_ID = (
+    SELECT Kategori_ID
+    FROM Kategori
+    WHERE Kategori_Adi = 'Nakit')

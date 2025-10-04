@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from typing import List
+from datetime import date
 
 from db import models
 from schemas import sube, user, role, permission, kullanici_rol, rol_yetki, e_fatura, b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, stok_fiyat, stok_sayim, calisan, puantaj_secimi, puantaj, avans_istek, ust_kategori, kategori, deger, e_fatura_referans, nakit, odeme, odeme_referans, pos_hareketleri, yemek_ceki, calisan_talep
@@ -515,6 +516,24 @@ def delete_gelir(db: Session, gelir_id: int):
         db.delete(db_gelir)
         db.commit()
     return db_gelir
+
+def get_nakit_gelir_by_date_range(db: Session, start_date: date, end_date: date, sube_id: int):
+    logger.info(f"get_nakit_gelir_by_date_range called with start_date: {start_date}, end_date: {end_date}, sube_id: {sube_id}")
+    nakit_kategori = db.query(models.Kategori).filter(models.Kategori.Kategori_Adi == 'Nakit').first()
+    if not nakit_kategori:
+        logger.warning("Nakit category not found.")
+        return []
+    
+    logger.info(f"Nakit category ID: {nakit_kategori.Kategori_ID}")
+    
+    result = db.query(models.Gelir).filter(
+        models.Gelir.Tarih >= start_date,
+        models.Gelir.Tarih <= end_date,
+        models.Gelir.Sube_ID == sube_id,
+        models.Gelir.Kategori_ID == nakit_kategori.Kategori_ID
+    ).all()
+    logger.info(f"Found {len(result)} records in get_nakit_gelir_by_date_range.")
+    return result
 
 # --- GelirEkstra CRUD ---
 def get_gelir_ekstra(db: Session, gelir_ekstra_id: int):

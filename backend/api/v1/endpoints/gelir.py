@@ -1,11 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
+from datetime import date, timedelta
+import logging
 
 from db import crud, database, models
 from schemas import gelir
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 @router.post("/gelirler/", response_model=gelir.GelirInDB, status_code=status.HTTP_201_CREATED)
 def create_gelir(gelir: gelir.GelirCreate, db: Session = Depends(database.get_db)):
@@ -36,3 +39,24 @@ def delete_gelir(gelir_id: int, db: Session = Depends(database.get_db)):
     if db_gelir is None:
         raise HTTPException(status_code=404, detail="Gelir not found")
     return {"message": "Gelir deleted successfully"}
+
+@router.get("/gelir/nakit-tahmin", response_model=List[gelir.GelirInDB])
+def get_nakit_tahmin(
+    start_date: date,
+    end_date: date,
+    sube_id: int,
+    db: Session = Depends(database.get_db)
+):
+    logger.info(f"get_nakit_tahmin called with start_date: {start_date}, end_date: {end_date}, sube_id: {sube_id}")
+    query_start_date = start_date - timedelta(days=28)
+    query_end_date = end_date - timedelta(days=28)
+    logger.info(f"Querying for dates: {query_start_date} to {query_end_date}")
+    
+    result = crud.get_nakit_gelir_by_date_range(
+        db=db,
+        start_date=query_start_date,
+        end_date=query_end_date,
+        sube_id=sube_id
+    )
+    logger.info(f"Found {len(result)} records.")
+    return result
