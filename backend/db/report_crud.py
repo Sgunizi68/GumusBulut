@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import func, and_, or_, case, extract
+from sqlalchemy import func, and_, or_, case, extract, text
 from decimal import Decimal
 import datetime
 from . import models
@@ -100,3 +100,25 @@ def get_bayi_karlilik_raporu(db: Session, year: int, sube_id: int):
         ]
     }
     return response
+
+def get_pos_odemeleri_by_date_range(db: Session, start_date: datetime.date, end_date: datetime.date, sube_id: int):
+    sql = text("""
+        SELECT Hesaba_Gecis as Gun, sum(Net_Tutar) as POS_Odemesi
+        FROM POS_Hareketleri
+        WHERE Hesaba_Gecis >= :start_date AND Hesaba_Gecis <= :end_date AND Sube_ID = :sube_id
+        GROUP BY Hesaba_Gecis
+        ORDER BY Hesaba_Gecis;
+    """)
+    result = db.execute(sql, {"start_date": start_date, "end_date": end_date, "sube_id": sube_id})
+    return result.fetchall()
+
+def get_yemek_ceki_by_date_range(db: Session, start_date: datetime.date, end_date: datetime.date, sube_id: int):
+    sql = text("""
+        SELECT Odeme_Tarih as Gun, sum(Tutar) as Yemek_Ceki
+        FROM Yemek_Ceki
+        WHERE Odeme_Tarih >= :start_date AND Odeme_Tarih <= :end_date AND Sube_ID = :sube_id
+        GROUP BY Odeme_Tarih
+        ORDER BY Odeme_Tarih;
+    """)
+    result = db.execute(sql, {"start_date": start_date, "end_date": end_date, "sube_id": sube_id})
+    return result.fetchall()

@@ -8,6 +8,8 @@ export const NakitAkisGelirRaporuPage: React.FC = () => {
   const { showError } = useToast();
   const { selectedBranch } = useAppContext();
   const [nakitGelirData, setNakitGelirData] = useState([]);
+  const [posOdemeleriData, setPosOdemeleriData] = useState([]);
+  const [yemekCekiData, setYemekCekiData] = useState([]);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -40,15 +42,31 @@ export const NakitAkisGelirRaporuPage: React.FC = () => {
                     setNakitGelirData(data);
                 }
             });
+
+        fetchData<any[]>(`${API_BASE_URL}/rapor/pos-odemeleri?start_date=${formatDateForInput(queryStartDate)}&end_date=${formatDateForInput(queryEndDate)}&sube_id=${selectedBranch.Sube_ID}`)
+            .then(data => {
+                if (data) {
+                    setPosOdemeleriData(data);
+                }
+            });
+
+        fetchData<any[]>(`${API_BASE_URL}/rapor/yemek-ceki?start_date=${formatDateForInput(queryStartDate)}&end_date=${formatDateForInput(queryEndDate)}&sube_id=${selectedBranch.Sube_ID}`)
+            .then(data => {
+                if (data) {
+                    setYemekCekiData(data);
+                }
+            });
     }
   }, [startDate, endDate, selectedBranch]);
 
-  const generateCashFlowData = (start, end, gelirData) => {
+  const generateCashFlowData = (start, end, gelirData, posOdemeleriData, yemekCekiData) => {
     const data = [];
     const currentDate = new Date(start);
     const endDateTime = new Date(end);
     
     const gelirMap = new Map(gelirData.map(item => [formatDateForInput(new Date(item.Tarih)), item.Tutar]));
+    const posOdemeleriMap = new Map(posOdemeleriData.map(item => [formatDateForInput(new Date(item.Gun)), item.POS_Odemesi]));
+    const yemekCekiMap = new Map(yemekCekiData.map(item => [formatDateForInput(new Date(item.Gun)), item.Yemek_Ceki]));
 
     while (currentDate <= endDateTime) {
       const dayOfWeek = currentDate.getDay();
@@ -60,8 +78,8 @@ export const NakitAkisGelirRaporuPage: React.FC = () => {
 
       const estimatedCash = gelirMap.get(formattedPriorDate) || 0;
       
-      const posPayment = Math.round(estimatedCash * (0.45 + Math.random() * 0.15));
-      const mealVoucher = Math.round(estimatedCash * (0.15 + Math.random() * 0.1));
+      const posPayment = posOdemeleriMap.get(formatDateForInput(currentDate)) || 0;
+      const mealVoucher = yemekCekiMap.get(formatDateForInput(currentDate)) || 0;
       const onlineTransfer = Math.round(estimatedCash * (0.25 + Math.random() * 0.15));
       
       const total = posPayment + mealVoucher + onlineTransfer;
@@ -82,8 +100,8 @@ export const NakitAkisGelirRaporuPage: React.FC = () => {
   };
 
   const cashFlowData = useMemo(() => {
-    return generateCashFlowData(startDate, endDate, nakitGelirData);
-  }, [startDate, endDate, nakitGelirData]);
+    return generateCashFlowData(startDate, endDate, nakitGelirData, posOdemeleriData, yemekCekiData);
+  }, [startDate, endDate, nakitGelirData, posOdemeleriData, yemekCekiData]);
 
   const totals = useMemo(() => {
     return cashFlowData.reduce((acc, row) => ({
