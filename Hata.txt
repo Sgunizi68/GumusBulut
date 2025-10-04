@@ -1,30 +1,30 @@
 GumusBulut/#/login:1  Access to fetch at 'https://gumusbulut.onrender.com/api/v1/token' from origin 'https://sgunizi68.github.io' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
-index-BQVz0FIu.js:1003   POST https://gumusbulut.onrender.com/api/v1/token net::ERR_FAILED 500 (Internal Server Error)
-(anonymous) @ index-BQVz0FIu.js:1003
-A @ index-BQVz0FIu.js:369
-ly @ index-BQVz0FIu.js:48
-(anonymous) @ index-BQVz0FIu.js:48
-XA @ index-BQVz0FIu.js:48
-yp @ index-BQVz0FIu.js:48
-Up @ index-BQVz0FIu.js:49
-pk @ index-BQVz0FIu.js:49
-index-BQVz0FIu.js:1003    Uncaught (in promise) TypeError: Failed to fetch
-    at index-BQVz0FIu.js:1003:26809
-    at A (index-BQVz0FIu.js:369:70281)
-    at ly (index-BQVz0FIu.js:48:118920)
-    at index-BQVz0FIu.js:48:124246
-    at XA (index-BQVz0FIu.js:48:9071)
-    at yp (index-BQVz0FIu.js:48:120185)
-    at Up (index-BQVz0FIu.js:49:27007)
-    at pk (index-BQVz0FIu.js:49:26829)
-(anonymous) @ index-BQVz0FIu.js:1003
-A @ index-BQVz0FIu.js:369
-ly @ index-BQVz0FIu.js:48
-(anonymous) @ index-BQVz0FIu.js:48
-XA @ index-BQVz0FIu.js:48
-yp @ index-BQVz0FIu.js:48
-Up @ index-BQVz0FIu.js:49
-pk @ index-BQVz0FIu.js:49
+index-BySvOpuR.js:1003   POST https://gumusbulut.onrender.com/api/v1/token net::ERR_FAILED 500 (Internal Server Error)
+(anonymous) @ index-BySvOpuR.js:1003
+A @ index-BySvOpuR.js:369
+ly @ index-BySvOpuR.js:48
+(anonymous) @ index-BySvOpuR.js:48
+XA @ index-BySvOpuR.js:48
+bp @ index-BySvOpuR.js:48
+jp @ index-BySvOpuR.js:49
+pk @ index-BySvOpuR.js:49
+index-BySvOpuR.js:1003    Uncaught (in promise) TypeError: Failed to fetch
+    at index-BySvOpuR.js:1003:26809
+    at A (index-BySvOpuR.js:369:70281)
+    at ly (index-BySvOpuR.js:48:118920)
+    at index-BySvOpuR.js:48:124246
+    at XA (index-BySvOpuR.js:48:9071)
+    at bp (index-BySvOpuR.js:48:120185)
+    at jp (index-BySvOpuR.js:49:27007)
+    at pk (index-BySvOpuR.js:49:26829)
+(anonymous) @ index-BySvOpuR.js:1003
+A @ index-BySvOpuR.js:369
+ly @ index-BySvOpuR.js:48
+(anonymous) @ index-BySvOpuR.js:48
+XA @ index-BySvOpuR.js:48
+bp @ index-BySvOpuR.js:48
+jp @ index-BySvOpuR.js:49
+pk @ index-BySvOpuR.js:49
 [NEW] Explain Console errors by using Copilot in Edge: click
 
          to explain an error.

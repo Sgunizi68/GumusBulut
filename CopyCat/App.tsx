@@ -289,7 +289,7 @@ export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://gumusb
 export const fetchData = async <T,>(url: string, options: RequestInit = {}, skipAuth: boolean = false): Promise<T | null> => {
   try {
     // Automatically set Content-Type for JSON, unless it's FormData
-    if (options.body && !(options.body instanceof FormData)) {
+    if (options.body && !(options.body instanceof FormData) && !(options.body instanceof URLSearchParams)) {
         options.headers = {
             'Content-Type': 'application/json',
             ...options.headers,
@@ -1738,15 +1738,14 @@ const AppWithToast: React.FC = () => {
 
 
   const login = useCallback(async (username: string, password) => {
-    const response = await fetch(`${API_BASE_URL}/token`, {
+    const response = await fetchData(`${API_BASE_URL}/token`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({ username, password }),
-    });
+    }, true);
 
-    if (response.ok) {
-      const data = await response.json();
-      localStorage.setItem(STORAGE_KEYS.TOKEN, data.access_token);
+    if (response) {
+      localStorage.setItem(STORAGE_KEYS.TOKEN, response.access_token);
       const users = await fetchData<Kullanici[]>(`${API_BASE_URL}/users/`);
       const userToLogin = users?.find(u => u.Kullanici_Adi.toLowerCase() === username.toLowerCase());
 
