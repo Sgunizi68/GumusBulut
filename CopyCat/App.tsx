@@ -281,9 +281,7 @@ const ProtectedRoute: React.FC<{ children: ReactNode }> = ({ children }) => {
 
 
 // Backende de nereye gideceğini buaradab ayarlıyorum. Lokal veya bulut
-//const API_BASE_URL = "http://localhost:8000/api/v1";
-//const API_BASE_URL = "https://gumusbulut.onrender.com/api/v1";
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://gumusbulut.onrender.com/api/v1";
+export const API_BASE_URL = "https://gumusbulut.onrender.com/api/v1";
 
 // Enhanced fetchData with error classification and suppression
 export const fetchData = async <T,>(url: string, options: RequestInit = {}, skipAuth: boolean = false): Promise<T | null> => {
@@ -363,6 +361,7 @@ export const fetchData = async <T,>(url: string, options: RequestInit = {}, skip
 
 // DataProvider Component
 const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [isInitialDataLoaded, setIsInitialDataLoaded] = useState(false);
     const [subeList, setSubeList] = useState<Sube[]>([]);
     const [eFaturaList, setEFaturaList] = useState<EFatura[]>([]);
     const [b2bEkstreList, setB2BEkstreList] = useState<B2BEkstre[]>([]);
@@ -489,6 +488,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
         const initialize = async () => {
             await loadEssentialData();
+            setIsInitialDataLoaded(true);
             loadNonEssentialData(); // no await
         }
 
@@ -1569,6 +1569,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const dataContextValue: DataContextType = useMemo(() => ({
+    isInitialDataLoaded,
     calisanTalepList,
     addCalisanTalep,
     updateCalisanTalep,
@@ -1666,7 +1667,7 @@ const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     uploadOdeme,
     uploadPosHareketleri,
     uploadTabakSayisi,
-  }), [depoKiraRapor, yemekCekiList, addYemekCeki, updateYemekCeki, deleteYemekCeki, subeList, eFaturaList, b2bEkstreList, digerHarcamaList, stokList, stokFiyatList, stokSayimList, calisanList, puantajSecimiList, puantajList, gelirList, gelirEkstraList, avansIstekList, ustKategoriList, kategoriList, degerList, userList, rolesList, permissionsList, userRolesList, rolePermissionsList, eFaturaReferansList, odemeReferansList, nakitList, odemeList, addSube, updateSube, addEFaturas, updateEFatura, addB2BEkstreler, updateB2BEkstre, addDigerHarcama, updateDigerHarcama, deleteDigerHarcama, addStok, updateStok, addStokFiyat, updateStokFiyat, addOrUpdateStokSayim, addCalisan, updateCalisan, addUser, updateUser, addPuantajSecimi, updatePuantajSecimi, addOrUpdatePuantajEntry, getPuantajEntry, deletePuantajEntry, addOrUpdateGelirEntry, getGelirEntry, addOrUpdateGelirEkstraEntry, getGelirEkstraEntry, addOrUpdateAvansIstek, deleteAvansIstek, getAvansIstek, addUstKategori, updateUstKategori, addKategori, updateKategori, fetchDegerler, addDeger, updateDeger, addRole, updateRole, deleteRole, addPermission, updatePermission, deletePermission, addUserRole, updateUserRole, deleteUserRole, addRolePermission, updateRolePermission, deleteRolePermission, addEFaturaReferans, updateEFaturaReferans, deleteEFaturaReferans, addOdemeReferans, updateOdemeReferans, deleteOdemeReferans, addNakit, updateNakit, deleteNakit, updateOdeme,     uploadOdeme, uploadPosHareketleri, uploadTabakSayisi, calisanTalepList, updateCalisanTalep, deleteCalisanTalep]);
+  }), [depoKiraRapor, yemekCekiList, addYemekCeki, updateYemekCeki, deleteYemekCeki, subeList, eFaturaList, b2bEkstreList, digerHarcamaList, stokList, stokFiyatList, stokSayimList, calisanList, puantajSecimiList, puantajList, gelirList, gelirEkstraList, avansIstekList, ustKategoriList, kategoriList, degerList, userList, rolesList, permissionsList, userRolesList, rolePermissionsList, eFaturaReferansList, odemeReferansList, nakitList, odemeList, addSube, updateSube, addEFaturas, updateEFatura, addB2BEkstreler, updateB2BEkstre, addDigerHarcama, updateDigerHarcama, deleteDigerHarcama, addStok, updateStok, addStokFiyat, updateStokFiyat, addOrUpdateStokSayim, addCalisan, updateCalisan, addUser, updateUser, addPuantajSecimi, updatePuantajSecimi, addOrUpdatePuantajEntry, getPuantajEntry, deletePuantajEntry, addOrUpdateGelirEntry, getGelirEntry, addOrUpdateGelirEkstraEntry, getGelirEkstraEntry, addOrUpdateAvansIstek, deleteAvansIstek, getAvansIstek, addUstKategori, updateUstKategori, addKategori, updateKategori, fetchDegerler, addDeger, updateDeger, addRole, updateRole, deleteRole, addPermission, updatePermission, deletePermission, addUserRole, updateUserRole, deleteUserRole, addRolePermission, updateRolePermission, deleteRolePermission, addEFaturaReferans, updateEFaturaReferans, deleteEFaturaReferans, addOdemeReferans, updateOdemeReferans, deleteOdemeReferans, addNakit, updateNakit, deleteNakit, updateOdeme,     uploadOdeme, uploadPosHareketleri, uploadTabakSayisi, calisanTalepList, updateCalisanTalep, deleteCalisanTalep, isInitialDataLoaded]);
 
   return <DataContext.Provider value={dataContextValue}>{children}</DataContext.Provider>;
 };
