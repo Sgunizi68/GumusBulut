@@ -126,6 +126,7 @@ export const VPS_DASHBOARD_YETKI_ADI = 'VPS Dashboard Görüntüleme';
 export const BAYI_KARLILIK_RAPORU_YETKI_ADI = 'Bayi Karlılık Raporu Görüntüleme';
 export const FATURA_BOLME_YONETIMI_EKRANI_YETKI_ADI = 'Fatura Bölme Yönetimi Ekranı Görüntüleme';
 export const OZET_KONTROL_RAPORU_YETKI_ADI = 'Özet Kontrol Raporu Görüntüleme';
+export const NAKIT_AKIS_GELIR_RAPORU_YETKI_ADI = 'Nakit Akış - Gelir Raporu Görüntüleme';
 export const CALISAN_TALEP_EKRANI_YETKI_ADI = 'Çalışan Talep Ekranı Görüntüleme';
 
 
@@ -208,6 +209,7 @@ export const MENU_GROUPS = [
             { label: 'VPS Dashboard', path: '/vps-dashboard', icon: Icons.Report, permission: VPS_DASHBOARD_YETKI_ADI },
             { label: 'Bayi Karlılık Raporu', path: '/bayi-karlilik-raporu', icon: Icons.DocumentReport, permission: BAYI_KARLILIK_RAPORU_YETKI_ADI },
             { label: 'Özet Kontrol Raporu', path: '/ozet-kontrol-raporu', icon: Icons.Report, permission: OZET_KONTROL_RAPORU_YETKI_ADI },
+            { label: 'Nakit Akış - Gelir', path: '/nakit-akis-gelir-raporu', icon: Icons.Report, permission: NAKIT_AKIS_GELIR_RAPORU_YETKI_ADI },
         ]
     }
 ];
