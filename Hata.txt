@@ -1,112 +1,32 @@
-2025-10-04T20:15:37.276345356Z WARNING:passlib.handlers.bcrypt:(trapped) error reading bcrypt version
-2025-10-04T20:15:37.276874785Z Traceback (most recent call last):
-2025-10-04T20:15:37.276883186Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
-2025-10-04T20:15:37.276887435Z     version = _bcrypt.__about__.__version__
-2025-10-04T20:15:37.276891606Z               ^^^^^^^^^^^^^^^^^
-2025-10-04T20:15:37.276895716Z AttributeError: module 'bcrypt' has no attribute '__about__'
-2025-10-04T20:15:37.647492911Z INFO:     82.222.120.167:0 - "POST /api/v1/token HTTP/1.1" 500 Internal Server Error
-2025-10-04T20:15:37.651230265Z ERROR:    Exception in ASGI application
-2025-10-04T20:15:37.651242275Z Traceback (most recent call last):
-2025-10-04T20:15:37.651248015Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
-2025-10-04T20:15:37.651253166Z     result = await app(  # type: ignore[func-returns-value]
-2025-10-04T20:15:37.651258106Z              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2025-10-04T20:15:37.651262915Z         self.scope, self.receive, self.send
-2025-10-04T20:15:37.651267236Z         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2025-10-04T20:15:37.651271396Z     )
-2025-10-04T20:15:37.651275486Z     ^
-2025-10-04T20:15:37.651282836Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
-2025-10-04T20:15:37.651287416Z     return await self.app(scope, receive, send)
-2025-10-04T20:15:37.651291636Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2025-10-04T20:15:37.651295516Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/fastapi/applications.py", line 1133, in __call__
-2025-10-04T20:15:37.651299446Z     await super().__call__(scope, receive, send)
-2025-10-04T20:15:37.651303146Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
-2025-10-04T20:15:37.651307206Z     await self.middleware_stack(scope, receive, send)
-2025-10-04T20:15:37.651311176Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
-2025-10-04T20:15:37.651315467Z     raise exc
-2025-10-04T20:15:37.651319987Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
-2025-10-04T20:15:37.651324807Z     await self.app(scope, receive, _send)
-2025-10-04T20:15:37.651329437Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
-2025-10-04T20:15:37.651334807Z     await self.simple_response(scope, receive, send, request_headers=headers)
-2025-10-04T20:15:37.651338947Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
-2025-10-04T20:15:37.651343377Z     await self.app(scope, receive, send)
-2025-10-04T20:15:37.651347687Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
-2025-10-04T20:15:37.651364507Z     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-2025-10-04T20:15:37.651366517Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-2025-10-04T20:15:37.651368317Z     raise exc
-2025-10-04T20:15:37.651370077Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-2025-10-04T20:15:37.651371808Z     await app(scope, receive, sender)
-2025-10-04T20:15:37.651373488Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
-2025-10-04T20:15:37.651375217Z     await self.app(scope, receive, send)
-2025-10-04T20:15:37.651377648Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
-2025-10-04T20:15:37.651379697Z     await self.middleware_stack(scope, receive, send)
-2025-10-04T20:15:37.651381518Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
-2025-10-04T20:15:37.651383158Z     await route.handle(scope, receive, send)
-2025-10-04T20:15:37.651384828Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
-2025-10-04T20:15:37.651386488Z     await self.app(scope, receive, send)
-2025-10-04T20:15:37.651388148Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 123, in app
-2025-10-04T20:15:37.651389858Z     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-2025-10-04T20:15:37.651391508Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-2025-10-04T20:15:37.651393148Z     raise exc
-2025-10-04T20:15:37.651394818Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-2025-10-04T20:15:37.651396488Z     await app(scope, receive, sender)
-2025-10-04T20:15:37.651398148Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 109, in app
-2025-10-04T20:15:37.651400378Z     response = await f(request)
-2025-10-04T20:15:37.651402028Z                ^^^^^^^^^^^^^^^^
-2025-10-04T20:15:37.651403678Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 387, in app
-2025-10-04T20:15:37.651405318Z     raw_response = await run_endpoint_function(
-2025-10-04T20:15:37.651407058Z                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2025-10-04T20:15:37.651409728Z     ...<3 lines>...
-2025-10-04T20:15:37.651411388Z     )
-2025-10-04T20:15:37.651413068Z     ^
-2025-10-04T20:15:37.651414778Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 288, in run_endpoint_function
-2025-10-04T20:15:37.651419648Z     return await dependant.call(**values)
-2025-10-04T20:15:37.651421438Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2025-10-04T20:15:37.651423118Z   File "/opt/render/project/src/backend/api/v1/endpoints/token.py", line 16, in login_for_access_token
-2025-10-04T20:15:37.651425288Z     user = crud.authenticate_user(db, username=form_data.username, password=form_data.password)
-2025-10-04T20:15:37.651439619Z   File "/opt/render/project/src/backend/db/crud.py", line 13, in authenticate_user
-2025-10-04T20:15:37.651441889Z     if not verify_password(password, user.Password):
-2025-10-04T20:15:37.651443609Z            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
-2025-10-04T20:15:37.651445289Z   File "/opt/render/project/src/backend/core/security.py", line 27, in verify_password
-2025-10-04T20:15:37.651451519Z     return pwd_context.verify(plain_password, hashed_password)
-2025-10-04T20:15:37.651453239Z            ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2025-10-04T20:15:37.651454919Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/context.py", line 2347, in verify
-2025-10-04T20:15:37.651456589Z     return record.verify(secret, hash, **kwds)
-2025-10-04T20:15:37.651458199Z            ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
-2025-10-04T20:15:37.651459959Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/utils/handlers.py", line 792, in verify
-2025-10-04T20:15:37.651461669Z     return consteq(self._calc_checksum(secret), chk)
-2025-10-04T20:15:37.651463379Z                    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
-2025-10-04T20:15:37.651465119Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/handlers/bcrypt.py", line 591, in _calc_checksum
-2025-10-04T20:15:37.651466779Z     self._stub_requires_backend()
-2025-10-04T20:15:37.651468409Z     ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
-2025-10-04T20:15:37.651470129Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/utils/handlers.py", line 2254, in _stub_requires_backend
-2025-10-04T20:15:37.651472119Z     cls.set_backend()
-2025-10-04T20:15:37.651473799Z     ~~~~~~~~~~~~~~~^^
-2025-10-04T20:15:37.651475489Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/utils/handlers.py", line 2156, in set_backend
-2025-10-04T20:15:37.651477169Z     return owner.set_backend(name, dryrun=dryrun)
-2025-10-04T20:15:37.651478809Z            ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
-2025-10-04T20:15:37.651480429Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/utils/handlers.py", line 2163, in set_backend
-2025-10-04T20:15:37.651482049Z     return cls.set_backend(name, dryrun=dryrun)
-2025-10-04T20:15:37.651483649Z            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
-2025-10-04T20:15:37.65148529Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/utils/handlers.py", line 2188, in set_backend
-2025-10-04T20:15:37.651486999Z     cls._set_backend(name, dryrun)
-2025-10-04T20:15:37.651488659Z     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
-2025-10-04T20:15:37.65149037Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/utils/handlers.py", line 2311, in _set_backend
-2025-10-04T20:15:37.651492039Z     super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
-2025-10-04T20:15:37.65149369Z     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
-2025-10-04T20:15:37.65149535Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/utils/handlers.py", line 2224, in _set_backend
-2025-10-04T20:15:37.65149699Z     ok = loader(**kwds)
-2025-10-04T20:15:37.65149869Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/handlers/bcrypt.py", line 626, in _load_backend_mixin
-2025-10-04T20:15:37.65150036Z     return mixin_cls._finalize_backend_mixin(name, dryrun)
-2025-10-04T20:15:37.65150202Z            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
-2025-10-04T20:15:37.65150368Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/handlers/bcrypt.py", line 421, in _finalize_backend_mixin
-2025-10-04T20:15:37.65150529Z     if detect_wrap_bug(IDENT_2A):
-2025-10-04T20:15:37.65150693Z        ~~~~~~~~~~~~~~~^^^^^^^^^^
-2025-10-04T20:15:37.6515086Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/handlers/bcrypt.py", line 380, in detect_wrap_bug
-2025-10-04T20:15:37.65151026Z     if verify(secret, bug_hash):
-2025-10-04T20:15:37.65151191Z        ~~~~~~^^^^^^^^^^^^^^^^^^
-2025-10-04T20:15:37.65151632Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/utils/handlers.py", line 792, in verify
-2025-10-04T20:15:37.65151802Z     return consteq(self._calc_checksum(secret), chk)
-2025-10-04T20:15:37.65151969Z                    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
-2025-10-04T20:15:37.65152133Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/passlib/handlers/bcrypt.py", line 655, in _calc_checksum
-2025-10-04T20:15:37.65152295Z     hash = _bcrypt.hashpw(secret, config)
-2025-10-04T20:15:37.65152465Z ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+2025-10-04T20:19:53.209443757Z ==> Downloading cache...
+2025-10-04T20:19:53.211251189Z ==> Cloning from https://github.com/Sgunizi68/GumusBulut
+2025-10-04T20:19:54.599595797Z ==> Checking out commit 5814e96ddbfaa5ac13be59016d52abbec125e543 in branch main
+2025-10-04T20:20:06.83392093Z ==> Transferred 251MB in 8s. Extraction took 5s.
+2025-10-04T20:20:15.104591729Z ==> Installing Python version 3.13.4...
+2025-10-04T20:20:25.116574353Z ==> Using Python version 3.13.4 (default)
+2025-10-04T20:20:25.14150581Z ==> Docs on specifying a Python version: https://render.com/docs/python-version
+2025-10-04T20:20:29.41717861Z ==> Using Poetry version 2.1.3 (default)
+2025-10-04T20:20:29.459302568Z ==> Docs on specifying a Poetry version: https://render.com/docs/poetry-version
+2025-10-04T20:20:29.490831551Z ==> Running build command 'pip install --upgrade pip; pip install -r backend/requirements.txt'...
+2025-10-04T20:20:29.993987497Z Requirement already satisfied: pip in ./.venv/lib/python3.13/site-packages (25.1.1)
+2025-10-04T20:20:30.202308868Z Collecting pip
+2025-10-04T20:20:30.203774583Z   Using cached pip-25.2-py3-none-any.whl.metadata (4.7 kB)
+2025-10-04T20:20:30.207518529Z Using cached pip-25.2-py3-none-any.whl (1.8 MB)
+2025-10-04T20:20:30.224372714Z Installing collected packages: pip
+2025-10-04T20:20:30.224542647Z   Attempting uninstall: pip
+2025-10-04T20:20:30.227149193Z     Found existing installation: pip 25.1.1
+2025-10-04T20:20:30.264953435Z     Uninstalling pip-25.1.1:
+2025-10-04T20:20:30.271606732Z       Successfully uninstalled pip-25.1.1
+2025-10-04T20:20:31.252641032Z Successfully installed pip-25.2
+2025-10-04T20:20:31.86094114Z Collecting fastapi (from -r backend/requirements.txt (line 1))
+2025-10-04T20:20:31.862546398Z   Using cached fastapi-0.118.0-py3-none-any.whl.metadata (28 kB)
+2025-10-04T20:20:32.125114309Z Collecting sqlalchemy (from -r backend/requirements.txt (line 3))
+2025-10-04T20:20:32.126764888Z   Using cached sqlalchemy-2.0.43-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (9.6 kB)
+2025-10-04T20:20:32.186646387Z Collecting mysql-connector-python (from -r backend/requirements.txt (line 4))
+2025-10-04T20:20:32.188101562Z   Using cached mysql_connector_python-9.4.0-cp313-cp313-manylinux_2_28_x86_64.whl.metadata (7.5 kB)
+2025-10-04T20:20:32.21254102Z Collecting python-dotenv (from -r backend/requirements.txt (line 5))
+2025-10-04T20:20:32.213814163Z   Using cached python_dotenv-1.1.1-py3-none-any.whl.metadata (24 kB)
+2025-10-04T20:20:32.236096793Z ERROR: Could not find a version that satisfies the requirement passlib==5.5.0 (from versions: 1.3.0, 1.3.1, 1.4, 1.5, 1.5.1, 1.5.2, 1.5.3, 1.6, 1.6.1, 1.6.2, 1.6.4, 1.6.5, 1.7.0, 1.7.1, 1.7.2, 1.7.3, 1.7.4)
+2025-10-04T20:20:32.241434117Z ERROR: No matching distribution found for passlib==5.5.0
+2025-10-04T20:20:32.317060682Z ==> Build failed 😞
+2025-10-04T20:20:32.317078082Z ==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys
