@@ -2,7 +2,7 @@ import React, { useState, createContext, useContext, useCallback, ReactNode, use
 import { HashRouter, Routes, Route, Link, NavLink, Navigate, useLocation } from 'react-router-dom';
 import { AppContextType, Sube, Kullanici, EFatura, InvoiceAssignmentFormData, DataContextType, RolYetki, B2BEkstre, B2BAssignmentFormData, DigerHarcama, DigerHarcamaFormData, Stok, StokFormData, StokFiyat, StokFiyatFormData, StokSayim, Calisan, CalisanFormData, PuantajSecimi, PuantajSecimiFormData, Puantaj, PuantajEntry, Gelir, GelirEkstra, AvansIstek, Rol, Yetki, KullaniciRol, Deger, UstKategori, Kategori, UstKategoriFormData, KategoriFormData, Nakit, NakitFormData, EFaturaReferans, EFaturaReferansFormData, OdemeReferans, OdemeReferansFormData, Odeme, OdemeAssignmentFormData, CalisanTalep } from './types';
 
-import { MENU_GROUPS, DASHBOARD_ITEM, Icons, DEFAULT_PERIOD, OZEL_FATURA_YETKI_ADI, PUANTAJ_HISTORY_ACCESS_YETKI_ADI, GELIR_GECMISI_YETKI_ADI, DEFAULT_END_DATE, STORAGE_KEYS } from './constants';
+import { API_BASE_URL, MENU_GROUPS, DASHBOARD_ITEM, Icons, DEFAULT_PERIOD, OZEL_FATURA_YETKI_ADI, PUANTAJ_HISTORY_ACCESS_YETKI_ADI, GELIR_GECMISI_YETKI_ADI, DEFAULT_END_DATE, STORAGE_KEYS } from './constants';
 import { ErrorProvider, useErrorContext, classifyError } from './contexts/ErrorContext';
 import { ToastContainer, ConnectionStatusBanner, useToast } from './contexts/ToastContext';
 
@@ -281,7 +281,7 @@ const ProtectedRoute: React.FC<{ children: ReactNode }> = ({ children }) => {
 
 
 // Backende de nereye gideceğini buaradab ayarlıyorum. Lokal veya bulut
-export const API_BASE_URL = "https://gumusbulut.onrender.com/api/v1";
+// export const API_BASE_URL = "https://gumusbulut.onrender.com/api/v1"; // Hatalı tanım, API adresi constants.tsx'den alınmalı.
 
 // Enhanced fetchData with error classification and suppression
 export const fetchData = async <T,>(url: string, options: RequestInit = {}, skipAuth: boolean = false): Promise<T | null> => {

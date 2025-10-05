@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { useAppContext, API_BASE_URL } from '../App';
+import { useAppContext } from '../App';
+import { API_BASE_URL } from '../constants';
 import { Button, Card, Select } from '../components';
 import { Icons, YAZDIRMA_YETKISI_ADI, EXCELE_AKTAR_YETKISI_ADI } from '../constants';
 import { generateDashboardPdf } from '../utils/pdfGenerator';

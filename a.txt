@@ -1,17 +1,3 @@
-Yemek Çeki
-SELECT Odeme_Tarih as Gün, sum(Tutar) as Yemek_Çeki
-FROM SilverCloud.Yemek_Ceki
-where Odeme_Tarih >= Ekran.Başlangıç_Tarih and
-Odeme_Tarih <= Ekran.Bitiş_Tarihi and
-Sube_ID = Ekran.Sube_Id
-group by Odeme_Tarih
-ORDER BY Odeme_Tarih
 
-Örnek Ekran.Başlangıç_Tarih ='2025-10-04', Ekran.Bitiş_Tarihi ='2025-10-25', Ekran.Sube_Id=1
-SELECT Odeme_Tarih as Gün, sum(Tutar) as Yemek_Çeki
-FROM SilverCloud.Yemek_Ceki
-where Odeme_Tarih >= '2025-10-04' and
-Odeme_Tarih <= '2025-10-25' and
-Sube_ID = 1
-group by Odeme_Tarih
-ORDER BY Odeme_Tarih
+Frontend lokal adreste ise (http://localhost:5173/) ise backend bağlantısı(http://localhost:8000/) üstünden olmalı ve aşağıdaki tanımı kullanmalı
+Frontend Bulut üstünde koşuyorsa (https://sgunizi68.github.io/) ise backedn bağlantısı Render (https://gumusbulut.onrender.com) üstünden yapmalı ve aşağıdaki tanımı kullanmalı

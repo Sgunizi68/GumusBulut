@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useAppContext, useDataContext, API_BASE_URL } from '../App';
+import { useAppContext, useDataContext } from '../App';
+import { API_BASE_URL } from '../constants';
 import { useToast } from '../contexts/ToastContext';
 import { Card, Button, Input, Select, TableLayout, Modal } from '../components';
 import { Icons, YAZDIRMA_YETKISI_ADI, EXCELE_AKTAR_YETKISI_ADI } from '../constants';

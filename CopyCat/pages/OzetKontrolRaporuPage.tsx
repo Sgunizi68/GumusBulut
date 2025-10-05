@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Card, Button } from '../components';
 import { useAppContext } from '../App';
 import { OZET_KONTROL_RAPORU_YETKI_ADI, EXCELE_AKTAR_YETKISI_ADI, Icons } from '../constants';
-import { API_BASE_URL, fetchData } from '../App';
+import { fetchData } from '../App';
+import { API_BASE_URL } from '../constants';
 import * as XLSX from 'xlsx';
 
 const AccessDenied: React.FC<{ title: string }> = ({ title }) => (

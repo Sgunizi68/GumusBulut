@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useAppContext, useDataContext, API_BASE_URL } from '../App';
+import { useAppContext, useDataContext } from '../App';
+import { API_BASE_URL } from '../constants';
 import { Card, Button, Input, Select, Modal } from '../components';
 import { Icons } from '../constants';
 import { DigerHarcama, Kategori } from '../types';
