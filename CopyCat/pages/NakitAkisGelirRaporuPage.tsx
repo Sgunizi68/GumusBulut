@@ -1,12 +1,13 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Calendar, TrendingUp } from 'lucide-react';
 import { useToast } from '../contexts/ToastContext';
-import { useAppContext, fetchData } from '../App';
+import { useAppContext, useDataContext, fetchData } from '../App';
 import { API_BASE_URL } from '../constants';
 
 export const NakitAkisGelirRaporuPage: React.FC = () => {
   const { showError } = useToast();
   const { selectedBranch } = useAppContext();
+  const { degerList, gelirList, kategoriList, ustKategoriList } = useDataContext();
   const [nakitGelirData, setNakitGelirData] = useState([]);
   const [posOdemeleriData, setPosOdemeleriData] = useState([]);
   const [yemekCekiData, setYemekCekiData] = useState([]);
@@ -59,7 +60,7 @@ export const NakitAkisGelirRaporuPage: React.FC = () => {
     }
   }, [startDate, endDate, selectedBranch]);
 
-  const generateCashFlowData = (start, end, gelirData, posOdemeleriData, yemekCekiData) => {
+  const generateCashFlowData = (start, end, gelirData, posOdemeleriData, yemekCekiData, degerList, gelirList, kategoriList, ustKategoriList) => {
     const data = [];
     const currentDate = new Date(start);
     const endDateTime = new Date(end);
@@ -67,6 +68,21 @@ export const NakitAkisGelirRaporuPage: React.FC = () => {
     const gelirMap = new Map(gelirData.map(item => [formatDateForInput(new Date(item.Tarih)), item.Tutar]));
     const posOdemeleriMap = new Map(posOdemeleriData.map(item => [formatDateForInput(new Date(item.Gun)), item.POS_Odemesi]));
     const yemekCekiMap = new Map(yemekCekiData.map(item => [formatDateForInput(new Date(item.Gun)), item.Yemek_Ceki]));
+
+    const onlineOdemeOrani = degerList.find(d => d.Deger_Adi === 'Online Ödeme')?.Deger_Tutar || 0;
+    const eTicaretUstKategori = ustKategoriList.find(uk => uk.UstKategori_Adi === 'E-Ticaret Kredi Kart');
+    const onlineKategoriIds = new Set(kategoriList.filter(k => k.Ust_Kategori_ID === eTicaretUstKategori?.UstKategori_ID).map(k => k.Kategori_ID));
+
+    const onlineGelirMap = new Map();
+    if (selectedBranch) {
+        gelirList.forEach(g => {
+            if (g.Sube_ID === selectedBranch.Sube_ID && onlineKategoriIds.has(g.Kategori_ID)) {
+                const key = formatDateForInput(new Date(g.Tarih));
+                const currentTutar = onlineGelirMap.get(key) || 0;
+                onlineGelirMap.set(key, currentTutar + g.Tutar);
+            }
+        });
+    }
 
     while (currentDate <= endDateTime) {
       const dayOfWeek = currentDate.getDay();
@@ -79,8 +95,13 @@ export const NakitAkisGelirRaporuPage: React.FC = () => {
       const estimatedCash = gelirMap.get(formattedPriorDate) || 0;
       
       const posPayment = posOdemeleriMap.get(formatDateForInput(currentDate)) || 0;
-      const mealVoucher = yemekCekiMap.get(formatDateForInput(currentDate)) || 0;
-      const onlineTransfer = Math.round(estimatedCash * (0.25 + Math.random() * 0.15));
+      
+      const yemekCekiOdemeOrani = degerList.find(d => d.Deger_Adi === 'Yemek Çeki Ödeme')?.Deger_Tutar || 1;
+      const mealVoucher = (yemekCekiMap.get(formatDateForInput(currentDate)) || 0) * yemekCekiOdemeOrani;
+
+      const onlineGelirTutar = onlineGelirMap.get(formattedPriorDate) || 0;
+      const onlineTransfer = onlineGelirTutar * onlineOdemeOrani;
+
       
       const total = posPayment + mealVoucher + onlineTransfer;
       
@@ -100,8 +121,8 @@ export const NakitAkisGelirRaporuPage: React.FC = () => {
   };
 
   const cashFlowData = useMemo(() => {
-    return generateCashFlowData(startDate, endDate, nakitGelirData, posOdemeleriData, yemekCekiData);
-  }, [startDate, endDate, nakitGelirData, posOdemeleriData, yemekCekiData]);
+    return generateCashFlowData(startDate, endDate, nakitGelirData, posOdemeleriData, yemekCekiData, degerList, gelirList, kategoriList, ustKategoriList);
+  }, [startDate, endDate, nakitGelirData, posOdemeleriData, yemekCekiData, degerList, gelirList, kategoriList, ustKategoriList]);
 
   const totals = useMemo(() => {
     return cashFlowData.reduce((acc, row) => ({

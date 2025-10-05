@@ -1,3 +1,44 @@
+Online Virman
 
-Frontend lokal adreste ise (http://localhost:5173/) ise backend bağlantısı(http://localhost:8000/) üstünden olmalı ve aşağıdaki tanımı kullanmalı
-Frontend Bulut üstünde koşuyorsa (https://sgunizi68.github.io/) ise backedn bağlantısı Render (https://gumusbulut.onrender.com) üstünden yapmalı ve aşağıdaki tanımı kullanmalı
+SELECT
+	Tarih + INTERVAL 28 DAY as Gün ,
+	Sum(Tutar) * (SELECT Deger FROM SilverCloud.Deger WHERE Deger_Adi = 'Online Ödeme') as Online_Virman
+FROM Gelir
+WHERE
+    Tarih >= Ekran.Başlangıç_Tarih - INTERVAL 28 DAY AND
+    Tarih <= Ekran.Bitiş_Tarihi - INTERVAL 28 DAY AND
+    Sube_ID = Ekran.Sube_ID And
+    Kategori_ID IN
+    (
+        SELECT Kategori_ID
+        FROM Kategori
+        WHERE Ust_Kategori_ID =
+			(select UstKategori_ID from UstKategori
+			where
+			UstKategori_Adi = 'E-Ticaret Kredi Kart'
+			)
+	)
+    GROUP BY Tarih
+    ORDER BY Tarih
+
+Örnek Ekran.Başlangıç_Tarih ='2025-10-04', Ekran.Bitiş_Tarihi ='2025-10-25', Ekran.Sube_Id=1
+SELECT
+	Tarih + INTERVAL 28 DAY as Gün ,
+	Sum(Tutar) * (SELECT Deger FROM SilverCloud.Deger WHERE Deger_Adi = 'Online Ödeme') as Online_Virman
+FROM Gelir
+WHERE
+    Tarih >= '2025-10-05' - INTERVAL 28 DAY AND
+    Tarih <= '2025-10-25' - INTERVAL 28 DAY AND
+    Sube_ID = 1 And
+    Kategori_ID IN
+    (
+        SELECT Kategori_ID
+        FROM Kategori
+        WHERE Ust_Kategori_ID =
+			(select UstKategori_ID from UstKategori
+			where
+			UstKategori_Adi = 'E-Ticaret Kredi Kart'
+			)
+	)
+    GROUP BY Tarih
+    ORDER BY Tarih
