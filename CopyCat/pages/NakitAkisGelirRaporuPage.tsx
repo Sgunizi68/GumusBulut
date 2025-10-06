@@ -11,6 +11,7 @@ export const NakitAkisGelirRaporuPage: React.FC = () => {
   const [nakitGelirData, setNakitGelirData] = useState([]);
   const [posOdemeleriData, setPosOdemeleriData] = useState([]);
   const [yemekCekiData, setYemekCekiData] = useState([]);
+  const [onlineVirmanData, setOnlineVirmanData] = useState([]);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -57,10 +58,17 @@ export const NakitAkisGelirRaporuPage: React.FC = () => {
                     setYemekCekiData(data);
                 }
             });
+
+        fetchData<any[]>(`${API_BASE_URL}/rapor/online-virman?start_date=${formatDateForInput(queryStartDate)}&end_date=${formatDateForInput(queryEndDate)}&sube_id=${selectedBranch.Sube_ID}`)
+            .then(data => {
+                if (data) {
+                    setOnlineVirmanData(data);
+                }
+            });
     }
   }, [startDate, endDate, selectedBranch]);
 
-  const generateCashFlowData = (start, end, gelirData, posOdemeleriData, yemekCekiData, degerList, gelirList, kategoriList, ustKategoriList) => {
+  const generateCashFlowData = (start, end, gelirData, posOdemeleriData, yemekCekiData, onlineVirmanData) => {
     const data = [];
     const currentDate = new Date(start);
     const endDateTime = new Date(end);
@@ -68,21 +76,7 @@ export const NakitAkisGelirRaporuPage: React.FC = () => {
     const gelirMap = new Map(gelirData.map(item => [formatDateForInput(new Date(item.Tarih)), item.Tutar]));
     const posOdemeleriMap = new Map(posOdemeleriData.map(item => [formatDateForInput(new Date(item.Gun)), item.POS_Odemesi]));
     const yemekCekiMap = new Map(yemekCekiData.map(item => [formatDateForInput(new Date(item.Gun)), item.Yemek_Ceki]));
-
-    const onlineOdemeOrani = degerList.find(d => d.Deger_Adi === 'Online Ödeme')?.Deger_Tutar || 0;
-    const eTicaretUstKategori = ustKategoriList.find(uk => uk.UstKategori_Adi === 'E-Ticaret Kredi Kart');
-    const onlineKategoriIds = new Set(kategoriList.filter(k => k.Ust_Kategori_ID === eTicaretUstKategori?.UstKategori_ID).map(k => k.Kategori_ID));
-
-    const onlineGelirMap = new Map();
-    if (selectedBranch) {
-        gelirList.forEach(g => {
-            if (g.Sube_ID === selectedBranch.Sube_ID && onlineKategoriIds.has(g.Kategori_ID)) {
-                const key = formatDateForInput(new Date(g.Tarih));
-                const currentTutar = onlineGelirMap.get(key) || 0;
-                onlineGelirMap.set(key, currentTutar + g.Tutar);
-            }
-        });
-    }
+    const onlineVirmanMap = new Map(onlineVirmanData.map(item => [formatDateForInput(new Date(item.Gun)), item.Online_Virman]));
 
     while (currentDate <= endDateTime) {
       const dayOfWeek = currentDate.getDay();
@@ -95,13 +89,8 @@ export const NakitAkisGelirRaporuPage: React.FC = () => {
       const estimatedCash = gelirMap.get(formattedPriorDate) || 0;
       
       const posPayment = posOdemeleriMap.get(formatDateForInput(currentDate)) || 0;
-      
-      const yemekCekiOdemeOrani = degerList.find(d => d.Deger_Adi === 'Yemek Çeki Ödeme')?.Deger_Tutar || 1;
-      const mealVoucher = (yemekCekiMap.get(formatDateForInput(currentDate)) || 0) * yemekCekiOdemeOrani;
-
-      const onlineGelirTutar = onlineGelirMap.get(formattedPriorDate) || 0;
-      const onlineTransfer = onlineGelirTutar * onlineOdemeOrani;
-
+      const mealVoucher = yemekCekiMap.get(formatDateForInput(currentDate)) || 0;
+      const onlineTransfer = onlineVirmanMap.get(formatDateForInput(currentDate)) || 0;
       
       const total = posPayment + mealVoucher + onlineTransfer;
       
@@ -121,8 +110,8 @@ export const NakitAkisGelirRaporuPage: React.FC = () => {
   };
 
   const cashFlowData = useMemo(() => {
-    return generateCashFlowData(startDate, endDate, nakitGelirData, posOdemeleriData, yemekCekiData, degerList, gelirList, kategoriList, ustKategoriList);
-  }, [startDate, endDate, nakitGelirData, posOdemeleriData, yemekCekiData, degerList, gelirList, kategoriList, ustKategoriList]);
+    return generateCashFlowData(startDate, endDate, nakitGelirData, posOdemeleriData, yemekCekiData, onlineVirmanData);
+  }, [startDate, endDate, nakitGelirData, posOdemeleriData, yemekCekiData, onlineVirmanData]);
 
   const totals = useMemo(() => {
     return cashFlowData.reduce((acc, row) => ({
