@@ -2,7 +2,8 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { generateDashboardPdf } from './utils/pdfGenerator';
 import * as XLSX from 'xlsx';
-import { useAppContext, useDataContext } from './App';
+import { useAppContext, useDataContext, fetchData } from './App';
+import { API_BASE_URL } from './constants';
 import { useToast } from './contexts/ToastContext';
 import { Button, Input, Modal, Card, TableLayout, StatusBadge, UserForm, RoleForm, PermissionForm, Select, DegerForm, Textarea, UstKategoriForm, KategoriForm, InlineEditInput, DigerHarcamaForm, StokForm, StokFiyatForm, NumberSpinnerInput, CalisanForm, PuantajSecimiForm, SubeForm, EFaturaReferansForm, OdemeReferansForm, NakitForm, AvansIstekForm } from './components';
 import { 
@@ -339,6 +340,7 @@ interface DashboardRowData {
 
 export const DashboardPage: React.FC = () => {
   const { selectedBranch, currentPeriod, hasPermission } = useAppContext();
+  const [gidenFaturaData, setGidenFaturaData] = useState<any[]>([]);
   const { 
     gelirEkstraList, eFaturaList, b2bEkstreList, digerHarcamaList, gelirList, 
     stokSayimList, stokFiyatList, stokList, kategoriList, ustKategoriList
@@ -373,6 +375,17 @@ export const DashboardPage: React.FC = () => {
       setSelectedPeriodForDashboard(currentPeriod || DEFAULT_PERIOD);
     }
   }, [currentPeriod, availablePeriodsForDashboard, selectedPeriodForDashboard]);
+
+  useEffect(() => {
+    if (selectedBranch && selectedPeriodForDashboard) {
+      fetchData<any[]>(`${API_BASE_URL}/rapor/giden-fatura?donem=${selectedPeriodForDashboard}&sube_id=${selectedBranch.Sube_ID}`)
+        .then(data => {
+          if (data) {
+            setGidenFaturaData(data);
+          }
+        });
+    }
+  }, [selectedBranch, selectedPeriodForDashboard]);
 
   // Helper to get latest price (copied from StokSayimPage, can be centralized)
   const getLatestPriceForPeriod = useCallback((malzemeKodu: string, periodYYAA: string): number => {
@@ -554,6 +567,20 @@ export const DashboardPage: React.FC = () => {
     const previousPeriodStokTotal = calculateStokTotalForPeriod(getPreviousPeriod(selectedPeriodForDashboard));
     const stokSayimFarki = currentPeriodStokTotal - previousPeriodStokTotal;
 
+    if (gidenFaturaData.length > 0) {
+      ozetData.push({ label: 'GİDEN FATURA', value: 0, isTitle: true, bgColor: 'bg-orange-100' });
+      let gidenFaturaToplam = 0;
+      gidenFaturaData.forEach(fatura => {
+        ozetData.push({
+          label: `${fatura.Kategori_Adi} - ${fatura.Alici_Unvani}`,
+          value: fatura.Tutar,
+          isSubItem: true,
+        });
+        gidenFaturaToplam += fatura.Tutar;
+      });
+      ozetData.push({ label: 'Giden Fatura Toplamı', value: gidenFaturaToplam, isBold: true, bgColor: 'bg-orange-50' });
+    }
+
     ozetData.push({ label: 'STOK DURUMU', value: 0, isTitle: true, bgColor: 'bg-yellow-100' });
     ozetData.push({ label: `Dönem (${selectedPeriodForDashboard}) Stok Değeri`, value: currentPeriodStokTotal });
     ozetData.push({ label: `Önceki Dönem (${getPreviousPeriod(selectedPeriodForDashboard)}) Stok Değeri`, value: previousPeriodStokTotal });
@@ -590,6 +617,7 @@ export const DashboardPage: React.FC = () => {
   }, [
     selectedBranch, selectedPeriodForDashboard, gelirEkstraList, eFaturaList, b2bEkstreList,
     digerHarcamaList, gelirList, stokSayimList, stokFiyatList, stokList, kategoriList, ustKategoriList,
+    gidenFaturaData,
     canViewGizliKategoriler, getLatestPriceForPeriod, getDetailedGiderItems
   ]);
 
