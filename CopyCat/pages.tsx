@@ -6297,8 +6297,17 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
   }, [weeklyHeaders, platforms, calculateVirman]);
 
   const grandTotalGelir = useMemo(() => {
-    return weeklyGelirTotals.reduce((sum, total) => sum + total, 0);
-  }, [weeklyGelirTotals]);
+    return platforms.reduce((sum, platform) => {
+        const totalGelir = gelirList
+            .filter(g => {
+                if (!g.Tarih) return false;
+                const gDonem = calculatePeriod(parseDateString(g.Tarih));
+                return g.Kategori_ID === platform.Kategori_ID && gDonem === viewedPeriod && g.Sube_ID === selectedBranch?.Sube_ID;
+            })
+            .reduce((total, g) => total + g.Tutar, 0);
+        return sum + totalGelir;
+    }, 0);
+  }, [platforms, gelirList, viewedPeriod, selectedBranch, calculatePeriod, parseDateString]);
 
   const grandTotalVirman = useMemo(() => {
     return weeklyVirmanTotals.reduce((sum, total) => sum + total, 0);
