@@ -6358,10 +6358,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
     const dataForExport: (string | number)[][] = [];
 
     const header: string[] = ['Platform'];
-    weeklyHeaders.forEach(h => {
-        header.push(`${h} Gelir`);
-        header.push(`${h} Virman`);
-    });
+
             header.push('Gelir Toplam', 'Virman Son Gün', 'Toplam Virman', 'Kısmı Gelir', 'Fark', 'Komisyon Toplam', 'Komisyon %');
             dataForExport.push(header);
     
@@ -6373,10 +6370,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                         const toplamVirmanYeni = calculateToplamVirman(platform.Kategori_Adi);
                         const kismiGelir = calculateKismiGelir(platform.Kategori_ID, virmanSonGun);
                         
-                        weeklyHeaders.forEach(header => {
-                            row.push(calculateWeeklyGelir(platform.Kategori_ID, header));
-                            row.push(calculateVirman(platform.Kategori_Adi, header));
-                        });
+
                 
                         row.push(totalGelir);
                         row.push(virmanSonGun !== null ? virmanSonGun : 'N/A');
@@ -6392,10 +6386,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                     });
                 
                     const footer: (string | number)[] = ['GENEL TOPLAM'];
-                    weeklyHeaders.forEach((_, weekIndex) => {
-                        footer.push(weeklyGelirTotals[weekIndex]);
-                        footer.push(weeklyVirmanTotals[weekIndex]);
-                    });
+
                     footer.push(grandTotalGelir);
                     footer.push('N/A');
                     const grandTotalKismiGelir = platforms.reduce((sum, p) => sum + calculateKismiGelir(p.Kategori_ID, calculateVirmanSonGun(p.Kategori_Adi)), 0);
@@ -6447,9 +6438,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                 <thead>
                     <tr>
                         <th rowSpan={2} className="border p-2 bg-gray-700 text-white">Platform</th>
-                        {weeklyHeaders.map(header => (
-                            <th key={header} colSpan={2} className="border p-2 bg-blue-600 text-white">{header}</th>
-                        ))}
+
                         <th rowSpan={2} className="border p-2 bg-green-600 text-white">Gelir Toplam</th>
                         
                         <th rowSpan={2} className="border p-2 bg-sky-600 text-white">Virman Son Gün</th>
@@ -6460,12 +6449,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                         <th rowSpan={2} className="border p-2 bg-pink-600 text-white">Komisyon %</th>
                     </tr>
                     <tr>
-                        {weeklyHeaders.map((_, index) => (
-                            <React.Fragment key={index}>
-                                <th className="border p-1 bg-blue-100 text-xs">Gelir</th>
-                                <th className="border p-1 bg-orange-100 text-xs">Virman</th>
-                            </React.Fragment>
-                        ))}
+
                         <th className="border p-1 bg-pink-100 text-xs">%</th>
                     </tr>
                 </thead>
@@ -6491,12 +6475,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                         return (
                             <tr key={platform.Kategori_ID}>
                                 <td className="border p-2 font-bold bg-red-100 text-red-800 text-left">{platform.Kategori_Adi}</td>
-                                {weeklyHeaders.map((header, weekIndex) => (
-                                    <React.Fragment key={weekIndex}>
-                                        <td className="border p-2 text-right">{formatTrCurrencyAdvanced(calculateWeeklyGelir(platform.Kategori_ID, header), 2)}</td>
-                                        <td className="border p-2 text-right">{formatTrCurrencyAdvanced(calculateVirman(platform.Kategori_Adi, header), 2)}</td>
-                                    </React.Fragment>
-                                ))}
+
                                 <td className="border p-2 text-right font-bold bg-green-100">{formatTrCurrencyAdvanced(totalGelir, 2)}</td>
                                 
                                 <td className="border p-2 text-right">{virmanSonGun !== null ? virmanSonGun : 'N/A'}</td>
@@ -6514,12 +6493,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                 <tfoot>
                     <tr className="bg-gray-700 text-white font-bold">
                         <td className="border p-2 text-left">GENEL TOPLAM</td>
-                        {weeklyHeaders.map((_, weekIndex) => (
-                            <React.Fragment key={weekIndex}>
-                                <td className="border p-2 text-right">{formatTrCurrencyAdvanced(weeklyGelirTotals[weekIndex], 2)}</td>
-                                <td className="border p-2 text-right">{formatTrCurrencyAdvanced(weeklyVirmanTotals[weekIndex], 2)}</td>
-                            </React.Fragment>
-                        ))}
+
                         <td className="border p-2 text-right">{formatTrCurrencyAdvanced(grandTotalGelir, 2)}</td>
                         
                         <td className="border p-2 text-right">N/A</td>
