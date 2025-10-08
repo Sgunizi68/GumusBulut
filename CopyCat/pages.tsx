@@ -6417,42 +6417,42 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
         const totalGelir = weeklyHeaders.reduce((sum, header) => sum + calculateWeeklyGelir(platform.Kategori_ID, header), 0);
         const totalVirman = weeklyHeaders.reduce((sum, header) => sum + calculateVirman(platform.Kategori_Adi, header), 0);
         const virmanSonGun = calculateVirmanSonGun(platform.Kategori_Adi);
-        const toplamVirmanYeni = calculateToplamVirman(platform.Kategori_Adi);
-        const kismiGelir = calculateKismiGelir(platform.Kategori_ID, virmanSonGun);
+                const toplamVirmanYeni = calculateToplamVirman(platform.Kategori_Adi);
+                const kismiGelir = calculateKismiGelir(platform.Kategori_ID, virmanSonGun);
+                
+                weeklyHeaders.forEach(header => {
+                    row.push(calculateWeeklyGelir(platform.Kategori_ID, header));
+                    row.push(calculateVirman(platform.Kategori_Adi, header));
+                });
         
-        weeklyHeaders.forEach(header => {
-            row.push(calculateWeeklyGelir(platform.Kategori_ID, header));
-            row.push(calculateVirman(platform.Kategori_Adi, header));
-        });
-
-        row.push(totalGelir);
-        row.push(totalVirman);
-        row.push(virmanSonGun !== null ? virmanSonGun : 'N/A');
-        row.push(kismiGelir); // Kısmı Gelir
-        row.push(toplamVirmanYeni);
-        row.push(kismiGelir - toplamVirmanYeni); // Fark
-        const monthlyKomisyon = calculateMonthlyKomisyon(platform.Kategori_Adi);
-        row.push(monthlyKomisyon);
-        const komisyonPercentage = totalVirman !== 0 ? (monthlyKomisyon / totalVirman) * 100 : 0;
-        row.push(komisyonPercentage.toFixed(2) + '%');
-
-        dataForExport.push(row);
-    });
-
-    const footer: (string | number)[] = ['GENEL TOPLAM'];
-    weeklyHeaders.forEach((_, weekIndex) => {
-        footer.push(weeklyGelirTotals[weekIndex]);
-        footer.push(weeklyVirmanTotals[weekIndex]);
-    });
-    footer.push(grandTotalGelir);
-    footer.push(grandTotalVirman);
-    footer.push('N/A');
-    const grandTotalKismiGelir = platforms.reduce((sum, p) => sum + calculateKismiGelir(p.Kategori_ID, calculateVirmanSonGun(p.Kategori_Adi)), 0);
-    footer.push(grandTotalKismiGelir);
-    footer.push(grandTotalToplamVirman);
-    footer.push(grandTotalKismiGelir - grandTotalToplamVirman);
-    footer.push(grandTotalKomisyon);
-    const grandTotalKomisyonPercentage = grandTotalVirman !== 0 ? (grandTotalKomisyon / grandTotalVirman) * 100 : 0;
+                row.push(totalGelir);
+                row.push(totalVirman);
+                row.push(virmanSonGun !== null ? virmanSonGun : 'N/A');
+                row.push(kismiGelir); // Kısmı Gelir
+                row.push(toplamVirmanYeni);
+                row.push(kismiGelir - toplamVirmanYeni); // Fark
+                const monthlyKomisyon = calculateMonthlyKomisyon(platform.Kategori_Adi);
+                row.push(monthlyKomisyon);
+                const komisyonPercentage = toplamVirmanYeni !== 0 ? (monthlyKomisyon / toplamVirmanYeni) * 100 : 0;
+                row.push(komisyonPercentage.toFixed(2) + '%');
+        
+                dataForExport.push(row);
+            });
+        
+            const footer: (string | number)[] = ['GENEL TOPLAM'];
+            weeklyHeaders.forEach((_, weekIndex) => {
+                footer.push(weeklyGelirTotals[weekIndex]);
+                footer.push(weeklyVirmanTotals[weekIndex]);
+            });
+            footer.push(grandTotalGelir);
+            footer.push(grandTotalVirman);
+            footer.push('N/A');
+            const grandTotalKismiGelir = platforms.reduce((sum, p) => sum + calculateKismiGelir(p.Kategori_ID, calculateVirmanSonGun(p.Kategori_Adi)), 0);
+            footer.push(grandTotalKismiGelir);
+            footer.push(grandTotalToplamVirman);
+            footer.push(grandTotalKismiGelir - grandTotalToplamVirman);
+            footer.push(grandTotalKomisyon);
+            const grandTotalKomisyonPercentage = grandTotalToplamVirman !== 0 ? (grandTotalKomisyon / grandTotalToplamVirman) * 100 : 0;
     footer.push(grandTotalKomisyonPercentage.toFixed(2) + '%');
     dataForExport.push(footer);
 
@@ -6528,8 +6528,8 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                         const toplamVirmanYeni = calculateToplamVirman(platform.Kategori_Adi);
                         const kismiGelir = calculateKismiGelir(platform.Kategori_ID, virmanSonGun);
                         
-                        const komisyonPercentage = totalVirman !== 0 
-                            ? (monthlyKomisyon / totalVirman) * 100 
+                        const komisyonPercentage = toplamVirmanYeni !== 0 
+                            ? (monthlyKomisyon / toplamVirmanYeni) * 100 
                             : 0;
 
                         return (
@@ -6572,8 +6572,8 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                         <td className="border p-2 text-right">{formatTrCurrencyAdvanced(platforms.reduce((sum, p) => sum + calculateKismiGelir(p.Kategori_ID, calculateVirmanSonGun(p.Kategori_Adi)), 0) - grandTotalToplamVirman, 2)}</td>
                         <td className="border p-2 text-right">{formatTrCurrencyAdvanced(grandTotalKomisyon, 2)}</td>
                         <td className="border p-2 text-right">
-                            {(grandTotalVirman !== 0 
-                                ? (grandTotalKomisyon / grandTotalVirman) * 100 
+                            {(grandTotalToplamVirman !== 0 
+                                ? (grandTotalKomisyon / grandTotalToplamVirman) * 100 
                                 : 0).toFixed(2)}%
                         </td>
                     </tr>
