@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Check, X, FileText, Users } from 'lucide-react';
+import { Plus, Edit, Trash2, Check, X, FileText, Users, Eye } from 'lucide-react';
 import { useAppContext, useDataContext } from '../App';
 import { CALISAN_TALEP_ISE_GIRIS_ONAYI_YETKI_ADI, CALISAN_TALEP_SSK_ONAYI_YETKI_ADI } from '../constants';
 
@@ -73,7 +73,7 @@ const CalisanTalepSistemi: React.FC = () => {
   const [activeEmployees, setActiveEmployees] = useState<ActiveEmployee[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showExitModal, setShowExitModal] = useState(false);
-  const [modalType, setModalType] = useState<'add' | 'edit'>('add');
+  const [modalType, setModalType] = useState<'add' | 'edit' | 'observe'>('add');
   const [selectedTalep, setSelectedTalep] = useState<CalisanTalep | null>(null);
   const [filter, setFilter] = useState<'all' | 'İşe Giriş' | 'İşten Çıkış'>('all');
   const [showOnlyApproved, setShowOnlyApproved] = useState(false);
@@ -271,6 +271,13 @@ const CalisanTalepSistemi: React.FC = () => {
     setShowModal(true);
   };
 
+  const handleObserve = (talep: CalisanTalep) => {
+    setFormData(talep);
+    setSelectedTalep(talep);
+    setModalType('observe');
+    setShowModal(true);
+  };
+
   const handleDelete = async (id: number) => {
     if (window.confirm('Bu talebi silmek istediğinizden emin misiniz?')) {
       await deleteCalisanTalep(id);
@@ -430,6 +437,13 @@ const CalisanTalepSistemi: React.FC = () => {
                       </td>
                       <td className="py-3 px-4">
                         <div className="flex gap-2">
+                          <button
+                            onClick={() => handleObserve(talep)}
+                            className="text-gray-600 hover:text-gray-800 p-1"
+                            title="Gözlemle"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
                           {!talep.Is_Onay_Tarih && !talep.SSK_Onay_Tarih && (
                             <>
                               <button
@@ -489,11 +503,12 @@ const CalisanTalepSistemi: React.FC = () => {
           <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-200">
               <h2 className="text-xl font-bold text-gray-900">
-                {modalType === 'add' ? 'Yeni İşe Giriş Talebi' : 'Talep Düzenle'}
+                {modalType === 'add' ? 'Yeni İşe Giriş Talebi' : modalType === 'edit' ? 'Talep Düzenle' : 'Talep Gözlemle'}
               </h2>
             </div>
             
             <form onSubmit={handleSubmit} className="p-6">
+              <fieldset disabled={modalType === 'observe'}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {formData.Talep === 'İşten Çıkış' ? (
                   <>
@@ -816,6 +831,7 @@ const CalisanTalepSistemi: React.FC = () => {
                   </>
                 )}
               </div>
+              </fieldset>
               
               <div className="flex justify-end gap-3 mt-6">
                 <button
@@ -827,14 +843,16 @@ const CalisanTalepSistemi: React.FC = () => {
                   }}
                   className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
                 >
-                  İptal
+                  {modalType === 'observe' ? 'Kapat' : 'İptal'}
                 </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-                >
-                  {modalType === 'add' ? 'Kaydet' : 'Güncelle'}
-                </button>
+                {modalType !== 'observe' && (
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                  >
+                    {modalType === 'add' ? 'Kaydet' : 'Güncelle'}
+                  </button>
+                )}
               </div>
             </form>
           </div>
