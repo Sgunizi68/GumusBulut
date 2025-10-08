@@ -6409,53 +6409,50 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
         header.push(`${h} Gelir`);
         header.push(`${h} Virman`);
     });
-    header.push('Gelir Toplam', 'Virman Toplam', 'Virman Son Gün', 'Kısmı Gelir', 'Toplam Virman', 'Fark', 'Komisyon Toplam', 'Komisyon %');
-    dataForExport.push(header);
-
-    platforms.forEach(platform => {
-        const row: (string | number)[] = [platform.Kategori_Adi];
-        const totalGelir = weeklyHeaders.reduce((sum, header) => sum + calculateWeeklyGelir(platform.Kategori_ID, header), 0);
-        const totalVirman = weeklyHeaders.reduce((sum, header) => sum + calculateVirman(platform.Kategori_Adi, header), 0);
-        const virmanSonGun = calculateVirmanSonGun(platform.Kategori_Adi);
-                const toplamVirmanYeni = calculateToplamVirman(platform.Kategori_Adi);
-                const kismiGelir = calculateKismiGelir(platform.Kategori_ID, virmanSonGun);
+            header.push('Gelir Toplam', 'Virman Son Gün', 'Kısmı Gelir', 'Toplam Virman', 'Fark', 'Komisyon Toplam', 'Komisyon %');
+            dataForExport.push(header);
+    
+            platforms.forEach(platform => {
+                const row: (string | number)[] = [platform.Kategori_Adi];
+                const totalGelir = weeklyHeaders.reduce((sum, header) => sum + calculateWeeklyGelir(platform.Kategori_ID, header), 0);
+                const totalVirman = weeklyHeaders.reduce((sum, header) => sum + calculateVirman(platform.Kategori_Adi, header), 0);
+                const virmanSonGun = calculateVirmanSonGun(platform.Kategori_Adi);
+                        const toplamVirmanYeni = calculateToplamVirman(platform.Kategori_Adi);
+                        const kismiGelir = calculateKismiGelir(platform.Kategori_ID, virmanSonGun);
+                        
+                        weeklyHeaders.forEach(header => {
+                            row.push(calculateWeeklyGelir(platform.Kategori_ID, header));
+                            row.push(calculateVirman(platform.Kategori_Adi, header));
+                        });
                 
-                weeklyHeaders.forEach(header => {
-                    row.push(calculateWeeklyGelir(platform.Kategori_ID, header));
-                    row.push(calculateVirman(platform.Kategori_Adi, header));
-                });
-        
-                row.push(totalGelir);
-                row.push(totalVirman);
-                row.push(virmanSonGun !== null ? virmanSonGun : 'N/A');
-                row.push(kismiGelir); // Kısmı Gelir
-                row.push(toplamVirmanYeni);
-                row.push(kismiGelir - toplamVirmanYeni); // Fark
-                const monthlyKomisyon = calculateMonthlyKomisyon(platform.Kategori_Adi);
-                row.push(monthlyKomisyon);
-                const komisyonPercentage = toplamVirmanYeni !== 0 ? (monthlyKomisyon / toplamVirmanYeni) * 100 : 0;
-                row.push(komisyonPercentage.toFixed(2) + '%');
-        
-                dataForExport.push(row);
-            });
-        
-            const footer: (string | number)[] = ['GENEL TOPLAM'];
-            weeklyHeaders.forEach((_, weekIndex) => {
-                footer.push(weeklyGelirTotals[weekIndex]);
-                footer.push(weeklyVirmanTotals[weekIndex]);
-            });
-            footer.push(grandTotalGelir);
-            footer.push(grandTotalVirman);
-            footer.push('N/A');
-            const grandTotalKismiGelir = platforms.reduce((sum, p) => sum + calculateKismiGelir(p.Kategori_ID, calculateVirmanSonGun(p.Kategori_Adi)), 0);
-            footer.push(grandTotalKismiGelir);
-            footer.push(grandTotalToplamVirman);
-            footer.push(grandTotalKismiGelir - grandTotalToplamVirman);
-            footer.push(grandTotalKomisyon);
-            const grandTotalKomisyonPercentage = grandTotalToplamVirman !== 0 ? (grandTotalKomisyon / grandTotalToplamVirman) * 100 : 0;
-    footer.push(grandTotalKomisyonPercentage.toFixed(2) + '%');
-    dataForExport.push(footer);
-
+                        row.push(totalGelir);
+                        row.push(virmanSonGun !== null ? virmanSonGun : 'N/A');
+                        row.push(kismiGelir); // Kısmı Gelir
+                        row.push(toplamVirmanYeni);
+                        row.push(kismiGelir - toplamVirmanYeni); // Fark
+                        const monthlyKomisyon = calculateMonthlyKomisyon(platform.Kategori_Adi);
+                        row.push(monthlyKomisyon);
+                        const komisyonPercentage = toplamVirmanYeni !== 0 ? (monthlyKomisyon / toplamVirmanYeni) * 100 : 0;
+                        row.push(komisyonPercentage.toFixed(2) + '%');
+                
+                        dataForExport.push(row);
+                    });
+                
+                    const footer: (string | number)[] = ['GENEL TOPLAM'];
+                    weeklyHeaders.forEach((_, weekIndex) => {
+                        footer.push(weeklyGelirTotals[weekIndex]);
+                        footer.push(weeklyVirmanTotals[weekIndex]);
+                    });
+                    footer.push(grandTotalGelir);
+                    footer.push('N/A');
+                    const grandTotalKismiGelir = platforms.reduce((sum, p) => sum + calculateKismiGelir(p.Kategori_ID, calculateVirmanSonGun(p.Kategori_Adi)), 0);
+                    footer.push(grandTotalKismiGelir);
+                    footer.push(grandTotalToplamVirman);
+                    footer.push(grandTotalKismiGelir - grandTotalToplamVirman);
+                    footer.push(grandTotalKomisyon);
+                    const grandTotalKomisyonPercentage = grandTotalToplamVirman !== 0 ? (grandTotalKomisyon / grandTotalToplamVirman) * 100 : 0;
+            footer.push(grandTotalKomisyonPercentage.toFixed(2) + '%');
+            dataForExport.push(footer);
     const ws = XLSX.utils.aoa_to_sheet(dataForExport);
     ws['!cols'] = [ { wch: 20 } ];
     for (let i = 0; i < weeklyHeaders.length * 2; i++) {
@@ -6501,7 +6498,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                             <th key={header} colSpan={2} className="border p-2 bg-blue-600 text-white">{header}</th>
                         ))}
                         <th rowSpan={2} className="border p-2 bg-green-600 text-white">Gelir Toplam</th>
-                        <th rowSpan={2} className="border p-2 bg-orange-600 text-white">Virman Toplam</th>
+                        
                         <th rowSpan={2} className="border p-2 bg-sky-600 text-white">Virman Son Gün</th>
                         <th rowSpan={2} className="border p-2 bg-teal-600 text-white">Kısmı Gelir</th>
                         <th rowSpan={2} className="border p-2 bg-indigo-600 text-white">Toplam Virman</th>
@@ -6542,7 +6539,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                                     </React.Fragment>
                                 ))}
                                 <td className="border p-2 text-right font-bold bg-green-100">{formatTrCurrencyAdvanced(totalGelir, 2)}</td>
-                                <td className="border p-2 text-right font-bold bg-orange-100">{formatTrCurrencyAdvanced(totalVirman, 2)}</td>
+                                
                                 <td className="border p-2 text-right">{virmanSonGun !== null ? virmanSonGun : 'N/A'}</td>
                                 <td className="border p-2 text-right">{formatTrCurrencyAdvanced(kismiGelir, 2)}</td>
                                 <td className="border p-2 text-right">{formatTrCurrencyAdvanced(toplamVirmanYeni, 2)}</td>
@@ -6565,7 +6562,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                             </React.Fragment>
                         ))}
                         <td className="border p-2 text-right">{formatTrCurrencyAdvanced(grandTotalGelir, 2)}</td>
-                        <td className="border p-2 text-right">{formatTrCurrencyAdvanced(grandTotalVirman, 2)}</td>
+                        
                         <td className="border p-2 text-right">N/A</td>
                         <td className="border p-2 text-right">{formatTrCurrencyAdvanced(platforms.reduce((sum, p) => sum + calculateKismiGelir(p.Kategori_ID, calculateVirmanSonGun(p.Kategori_Adi)), 0), 2)}</td>
                         <td className="border p-2 text-right">{formatTrCurrencyAdvanced(grandTotalToplamVirman, 2)}</td>
