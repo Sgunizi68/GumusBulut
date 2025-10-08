@@ -6212,29 +6212,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
   }, [viewedPeriod]);
 
   const calculateVirman = (platformName: string, weekHeader: string) => {
-    if (!viewedPeriod || !b2bEkstreList) return 0;
-
-    let aramaYapilacakText = '';
-
-    if (platformName === 'Getir Online' && weekHeader.startsWith('22-28')) {
-        const year = 2000 + parseInt(viewedPeriod.substring(0, 2));
-        const month = parseInt(viewedPeriod.substring(2, 4));
-        const lastDayOfMonth = new Date(year, month, 0).getDate();
-        const monthName = monthNames[month - 1];
-        aramaYapilacakText = `22-${lastDayOfMonth} ${monthName} Getir Online Alacak Virmanlar`.replace(/\s/g, '').toLowerCase();
-    } else {
-        aramaYapilacakText = `${weekHeader} ${platformName} Alacak Virmanlar`.replace(/\s/g, '').toLowerCase();
-    }
-    
-    const virman = b2bEkstreList
-      .filter(ekstre => {
-        const ekstreDonem = String(ekstre.Donem).trim();
-        const ekstreAciklama = ekstre.Aciklama ? ekstre.Aciklama.replace(/\s/g, '').toLowerCase() : '';
-        return ekstreDonem === viewedPeriod && ekstreAciklama.includes(aramaYapilacakText);
-      })
-      .reduce((total, ekstre) => total + Math.abs(ekstre.Alacak), 0);
-  
-    return virman;
+    return 0;
   };
 
   const calculateMonthlyKomisyon = (platformName: string) => {
@@ -6268,32 +6246,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
   };
 
   const calculateWeeklyGelir = (platformId: number, weekHeader: string) => {
-    if (!viewedPeriod || !gelirList) return 0;
-
-    const year = 2000 + parseInt(viewedPeriod.substring(0, 2));
-    const month = parseInt(viewedPeriod.substring(2, 4));
-    
-    const dayParts = weekHeader.split(' ')[0].split('-');
-    const startDay = parseInt(dayParts[0]);
-    const endDay = parseInt(dayParts[1]);
-
-    const startDate = new Date(year, month - 1, startDay);
-    startDate.setHours(0, 0, 0, 0);
-    const endDate = new Date(year, month - 1, endDay);
-    endDate.setHours(23, 59, 59, 999);
-
-    const gelir = gelirList
-      .filter(g => {
-        const [gYear, gMonth, gDay] = g.Tarih.split('-').map(Number);
-        const gelirTarih = new Date(gYear, gMonth - 1, gDay);
-        
-        return g.Kategori_ID === platformId &&
-               gelirTarih >= startDate &&
-               gelirTarih <= endDate;
-      })
-      .reduce((total, g) => total + g.Tutar, 0);
-
-    return gelir;
+    return 0;
   };
 
   const calculateKismiGelir = (platformId: number, virmanSonGun: number | null) => {
