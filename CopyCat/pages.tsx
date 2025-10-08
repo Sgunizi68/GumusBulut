@@ -6382,7 +6382,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                         row.push(virmanSonGun !== null ? virmanSonGun : 'N/A');
                         row.push(toplamVirmanYeni);
                         row.push(kismiGelir); // Kısmı Gelir
-                        row.push(kismiGelir - toplamVirmanYeni); // Fark
+                        row.push(toplamVirmanYeni - kismiGelir); // Fark
                         const monthlyKomisyon = calculateMonthlyKomisyon(platform.Kategori_Adi);
                         row.push(monthlyKomisyon);
                         const komisyonPercentage = toplamVirmanYeni !== 0 ? (monthlyKomisyon / toplamVirmanYeni) * 100 : 0;
@@ -6401,7 +6401,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                     const grandTotalKismiGelir = platforms.reduce((sum, p) => sum + calculateKismiGelir(p.Kategori_ID, calculateVirmanSonGun(p.Kategori_Adi)), 0);
                     footer.push(grandTotalToplamVirman);
                     footer.push(grandTotalKismiGelir);
-                    footer.push(grandTotalKismiGelir - grandTotalToplamVirman);
+                    footer.push(grandTotalToplamVirman - grandTotalKismiGelir);
                     footer.push(grandTotalKomisyon);
                     const grandTotalKomisyonPercentage = grandTotalToplamVirman !== 0 ? (grandTotalKomisyon / grandTotalToplamVirman) * 100 : 0;
             footer.push(grandTotalKomisyonPercentage.toFixed(2) + '%');
@@ -6496,7 +6496,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                                 <td className="border p-2 text-right">{virmanSonGun !== null ? virmanSonGun : 'N/A'}</td>
                                 <td className="border p-2 text-right">{formatTrCurrencyAdvanced(toplamVirmanYeni, 2)}</td>
                                 <td className="border p-2 text-right">{formatTrCurrencyAdvanced(kismiGelir, 2)}</td>
-                                <td className="border p-2 text-right">{formatTrCurrencyAdvanced(kismiGelir - toplamVirmanYeni, 2)}</td>
+                                <td className="border p-2 text-right">{formatTrCurrencyAdvanced(toplamVirmanYeni - kismiGelir, 2)}</td>
                                 <td className="border p-2 text-right font-bold bg-purple-100">{formatTrCurrencyAdvanced(monthlyKomisyon, 2)}</td>
                                 <td className="border p-2 text-right font-bold bg-pink-100">
                                     {komisyonPercentage.toFixed(2)}%
@@ -6519,7 +6519,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                         <td className="border p-2 text-right">N/A</td>
                         <td className="border p-2 text-right">{formatTrCurrencyAdvanced(grandTotalToplamVirman, 2)}</td>
                         <td className="border p-2 text-right">{formatTrCurrencyAdvanced(platforms.reduce((sum, p) => sum + calculateKismiGelir(p.Kategori_ID, calculateVirmanSonGun(p.Kategori_Adi)), 0), 2)}</td>
-                        <td className="border p-2 text-right">{formatTrCurrencyAdvanced(platforms.reduce((sum, p) => sum + calculateKismiGelir(p.Kategori_ID, calculateVirmanSonGun(p.Kategori_Adi)), 0) - grandTotalToplamVirman, 2)}</td>
+                        <td className="border p-2 text-right">{formatTrCurrencyAdvanced(grandTotalToplamVirman - platforms.reduce((sum, p) => sum + calculateKismiGelir(p.Kategori_ID, calculateVirmanSonGun(p.Kategori_Adi)), 0), 2)}</td>
                         <td className="border p-2 text-right">{formatTrCurrencyAdvanced(grandTotalKomisyon, 2)}</td>
                         <td className="border p-2 text-right">
                             {(grandTotalToplamVirman !== 0 
