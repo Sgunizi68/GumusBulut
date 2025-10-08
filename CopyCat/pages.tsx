@@ -6471,7 +6471,13 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                 </thead>
                 <tbody>
                     {platforms.map(platform => {
-                        const totalGelir = weeklyHeaders.reduce((sum, header) => sum + calculateWeeklyGelir(platform.Kategori_ID, header), 0);
+                        const totalGelir = gelirList
+                            .filter(g => {
+                                if (!g.Tarih) return false;
+                                const gDonem = calculatePeriod(parseDateString(g.Tarih));
+                                return g.Kategori_ID === platform.Kategori_ID && gDonem === viewedPeriod && g.Sube_ID === selectedBranch?.Sube_ID;
+                            })
+                            .reduce((total, g) => total + g.Tutar, 0);
                         const totalVirman = weeklyHeaders.reduce((sum, header) => sum + calculateVirman(platform.Kategori_Adi, header), 0);
                         const monthlyKomisyon = calculateMonthlyKomisyon(platform.Kategori_Adi);
                         const virmanSonGun = calculateVirmanSonGun(platform.Kategori_Adi);
