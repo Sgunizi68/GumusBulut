@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Check, X, FileText, Users, Eye } from 'lucide-react';
+import { Plus, Edit, Trash2, Check, X, FileText, Users, Eye, Download } from 'lucide-react';
+import * as XLSX from 'xlsx';
 import { useAppContext, useDataContext } from '../App';
 import { CALISAN_TALEP_ISE_GIRIS_ONAYI_YETKI_ADI, CALISAN_TALEP_SSK_ONAYI_YETKI_ADI } from '../constants';
 
@@ -126,7 +127,6 @@ const CalisanTalepSistemi: React.FC = () => {
     if (calisanList) {
       const today = new Date();
       const active = calisanList.filter(calisan => {
-        // If Sigorta_Cikis is not set, or is in the future, consider them active
         if (!calisan.Sigorta_Cikis) return true;
         const cikisDate = new Date(calisan.Sigorta_Cikis);
         return cikisDate > today;
@@ -166,17 +166,13 @@ const CalisanTalepSistemi: React.FC = () => {
       Sigorta_Cikis: '2099-01-01',
       Talep: 'İşe Giriş',
       Sube_ID: 1,
-      status: 'pending'
     });
     setSelectedFile(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     let talepData: Partial<CalisanTalep> = { ...formData };
-
-    // Ensure required string fields are not null to prevent validation errors
     talepData.Talep = talepData.Talep || (formData.Talep === 'İşten Çıkış' ? 'İşten Çıkış' : 'İşe Giriş');
     talepData.TC_No = talepData.TC_No || '';
     talepData.Adi = talepData.Adi || '';
@@ -184,8 +180,6 @@ const CalisanTalepSistemi: React.FC = () => {
     talepData.Ilk_Soyadi = talepData.Ilk_Soyadi || '';
     talepData.Cinsiyet = talepData.Cinsiyet || 'Erkek';
     talepData.Medeni_Hali = talepData.Medeni_Hali || 'Bekar';
-
-    console.log("Data being sent to backend:", talepData);
 
     if (selectedFile) {
       const fileAsBase64 = await new Promise<string>((resolve, reject) => {
@@ -213,7 +207,6 @@ const CalisanTalepSistemi: React.FC = () => {
 
   const handleExitSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     const employee = activeEmployees.find(emp => emp.id === exitFormData.employeeId);
     if (!employee) return;
 
@@ -306,6 +299,47 @@ const CalisanTalepSistemi: React.FC = () => {
     }
   };
 
+  const handleExportToExcel = () => {
+    if (!formData) return;
+
+    const dataToExport = [
+      { 'Alan': 'Talep Türü', 'Değer': formData.Talep },
+      { 'Alan': 'TC No', 'Değer': formData.TC_No },
+      { 'Alan': 'Ad', 'Değer': formData.Adi },
+      { 'Alan': 'Soyad', 'Değer': formData.Soyadi },
+      { 'Alan': 'İlk Soyad', 'Değer': formData.Ilk_Soyadi },
+      { 'Alan': 'Cinsiyet', 'Değer': formData.Cinsiyet },
+      { 'Alan': 'Medeni Hal', 'Değer': formData.Medeni_Hali },
+      { 'Alan': 'Doğum Tarihi', 'Değer': formData.Dogum_Tarihi },
+      { 'Alan': 'Doğum Yeri', 'Değer': formData.Dogum_Yeri },
+      { 'Alan': 'Anne Adı', 'Değer': formData.Anne_Adi },
+      { 'Alan': 'Baba Adı', 'Değer': formData.Baba_Adi },
+      { 'Alan': 'Cep Telefonu', 'Değer': formData.Cep_No },
+      { 'Alan': 'Görev', 'Değer': formData.Gorevi },
+      { 'Alan': 'Öğrenim Durumu', 'Değer': formData.Ogrenim_Durumu },
+      { 'Alan': 'IBAN', 'Değer': formData.IBAN },
+      { 'Alan': 'Hesap No', 'Değer': formData.Hesap_No },
+      { 'Alan': 'Net Maaş', 'Değer': formData.Net_Maas },
+      { 'Alan': 'Adres Bilgileri', 'Değer': formData.Adres_Bilgileri },
+      { 'Alan': 'Sigorta Giriş Tarihi', 'Değer': formData.Sigorta_Giris },
+    ];
+
+    if (formData.Talep === 'İşten Çıkış') {
+      dataToExport.push(
+        { 'Alan': 'Sigorta Çıkış Tarihi', 'Değer': formData.Sigorta_Cikis },
+        { 'Alan': 'SSK Çıkış Nedeni', 'Değer': formData.SSK_Cikis_Nedeni }
+      );
+    }
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport, { skipHeader: true });
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Çalışan Talep Bilgileri');
+
+    worksheet['!cols'] = [{ wch: 25 }, { wch: 40 }];
+
+    XLSX.writeFile(workbook, `Calisan_Talep_${formData.Adi}_${formData.Soyadi}.xlsx`);
+  };
+
   const getStatusText = (talep: CalisanTalep): string => {
     if (talep.Talep === 'İşe Giriş') {
       if (!talep.Is_Onay_Tarih) {
@@ -370,10 +404,10 @@ const CalisanTalepSistemi: React.FC = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
               <div className="flex gap-2">
-                {(['all', 'İşe Giriş', 'İşten Çıkış'] as const).map(filterType => (
+                {['all', 'İşe Giriş', 'İşten Çıkış'].map(filterType => (
                   <button
                     key={filterType}
-                    onClick={() => setFilter(filterType)}
+                    onClick={() => setFilter(filterType as 'all' | 'İşe Giriş' | 'İşten Çıkış')}
                     className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                       filter === filterType
                         ? 'bg-blue-600 text-white'
@@ -507,10 +541,20 @@ const CalisanTalepSistemi: React.FC = () => {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
+            <div className="p-6 border-b border-gray-200 flex justify-between items-center">
               <h2 className="text-xl font-bold text-gray-900">
                 {modalType === 'add' ? 'Yeni İşe Giriş Talebi' : modalType === 'edit' ? 'Talep Düzenle' : 'Talep Gözlemle'}
               </h2>
+              {modalType === 'observe' && (
+                <button
+                    type="button"
+                    onClick={handleExportToExcel}
+                    className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors flex items-center gap-2 text-sm"
+                >
+                    <Download className="w-4 h-4" />
+                    Excel'e Aktar
+                </button>
+              )}
             </div>
             
             <form onSubmit={handleSubmit} className="p-6">
