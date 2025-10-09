@@ -465,19 +465,25 @@ const CalisanTalepSistemi: React.FC = () => {
                             </>
                           )}
                           
+                          {/* İşe Giriş Onayı butonu: Sadece talep 'İşe Giriş' ise ve henüz onaylanmamışsa gösterilir. */}
                           {talep.Talep === 'İşe Giriş' && !talep.Is_Onay_Tarih && (isCurrentUserAdmin || hasPermission(CALISAN_TALEP_ISE_GIRIS_ONAYI_YETKI_ADI)) && (
-                            <>
-                              <button
-                                onClick={() => handleHRApproval(talep.Calisan_Talep_ID)}
-                                className="text-green-600 hover:text-green-800 p-1"
-                                title="İşe Giriş Onayı"
-                              >
-                                <Check className="w-4 h-4" />
-                              </button>
-                            </>
+                            <button
+                              onClick={() => handleHRApproval(talep.Calisan_Talep_ID)}
+                              className="text-green-600 hover:text-green-800 p-1"
+                              title="İşe Giriş Onayı"
+                            >
+                              <Check className="w-4 h-4" />
+                            </button>
                           )}
-                          
-                                                    {((talep.Talep === 'İşe Giriş' && talep.Is_Onay_Tarih && !talep.SSK_Onay_Tarih) || (talep.Talep === 'İşten Çıkış' && !talep.SSK_Onay_Tarih)) && (isCurrentUserAdmin || hasPermission(CALISAN_TALEP_SSK_ONAYI_YETKI_ADI)) && (
+
+                          {/* SSK Onayı butonu: 
+                              - 'İşe Giriş' talepleri için İK onayı sonrası gösterilir.
+                              - 'İşten Çıkış' talepleri için direkt gösterilir.
+                              - Her iki durumda da daha önce SSK onayı verilmemiş olmalı.
+                          */}
+                          {!talep.SSK_Onay_Tarih &&
+                            ((talep.Talep === 'İşe Giriş' && talep.Is_Onay_Tarih) || talep.Talep === 'İşten Çıkış') &&
+                            (isCurrentUserAdmin || hasPermission(CALISAN_TALEP_SSK_ONAYI_YETKI_ADI) || hasPermission('SSK Onayı')) && (
                             <button
                               onClick={() => handleSSKApproval(talep.Calisan_Talep_ID)}
                               className="text-green-600 hover:text-green-800 p-1"
