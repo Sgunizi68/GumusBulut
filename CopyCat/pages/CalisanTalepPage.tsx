@@ -580,7 +580,7 @@ const CalisanTalepSistemi: React.FC = () => {
                       {selectedFile && (
                         <p className="mt-1 text-sm text-gray-600">Seçilen dosya: {selectedFile.name}</p>
                       )}
-                      {modalType === 'edit' && formData.Imaj && (() => {
+                      {(modalType === 'edit' || modalType === 'observe') && formData.Imaj && (() => {
                         const mimeType = getMimeType(formData.Imaj_Adi);
                         const isImage = mimeType.startsWith('image/');
                         return (
@@ -808,7 +808,7 @@ const CalisanTalepSistemi: React.FC = () => {
                       {selectedFile && (
                         <p className="mt-1 text-sm text-gray-600">Seçilen dosya: {selectedFile.name}</p>
                       )}
-                      {modalType === 'edit' && formData.Imaj && (() => {
+                      {(modalType === 'edit' || modalType === 'observe') && formData.Imaj && (() => {
                         const mimeType = getMimeType(formData.Imaj_Adi);
                         const isImage = mimeType.startsWith('image/');
                         return (
