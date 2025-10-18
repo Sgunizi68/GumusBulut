@@ -130,6 +130,7 @@ export const OZET_KONTROL_RAPORU_YETKI_ADI = 'Özet Kontrol Raporu Görüntülem
 export const NAKIT_AKIS_GELIR_RAPORU_YETKI_ADI = 'Nakit Akış - Gelir Raporu Görüntüleme';
 export const CALISAN_TALEP_EKRANI_YETKI_ADI = 'Çalışan Talep Ekranı Görüntüleme';
 export const CARI_BORC_TAKIP_SISTEMI_YETKI_ADI = 'Cari Borç Takip Sistemi Görüntüleme';
+export const CARI_BORC_YONETIMI_EKRANI_YETKI_ADI = 'Cari Borç Yönetimi Ekranı Görüntüleme';
 
 
 // --- MENU STRUCTURE ---
@@ -148,6 +149,7 @@ export const MENU_GROUPS = [
             { label: 'Rol Yetki Atama', path: '/role-permission-assignment', icon: Icons.Assignments, permission: ROL_YETKI_ATAMA_EKRANI_YETKI_ADI },
             { label: 'e-Fatura Referans Yönetimi', path: '/e-fatura-referans', icon: Icons.Invoice, permission: E_FATURA_REFERANS_YONETIMI_EKRANI_YETKI_ADI },
             { label: 'Ödeme Referans Yönetimi', path: '/odeme-referans', icon: Icons.Invoice, permission: ODEME_REFERANS_YONETIMI_EKRANI_YETKI_ADI },
+            { label: 'Cari Borç Yönetimi', path: '/cari-borc-yonetimi', icon: Icons.Invoice, permission: CARI_BORC_YONETIMI_EKRANI_YETKI_ADI },
         ]
     },
     {

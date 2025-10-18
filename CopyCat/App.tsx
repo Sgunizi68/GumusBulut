@@ -1869,6 +1869,7 @@ const AppWithToast: React.FC = () => {
                       <Route path="/nakit-akis-gelir-raporu" element={<NakitAkisGelirRaporuPage />} />
                       <Route path="/calisan-talep" element={<CalisanTalepPage />} />
                       <Route path="/cari-borc-takip-sistemi" element={<CariTakipEkrani />} />
+                      <Route path="/cari-borc-yonetimi" element={<PlaceholderPage title="Cari Borç Yönetimi" />} />
                       
                       <Route path="*" element={<Navigate to="/" />} />
                     </Routes>
