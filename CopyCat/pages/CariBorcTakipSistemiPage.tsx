@@ -28,73 +28,100 @@ const CariTakipEkrani = () => {
 
   useEffect(() => {
     const fetchAllData = async () => {
-      console.log("Fetching data for subeId:", subeId, "baslangicTarihi:", baslangicTarihi);
-      const [mutabakat, fatura, odeme] = await Promise.all([
-        fetchData(`${API_BASE_URL}/rapor/cari-mutabakat`),
-        fetchData(`${API_BASE_URL}/rapor/cari-fatura?sube_id=${subeId}&baslangic_tarih=${baslangicTarihi}`),
-        fetchData(`${API_BASE_URL}/rapor/cari-odeme?sube_id=${subeId}&baslangic_tarih=${baslangicTarihi}`)
-      ]);
-      console.log("mutabakat", mutabakat);
-      console.log("fatura", fatura);
-      console.log("odeme", odeme);
-      if (mutabakat) setMutabakatData(mutabakat);
-      if (fatura) setFaturaData(fatura);
-      if (odeme) setOdemeData(odeme);
+      // 1. Fetch mutabakat data
+      const mutabakat = await fetchData(`${API_BASE_URL}/rapor/cari-mutabakat`);
+      if (mutabakat) {
+        setMutabakatData(mutabakat);
+
+        // 2. Determine the effective start date for fetching invoices and payments
+        const mutabakatDates = mutabakat.map(m => new Date(m.Son_Mutabakat_Tarihi)).filter(d => !isNaN(d.getTime()));
+        const earliestMutabakatDate = mutabakatDates.length > 0 ? new Date(Math.min.apply(null, mutabakatDates)) : null;
+        
+        const selectedDate = new Date(baslangicTarihi);
+        let effectiveStartDate = selectedDate;
+
+        if (earliestMutabakatDate && earliestMutabakatDate < selectedDate) {
+          effectiveStartDate = earliestMutabakatDate;
+        }
+        
+        const effectiveStartDateString = effectiveStartDate.toISOString().split('T')[0];
+
+        // 3. Fetch invoices and payments from the effective start date
+        const [fatura, odeme] = await Promise.all([
+          fetchData(`${API_BASE_URL}/rapor/cari-fatura?sube_id=${subeId}&baslangic_tarih=${effectiveStartDateString}`),
+          fetchData(`${API_BASE_URL}/rapor/cari-odeme?sube_id=${subeId}&baslangic_tarih=${effectiveStartDateString}`)
+        ]);
+        if (fatura) setFaturaData(fatura);
+        if (odeme) setOdemeData(odeme);
+      } else {
+        // No mutabakat data, fetch invoices and payments from the selected date
+        const [fatura, odeme] = await Promise.all([
+          fetchData(`${API_BASE_URL}/rapor/cari-fatura?sube_id=${subeId}&baslangic_tarih=${baslangicTarihi}`),
+          fetchData(`${API_BASE_URL}/rapor/cari-odeme?sube_id=${subeId}&baslangic_tarih=${baslangicTarihi}`)
+        ]);
+        if (fatura) setFaturaData(fatura);
+        if (odeme) setOdemeData(odeme);
+      }
     }
     fetchAllData();
   }, [baslangicTarihi, subeId]);
 
   const firmaListesi = useMemo(() => {
-    const allFirmaNames = new Set([
-      ...faturaData.map(f => f.Alici_Unvani),
-      ...mutabakatData.map(m => m.Alici_Unvani),
-      ...odemeData.map(o => o.Alici_Unvani)
-    ]);
-
     const firmalar = {};
 
+    // 1. Process all data to build a comprehensive firm object
+    const allFirmaNames = new Set([...faturaData.map(f => f.Alici_Unvani), ...mutabakatData.map(m => m.Alici_Unvani), ...odemeData.map(o => o.Alici_Unvani)]);
+
     allFirmaNames.forEach(firma => {
-      if (!firma) return; // Skip null/undefined firma names
+      if (!firma) return;
 
-      const faturalar = faturaData.filter(f => f.Alici_Unvani === firma);
-      const odemeler = odemeData.filter(o => o.Alici_Unvani === firma);
+      const firmaFaturalar = faturaData.filter(f => f.Alici_Unvani === firma);
+      const firmaMutabakatlar = mutabakatData.filter(m => m.Alici_Unvani === firma);
+      const firmaOdemeler = odemeData.filter(o => o.Alici_Unvani === firma);
 
-      // If there are no invoices and no payments for the selected period, do not show the firm
+      // Determine Cari Durumu
+      let cariDurum = 'Belirsiz';
+      const faturaCariDurumlar = firmaFaturalar.map(f => f.Cari_Durumu);
+      if (faturaCariDurumlar.includes('Cari Borç')) {
+        cariDurum = 'Cari Borç';
+      } else if (faturaCariDurumlar.includes('Cari Olmayan Borç')) {
+        cariDurum = 'Cari Olmayan Borç';
+      } else if (firmaMutabakatlar.length > 0) {
+        cariDurum = 'Cari Borç'; // Assumption
+      }
+
+      // Determine start date for calculations
+      const lastMutabakat = firmaMutabakatlar.length > 0 ? firmaMutabakatlar.reduce((latest, m) => new Date(m.Son_Mutabakat_Tarihi) > new Date(latest.Son_Mutabakat_Tarihi) ? m : latest) : null;
+      const startDate = (cariDurum === 'Cari Borç' && lastMutabakat) ? new Date(lastMutabakat.Son_Mutabakat_Tarihi) : new Date(baslangicTarihi);
+
+      // Filter invoices and payments based on the determined start date
+      const faturalar = firmaFaturalar.filter(f => new Date(f.Fatura_Tarihi) >= startDate);
+      const odemeler = firmaOdemeler.filter(o => new Date(o.Tarih) >= startDate);
+
+      // If no transactions in the period, skip the firm
       if (faturalar.length === 0 && odemeler.length === 0) {
         return;
       }
 
-      const mutabakatlar = mutabakatData.filter(m => m.Alici_Unvani === firma);
-
-      let cariDurum = 'Belirsiz';
-      if (faturalar.length > 0) {
-        if (faturalar.some(f => f.Cari_Durumu === 'Cari Borç')) {
-          cariDurum = 'Cari Borç';
-        } else if (faturalar.some(f => f.Cari_Durumu === 'Cari Olmayan Borç')) {
-          cariDurum = 'Cari Olmayan Borç';
-        }
-      } else if (mutabakatlar.length > 0) {
-        cariDurum = 'Cari Borç'; // Assumption
-      }
-
-      const mutabakatToplam = mutabakatlar.reduce((sum, m) => sum + m.Toplam_Mutabakat_Tutari, 0);
+      const mutabakatToplam = (cariDurum === 'Cari Borç' && lastMutabakat) ? lastMutabakat.Toplam_Mutabakat_Tutari : 0;
       const faturaToplam = faturalar.reduce((sum, f) => sum + f.Tutar, 0);
       const odemeToplam = odemeler.reduce((sum, o) => sum + o.Tutar, 0);
+      const bakiye = mutabakatToplam + faturaToplam - odemeToplam;
 
       firmalar[firma] = {
         cariDurum: cariDurum,
-        mutabakat: mutabakatlar,
+        mutabakat: firmaMutabakatlar,
         faturalar: faturalar,
         odemeler: odemeler,
         mutabakatToplam: mutabakatToplam,
         faturaToplam: faturaToplam,
         odemeToplam: odemeToplam,
-        bakiye: mutabakatToplam + faturaToplam - odemeToplam
+        bakiye: bakiye,
       };
     });
 
     return firmalar;
-  }, [mutabakatData, faturaData, odemeData]);
+  }, [mutabakatData, faturaData, odemeData, baslangicTarihi]);
 
   // Kategorilere ayır
   const cariBorcFirmalar = Object.entries(firmaListesi).filter(([_, f]) => f.cariDurum === 'Cari Borç');
