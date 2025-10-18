@@ -20,6 +20,7 @@ import { OzetKontrolRaporuPage } from './pages/OzetKontrolRaporuPage';
 import CalisanTalepPage from './pages/CalisanTalepPage';
 import NakitAkisGelirRaporuPage from './pages/NakitAkisGelirRaporuPage';
 import FaturaBolmeYonetimiPage from './pages/FaturaBolmeYonetimi';
+import CariTakipEkrani from './pages/CariBorcTakipSistemiPage';
 
 import { Input, Select } from './components'; 
 
@@ -1867,7 +1868,7 @@ const AppWithToast: React.FC = () => {
                       <Route path="/ozet-kontrol-raporu" element={<OzetKontrolRaporuPage />} />
                       <Route path="/nakit-akis-gelir-raporu" element={<NakitAkisGelirRaporuPage />} />
                       <Route path="/calisan-talep" element={<CalisanTalepPage />} />
-                      <Route path="/cari-borc-takip-sistemi" element={<PlaceholderPage title='Cari Borç Takip Sistemi' />} />
+                      <Route path="/cari-borc-takip-sistemi" element={<CariTakipEkrani />} />
                       
                       <Route path="*" element={<Navigate to="/" />} />
                     </Routes>
