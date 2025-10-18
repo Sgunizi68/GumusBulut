@@ -1,10 +1,12 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Calendar, ChevronDown, ChevronRight, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
 import { useAppContext, fetchData } from '../App';
-import { API_BASE_URL } from '../constants';
+import { API_BASE_URL, EXCELE_AKTAR_YETKISI_ADI, Icons } from '../constants';
+import { Button } from '../components';
+import * as XLSX from 'xlsx';
 
 const CariTakipEkrani = () => {
-  const { selectedBranch } = useAppContext();
+  const { selectedBranch, hasPermission } = useAppContext();
   // Bugünün tarihinden ay başını hesapla
   const getMonthStart = () => {
     const today = new Date();
@@ -14,7 +16,7 @@ const CariTakipEkrani = () => {
   const [baslangicTarihi, setBaslangicTarihi] = useState(getMonthStart());
   const [subeId, setSubeId] = useState(selectedBranch?.Sube_ID || 1);
   const [expandedFirma, setExpandedFirma] = useState({});
-  const [aktifFiltreler, setAktifFiltreler] = useState(['Cari Borç', 'Belirsiz']);
+  const [aktifFiltreler, setAktifFiltreler] = useState(['Cari Borç', 'Cari Olmayan Borç', 'Belirsiz']);
 
   const [mutabakatData, setMutabakatData] = useState([]);
   const [faturaData, setFaturaData] = useState([]);
@@ -86,13 +88,11 @@ const CariTakipEkrani = () => {
         cariDurum = 'Cari Borç';
       } else if (faturaCariDurumlar.includes('Cari Olmayan Borç')) {
         cariDurum = 'Cari Olmayan Borç';
-      } else if (firmaMutabakatlar.length > 0) {
-        cariDurum = 'Cari Borç'; // Assumption
       }
 
       // Determine start date for calculations
       const lastMutabakat = firmaMutabakatlar.length > 0 ? firmaMutabakatlar.reduce((latest, m) => new Date(m.Son_Mutabakat_Tarihi) > new Date(latest.Son_Mutabakat_Tarihi) ? m : latest) : null;
-      const startDate = (cariDurum === 'Cari Borç' && lastMutabakat) ? new Date(lastMutabakat.Son_Mutabakat_Tarihi) : new Date(baslangicTarihi);
+      const startDate = (cariDurum === 'Cari Borç' && lastMutabakat && lastMutabakat.Son_Mutabakat_Tarihi) ? new Date(lastMutabakat.Son_Mutabakat_Tarihi) : new Date(baslangicTarihi);
 
       // Filter invoices and payments based on the determined start date
       const faturalar = firmaFaturalar.filter(f => new Date(f.Fatura_Tarihi) >= startDate);
@@ -103,7 +103,7 @@ const CariTakipEkrani = () => {
         return;
       }
 
-      const mutabakatToplam = (cariDurum === 'Cari Borç' && lastMutabakat) ? lastMutabakat.Toplam_Mutabakat_Tutari : 0;
+      const mutabakatToplam = (cariDurum === 'Cari Borç' && lastMutabakat && lastMutabakat.Son_Mutabakat_Tarihi) ? lastMutabakat.Toplam_Mutabakat_Tutari : 0;
       const faturaToplam = faturalar.reduce((sum, f) => sum + f.Tutar, 0);
       const odemeToplam = odemeler.reduce((sum, o) => sum + o.Tutar, 0);
       const bakiye = mutabakatToplam + faturaToplam - odemeToplam;
@@ -128,12 +128,34 @@ const CariTakipEkrani = () => {
   const cariOlmayanFirmalar = Object.entries(firmaListesi).filter(([_, f]) => f.cariDurum === 'Cari Olmayan Borç');
   const belirsizFirmalar = Object.entries(firmaListesi).filter(([_, f]) => f.cariDurum === 'Belirsiz');
 
+  const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
+
   const formatTutar = (tutar) => {
     return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(tutar);
   };
 
   const formatTarih = (tarih) => {
+    if (!tarih) return '';
     return new Date(tarih).toLocaleDateString('tr-TR');
+  };
+
+  const handleExportToExcel = () => {
+    const dataForExport = [];
+    Object.entries(firmaListesi).forEach(([firma, data]) => {
+      dataForExport.push({
+        'Firma': firma,
+        'Cari Durumu': data.cariDurum,
+        'Bakiye': data.bakiye,
+        'Mutabakat Tutarı': data.mutabakatToplam,
+        'Fatura Tutarı': data.faturaToplam,
+        'Ödeme Tutarı': data.odemeToplam,
+      });
+    });
+
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(dataForExport);
+    XLSX.utils.book_append_sheet(wb, ws, 'Cari Borç Takip');
+    XLSX.writeFile(wb, `Cari_Borc_Takip_Raporu_${selectedBranch?.Sube_Adi}_${baslangicTarihi}.xlsx`);
   };
 
   const toggleFirma = (firma) => {
@@ -151,7 +173,8 @@ const CariTakipEkrani = () => {
       setAktifFiltreler(prev => {
         if (prev.includes(filtre)) {
           return prev.filter(f => f !== filtre);
-        } else {
+        }
+        else {
           return [...prev, filtre];
         }
       });
@@ -191,19 +214,21 @@ const CariTakipEkrani = () => {
         {isExpanded && (
           <div className="border-t border-gray-200 bg-gray-50 p-4">
             {/* Mutabakat */}
-            {data.mutabakat.length > 0 && (
+            {data.mutabakat.some(m => m.Son_Mutabakat_Tarihi) && (
               <div className="mb-4">
                 <h4 className="font-semibold text-sm text-gray-700 mb-2 flex items-center gap-2">
                   <DollarSign size={16} />
                   Mutabakat Kaydı
                 </h4>
                 {data.mutabakat.map((m, idx) => (
-                  <div key={idx} className="bg-blue-50 border border-blue-200 rounded p-3 mb-2">
-                    <div className="flex justify-between">
-                      <span className="text-sm">Tarih: {formatTarih(m.Son_Mutabakat_Tarihi)}</span>
-                      <span className="font-semibold text-blue-700">{formatTutar(m.Toplam_Mutabakat_Tutari)}</span>
+                  m.Son_Mutabakat_Tarihi && (
+                    <div key={idx} className="bg-blue-50 border border-blue-200 rounded p-3 mb-2">
+                      <div className="flex justify-between">
+                        <span className="text-sm">Tarih: {formatTarih(m.Son_Mutabakat_Tarihi)}</span>
+                        <span className="font-semibold text-blue-700">{formatTutar(m.Toplam_Mutabakat_Tutari)}</span>
+                      </div>
                     </div>
-                  </div>
+                  )
                 ))}
               </div>
             )}
@@ -264,9 +289,7 @@ const CariTakipEkrani = () => {
                 </div>
                 <div className="flex justify-between pt-2 border-t border-gray-300">
                   <span className="font-semibold">Bakiye:</span>
-                  <span className={`font-bold ${data.bakiye > 0 ? 'text-red-600' : 'text-green-600'}`}>
-                    {formatTutar(data.bakiye)}
-                  </span>
+                  <span className={`font-bold ${data.bakiye > 0 ? 'text-red-600' : 'text-green-600'}`}>{formatTutar(data.bakiye)}</span>
                 </div>
               </div>
             </div>
@@ -290,7 +313,14 @@ const CariTakipEkrani = () => {
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h1 className="text-3xl font-bold mb-6 text-gray-800">Cari Borç Takip Sistemi</h1>
+          <div className="flex justify-between items-start">
+            <h1 className="text-3xl font-bold mb-6 text-gray-800">Cari Borç Takip Sistemi</h1>
+            {canExportExcel && (
+              <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
+                  <Icons.Download className="w-5 h-5" />
+              </Button>
+            )}
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
