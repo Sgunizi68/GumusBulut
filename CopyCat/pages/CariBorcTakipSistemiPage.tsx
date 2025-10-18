@@ -45,60 +45,52 @@ const CariTakipEkrani = () => {
   }, [baslangicTarihi, subeId]);
 
   const firmaListesi = useMemo(() => {
+    const allFirmaNames = new Set([
+      ...faturaData.map(f => f.Alici_Unvani),
+      ...mutabakatData.map(m => m.Alici_Unvani),
+      ...odemeData.map(o => o.Alici_Unvani)
+    ]);
+
     const firmalar = {};
 
-    // Cari Borç firmaları için
-    mutabakatData.forEach(mutabakat => {
-      const firma = mutabakat.Alici_Unvani;
-      if (!firmalar[firma]) {
-        firmalar[firma] = {
-          cariDurum: 'Cari Borç',
-          mutabakat: [],
-          faturalar: [],
-          odemeler: [],
-          mutabakatToplam: 0,
-          faturaToplam: 0,
-          odemeToplam: 0,
-          bakiye: 0
-        };
-      }
-      firmalar[firma].mutabakat.push(mutabakat);
-      firmalar[firma].mutabakatToplam = mutabakat.Toplam_Mutabakat_Tutari;
-    });
+    allFirmaNames.forEach(firma => {
+      if (!firma) return; // Skip null/undefined firma names
 
-    // Faturaları ekle
-    faturaData.forEach(fatura => {
-      const firma = fatura.Alici_Unvani;
-      if (!firmalar[firma]) {
-        firmalar[firma] = {
-          cariDurum: fatura.Cari_Durumu,
-          mutabakat: [],
-          faturalar: [],
-          odemeler: [],
-          mutabakatToplam: 0,
-          faturaToplam: 0,
-          odemeToplam: 0,
-          bakiye: 0
-        };
-      }
-      firmalar[firma].faturalar.push(fatura);
-      firmalar[firma].faturaToplam += fatura.Tutar;
-      firmalar[firma].cariDurum = fatura.Cari_Durumu;
-    });
+      const faturalar = faturaData.filter(f => f.Alici_Unvani === firma);
+      const odemeler = odemeData.filter(o => o.Alici_Unvani === firma);
 
-    // Ödemeleri ekle
-    odemeData.forEach(odeme => {
-      const firma = odeme.Alici_Unvani;
-      if (firmalar[firma]) {
-        firmalar[firma].odemeler.push(odeme);
-        firmalar[firma].odemeToplam += odeme.Tutar;
+      // If there are no invoices and no payments for the selected period, do not show the firm
+      if (faturalar.length === 0 && odemeler.length === 0) {
+        return;
       }
-    });
 
-    // Bakiyeleri hesapla
-    Object.keys(firmalar).forEach(firma => {
-      const f = firmalar[firma];
-      f.bakiye = f.mutabakatToplam + f.faturaToplam - f.odemeToplam;
+      const mutabakatlar = mutabakatData.filter(m => m.Alici_Unvani === firma);
+
+      let cariDurum = 'Belirsiz';
+      if (faturalar.length > 0) {
+        if (faturalar.some(f => f.Cari_Durumu === 'Cari Borç')) {
+          cariDurum = 'Cari Borç';
+        } else if (faturalar.some(f => f.Cari_Durumu === 'Cari Olmayan Borç')) {
+          cariDurum = 'Cari Olmayan Borç';
+        }
+      } else if (mutabakatlar.length > 0) {
+        cariDurum = 'Cari Borç'; // Assumption
+      }
+
+      const mutabakatToplam = mutabakatlar.reduce((sum, m) => sum + m.Toplam_Mutabakat_Tutari, 0);
+      const faturaToplam = faturalar.reduce((sum, f) => sum + f.Tutar, 0);
+      const odemeToplam = odemeler.reduce((sum, o) => sum + o.Tutar, 0);
+
+      firmalar[firma] = {
+        cariDurum: cariDurum,
+        mutabakat: mutabakatlar,
+        faturalar: faturalar,
+        odemeler: odemeler,
+        mutabakatToplam: mutabakatToplam,
+        faturaToplam: faturaToplam,
+        odemeToplam: odemeToplam,
+        bakiye: mutabakatToplam + faturaToplam - odemeToplam
+      };
     });
 
     return firmalar;
