@@ -129,6 +129,7 @@ export const FATURA_BOLME_YONETIMI_EKRANI_YETKI_ADI = 'Fatura Bölme Yönetimi E
 export const OZET_KONTROL_RAPORU_YETKI_ADI = 'Özet Kontrol Raporu Görüntüleme';
 export const NAKIT_AKIS_GELIR_RAPORU_YETKI_ADI = 'Nakit Akış - Gelir Raporu Görüntüleme';
 export const CALISAN_TALEP_EKRANI_YETKI_ADI = 'Çalışan Talep Ekranı Görüntüleme';
+export const CARI_BORC_TAKIP_SISTEMI_YETKI_ADI = 'Cari Borç Takip Sistemi Görüntüleme';
 
 
 // --- MENU STRUCTURE ---
@@ -211,6 +212,7 @@ export const MENU_GROUPS = [
             { label: 'Bayi Karlılık Raporu', path: '/bayi-karlilik-raporu', icon: Icons.DocumentReport, permission: BAYI_KARLILIK_RAPORU_YETKI_ADI },
             { label: 'Özet Kontrol Raporu', path: '/ozet-kontrol-raporu', icon: Icons.Report, permission: OZET_KONTROL_RAPORU_YETKI_ADI },
             { label: 'Nakit Akış - Gelir', path: '/nakit-akis-gelir-raporu', icon: Icons.Report, permission: NAKIT_AKIS_GELIR_RAPORU_YETKI_ADI },
+            { label: 'Cari Borç Takip Sistemi', path: '/cari-borc-takip-sistemi', icon: Icons.Report, permission: CARI_BORC_TAKIP_SISTEMI_YETKI_ADI },
         ]
     }
 ];
