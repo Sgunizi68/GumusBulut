@@ -1,7 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Calendar, ChevronDown, ChevronRight, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
+import { useAppContext, fetchData } from '../App';
+import { API_BASE_URL } from '../constants';
 
 const CariTakipEkrani = () => {
+  const { selectedBranch } = useAppContext();
   // Bugünün tarihinden ay başını hesapla
   const getMonthStart = () => {
     const today = new Date();
@@ -9,39 +12,43 @@ const CariTakipEkrani = () => {
   };
 
   const [baslangicTarihi, setBaslangicTarihi] = useState(getMonthStart());
-  const [subeId] = useState(1);
+  const [subeId, setSubeId] = useState(selectedBranch?.Sube_ID || 1);
   const [expandedFirma, setExpandedFirma] = useState({});
   const [aktifFiltreler, setAktifFiltreler] = useState(['Cari Borç', 'Belirsiz']);
 
-  // Örnek veri - Gerçek uygulamada API'den gelecek
-  const mockMutabakatData = [
-    { Cari_ID: 1, Alici_Unvani: 'ABC Tekstil A.Ş.', Son_Mutabakat_Tarihi: '2025-09-15', Toplam_Mutabakat_Tutari: 50000 },
-    { Cari_ID: 2, Alici_Unvani: 'XYZ İnşaat Ltd.', Son_Mutabakat_Tarihi: '2025-09-20', Toplam_Mutabakat_Tutari: 75000 },
-    { Cari_ID: 3, Alici_Unvani: 'DEF Gıda San.', Son_Mutabakat_Tarihi: '2025-09-10', Toplam_Mutabakat_Tutari: 30000 },
-  ];
+  const [mutabakatData, setMutabakatData] = useState([]);
+  const [faturaData, setFaturaData] = useState([]);
+  const [odemeData, setOdemeData] = useState([]);
 
-  const mockFaturaData = [
-    { Cari_Durumu: 'Cari Borç', Alici_Unvani: 'ABC Tekstil A.Ş.', Fatura_ID: 101, Fatura_Tarihi: '2025-10-05', Fatura_Numarasi: 'FT-2025-001', Tutar: 15000, Kategori_ID: 1 },
-    { Cari_Durumu: 'Cari Borç', Alici_Unvani: 'ABC Tekstil A.Ş.', Fatura_ID: 102, Fatura_Tarihi: '2025-10-12', Fatura_Numarasi: 'FT-2025-002', Tutar: 8500, Kategori_ID: 1 },
-    { Cari_Durumu: 'Cari Borç', Alici_Unvani: 'XYZ İnşaat Ltd.', Fatura_ID: 103, Fatura_Tarihi: '2025-10-08', Fatura_Numarasi: 'FT-2025-003', Tutar: 22000, Kategori_ID: 2 },
-    { Cari_Durumu: 'Cari Borç', Alici_Unvani: 'DEF Gıda San.', Fatura_ID: 104, Fatura_Tarihi: '2025-10-15', Fatura_Numarasi: 'FT-2025-004', Tutar: 12000, Kategori_ID: 3 },
-    { Cari_Durumu: 'Cari Olmayan Borç', Alici_Unvani: 'GHI Lojistik', Fatura_ID: 105, Fatura_Tarihi: '2025-10-10', Fatura_Numarasi: 'FT-2025-005', Tutar: 5000, Kategori_ID: 4 },
-    { Cari_Durumu: 'Belirsiz', Alici_Unvani: 'JKL Market', Fatura_ID: 106, Fatura_Tarihi: '2025-10-11', Fatura_Numarasi: 'FT-2025-006', Tutar: 3500, Kategori_ID: 5 },
-  ];
+  useEffect(() => {
+    if (selectedBranch) {
+      setSubeId(selectedBranch.Sube_ID);
+    }
+  }, [selectedBranch]);
 
-  const mockOdemeData = [
-    { Cari_ID: 1, Alici_Unvani: 'ABC Tekstil A.Ş.', Tutar: 10000, Tarih: '2025-10-10' },
-    { Cari_ID: 1, Alici_Unvani: 'ABC Tekstil A.Ş.', Tutar: 5000, Tarih: '2025-10-14' },
-    { Cari_ID: 2, Alici_Unvani: 'XYZ İnşaat Ltd.', Tutar: 15000, Tarih: '2025-10-12' },
-    { Cari_ID: 3, Alici_Unvani: 'DEF Gıda San.', Tutar: 8000, Tarih: '2025-10-16' },
-  ];
+  useEffect(() => {
+    const fetchAllData = async () => {
+      console.log("Fetching data for subeId:", subeId, "baslangicTarihi:", baslangicTarihi);
+      const [mutabakat, fatura, odeme] = await Promise.all([
+        fetchData(`${API_BASE_URL}/rapor/cari-mutabakat`),
+        fetchData(`${API_BASE_URL}/rapor/cari-fatura?sube_id=${subeId}&baslangic_tarih=${baslangicTarihi}`),
+        fetchData(`${API_BASE_URL}/rapor/cari-odeme?sube_id=${subeId}&baslangic_tarih=${baslangicTarihi}`)
+      ]);
+      console.log("mutabakat", mutabakat);
+      console.log("fatura", fatura);
+      console.log("odeme", odeme);
+      if (mutabakat) setMutabakatData(mutabakat);
+      if (fatura) setFaturaData(fatura);
+      if (odeme) setOdemeData(odeme);
+    }
+    fetchAllData();
+  }, [baslangicTarihi, subeId]);
 
-  // Firma bazında veriyi grupla ve hesapla
   const firmaListesi = useMemo(() => {
     const firmalar = {};
 
     // Cari Borç firmaları için
-    mockMutabakatData.forEach(mutabakat => {
+    mutabakatData.forEach(mutabakat => {
       const firma = mutabakat.Alici_Unvani;
       if (!firmalar[firma]) {
         firmalar[firma] = {
@@ -60,7 +67,7 @@ const CariTakipEkrani = () => {
     });
 
     // Faturaları ekle
-    mockFaturaData.forEach(fatura => {
+    faturaData.forEach(fatura => {
       const firma = fatura.Alici_Unvani;
       if (!firmalar[firma]) {
         firmalar[firma] = {
@@ -80,7 +87,7 @@ const CariTakipEkrani = () => {
     });
 
     // Ödemeleri ekle
-    mockOdemeData.forEach(odeme => {
+    odemeData.forEach(odeme => {
       const firma = odeme.Alici_Unvani;
       if (firmalar[firma]) {
         firmalar[firma].odemeler.push(odeme);
@@ -95,7 +102,7 @@ const CariTakipEkrani = () => {
     });
 
     return firmalar;
-  }, [baslangicTarihi, subeId]);
+  }, [mutabakatData, faturaData, odemeData]);
 
   // Kategorilere ayır
   const cariBorcFirmalar = Object.entries(firmaListesi).filter(([_, f]) => f.cariDurum === 'Cari Borç');
