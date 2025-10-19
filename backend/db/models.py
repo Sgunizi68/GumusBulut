@@ -436,3 +436,23 @@ class CalisanTalep(Base):
     sube = relationship("Sube", back_populates="calisan_talepler")
     is_onay_veren_kullanici = relationship("Kullanici", foreign_keys=[Is_Onay_Veren_Kullanici_ID], back_populates="is_onay_veren_talepler")
     ssk_onay_veren_kullanici = relationship("Kullanici", foreign_keys=[SSK_Onay_Veren_Kullanici_ID], back_populates="ssk_onay_veren_talepler")
+
+class Cari(Base):
+    __tablename__ = "Cari"
+
+    Cari_ID = Column(Integer, primary_key=True, index=True)
+    Alici_Unvani = Column(String(200), nullable=False)
+    e_Fatura_Kategori_ID = Column(Integer, nullable=True)
+    Referans_ID = Column(Integer, ForeignKey("Odeme_Referans.Referans_ID"), nullable=True)
+    Cari = Column(Boolean, default=True)
+    Aciklama = Column(Text, nullable=True)
+    Aktif_Pasif = Column(Boolean, default=True)
+    Kayit_Tarihi = Column(DateTime, default=func.now(), onupdate=func.now())
+
+class Mutabakat(Base):
+    __tablename__ = "Mutabakat"
+
+    Mutabakat_ID = Column(Integer, primary_key=True, index=True)
+    Cari_ID = Column(Integer, ForeignKey("Cari.Cari_ID"), nullable=False)
+    Mutabakat_Tarihi = Column(Date, nullable=False)
+    Tutar = Column(DECIMAL(15, 2), nullable=False)

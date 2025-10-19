@@ -122,3 +122,161 @@ def get_yemek_ceki_by_date_range(db: Session, start_date: datetime.date, end_dat
     """)
     result = db.execute(sql, {"start_date": start_date, "end_date": end_date, "sube_id": sube_id})
     return result.fetchall()
+
+def get_online_virman_by_date_range(db: Session, start_date: datetime.date, end_date: datetime.date, sube_id: int):
+    sql = text("""
+        SELECT
+            DATE(Tarih, '+28 days') as Gun,
+            SUM(Tutar) * IFNULL((SELECT Deger FROM Deger WHERE Deger_Adi = 'Online Ödeme'), 0) as Online_Virman
+        FROM Gelir
+        WHERE
+            Tarih >= DATE(:start_date, '-28 days') AND
+            Tarih <= DATE(:end_date, '-28 days') AND
+            Sube_ID = :sube_id AND
+            Kategori_ID IN (
+                SELECT Kategori_ID
+                FROM Kategori
+                WHERE Ust_Kategori_ID = (
+                    SELECT UstKategori_ID FROM UstKategori WHERE UstKategori_Adi = 'E-Ticaret Kredi Kart'
+                )
+            )
+        GROUP BY Tarih
+        ORDER BY Tarih;
+    """)
+    result = db.execute(sql, {"start_date": start_date, "end_date": end_date, "sube_id": sube_id})
+    return result.fetchall()
+
+def get_giden_fatura_by_donem(db: Session, donem: int, sube_id: int):
+    sql = text("""
+        SELECT k.Kategori_Adi, e.Alici_Unvani, e.Tutar 
+        FROM e_Fatura e
+        JOIN Kategori k ON e.Kategori_ID = k.Kategori_ID
+        WHERE e.Giden_Fatura = 1 
+        AND e.Donem = :donem 
+        AND e.Sube_ID = :sube_id
+        AND k.Kategori_Adi IN ('İade Fatura', 'Giden Fatura')
+        ORDER BY k.Kategori_Adi, e.Alici_Unvani;
+    """)
+    result = db.execute(sql, {"donem": donem, "sube_id": sube_id})
+    return result.fetchall()
+
+def get_cari_fatura(db: Session, sube_id: int, baslangic_tarih: datetime.date):
+    sql = text("""
+        SELECT
+            CASE
+                WHEN C.Cari IS NULL THEN 'Belirsiz'
+                WHEN C.Cari = 0 THEN 'Cari Olmayan Borç'
+                ELSE 'Cari Borç'
+            END AS Cari_Durumu,
+            E.Alici_Unvani,
+            E.Fatura_ID,
+            E.Fatura_Tarihi,
+            E.Fatura_Numarasi,
+            E.Tutar,
+            E.Kategori_ID
+        FROM e_Fatura AS E
+        LEFT JOIN Cari AS C
+            ON C.Alici_Unvani = E.Alici_Unvani
+            AND C.e_Fatura_Kategori_ID = E.Kategori_ID
+        WHERE E.Fatura_Tarihi >= :baslangic_tarih AND
+              E.Sube_ID = :sube_id
+        ORDER BY
+            CASE
+                WHEN C.Cari IS NULL THEN 3
+                WHEN C.Cari = 0 THEN 2
+                ELSE 1
+            END,
+            E.Fatura_Tarihi;
+    """)
+    result = db.execute(sql, {"sube_id": sube_id, "baslangic_tarih": baslangic_tarih})
+    return result.fetchall()
+
+def get_cari_mutabakat(db: Session):
+    sql = text("""
+        SELECT
+            C.Cari_ID,
+            C.Alici_Unvani,
+            MAX(M.Mutabakat_Tarihi) AS Son_Mutabakat_Tarihi,
+            SUM(M.Tutar) AS Toplam_Mutabakat_Tutari
+        FROM Cari AS C
+        LEFT JOIN Mutabakat AS M
+            ON M.Cari_ID = C.Cari_ID
+        GROUP BY
+            C.Cari_ID, C.Alici_Unvani
+        ORDER BY
+            Son_Mutabakat_Tarihi DESC;
+    """)
+    result = db.execute(sql)
+    return result.fetchall()
+
+def get_cari_odeme(db: Session, sube_id: int, baslangic_tarih: datetime.date):
+    sql = text("""
+        SELECT
+            C.Cari_ID,
+            C.Alici_Unvani,
+            -1 * O.Tutar AS Tutar,
+            O.Tarih
+        FROM Cari AS C
+        INNER JOIN Odeme_Referans AS ORF
+            ON C.Referans_ID = ORF.Referans_ID
+        INNER JOIN Odeme AS O
+            ON O.Kategori_ID = ORF.Kategori_ID
+           AND O.Aciklama LIKE CONCAT('%', ORF.Referans_Metin, '%')
+        WHERE
+            O.Sube_ID = :sube_id
+            AND O.Tarih >= :baslangic_tarih
+        ORDER BY
+            C.Cari_ID, O.Tarih DESC;
+    """)
+    result = db.execute(sql, {"sube_id": sube_id, "baslangic_tarih": baslangic_tarih})
+    return result.fetchall()
+
+def get_cari_fatura_by_firma(db: Session, sube_id: int, alici_unvani: str, baslangic_tarih: datetime.date):
+    sql = text("""
+        SELECT
+            CASE
+                WHEN C.Cari IS NULL THEN 'Belirsiz'
+                WHEN C.Cari = 0 THEN 'Cari Olmayan Borç'
+                ELSE 'Cari Borç'
+            END AS Cari_Durumu,
+            E.Alici_Unvani,
+            E.Fatura_ID,
+            E.Fatura_Tarihi,
+            E.Fatura_Numarasi,
+            E.Tutar,
+            E.Kategori_ID
+        FROM e_Fatura AS E
+        LEFT JOIN Cari AS C
+            ON C.Alici_Unvani = E.Alici_Unvani
+            AND C.e_Fatura_Kategori_ID = E.Kategori_ID
+        WHERE E.Fatura_Tarihi >= :baslangic_tarih AND
+              E.Sube_ID = :sube_id AND
+              E.Alici_Unvani = :alici_unvani
+        ORDER BY
+            E.Fatura_Tarihi;
+    """)
+    result = db.execute(sql, {"sube_id": sube_id, "baslangic_tarih": baslangic_tarih, "alici_unvani": alici_unvani})
+    return result.fetchall()
+
+def get_cari_odeme_by_firma(db: Session, sube_id: int, alici_unvani: str, baslangic_tarih: datetime.date):
+    sql = text("""
+        SELECT
+            C.Cari_ID,
+            C.Alici_Unvani,
+            -1 * O.Tutar AS Tutar,
+            O.Tarih
+        FROM Cari AS C
+        INNER JOIN Odeme_Referans AS ORF
+            ON C.Referans_ID = ORF.Referans_ID
+        INNER JOIN Odeme AS O
+            ON O.Kategori_ID = ORF.Kategori_ID
+           AND O.Aciklama LIKE CONCAT('%', ORF.Referans_Metin, '%')
+        WHERE
+            O.Sube_ID = :sube_id
+            AND O.Tarih >= :baslangic_tarih
+            AND C.Alici_Unvani = :alici_unvani
+        ORDER BY
+            O.Tarih DESC;
+    """)
+    result = db.execute(sql, {"sube_id": sube_id, "baslangic_tarih": baslangic_tarih, "alici_unvani": alici_unvani})
+    return result.fetchall()

@@ -3,7 +3,7 @@ from typing import List
 from datetime import date
 
 from db import models
-from schemas import sube, user, role, permission, kullanici_rol, rol_yetki, e_fatura, b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, stok_fiyat, stok_sayim, calisan, puantaj_secimi, puantaj, avans_istek, ust_kategori, kategori, deger, e_fatura_referans, nakit, odeme, odeme_referans, pos_hareketleri, yemek_ceki, calisan_talep
+from schemas import sube, user, role, permission, kullanici_rol, rol_yetki, e_fatura, b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, stok_fiyat, stok_sayim, calisan, puantaj_secimi, puantaj, avans_istek, ust_kategori, kategori, deger, e_fatura_referans, nakit, odeme, odeme_referans, pos_hareketleri, yemek_ceki, calisan_talep, cari
 from core.security import verify_password, get_password_hash
 
 def authenticate_user(db: Session, username: str, password: str):
@@ -84,6 +84,12 @@ def delete_user(db: Session, user_id: int):
         db.delete(db_user)
         db.commit()
     return db_user
+
+def get_users_by_role_name(db: Session, role_name: str) -> List[models.Kullanici]:
+    """
+    Retrieves all users associated with a specific role by role name.
+    """
+    return db.query(models.Kullanici).join(models.KullaniciRol).join(models.Rol).filter(models.Rol.Rol_Adi == role_name).all()
 
 # --- Rol CRUD ---
 def get_rol(db: Session, rol_id: int):
@@ -856,6 +862,36 @@ def delete_calisan_talep(db: Session, talep_id: int):
         db.commit()
         return True
     return False
+
+# --- Cari CRUD ---
+def get_cari(db: Session, cari_id: int):
+    return db.query(models.Cari).filter(models.Cari.Cari_ID == cari_id).first()
+
+def get_cariler(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Cari).offset(skip).limit(limit).all()
+
+def create_cari(db: Session, cari_data: cari.CariCreate):
+    db_cari = models.Cari(**cari_data.dict())
+    db.add(db_cari)
+    db.commit()
+    db.refresh(db_cari)
+    return db_cari
+
+def update_cari(db: Session, cari_id: int, cari_data: cari.CariUpdate):
+    db_cari = db.query(models.Cari).filter(models.Cari.Cari_ID == cari_id).first()
+    if db_cari:
+        for key, value in cari_data.dict(exclude_unset=True).items():
+            setattr(db_cari, key, value)
+        db.commit()
+        db.refresh(db_cari)
+    return db_cari
+
+def delete_cari(db: Session, cari_id: int):
+    db_cari = db.query(models.Cari).filter(models.Cari.Cari_ID == cari_id).first()
+    if db_cari:
+        db.delete(db_cari)
+        db.commit()
+    return db_cari
 
 # --- PuantajSecimi CRUD ---
 def get_puantaj_secimi(db: Session, secim_id: int):

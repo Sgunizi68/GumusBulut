@@ -6,6 +6,8 @@ import io
 from datetime import datetime
 import logging
 
+# Import send_email function assuming the script is run from the project root
+from send_email import gmail_send_message
 from db import crud, database, models
 from schemas import b2b_ekstre
 
@@ -104,6 +106,27 @@ async def upload_b2b_ekstre(
     result = crud.create_b2b_ekstre_bulk(db=db, ekstreler=ekstreler_to_create)
     logger.info(f"Bulk insert result: {result}")
     
+    # Send email notification to admins
+    try:
+        print("--- DEBUG: ENTERING EMAIL BLOCK ---")
+        admin_users = crud.get_users_by_role_name(db, role_name="Admin")
+        if not admin_users:
+            print("--- DEBUG: No admin users found, skipping email notification. ---")
+        else:
+            subject = "B2B Ekstre Yükleme"
+            body = f"'{file.filename}' Yüklendi."
+            print(f"--- DEBUG: Found {len(admin_users)} admin user(s). ---")
+            for user in admin_users:
+                if user.Email:
+                    print(f"--- DEBUG: Attempting to send email to {user.Email} ---")
+                    gmail_send_message(to_email=user.Email, subject=subject, body=body)
+                else:
+                    print(f"--- DEBUG: Admin user {user.Kullanici_Adi} has no email address, skipping. ---")
+            print("--- DEBUG: Finished sending email notifications. ---")
+    except Exception as e:
+        print(f"--- DEBUG: CRITICAL ERROR IN EMAIL BLOCK: {e} ---")
+        # Do not re-raise the exception, as the file upload itself was successful.
+
     return {
         "message": "B2B Ekstre file processed successfully.",
         "added": result["added"],

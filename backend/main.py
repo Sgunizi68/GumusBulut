@@ -1,14 +1,15 @@
+import os
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 
 from db.database import engine, Base
 from api.v1.endpoints import (
     sube, users, roles, permissions, kullanici_rol, rol_yetki, e_fatura,
-    b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, stok_fiyat, calisan, puantaj_secimi, puantaj, avans_istek, kategori, ust_kategori, token, deger, e_fatura_referans, nakit, odeme, odeme_referans, report, fatura_diger_harcama_rapor, pos_hareketleri, yemek_ceki, fatura_bolme, calisan_talep, rapor
+    b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, stok_fiyat, calisan, puantaj_secimi, puantaj, avans_istek, kategori, ust_kategori, token, deger, e_fatura_referans, nakit, odeme, odeme_referans, report, fatura_diger_harcama_rapor, pos_hareketleri, yemek_ceki, fatura_bolme, calisan_talep, rapor, email, cari
 )
 
 # Create database tables
-# Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="SilverCloud Backend API",
@@ -54,6 +55,7 @@ app.include_router(pos_hareketleri.router, prefix="/api/v1", tags=["POS Hareketl
 app.include_router(yemek_ceki.router, prefix="/api/v1", tags=["Yemek Cekiler"])
 app.include_router(fatura_bolme.router, prefix="/api/v1", tags=["Fatura Bolme"])
 app.include_router(calisan_talep.router, prefix="/api/v1", tags=["Calisan Talep"])
+app.include_router(cari.router, prefix="/api/v1", tags=["Cari"])
 
 app.include_router(calisan.router, prefix="/api/v1", tags=["Calisan"])
 app.include_router(puantaj_secimi.router, prefix="/api/v1", tags=["Puantaj Secimi"])
@@ -62,6 +64,7 @@ app.include_router(avans_istek.router, prefix="/api/v1", tags=["Avans Istek"])
 app.include_router(report.router, prefix="/api/v1", tags=["Reports"])
 app.include_router(rapor.router, prefix="/api/v1", tags=["Raporlar"])
 app.include_router(fatura_diger_harcama_rapor.router, prefix="/api/v1/fatura-diger-harcama-rapor", tags=["Reports"])
+app.include_router(email.router, prefix="/api/v1", tags=["Email"])
 
 @app.get("/", tags=["Root"])
 async def read_root():

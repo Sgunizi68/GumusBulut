@@ -1,44 +1,22 @@
-Online Virman
-
 SELECT
-	Tarih + INTERVAL 28 DAY as Gün ,
-	Sum(Tutar) * (SELECT Deger FROM SilverCloud.Deger WHERE Deger_Adi = 'Online Ödeme') as Online_Virman
-FROM Gelir
-WHERE
-    Tarih >= Ekran.Başlangıç_Tarih - INTERVAL 28 DAY AND
-    Tarih <= Ekran.Bitiş_Tarihi - INTERVAL 28 DAY AND
-    Sube_ID = Ekran.Sube_ID And
-    Kategori_ID IN
-    (
-        SELECT Kategori_ID
-        FROM Kategori
-        WHERE Ust_Kategori_ID =
-			(select UstKategori_ID from UstKategori
-			where
-			UstKategori_Adi = 'E-Ticaret Kredi Kart'
-			)
-	)
-    GROUP BY Tarih
-    ORDER BY Tarih
+    C.Alici_Unvani AS `e-Fatura Ünvan`,
+    (SELECT K.Kategori_Adi
+     FROM Kategori K
+     WHERE K.Kategori_ID = C.e_Fatura_Kategori_ID) AS `e-Fatura Kategori`,
+    CONCAT(
+        ' #',
+        O.Referans_ID,
+        ' (',
+        O.Referans_Metin,
+        ' - ',
+        (SELECT K2.Kategori_Adi
+         FROM Kategori K2
+         WHERE K2.Kategori_ID = O.Kategori_ID),
+        ')'
+    ) AS `Ödeme e-Referans`,
+    C.Cari,
+    C.Aktif_Pasif
+FROM SilverCloud.Cari C
+LEFT JOIN SilverCloud.Odeme_Referans O
+    ON C.Referans_ID = O.Referans_ID;
 
-Örnek Ekran.Başlangıç_Tarih ='2025-10-04', Ekran.Bitiş_Tarihi ='2025-10-25', Ekran.Sube_Id=1
-SELECT
-	Tarih + INTERVAL 28 DAY as Gün ,
-	Sum(Tutar) * (SELECT Deger FROM SilverCloud.Deger WHERE Deger_Adi = 'Online Ödeme') as Online_Virman
-FROM Gelir
-WHERE
-    Tarih >= '2025-10-05' - INTERVAL 28 DAY AND
-    Tarih <= '2025-10-25' - INTERVAL 28 DAY AND
-    Sube_ID = 1 And
-    Kategori_ID IN
-    (
-        SELECT Kategori_ID
-        FROM Kategori
-        WHERE Ust_Kategori_ID =
-			(select UstKategori_ID from UstKategori
-			where
-			UstKategori_Adi = 'E-Ticaret Kredi Kart'
-			)
-	)
-    GROUP BY Tarih
-    ORDER BY Tarih
