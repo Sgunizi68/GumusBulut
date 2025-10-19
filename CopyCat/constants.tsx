@@ -131,6 +131,7 @@ export const NAKIT_AKIS_GELIR_RAPORU_YETKI_ADI = 'Nakit Akış - Gelir Raporu G�
 export const CALISAN_TALEP_EKRANI_YETKI_ADI = 'Çalışan Talep Ekranı Görüntüleme';
 export const CARI_BORC_TAKIP_SISTEMI_YETKI_ADI = 'Cari Borç Takip Sistemi Görüntüleme';
 export const CARI_BORC_YONETIMI_EKRANI_YETKI_ADI = 'Cari Borç Yönetimi Ekranı Görüntüleme';
+export const MUTABAKAT_YONETIMI_EKRANI_YETKI_ADI = 'Mutabakat Yönetimi Ekranı Görüntüleme';
 
 
 // --- MENU STRUCTURE ---
@@ -173,6 +174,7 @@ export const MENU_GROUPS = [
             { label: 'POS Hareketleri Yükleme', path: '/pos-hareketleri-yukleme', icon: Icons.Upload, permission: POS_HAREKETLERI_YUKLEME_EKRANI_YETKI_ADI },
             { label: 'Tabak Sayısı Yükleme', path: '/tabak-sayisi-yukleme', icon: Icons.Upload, permission: TABAK_SAYISI_YUKLEME_EKRANI_YETKI_ADI },
             { label: 'Yemek Çeki', path: '/yemek-ceki', icon: Icons.CreditCard, permission: YEMEK_CEKI_EKRANI_YETKI_ADI },
+            { label: 'Mutabakat Yönetimi', path: '/mutabakat-yonetimi', icon: Icons.Invoice, permission: MUTABAKAT_YONETIMI_EKRANI_YETKI_ADI },
         ]
     },
     {
