@@ -1,11 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Search, Plus, Edit2, Trash2, Download, Eye } from 'lucide-react';
-import { useAppContext, useDataContext, fetchData } from '../App';
+import { useAppContext, fetchData } from '../App';
 import { Cari, CariFormData, Kategori, OdemeReferans } from '../types';
 import { API_BASE_URL } from '../constants';
 
 export default function CariYonetim() {
-  const { addCari, updateCari, deleteCari } = useDataContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingCari, setEditingCari] = useState<Cari | null>(null);
@@ -26,6 +25,46 @@ export default function CariYonetim() {
     };
     loadData();
   }, []);
+
+  const addCari = async (data: CariFormData) => {
+    const newCari = await fetchData<Cari>(`${API_BASE_URL}/cari/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (newCari) {
+      setCariList(prev => [...prev, newCari]);
+      return { success: true, data: newCari };
+    }
+    return { success: false, message: "Cari eklenirken bir hata oluştu." };
+  };
+
+  const updateCari = async (cariId: number, data: CariFormData) => {
+    const updatedCari = await fetchData<Cari>(`${API_BASE_URL}/cari/${cariId}`,
+     {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (updatedCari) {
+      setCariList(prev =>
+        prev.map(c => (c.Cari_ID === cariId ? updatedCari : c))
+      );
+      return { success: true, data: updatedCari };
+    }
+    return { success: false, message: "Cari güncellenirken bir hata oluştu." };
+  };
+
+  const deleteCari = async (cariId: number) => {
+    const success = await fetchData<any>(`${API_BASE_URL}/cari/${cariId}`, {
+      method: 'DELETE',
+    });
+    if (success) {
+      setCariList(prev => prev.filter(c => c.Cari_ID !== cariId));
+      return { success: true };
+    }
+    return { success: false, message: "Cari silinirken bir hata oluştu." };
+  };
 
   const processedCariList = useMemo(() => {
     if (!cariList || !kategoriList || !odemeReferansList) {
@@ -63,27 +102,15 @@ export default function CariYonetim() {
 
   const handleDelete = (cariId: number) => {
     if (window.confirm('Bu cari kaydını silmek istediğinizden emin misiniz?')) {
-      deleteCari(cariId).then(() => {
-        setCariList(prev => prev.filter(c => c.Cari_ID !== cariId));
-      });
+      deleteCari(cariId);
     }
   };
 
   const handleSubmit = (formData: CariFormData) => {
     if (editingCari) {
-      updateCari(editingCari.Cari_ID, formData).then((result) => {
-        if(result.success) {
-            const updatedCari = result.data as Cari;
-            setCariList(prev => prev.map(c => c.Cari_ID === updatedCari.Cari_ID ? updatedCari : c));
-        }
-      });
+      updateCari(editingCari.Cari_ID, formData);
     } else {
-      addCari(formData).then((result) => {
-        if(result.success) {
-            const newCari = result.data as Cari;
-            setCariList(prev => [...prev, newCari]);
-        }
-      });
+      addCari(formData);
     }
     setShowModal(false);
   };
@@ -224,20 +251,28 @@ export default function CariYonetim() {
       </div>
 
       {/* Modal */}
-      {showModal && (
-        <CariModal 
-            initialData={editingCari} 
-            onSubmit={handleSubmit} 
-            onClose={() => setShowModal(false)} 
-        />
-      )}
+      {showModal && (() => {
+        console.log("editingCari", editingCari);
+        return (
+          <CariModal 
+              initialData={editingCari} 
+              onSubmit={handleSubmit} 
+              onClose={() => setShowModal(false)} 
+              kategoriList={kategoriList}
+              odemeReferansList={odemeReferansList}
+          />
+        );
+      })()}
     </div>
   );
 }
 
-const CariModal: React.FC<{initialData: Cari | null, onSubmit: (data: CariFormData) => void, onClose: () => void}> = ({initialData, onSubmit, onClose}) => {
-    const { kategoriList, odemeReferansList } = useDataContext();
+const CariModal: React.FC<{initialData: Cari | null, onSubmit: (data: CariFormData) => void, onClose: () => void, kategoriList: Kategori[], odemeReferansList: OdemeReferans[]}> = ({initialData, onSubmit, onClose, kategoriList, odemeReferansList}) => {
     const [formData, setFormData] = useState<CariFormData>({ ...initialData });
+
+    useEffect(() => {
+        setFormData({ ...initialData });
+    }, [initialData]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
