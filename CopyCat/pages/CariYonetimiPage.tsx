@@ -265,7 +265,14 @@ export default function CariYonetim() {
 }
 
 const CariModal: React.FC<{initialData: Cari | null, onSubmit: (data: CariFormData) => void, onClose: () => void, kategoriList: Kategori[], odemeReferansList: OdemeReferans[]}> = ({initialData, onSubmit, onClose, kategoriList, odemeReferansList}) => {
-    const [formData, setFormData] = useState<CariFormData>({ ...initialData });
+    const [formData, setFormData] = useState<CariFormData>(initialData || {
+        Alici_Unvani: '',
+        e_Fatura_Kategori_ID: undefined,
+        Referans_ID: undefined,
+        Cari: true,
+        Aciklama: '',
+        Aktif_Pasif: true,
+    });
 
     useEffect(() => {
         setFormData({ ...initialData });
