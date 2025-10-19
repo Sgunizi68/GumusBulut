@@ -1,55 +1,92 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Search, Plus, Edit2, Trash2, Download, Eye } from 'lucide-react';
+import { useAppContext, useDataContext, fetchData } from '../App';
+import { Cari, CariFormData, Kategori, OdemeReferans } from '../types';
+import { API_BASE_URL } from '../constants';
 
 export default function CariYonetim() {
+  const { addCari, updateCari, deleteCari } = useDataContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [cariChecked, setCariChecked] = useState(false);
-  
-  // Örnek veri
-  const [cariList] = useState([
-    {
-      Cari_ID: 1,
-      Alici_Unvani: 'ABC Teknoloji A.Ş.',
-      e_Fatura_Kategori_ID: 1,
-      Kategori_Adi: 'Özel Sektör',
-      Referans_ID: 101,
-      Referans_Detay: '#101 (Transfer İşlemleri Alıcı : G2M Dağıtım - G2M Ödemesi)',
-      Cari: 1,
-      Aciklama: 'Yazılım hizmetleri müşterisi',
-      Kayit_Tarihi: '2024-10-15 14:30:00',
-      Aktif_Pasif: 1
-    },
-    {
-      Cari_ID: 2,
-      Alici_Unvani: 'XYZ İnşaat Ltd. Şti.',
-      e_Fatura_Kategori_ID: 2,
-      Kategori_Adi: 'KOBİ',
-      Referans_ID: 102,
-      Referans_Detay: '#102 (Havale İşlemleri - Tedarikçi Ödemesi)',
-      Cari: 1,
-      Aciklama: 'İnşaat malzemeleri tedarikçisi',
-      Kayit_Tarihi: '2024-09-20 10:15:00',
-      Aktif_Pasif: 1
-    },
-    {
-      Cari_ID: 3,
-      Alici_Unvani: 'Güneş Enerji Sistemleri',
-      e_Fatura_Kategori_ID: 1,
-      Kategori_Adi: 'Özel Sektör',
-      Referans_ID: null,
-      Referans_Detay: null,
-      Cari: 0,
-      Aciklama: 'Potansiyel müşteri',
-      Kayit_Tarihi: '2024-10-01 09:00:00',
-      Aktif_Pasif: 0
-    }
-  ]);
+  const [editingCari, setEditingCari] = useState<Cari | null>(null);
+  const [cariList, setCariList] = useState<Cari[]>([]);
+  const [kategoriList, setKategoriList] = useState<Kategori[]>([]);
+  const [odemeReferansList, setOdemeReferansList] = useState<OdemeReferans[]>([]);
 
-  const filteredList = cariList.filter(item => {
-    const matchesSearch = item.Alici_Unvani.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesSearch;
-  });
+  useEffect(() => {
+    const loadData = async () => {
+      const [cariler, kategoriler, odemeReferanslar] = await Promise.all([
+        fetchData<Cari[]>(`${API_BASE_URL}/cari/`),
+        fetchData<Kategori[]>(`${API_BASE_URL}/kategoriler/`),
+        fetchData<OdemeReferans[]>(`${API_BASE_URL}/Odeme_Referans/`),
+      ]);
+      if (cariler) setCariList(cariler);
+      if (kategoriler) setKategoriList(kategoriler);
+      if (odemeReferanslar) setOdemeReferansList(odemeReferanslar);
+    };
+    loadData();
+  }, []);
+
+  const processedCariList = useMemo(() => {
+    if (!cariList || !kategoriList || !odemeReferansList) {
+      return [];
+    }
+    return cariList.map(cari => {
+      const kategori = kategoriList.find(k => k.Kategori_ID === cari.e_Fatura_Kategori_ID);
+      const odemeReferans = odemeReferansList.find(o => o.Referans_ID === cari.Referans_ID);
+      const odemeKategori = odemeReferans ? kategoriList.find(k => k.Kategori_ID === odemeReferans.Kategori_ID) : null;
+
+      return {
+        ...cari,
+        Kategori_Adi: kategori ? kategori.Kategori_Adi : '-',
+        Referans_Detay: odemeReferans ? `#${odemeReferans.Referans_ID} (${odemeReferans.Referans_Metin} - ${odemeKategori ? odemeKategori.Kategori_Adi : ''})` : null,
+      };
+    });
+  }, [cariList, kategoriList, odemeReferansList]);
+
+  const filteredList = useMemo(() => {
+    return processedCariList.filter(item => {
+      const matchesSearch = item.Alici_Unvani.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesSearch;
+    });
+  }, [processedCariList, searchTerm]);
+
+  const handleAddNew = () => {
+    setEditingCari(null);
+    setShowModal(true);
+  };
+
+  const handleEdit = (cari: Cari) => {
+    setEditingCari(cari);
+    setShowModal(true);
+  };
+
+  const handleDelete = (cariId: number) => {
+    if (window.confirm('Bu cari kaydını silmek istediğinizden emin misiniz?')) {
+      deleteCari(cariId).then(() => {
+        setCariList(prev => prev.filter(c => c.Cari_ID !== cariId));
+      });
+    }
+  };
+
+  const handleSubmit = (formData: CariFormData) => {
+    if (editingCari) {
+      updateCari(editingCari.Cari_ID, formData).then((result) => {
+        if(result.success) {
+            const updatedCari = result.data as Cari;
+            setCariList(prev => prev.map(c => c.Cari_ID === updatedCari.Cari_ID ? updatedCari : c));
+        }
+      });
+    } else {
+      addCari(formData).then((result) => {
+        if(result.success) {
+            const newCari = result.data as Cari;
+            setCariList(prev => [...prev, newCari]);
+        }
+      });
+    }
+    setShowModal(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
@@ -81,7 +118,7 @@ export default function CariYonetim() {
             </button>
             
             <button 
-              onClick={() => setShowModal(true)}
+              onClick={handleAddNew}
               className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium whitespace-nowrap"
             >
               <Plus className="w-4 h-4" />
@@ -126,7 +163,7 @@ export default function CariYonetim() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      {cari.Cari === 1 ? (
+                      {cari.Cari ? (
                         <span className="px-3 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">
                           Evet
                         </span>
@@ -137,7 +174,7 @@ export default function CariYonetim() {
                       )}
                     </td>
                     <td className="px-6 py-4">
-                      {cari.Aktif_Pasif === 1 ? (
+                      {cari.Aktif_Pasif ? (
                         <span className="px-3 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">
                           Aktif
                         </span>
@@ -152,10 +189,10 @@ export default function CariYonetim() {
                         <button className="p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors" title="Görüntüle">
                           <Eye className="w-4 h-4" />
                         </button>
-                        <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Düzenle">
+                        <button onClick={() => handleEdit(cari)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Düzenle">
                           <Edit2 className="w-4 h-4" />
                         </button>
-                        <button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Sil">
+                        <button onClick={() => handleDelete(cari.Cari_ID)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Sil">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
@@ -188,72 +225,107 @@ export default function CariYonetim() {
 
       {/* Modal */}
       {showModal && (
+        <CariModal 
+            initialData={editingCari} 
+            onSubmit={handleSubmit} 
+            onClose={() => setShowModal(false)} 
+        />
+      )}
+    </div>
+  );
+}
+
+const CariModal: React.FC<{initialData: Cari | null, onSubmit: (data: CariFormData) => void, onClose: () => void}> = ({initialData, onSubmit, onClose}) => {
+    const { kategoriList, odemeReferansList } = useDataContext();
+    const [formData, setFormData] = useState<CariFormData>({ ...initialData });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const { name, value, type } = e.target;
+        if (type === 'checkbox') {
+            const checked = (e.target as HTMLInputElement).checked;
+            setFormData(prev => ({ ...prev, [name]: checked }));
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
+    };
+
+    const handleFormSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        onSubmit(formData);
+    };
+
+    return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <form onSubmit={handleFormSubmit}>
             <div className="p-6 border-b border-slate-200">
-              <h2 className="text-2xl font-bold text-slate-800">Yeni Cari Ekle</h2>
+              <h2 className="text-2xl font-bold text-slate-800">{initialData ? 'Cari Düzenle' : 'Yeni Cari Ekle'}</h2>
             </div>
             <div className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Alıcı Ünvanı *</label>
-                <input type="text" className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input type="text" name="Alici_Unvani" value={formData.Alici_Unvani || ''} onChange={handleChange} className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">E-Fatura Kategorisi *</label>
-                <select className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <select name="e_Fatura_Kategori_ID" value={formData.e_Fatura_Kategori_ID || ''} onChange={handleChange} className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                   <option>Seçiniz...</option>
-                  <option>Özel Sektör</option>
-                  <option>KOBİ</option>
-                  <option>Kamu</option>
+                  {kategoriList.filter(k => k.Tip === 'Gider' || k.Tip === 'Gelir').map(k => (
+                      <option key={k.Kategori_ID} value={k.Kategori_ID}>{k.Kategori_Adi}</option>
+                  ))}
                 </select>
               </div>
               <div className="flex items-center gap-2">
                 <input 
                   type="checkbox" 
-                  id="cari" 
-                  checked={cariChecked}
-                  onChange={(e) => setCariChecked(e.target.checked)}
+                  id="cari"
+                  name="Cari"
+                  checked={!!formData.Cari}
+                  onChange={handleChange}
                   className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500" 
                 />
                 <label htmlFor="cari" className="text-sm font-medium text-slate-700">Cari Hesap</label>
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Ödeme e-Referans {cariChecked && <span className="text-red-600">*</span>}
+                  Ödeme e-Referans {formData.Cari && <span className="text-red-600">*</span>}
                 </label>
                 <select 
+                  name="Referans_ID"
+                  value={formData.Referans_ID || ''}
+                  onChange={handleChange}
                   className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required={cariChecked}
+                  required={!!formData.Cari}
                 >
                   <option value="">Seçiniz...</option>
-                  <option value="101">#101 (Transfer İşlemleri Alıcı : G2M Dağıtım - G2M Ödemesi)</option>
-                  <option value="102">#102 (Havale İşlemleri - Tedarikçi Ödemesi)</option>
-                  <option value="103">#103 (Kredi Kartı Ödemesi - Peşin)</option>
+                  {odemeReferansList.map(o => (
+                      <option key={o.Referans_ID} value={o.Referans_ID}>{`#${o.Referans_ID} (${o.Referans_Metin})`}</option>
+                  ))}
                 </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Açıklama</label>
-                <textarea rows="3" className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                <textarea name="Aciklama" value={formData.Aciklama || ''} onChange={handleChange} rows="3" className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
               </div>
               <div className="flex items-center gap-2">
-                <input type="checkbox" id="aktif" defaultChecked className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500" />
+                <input type="checkbox" id="aktif" name="Aktif_Pasif" checked={!!formData.Aktif_Pasif} onChange={handleChange} className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500" />
                 <label htmlFor="aktif" className="text-sm font-medium text-slate-700">Aktif</label>
               </div>
             </div>
             <div className="p-6 border-t border-slate-200 flex gap-3 justify-end">
               <button 
-                onClick={() => setShowModal(false)}
+                type="button"
+                onClick={onClose}
                 className="px-6 py-2.5 border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-medium"
               >
                 İptal
               </button>
-              <button className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+              <button type="submit" className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
                 Kaydet
               </button>
             </div>
+            </form>
           </div>
         </div>
-      )}
-    </div>
-  );
+    );
 }
