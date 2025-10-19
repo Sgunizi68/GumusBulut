@@ -251,18 +251,15 @@ export default function CariYonetim() {
       </div>
 
       {/* Modal */}
-      {showModal && (() => {
-        console.log("editingCari", editingCari);
-        return (
-          <CariModal 
-              initialData={editingCari} 
-              onSubmit={handleSubmit} 
-              onClose={() => setShowModal(false)} 
-              kategoriList={kategoriList}
-              odemeReferansList={odemeReferansList}
-          />
-        );
-      })()}
+      {showModal && (
+        <CariModal 
+            initialData={editingCari} 
+            onSubmit={handleSubmit} 
+            onClose={() => setShowModal(false)} 
+            kategoriList={kategoriList}
+            odemeReferansList={odemeReferansList}
+        />
+      )}
     </div>
   );
 }

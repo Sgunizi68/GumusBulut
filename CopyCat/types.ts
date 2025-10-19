@@ -485,6 +485,10 @@ export interface DataContextType {
   addCalisanTalep: (data: Partial<CalisanTalep>) => Promise<{ success: boolean, data?: CalisanTalep, message?: string }>;
   updateCalisanTalep: (talepId: number, data: Partial<CalisanTalep>) => Promise<{ success: boolean, data?: CalisanTalep, message?: string }>;
   deleteCalisanTalep: (talepId: number) => Promise<{ success: boolean, message?: string }>;
+  cariList: Cari[];
+  addCari: (data: CariFormData) => Promise<{ success: boolean; data?: Cari, message?: string }>;
+  updateCari: (cariId: number, data: CariFormData) => Promise<{ success: boolean; data?: Cari, message?: string }>;
+  deleteCari: (cariId: number) => Promise<{ success: boolean; message?: string }>;
   depoKiraRapor: any[];
   yemekCekiList: YemekCeki[];
   addYemekCeki: (formData: FormData) => Promise<{ success: boolean; message?: string }>;
@@ -620,4 +624,29 @@ export interface YemekCeki {
 }
 
 // YemekCekiFormData can be used for form submissions
-export type YemekCekiFormData = Omit<YemekCeki, 'ID' | 'Kayit_Tarihi' | 'Sube_ID' | 'Imaj' | 'Imaj_Adi'> & { Sube_ID?: number; Imaj?: File | null; Imaj_Adi?: string | null; };
+export interface CalisanTalep {
+  Talep_ID: number;
+  TC_No: string;
+  Talep_Tipi: string;
+  Aciklama: string;
+  Durum: string;
+  Onay_Tarihi: string | null;
+  Red_Tarihi: string | null;
+  Sube_ID: number;
+  Kayit_Tarihi: string;
+}
+
+export interface Cari {
+  Cari_ID: number;
+  Alici_Unvani: string;
+  e_Fatura_Kategori_ID: number;
+  Kategori_Adi?: string;
+  Referans_ID: number | null;
+  Referans_Detay?: string | null;
+  Cari: boolean;
+  Aciklama: string | null;
+  Kayit_Tarihi?: string;
+  Aktif_Pasif: boolean;
+}
+
+export type CariFormData = Partial<Omit<Cari, 'Cari_ID' | 'Kategori_Adi' | 'Referans_Detay' | 'Kayit_Tarihi'>>;
