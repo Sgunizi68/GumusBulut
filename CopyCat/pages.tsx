@@ -341,10 +341,11 @@ interface DashboardRowData {
 export const DashboardPage: React.FC = () => {
   const { selectedBranch, currentPeriod, hasPermission } = useAppContext();
   const [gidenFaturaData, setGidenFaturaData] = useState<any[]>([]);
-  const { 
-    gelirEkstraList, eFaturaList, b2bEkstreList, digerHarcamaList, gelirList, 
+  const {
+    gelirEkstraList, eFaturaList, b2bEkstreList, digerHarcamaList, gelirList,
     stokSayimList, stokFiyatList, stokList, kategoriList, ustKategoriList
   } = useDataContext();
+  const [loadData, setLoadData] = useState(false);
 
   if (!selectedBranch) {
     return <Card title="Dashboard Raporu"><p className="text-red-500">Lütfen önce bir şube seçin.</p></Card>;
@@ -367,7 +368,7 @@ export const DashboardPage: React.FC = () => {
         periods.push(tempPeriod);
       }
     }
-    return Array.from(new Set(periods)).sort((a,b)=> b.localeCompare(a));
+    return Array.from(new Set(periods)).sort((a, b) => b.localeCompare(a));
   }, [currentPeriod, canViewFullHistory]);
 
   useEffect(() => {
@@ -377,7 +378,7 @@ export const DashboardPage: React.FC = () => {
   }, [currentPeriod, availablePeriodsForDashboard, selectedPeriodForDashboard]);
 
   useEffect(() => {
-    if (selectedBranch && selectedPeriodForDashboard) {
+    if (loadData && selectedBranch && selectedPeriodForDashboard) {
       fetchData<any[]>(`${API_BASE_URL}/rapor/giden-fatura?donem=${selectedPeriodForDashboard}&sube_id=${selectedBranch.Sube_ID}`)
         .then(data => {
           if (data) {
@@ -385,7 +386,7 @@ export const DashboardPage: React.FC = () => {
           }
         });
     }
-  }, [selectedBranch, selectedPeriodForDashboard]);
+  }, [loadData, selectedBranch, selectedPeriodForDashboard]);
 
   // Helper to get latest price (copied from StokSayimPage, can be centralized)
   const getLatestPriceForPeriod = useCallback((malzemeKodu: string, periodYYAA: string): number => {
@@ -398,9 +399,9 @@ export const DashboardPage: React.FC = () => {
       .filter(sf => sf.Malzeme_Kodu === malzemeKodu)
       .filter(sf => {
         try {
-            const priceDate = new Date(parseDateString(sf.Gecerlilik_Baslangic_Tarih));
-            return !isNaN(priceDate.getTime()) && priceDate <= periodEndDate;
-        } catch { return false;}
+          const priceDate = new Date(parseDateString(sf.Gecerlilik_Baslangic_Tarih));
+          return !isNaN(priceDate.getTime()) && priceDate <= periodEndDate;
+        } catch { return false; }
       })
       .sort((a, b) => new Date(b.Gecerlilik_Baslangic_Tarih).getTime() - new Date(a.Gecerlilik_Baslangic_Tarih).getTime());
     return relevantPrices.length > 0 ? relevantPrices[0].Fiyat : 0;
@@ -441,7 +442,7 @@ export const DashboardPage: React.FC = () => {
   }, [selectedBranch, eFaturaList, digerHarcamaList, b2bEkstreList]);
 
   const dashboardColumns = useMemo(() => {
-    if (!selectedBranch) return null;
+    if (!selectedBranch || !loadData) return null;
 
     const gelirlerData: DashboardRowData[] = [];
     const giderlerData: DashboardRowData[] = [];
@@ -449,43 +450,43 @@ export const DashboardPage: React.FC = () => {
 
     // Helper to get category total for a period, with fallback to previous periods
     const getCategoryTotalForPeriod = (
-        kategoriId: number, 
-        targetPeriod: string, 
-        kategoriTip: KategoriTip,
-        maxLookback = 6 // Look back up to 6 months
+      kategoriId: number,
+      targetPeriod: string,
+      kategoriTip: KategoriTip,
+      maxLookback = 6 // Look back up to 6 months
     ): { value: number; periodUsed: string; isFromPrevious: boolean } => {
-        let currentLookupPeriod = targetPeriod;
-        for (let i = 0; i <= maxLookback; i++) {
-            let periodTotal = 0;
-            if (kategoriTip === 'Gelir') {
-                periodTotal = gelirList
-                    .filter(g => g.Sube_ID === selectedBranch.Sube_ID && g.Kategori_ID === kategoriId && calculatePeriod(parseDateString(g.Tarih)) === currentLookupPeriod)
-                    .reduce((sum, g) => sum + g.Tutar, 0);
-            } else if (kategoriTip === 'Gider') {
-                eFaturaList
-                    .filter(ef => ef.Sube_ID === selectedBranch.Sube_ID && ef.Kategori_ID === kategoriId && ef.Donem === parseInt(currentLookupPeriod))
-                    .forEach(ef => periodTotal += ef.Tutar);
-                digerHarcamaList
-                    .filter(dh => dh.Sube_ID === selectedBranch.Sube_ID && dh.Kategori_ID === kategoriId && dh.Donem === parseInt(currentLookupPeriod))
-                    .forEach(dh => periodTotal += dh.Tutar);
-                b2bEkstreList
-                    .filter(b2b => b2b.Sube_ID === selectedBranch.Sube_ID && b2b.Kategori_ID === kategoriId && b2b.Donem === currentLookupPeriod)
-                    .forEach(b2b => periodTotal += b2b.Borc); // Assuming Borc is expense for a Gider Kategori
-            }
-
-            if (periodTotal !== 0 || i === 0) { // Found data or it's the target period (even if zero)
-                 if (i > 0 && periodTotal !== 0) { // Data found from a previous period
-                    return { value: periodTotal, periodUsed: currentLookupPeriod, isFromPrevious: true };
-                 }
-                 if (i === 0) { // Target period data (can be zero)
-                    return { value: periodTotal, periodUsed: currentLookupPeriod, isFromPrevious: false };
-                 }
-            }
-            if (i < maxLookback) currentLookupPeriod = getPreviousPeriod(currentLookupPeriod);
+      let currentLookupPeriod = targetPeriod;
+      for (let i = 0; i <= maxLookback; i++) {
+        let periodTotal = 0;
+        if (kategoriTip === 'Gelir') {
+          periodTotal = gelirList
+            .filter(g => g.Sube_ID === selectedBranch.Sube_ID && g.Kategori_ID === kategoriId && calculatePeriod(parseDateString(g.Tarih)) === currentLookupPeriod)
+            .reduce((sum, g) => sum + g.Tutar, 0);
+        } else if (kategoriTip === 'Gider') {
+          eFaturaList
+            .filter(ef => ef.Sube_ID === selectedBranch.Sube_ID && ef.Kategori_ID === kategoriId && ef.Donem === parseInt(currentLookupPeriod))
+            .forEach(ef => periodTotal += ef.Tutar);
+          digerHarcamaList
+            .filter(dh => dh.Sube_ID === selectedBranch.Sube_ID && dh.Kategori_ID === kategoriId && dh.Donem === parseInt(currentLookupPeriod))
+            .forEach(dh => periodTotal += dh.Tutar);
+          b2bEkstreList
+            .filter(b2b => b2b.Sube_ID === selectedBranch.Sube_ID && b2b.Kategori_ID === kategoriId && b2b.Donem === currentLookupPeriod)
+            .forEach(b2b => periodTotal += b2b.Borc); // Assuming Borc is expense for a Gider Kategori
         }
-        return { value: 0, periodUsed: targetPeriod, isFromPrevious: false }; // Default if no data found in lookback
+
+        if (periodTotal !== 0 || i === 0) { // Found data or it's the target period (even if zero)
+          if (i > 0 && periodTotal !== 0) { // Data found from a previous period
+            return { value: periodTotal, periodUsed: currentLookupPeriod, isFromPrevious: true };
+          }
+          if (i === 0) { // Target period data (can be zero)
+            return { value: periodTotal, periodUsed: currentLookupPeriod, isFromPrevious: false };
+          }
+        }
+        if (i < maxLookback) currentLookupPeriod = getPreviousPeriod(currentLookupPeriod);
+      }
+      return { value: 0, periodUsed: targetPeriod, isFromPrevious: false }; // Default if no data found in lookback
     };
-    
+
     // 1. Gelirler & Giderler
     let grandTotalGelir = 0;
     let grandTotalGider = 0;
@@ -496,11 +497,11 @@ export const DashboardPage: React.FC = () => {
       let tipTotal = 0;
 
       const relevantUstKategoriler = ustKategoriList.filter(uk => uk.Aktif_Pasif);
-      
+
       relevantUstKategoriler.forEach(ustKategori => {
-        const kategorilerInUst = kategoriList.filter(k => 
-          k.Ust_Kategori_ID === ustKategori.UstKategori_ID && 
-          k.Tip === tip && 
+        const kategorilerInUst = kategoriList.filter(k =>
+          k.Ust_Kategori_ID === ustKategori.UstKategori_ID &&
+          k.Tip === tip &&
           k.Aktif_Pasif &&
           (canViewGizliKategoriler || !k.Gizli)
         );
@@ -511,11 +512,11 @@ export const DashboardPage: React.FC = () => {
 
           kategorilerInUst.forEach(kategori => {
             const { value, isFromPrevious } = getCategoryTotalForPeriod(kategori.Kategori_ID, selectedPeriodForDashboard, tip);
-            subRows.push({ 
-                label: kategori.Kategori_Adi + (kategori.Gizli ? " (Gizli)" : ""), 
-                value: value, 
-                isSubItem: true, 
-                isFromPreviousPeriod: isFromPrevious 
+            subRows.push({
+              label: kategori.Kategori_Adi + (kategori.Gizli ? " (Gizli)" : ""),
+              value: value,
+              isSubItem: true,
+              isFromPreviousPeriod: isFromPrevious
             });
             ustKategoriTotal += value;
 
@@ -537,7 +538,7 @@ export const DashboardPage: React.FC = () => {
               }
             }
           });
-          
+
           dataRows.push({ label: ustKategori.UstKategori_Adi, value: ustKategoriTotal, isBold: true, isSubItem: false, bgColor: tip === 'Gelir' ? 'bg-green-50' : 'bg-red-50' });
           dataRows.push(...subRows);
 
@@ -596,40 +597,40 @@ export const DashboardPage: React.FC = () => {
     }
 
     const addPercentages = (data: DashboardRowData[]): DashboardRowData[] => {
-        if (grandTotalGelir === 0) return data;
-        return data.map(row => {
-            if (row.isTitle || row.value === 0) {
-                return row;
-            }
-            return {
-                ...row,
-                percentage: (row.value / grandTotalGelir) * 100
-            };
-        });
+      if (grandTotalGelir === 0) return data;
+      return data.map(row => {
+        if (row.isTitle || row.value === 0) {
+          return row;
+        }
+        return {
+          ...row,
+          percentage: (row.value / grandTotalGelir) * 100
+        };
+      });
     };
 
-    return { 
-        gelirler: addPercentages(gelirlerData), 
-        giderler: addPercentages(giderlerData), 
-        ozet: addPercentages(ozetData) 
+    return {
+      gelirler: addPercentages(gelirlerData),
+      giderler: addPercentages(giderlerData),
+      ozet: addPercentages(ozetData)
     };
 
   }, [
     selectedBranch, selectedPeriodForDashboard, gelirEkstraList, eFaturaList, b2bEkstreList,
     digerHarcamaList, gelirList, stokSayimList, stokFiyatList, stokList, kategoriList, ustKategoriList,
     gidenFaturaData,
-    canViewGizliKategoriler, getLatestPriceForPeriod, getDetailedGiderItems
+    canViewGizliKategoriler, getLatestPriceForPeriod, getDetailedGiderItems, loadData
   ]);
 
   if (!hasPermission(DASHBOARD_EKRANI_YETKI_ADI)) {
-      return <AccessDenied title="Dashboard" />;
+    return <AccessDenied title="Dashboard" />;
   }
 
   const renderDashboardColumn = (data: DashboardRowData[], title: string) => (
     <div className="space-y-1">
       {data.map((row, index) => (
-        <div 
-          key={`${row.label}-${index}`} 
+        <div
+          key={`${row.label}-${index}`}
           className={`py-2 px-3 rounded-md flex justify-between items-center
             ${row.isTitle ? `font-bold text-lg ${row.bgColor || 'bg-gray-200'} ${row.textColor || 'text-gray-800'} mt-4 mb-2` : ''}
             ${row.bgColor && !row.isTitle ? row.bgColor : ''}
@@ -639,7 +640,7 @@ export const DashboardPage: React.FC = () => {
             ${row.isEmphasized ? 'text-lg font-bold' : ''}
           `}>
           <span className={`
-            ${row.isSubItem ? 'ml-4' : ''} 
+            ${row.isSubItem ? 'ml-4' : ''}
             ${row.isSubSubItem ? 'ml-8 text-sm' : ''}
             ${row.isBold && !row.isEmphasized ? 'font-semibold' : ''}
           `}>
@@ -647,12 +648,12 @@ export const DashboardPage: React.FC = () => {
           </span>
           {!row.isTitle && (
             <span className={`flex items-baseline ${row.isBold || row.isEmphasized ? 'font-semibold' : ''} ${row.isEmphasized ? 'text-base' : ''}`}>
-                {formatTrCurrencyAdvanced(row.value, 2)}
-                {row.percentage !== undefined && (
-                    <span className="ml-2 text-xs text-gray-500 font-normal italic">
-                        ({row.percentage.toFixed(2)}%)
-                    </span>
-                )}
+              {formatTrCurrencyAdvanced(row.value, 2)}
+              {row.percentage !== undefined && (
+                <span className="ml-2 text-xs text-gray-500 font-normal italic">
+                  ({row.percentage.toFixed(2)}%)
+                </span>
+              )}
             </span>
           )}
         </div>
@@ -669,11 +670,11 @@ export const DashboardPage: React.FC = () => {
     if (!dashboardColumns) return;
 
     const wb = XLSX.utils.book_new();
-    
+
     // Helper function to create formatted data with better structure
     const createFormattedData = (data: DashboardRowData[], sectionTitle: string) => {
       const formattedData: any[] = [];
-      
+
       // Add section header
       formattedData.push({
         'Kategori': sectionTitle.toUpperCase(),
@@ -681,7 +682,7 @@ export const DashboardPage: React.FC = () => {
         'Tutar (₺)': '',
         'Durum': ''
       });
-      
+
       // Add an empty row for better spacing
       formattedData.push({
         'Kategori': '',
@@ -689,12 +690,12 @@ export const DashboardPage: React.FC = () => {
         'Tutar (₺)': '',
         'Durum': ''
       });
-      
+
       data.forEach(row => {
         let category = '';
         let itemName = row.label;
         let status = '';
-        
+
         // Determine hierarchy and formatting
         if (row.isTitle) {
           category = 'BAŞLIK';
@@ -711,11 +712,11 @@ export const DashboardPage: React.FC = () => {
           category = 'Ana Kalem';
           status = row.isFromPreviousPeriod ? 'Önceki Dönem' : 'Mevcut Dönem';
         }
-        
+
         if (row.isFromPreviousPeriod) {
           itemName = `${itemName} (Önceki Dönem Verisi)`;
         }
-        
+
         formattedData.push({
           'Kategori': category,
           'Kalem Adı': itemName,
@@ -723,7 +724,7 @@ export const DashboardPage: React.FC = () => {
           'Durum': status
         });
       });
-      
+
       return formattedData;
     };
 
@@ -737,9 +738,9 @@ export const DashboardPage: React.FC = () => {
       { 'Kategori': '', 'Kalem Adı': '', 'Tutar (₺)': '', 'Durum': '' },
       ...createFormattedData(dashboardColumns.ozet, 'Özet')
     ];
-    
+
     const mainWs = XLSX.utils.json_to_sheet(allData);
-    
+
     // Set column widths for better display
     mainWs['!cols'] = [
       { wch: 15 }, // Kategori
@@ -747,7 +748,7 @@ export const DashboardPage: React.FC = () => {
       { wch: 20 }, // Tutar
       { wch: 20 }  // Durum
     ];
-    
+
     // Ensure numeric values are exported as numbers, not text
     const mainRange = XLSX.utils.decode_range(mainWs['!ref'] || 'A1');
     for (let row = mainRange.s.r + 1; row <= mainRange.e.r; ++row) {
@@ -761,13 +762,13 @@ export const DashboardPage: React.FC = () => {
         }
       }
     }
-    
+
     XLSX.utils.book_append_sheet(wb, mainWs, 'Tam Rapor');
 
     // Create separate sheets for each section
     const gelirlerWs = XLSX.utils.json_to_sheet(createFormattedData(dashboardColumns.gelirler, 'Gelirler'));
     gelirlerWs['!cols'] = [{ wch: 15 }, { wch: 50 }, { wch: 20 }, { wch: 20 }];
-    
+
     // Ensure numeric values are exported as numbers, not text
     const gelirlerRange = XLSX.utils.decode_range(gelirlerWs['!ref'] || 'A1');
     for (let row = gelirlerRange.s.r + 1; row <= gelirlerRange.e.r; ++row) {
@@ -781,12 +782,12 @@ export const DashboardPage: React.FC = () => {
         }
       }
     }
-    
+
     XLSX.utils.book_append_sheet(wb, gelirlerWs, 'Gelirler');
-    
+
     const giderlerWs = XLSX.utils.json_to_sheet(createFormattedData(dashboardColumns.giderler, 'Giderler'));
     giderlerWs['!cols'] = [{ wch: 15 }, { wch: 50 }, { wch: 20 }, { wch: 20 }];
-    
+
     // Ensure numeric values are exported as numbers, not text
     const giderlerRange = XLSX.utils.decode_range(giderlerWs['!ref'] || 'A1');
     for (let row = giderlerRange.s.r + 1; row <= giderlerRange.e.r; ++row) {
@@ -800,12 +801,12 @@ export const DashboardPage: React.FC = () => {
         }
       }
     }
-    
+
     XLSX.utils.book_append_sheet(wb, giderlerWs, 'Giderler');
-    
+
     const ozetWs = XLSX.utils.json_to_sheet(createFormattedData(dashboardColumns.ozet, 'Özet'));
     ozetWs['!cols'] = [{ wch: 15 }, { wch: 50 }, { wch: 20 }, { wch: 20 }];
-    
+
     // Ensure numeric values are exported as numbers, not text
     const ozetRange = XLSX.utils.decode_range(ozetWs['!ref'] || 'A1');
     for (let row = ozetRange.s.r + 1; row <= ozetRange.e.r; ++row) {
@@ -819,21 +820,21 @@ export const DashboardPage: React.FC = () => {
         }
       }
     }
-    
+
     XLSX.utils.book_append_sheet(wb, ozetWs, 'Özet');
-    
+
     // Create a summary statistics sheet
     const summaryData = [];
-    
+
     // Calculate totals
     const gelirTotal = dashboardColumns.gelirler
       .filter(row => !row.isTitle && !row.isSubItem && !row.isSubSubItem)
       .reduce((sum, row) => sum + row.value, 0);
-      
+
     const giderTotal = dashboardColumns.giderler
       .filter(row => !row.isTitle && !row.isSubItem && !row.isSubSubItem)
       .reduce((sum, row) => sum + row.value, 0);
-    
+
     summaryData.push(
       { 'Açıklama': 'Rapor Özeti', 'Değer': '' },
       { 'Açıklama': '', 'Değer': '' },
@@ -845,10 +846,10 @@ export const DashboardPage: React.FC = () => {
       { 'Açıklama': 'Toplam Gider', 'Değer': typeof giderTotal === 'number' ? giderTotal : parseFloat(giderTotal) || 0 },
       { 'Açıklama': 'Net Fark (Gelir - Gider)', 'Değer': typeof (gelirTotal - giderTotal) === 'number' ? (gelirTotal - giderTotal) : parseFloat(gelirTotal - giderTotal) || 0 }
     );
-    
+
     const summaryWs = XLSX.utils.json_to_sheet(summaryData);
     summaryWs['!cols'] = [{ wch: 30 }, { wch: 25 }];
-    
+
     // Ensure numeric values are exported as numbers, not text
     const summaryRange = XLSX.utils.decode_range(summaryWs['!ref'] || 'A1');
     for (let row = summaryRange.s.r + 1; row <= summaryRange.e.r; ++row) {
@@ -862,10 +863,15 @@ export const DashboardPage: React.FC = () => {
         }
       }
     }
-    
+
     XLSX.utils.book_append_sheet(wb, summaryWs, 'Özet İstatistik');
 
     XLSX.writeFile(wb, `Dashboard_Raporu_${selectedBranch?.Sube_Adi}_${selectedPeriodForDashboard}.xlsx`);
+  };
+
+  const handlePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedPeriodForDashboard(e.target.value);
+    setLoadData(true);
   };
 
   return (
@@ -877,15 +883,15 @@ export const DashboardPage: React.FC = () => {
           </Button>
         )}
         {canExportExcel && (
-            <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
-                <Icons.Download className="w-5 h-5" />
-            </Button>
+          <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar">
+            <Icons.Download className="w-5 h-5" />
+          </Button>
         )}
         <label htmlFor="dashboard-period-select" className="text-sm font-medium text-gray-700">Dönem:</label>
         <Select
           id="dashboard-period-select"
           value={selectedPeriodForDashboard}
-          onChange={(e) => setSelectedPeriodForDashboard(e.target.value)}
+          onChange={handlePeriodChange}
           className="text-sm py-1"
         >
           {availablePeriodsForDashboard.map(p => <option key={p} value={p}>{p}</option>)}
@@ -900,15 +906,15 @@ export const DashboardPage: React.FC = () => {
             {renderDashboardColumn(dashboardColumns.giderler, "Giderler")}
             {renderDashboardColumn(dashboardColumns.ozet, "Özet")}
           </div>
-          
+
           {/* For PDF: use stacked layout */}
           <div className="hidden print:block space-y-8">
             <div className="w-full">
               <h3 className="text-lg font-bold mb-4 text-green-800 border-b-2 border-green-200 pb-2">GELİRLER</h3>
               <div className="space-y-1">
                 {dashboardColumns.gelirler.map((row, index) => (
-                  <div 
-                    key={`gelir-${row.label}-${index}`} 
+                  <div
+                    key={`gelir-${row.label}-${index}`}
                     className={`py-2 px-3 rounded-md flex justify-between items-center
                       ${row.isTitle ? `font-bold text-lg ${row.bgColor || 'bg-gray-200'} ${row.textColor || 'text-gray-800'} mt-4 mb-2` : ''}
                       ${row.bgColor && !row.isTitle ? row.bgColor : ''}
@@ -918,7 +924,7 @@ export const DashboardPage: React.FC = () => {
                       ${row.isEmphasized ? 'text-lg font-bold' : ''}
                     `}>
                     <span className={`
-                      ${row.isSubItem ? 'ml-4' : ''} 
+                      ${row.isSubItem ? 'ml-4' : ''}
                       ${row.isSubSubItem ? 'ml-8 text-sm' : ''}
                       ${row.isBold && !row.isEmphasized ? 'font-semibold' : ''}
                     `}>
@@ -936,13 +942,13 @@ export const DashboardPage: React.FC = () => {
                 ))}
               </div>
             </div>
-            
+
             <div className="w-full">
               <h3 className="text-lg font-bold mb-4 text-red-800 border-b-2 border-red-200 pb-2">GİDERLER</h3>
               <div className="space-y-1">
                 {dashboardColumns.giderler.map((row, index) => (
-                  <div 
-                    key={`gider-${row.label}-${index}`} 
+                  <div
+                    key={`gider-${row.label}-${index}`}
                     className={`py-2 px-3 rounded-md flex justify-between items-center
                       ${row.isTitle ? `font-bold text-lg ${row.bgColor || 'bg-gray-200'} ${row.textColor || 'text-gray-800'} mt-4 mb-2` : ''}
                       ${row.bgColor && !row.isTitle ? row.bgColor : ''}
@@ -952,7 +958,7 @@ export const DashboardPage: React.FC = () => {
                       ${row.isEmphasized ? 'text-lg font-bold' : ''}
                     `}>
                     <span className={`
-                      ${row.isSubItem ? 'ml-4' : ''} 
+                      ${row.isSubItem ? 'ml-4' : ''}
                       ${row.isSubSubItem ? 'ml-8 text-sm' : ''}
                       ${row.isBold && !row.isEmphasized ? 'font-semibold' : ''}
                     `}>
@@ -970,13 +976,13 @@ export const DashboardPage: React.FC = () => {
                 ))}
               </div>
             </div>
-            
+
             <div className="w-full">
               <h3 className="text-lg font-bold mb-4 text-gray-800 border-b-2 border-gray-200 pb-2">ÖZET</h3>
               <div className="space-y-1">
                 {dashboardColumns.ozet.map((row, index) => (
-                  <div 
-                    key={`ozet-${row.label}-${index}`} 
+                  <div
+                    key={`ozet-${row.label}-${index}`}
                     className={`py-2 px-3 rounded-md flex justify-between items-center
                       ${row.isTitle ? `font-bold text-lg ${row.bgColor || 'bg-gray-200'} ${row.textColor || 'text-gray-800'} mt-4 mb-2` : ''}
                       ${row.bgColor && !row.isTitle ? row.bgColor : ''}
@@ -986,7 +992,7 @@ export const DashboardPage: React.FC = () => {
                       ${row.isEmphasized ? 'text-lg font-bold' : ''}
                     `}>
                     <span className={`
-                      ${row.isSubItem ? 'ml-4' : ''} 
+                      ${row.isSubItem ? 'ml-4' : ''}
                       ${row.isSubSubItem ? 'ml-8 text-sm' : ''}
                       ${row.isBold && !row.isEmphasized ? 'font-semibold' : ''}
                     `}>
@@ -1004,13 +1010,13 @@ export const DashboardPage: React.FC = () => {
                 ))}
               </div>
             </div>
-            
+
             <div className="w-full">
               <h3 className="text-lg font-bold mb-4 text-blue-800 border-b-2 border-blue-200 pb-2">ÖZET</h3>
               <div className="space-y-1">
                 {dashboardColumns.ozet.map((row, index) => (
-                  <div 
-                    key={`ozet-${row.label}-${index}`} 
+                  <div
+                    key={`ozet-${row.label}-${index}`}
                     className={`py-2 px-3 rounded-md flex justify-between items-center
                       ${row.isTitle ? `font-bold text-lg ${row.bgColor || 'bg-gray-200'} ${row.textColor || 'text-gray-800'} mt-4 mb-2` : ''}
                       ${row.bgColor && !row.isTitle ? row.bgColor : ''}
@@ -1020,7 +1026,7 @@ export const DashboardPage: React.FC = () => {
                       ${row.isEmphasized ? 'text-lg font-bold' : ''}
                     `}>
                     <span className={`
-                      ${row.isSubItem ? 'ml-4' : ''} 
+                      ${row.isSubItem ? 'ml-4' : ''}
                       ${row.isSubSubItem ? 'ml-8 text-sm' : ''}
                       ${row.isBold && !row.isEmphasized ? 'font-semibold' : ''}
                     `}>
@@ -1041,7 +1047,9 @@ export const DashboardPage: React.FC = () => {
           </div>
         </div>
       ) : (
-        <p className="text-gray-500">Bu dönem için rapor verisi bulunmamaktadır veya hesaplanıyor.</p>
+        <div className="text-center py-10">
+          <p className="text-gray-500">Raporu görüntülemek için lütfen bir dönem seçin.</p>
+        </div>
       )}
     </Card>
   );
@@ -6181,17 +6189,19 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
   const { kategoriList, ustKategoriList, b2bEkstreList, gelirList } = useDataContext();
 
   const [viewedPeriod, setViewedPeriod] = useState(currentPeriod);
+  const [loadData, setLoadData] = useState(false);
 
   const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
 
   const platforms = useMemo(() => {
+    if (!loadData) return [];
     return kategoriList.filter(k => k.Ust_Kategori_ID === 1 && k.Aktif_Pasif);
-  }, [kategoriList]);
+  }, [kategoriList, loadData]);
 
   const monthNames = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
 
   const weeklyHeaders = useMemo(() => {
-    if (!viewedPeriod) return [];
+    if (!viewedPeriod || !loadData) return [];
     const year = 2000 + parseInt(viewedPeriod.substring(0, 2));
     const month = parseInt(viewedPeriod.substring(2, 4));
     const monthName = monthNames[month - 1];
@@ -6209,14 +6219,15 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
     }
 
     return headers;
-  }, [viewedPeriod]);
+  }, [viewedPeriod, loadData]);
 
   const calculateVirman = (platformName: string, weekHeader: string) => {
+    if (!loadData) return 0;
     return 0;
   };
 
   const calculateMonthlyKomisyon = (platformName: string) => {
-    if (!viewedPeriod || !b2bEkstreList) return 0;
+    if (!viewedPeriod || !b2bEkstreList || !loadData) return 0;
 
     const month = parseInt(viewedPeriod.substring(2, 4));
     const monthName = monthNames[month - 1];
@@ -6246,11 +6257,12 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
   };
 
   const calculateWeeklyGelir = (platformId: number, weekHeader: string) => {
+    if (!loadData) return 0;
     return 0;
   };
 
   const calculateKismiGelir = (platformId: number, virmanSonGun: number | null) => {
-    if (!viewedPeriod || !gelirList || virmanSonGun === null) return 0;
+    if (!viewedPeriod || !gelirList || virmanSonGun === null || !loadData) return 0;
 
     const year = 2000 + parseInt(viewedPeriod.substring(0, 2));
     const month = parseInt(viewedPeriod.substring(2, 4));
@@ -6285,18 +6297,21 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
   }, [currentPeriod]);
 
   const weeklyGelirTotals = useMemo(() => {
+    if (!loadData) return [];
     return weeklyHeaders.map(header =>
       platforms.reduce((sum, platform) => sum + calculateWeeklyGelir(platform.Kategori_ID, header), 0)
     );
-  }, [weeklyHeaders, platforms, calculateWeeklyGelir]);
+  }, [weeklyHeaders, platforms, calculateWeeklyGelir, loadData]);
 
   const weeklyVirmanTotals = useMemo(() => {
+    if (!loadData) return [];
     return weeklyHeaders.map(header =>
       platforms.reduce((sum, platform) => sum + calculateVirman(platform.Kategori_Adi, header), 0)
     );
-  }, [weeklyHeaders, platforms, calculateVirman]);
+  }, [weeklyHeaders, platforms, calculateVirman, loadData]);
 
   const grandTotalGelir = useMemo(() => {
+    if (!loadData) return 0;
     return platforms.reduce((sum, platform) => {
         const totalGelir = gelirList
             .filter(g => {
@@ -6307,18 +6322,20 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
             .reduce((total, g) => total + g.Tutar, 0);
         return sum + totalGelir;
     }, 0);
-  }, [platforms, gelirList, viewedPeriod, selectedBranch, calculatePeriod, parseDateString]);
+  }, [platforms, gelirList, viewedPeriod, selectedBranch, calculatePeriod, parseDateString, loadData]);
 
   const grandTotalVirman = useMemo(() => {
+    if (!loadData) return 0;
     return weeklyVirmanTotals.reduce((sum, total) => sum + total, 0);
-  }, [weeklyVirmanTotals]);
+  }, [weeklyVirmanTotals, loadData]);
 
   const grandTotalKomisyon = useMemo(() => {
+    if (!loadData) return 0;
     return platforms.reduce((sum, platform) => sum + calculateMonthlyKomisyon(platform.Kategori_Adi), 0);
-  }, [platforms, calculateMonthlyKomisyon]);
+  }, [platforms, calculateMonthlyKomisyon, loadData]);
 
   const calculateVirmanSonGun = useCallback((platformName: string) => {
-    if (!viewedPeriod || !b2bEkstreList) return null;
+    if (!viewedPeriod || !b2bEkstreList || !loadData) return null;
 
     const virmanGunleri = b2bEkstreList
       .filter(ekstre => {
@@ -6342,10 +6359,10 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
     }
 
     return Math.max(...virmanGunleri);
-  }, [b2bEkstreList, viewedPeriod]);
+  }, [b2bEkstreList, viewedPeriod, loadData]);
 
   const calculateToplamVirman = useCallback((platformName: string) => {
-    if (!viewedPeriod || !b2bEkstreList) return 0;
+    if (!viewedPeriod || !b2bEkstreList || !loadData) return 0;
 
     const toplamVirman = b2bEkstreList
       .filter(ekstre => {
@@ -6357,11 +6374,12 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
       .reduce((total, ekstre) => total + ekstre.Alacak, 0);
 
     return -1 * toplamVirman;
-  }, [b2bEkstreList, viewedPeriod]);
+  }, [b2bEkstreList, viewedPeriod, loadData]);
 
   const grandTotalToplamVirman = useMemo(() => {
+    if (!loadData) return 0;
     return platforms.reduce((sum, platform) => sum + calculateToplamVirman(platform.Kategori_Adi), 0);
-  }, [platforms, calculateToplamVirman]);
+  }, [platforms, calculateToplamVirman, loadData]);
 
   const handleExportToExcel = () => {
     const dataForExport: (string | number)[][] = [];
@@ -6429,6 +6447,11 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
       return <AccessDenied title="Online Kontrol Dashboard" />;
   }
 
+  const handlePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setViewedPeriod(e.target.value);
+    setLoadData(true);
+  };
+
   return (
     <Card title="Online Kontrol Dashboard" actions={
         <div className="flex items-center space-x-2">
@@ -6438,7 +6461,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                 </Button>
             )}
             <label htmlFor="period-select" className="text-sm font-medium">Dönem:</label>
-            <Select id="period-select" value={viewedPeriod} onChange={e => setViewedPeriod(e.target.value)}>
+            <Select id="period-select" value={viewedPeriod} onChange={handlePeriodChange}>
                 {availablePeriods.map(p => {
                     const year = 2000 + parseInt(p.substring(0, 2));
                     const month = parseInt(p.substring(2, 4));
@@ -6448,6 +6471,11 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
             </Select>
         </div>
     }>
+      {!loadData ? (
+        <div className="text-center py-10">
+          <p className="text-gray-500">Raporu görüntülemek için lütfen bir dönem seçin.</p>
+        </div>
+      ) : (
         <div className="overflow-x-auto">
             <table className="min-w-full border-collapse">
                 <thead>
@@ -6525,6 +6553,7 @@ export const OnlineKontrolDashboardPage: React.FC = () => {
                 </tfoot>
             </table>
         </div>
+      )}
     </Card>
   );
 };

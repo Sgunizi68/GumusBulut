@@ -6,6 +6,7 @@ export const VPSDashboardPage: React.FC = () => {
     const { puantajSecimiList, puantajList, gelirEkstraList, calisanList } = useDataContext();
   const { currentPeriod } = useAppContext();
   const [selectedMonth, setSelectedMonth] = useState(currentPeriod);
+  const [loadData, setLoadData] = useState(false);
 
   const months = useMemo(() => {
     const endYear = 2000 + parseInt(currentPeriod.substring(0, 2));
@@ -50,6 +51,7 @@ export const VPSDashboardPage: React.FC = () => {
   }, [selectedMonth]);
 
   const mainData = useMemo(() => {
+    if (!loadData) return [];
     const year = 2000 + parseInt(selectedMonth.substring(0, 2));
     const month = parseInt(selectedMonth.substring(2, 4));
 
@@ -226,10 +228,10 @@ export const VPSDashboardPage: React.FC = () => {
         total: totalValue
       };
     });
-  }, [dates, puantajList, puantajSecimiList, selectedMonth, gelirEkstraList, calisanList]);
+  }, [dates, puantajList, puantajSecimiList, selectedMonth, gelirEkstraList, calisanList, loadData]);
 
   const scoreData = useMemo(() => {
-    if (!puantajSecimiList || !puantajList || !selectedMonth) return [];
+    if (!puantajSecimiList || !puantajList || !selectedMonth || !loadData) return [];
 
     const year = 2000 + parseInt(selectedMonth.substring(0, 2));
     const month = parseInt(selectedMonth.substring(2, 4));
@@ -265,10 +267,10 @@ export const VPSDashboardPage: React.FC = () => {
       ...row,
       total: row.personCounts.reduce((a, b) => a + b, 0)
     }));
-  }, [dates, puantajSecimiList, puantajList, selectedMonth]);
+  }, [dates, puantajSecimiList, puantajList, selectedMonth, loadData]);
 
   const { iseGirenCalisanSayisi, istenCikanCalisanSayisi } = useMemo(() => {
-    if (!calisanList || !selectedMonth) {
+    if (!calisanList || !selectedMonth || !loadData) {
       return { iseGirenCalisanSayisi: 0, istenCikanCalisanSayisi: 0 };
     }
 
@@ -289,12 +291,17 @@ export const VPSDashboardPage: React.FC = () => {
     }).length;
 
     return { iseGirenCalisanSayisi: iseGiren, istenCikanCalisanSayisi: istenCikan };
-  }, [calisanList, selectedMonth]);
+  }, [calisanList, selectedMonth, loadData]);
 
   const isWeekend = (date) => {
     const day = new Date(2025, parseInt(selectedMonth.slice(2)) - 1, date).getDay();
     return day === 0 || day === 6; // Pazar = 0, Cumartesi = 6
   };
+
+  const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedMonth(e.target.value);
+      setLoadData(true);
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-6">
@@ -313,7 +320,7 @@ export const VPSDashboardPage: React.FC = () => {
             <div className="relative">
               <select 
                 value={selectedMonth}
-                onChange={(e) => setSelectedMonth(e.target.value)}
+                onChange={handleMonthChange}
                 className="appearance-none px-6 py-3 pr-10 border-2 border-white/50 rounded-xl bg-white/80 backdrop-blur-sm text-slate-700 font-medium focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 min-w-56"
               >
                 {months.map((month) => (
@@ -325,6 +332,13 @@ export const VPSDashboardPage: React.FC = () => {
           </div>
         </div>
 
+        {!loadData ? (
+            <div className="text-center py-20 bg-white/50 rounded-2xl shadow-lg">
+              <h2 className="text-2xl font-semibold text-slate-700">Raporu Görüntülemek İçin Bir Dönem Seçin</h2>
+              <p className="text-slate-500 mt-2">Yukarıdaki menüden bir ay seçerek başlayın.</p>
+            </div>
+        ) : (
+        <>
         {/* Stats Cards - SADECE 4 KART */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* İlk 2 kart: Ortalamalar */}
@@ -512,6 +526,8 @@ export const VPSDashboardPage: React.FC = () => {
             </table>
           </div>
         </div>
+        </>
+        )}
 
         {/* Footer */}
         <div className="mt-8 text-center text-slate-500">

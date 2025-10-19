@@ -47,6 +47,7 @@ export const POSKontrolDashboardPage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [limit] = useState<number>(31);
+    const [loadData, setLoadData] = useState(false);
 
     const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
     const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
@@ -63,9 +64,8 @@ export const POSKontrolDashboardPage: React.FC = () => {
         return `${(year % 100).toString().padStart(2, '0')}${month.toString().padStart(2, '0')}`;
     };
 
-    // Step 1: Create a memoized function for fetching data
     const fetchReportData = useCallback(async (isPolling = false) => {
-        if (selectedBranch && selectedPeriod) {
+        if (loadData && selectedBranch && selectedPeriod) {
             if (!isPolling) setLoading(true);
             setError(null);
             const skip = (currentPage - 1) * limit;
@@ -91,30 +91,26 @@ export const POSKontrolDashboardPage: React.FC = () => {
             }
             if (!isPolling) setLoading(false);
         }
-    }, [selectedBranch, selectedPeriod, currentPage, limit]);
+    }, [loadData, selectedBranch, selectedPeriod, currentPage, limit]);
 
-    // Step 2: useEffect for initial fetch and page changes
     useEffect(() => {
         fetchReportData();
     }, [fetchReportData]);
 
-    // Step 3: useEffect for polling
     useEffect(() => {
         const intervalId = setInterval(() => {
             console.log('Polling for new data...');
-            fetchReportData(true); // Pass true to indicate it's a background poll
-        }, 30000); // Poll every 30 seconds
+            fetchReportData(true);
+        }, 30000);
 
-        return () => clearInterval(intervalId); // Cleanup on unmount
+        return () => clearInterval(intervalId);
     }, [fetchReportData]);
 
-    // Reset page when branch or period changes
     useEffect(() => {
         setCurrentPage(1);
         setReportData(null);
     }, [selectedBranch, selectedPeriod]);
     
-    // Other functions (handleGeneratePdf, handleExportToExcel, etc.) remain the same
     const handleGeneratePdf = () => { generateDashboardPdf('pos-kontrol-dashboard-content', `POS_Kontrol_Dashboard_${selectedBranch?.Sube_Adi}_${selectedPeriod}.pdf`); };
     const handleExportToExcel = () => {
         if (!reportData || !selectedBranch) return;
@@ -193,19 +189,27 @@ export const POSKontrolDashboardPage: React.FC = () => {
 
     const isNextDisabled = !reportData || reportData.data.length < limit || (reportData.summary && currentPage * limit >= reportData.summary.total_records);
 
-    // The rest of the JSX remains largely the same
+    const handlePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedPeriod(e.target.value);
+        setLoadData(true);
+    };
+
     return (
         <div className="space-y-6" id="pos-kontrol-dashboard-content">
             <Card title={`POS Kontrol Dashboard (Şube: ${selectedBranch?.Sube_Adi})`} actions={
                 <div className="flex items-center space-x-2 hide-on-pdf">
                     {canPrint && <Button onClick={handleGeneratePdf} variant="ghost" size="sm" title="PDF Olarak İndir" className="print-button"><Icons.Print className="w-5 h-5" /></Button>}
                     {canExportExcel && <Button onClick={handleExportToExcel} variant="ghost" size="sm" title="Excel'e Aktar"><Icons.Download className="w-5 h-5" /></Button>}
-                    <Select value={selectedPeriod} onChange={(e) => setSelectedPeriod(e.target.value)} className="text-sm py-1">
+                    <Select value={selectedPeriod} onChange={handlePeriodChange} className="text-sm py-1">
                         {availablePeriods.map(p => <option key={p} value={p}>{p}</option>)}
                     </Select>
                 </div>
             }>
-                {loading && !reportData ? (
+                {!loadData ? (
+                    <div className="text-center py-10">
+                        <p className="text-gray-500">Raporu görüntülemek için lütfen bir dönem seçin.</p>
+                    </div>
+                ) : loading && !reportData ? (
                     <div className="flex justify-center items-center py-8">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                         <p className="ml-3 text-lg text-gray-600">Rapor yükleniyor...</p>

@@ -87,6 +87,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
 
     const [period, setPeriod] = useState('');
     const [periodName, setPeriodName] = useState('');
+    const [loadData, setLoadData] = useState(false);
 
     const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
 
@@ -114,10 +115,11 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
 
     const handlePeriodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setPeriod(event.target.value);
+        setLoadData(true);
     };
 
     const processedData = useMemo(() => {
-        if (!selectedBranch || !yemekCekiList || !kategoriList || !gelirList || !ustKategoriList || !eFaturaList || !eFaturaReferansList || !odemeList || !period) {
+        if (!loadData || !selectedBranch || !yemekCekiList || !kategoriList || !gelirList || !ustKategoriList || !eFaturaList || !eFaturaReferansList || !odemeList || !period) {
             return { groups: [], kontrolEdilenKayitSayisi: 0, totalAylikGelir: 0, totalDonemTutar: 0, totalFark: 0 };
         }
 
@@ -268,7 +270,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
 
         return { groups, kontrolEdilenKayitSayisi, totalAylikGelir, totalDonemTutar, totalFark: totalDonemTutar - totalAylikGelir };
 
-    }, [yemekCekiList, kategoriList, ustKategoriList, gelirList, eFaturaList, eFaturaReferansList, odemeList, selectedBranch, period]);
+    }, [yemekCekiList, kategoriList, ustKategoriList, gelirList, eFaturaList, eFaturaReferansList, odemeList, selectedBranch, period, loadData]);
 
     const handleExportToExcel = () => {
         const dataForExport: (string | number)[][] = [];
@@ -319,6 +321,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
     };
 
     useEffect(() => {
+        if (!loadData) return;
         const allRows = document.querySelectorAll('tbody tr');
         allRows.forEach((row, index) => {
             const htmlRow = row as HTMLElement;
@@ -352,7 +355,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                 checkbox.removeEventListener('change', handleChange as EventListener);
             });
         };
-    }, [processedData]);
+    }, [processedData, loadData]);
 
     return (
         <div className="yemek-ceki-dashboard-wrapper">
@@ -365,19 +368,19 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                     <div className="summary-cards">
                         <div className="summary-card income">
                             <h3>📊 Aylık Toplam Gelir</h3>
-                            <div className="amount">{formatCurrency(processedData.totalAylikGelir)}</div>
+                            <div className="amount">{loadData ? formatCurrency(processedData.totalAylikGelir) : '-'}</div>
                         </div>
                         <div className="summary-card paid">
                             <h3>💰 Dönem Tutar Toplamı</h3>
-                            <div className="amount">{formatCurrency(processedData.totalDonemTutar)}</div>
+                            <div className="amount">{loadData ? formatCurrency(processedData.totalDonemTutar) : '-'}</div>
                         </div>
                         <div className="summary-card difference">
                             <h3>⚖️ Fark</h3>
-                            <div className="amount">{formatCurrency(processedData.totalFark)}</div>
+                            <div className="amount">{loadData ? formatCurrency(processedData.totalFark) : '-'}</div>
                         </div>
                         <div className="summary-card pending">
                             <h3>📝 Kontrol Edilen Kayıt</h3>
-                            <div className="amount">{processedData.kontrolEdilenKayitSayisi}</div>
+                            <div className="amount">{loadData ? processedData.kontrolEdilenKayitSayisi : '-'}</div>
                         </div>
                     </div>
 
@@ -400,6 +403,11 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                                 </select>
                             </div>
                         </div>
+                        {!loadData ? (
+                            <div className="text-center py-10">
+                                <p className="text-gray-500">Raporu görüntülemek için lütfen bir dönem seçin.</p>
+                            </div>
+                        ) : (
                         <table>
                             <thead>
                                 <tr>
@@ -479,6 +487,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                                 </tr>
                             </tbody>
                         </table>
+                        )}
                     </div>
                 </div>
 
