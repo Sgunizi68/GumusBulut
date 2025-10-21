@@ -1,83 +1,54 @@
-import React, { useState } from 'react';
-import { Search, Plus, Edit2, Trash2, Download, Eye, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, Plus, Edit2, Trash2, Download, Eye } from 'lucide-react';
 
 export default function MutabakatYonetim() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const [selectedMutabakat, setSelectedMutabakat] = useState(null);
-  
-  // Örnek veri
-  const [mutabakatList, setMutabakatList] = useState([
-    {
-      Mutabakat_ID: 1,
-      Cari_ID: 1,
-      Cari_Unvani: 'ABC Teknoloji A.Ş.',
-      Mutabakat_Tarihi: '2024-10-15',
-      Tutar: 125000.00,
-      Aciklama: 'Ekim ayı mutabakat tutarı',
-      Sube_ID: 1,
-      Sube_Adi: 'Merkez Şube',
-      Kayit_Tarihi: '2024-10-15 14:30:00'
-    },
-    {
-      Mutabakat_ID: 2,
-      Cari_ID: 2,
-      Cari_Unvani: 'XYZ İnşaat Ltd. Şti.',
-      Mutabakat_Tarihi: '2024-09-20',
-      Tutar: 85000.00,
-      Aciklama: 'Malzeme tedarik mutabakatı',
-      Sube_ID: 2,
-      Sube_Adi: 'Anadolu Şube',
-      Kayit_Tarihi: '2024-09-20 10:15:00'
-    },
-    {
-      Mutabakat_ID: 3,
-      Cari_ID: 1,
-      Cari_Unvani: 'ABC Teknoloji A.Ş.',
-      Mutabakat_Tarihi: '2024-09-01',
-      Tutar: 95000.00,
-      Aciklama: 'Eylül ayı mutabakat tutarı',
-      Sube_ID: 1,
-      Sube_Adi: 'Merkez Şube',
-      Kayit_Tarihi: '2024-09-01 09:00:00'
-    }
-  ]);
+  const [mutabakatList, setMutabakatList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [cariList] = useState([
-    { Cari_ID: 1, Alici_Unvani: 'ABC Teknoloji A.Ş.' },
-    { Cari_ID: 2, Alici_Unvani: 'XYZ İnşaat Ltd. Şti.' },
-    { Cari_ID: 3, Alici_Unvani: 'Güneş Enerji Sistemleri' }
-  ]);
+  useEffect(() => {
+    const fetchMutabakatData = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/v1/mutabakat');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setMutabakatList(data);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const [subeList] = useState([
-    { Sube_ID: 1, Sube_Adi: 'Merkez Şube' },
-    { Sube_ID: 2, Sube_Adi: 'Anadolu Şube' },
-    { Sube_ID: 3, Sube_Adi: 'Avrupa Şube' }
-  ]);
+    fetchMutabakatData();
+  }, []);
 
   const filteredList = mutabakatList.filter(item => {
-    const matchesSearch = item.Cari_Unvani.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.Aciklama?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = item.Alici_Unvani.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesSearch;
   });
 
-  const handleEdit = (mutabakat) => {
-    setSelectedMutabakat(mutabakat);
-    setEditMode(true);
-    setShowModal(true);
+  if (loading) {
+    return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">Yükleniyor...</div>;
+  }
+
+  if (error) {
+    return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">Hata: {error.message}</div>;
+  }
+
+  const handleAddNew = () => {
+    alert("Yeni mutabakat ekleme özelliği henüz mevcut değil.");
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm('Bu mutabakat kaydını silmek istediğinizden emin misiniz?')) {
-      setMutabakatList(mutabakatList.filter(m => m.Mutabakat_ID !== id));
-    }
+  const handleEdit = (mutabakat: any) => {
+    alert("Mutabakat düzenleme özelliği henüz mevcut değil.");
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setEditMode(false);
-    setSelectedMutabakat(null);
+  const handleDelete = (mutabakatId: number) => {
+    alert("Mutabakat silme özelliği henüz mevcut değil.");
   };
 
   return (
@@ -85,7 +56,7 @@ export default function MutabakatYonetim() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-800">Cari Mutabakat Yönetimi</h1>
+          <h1 className="text-3xl font-bold text-slate-800">Mutabakat Yönetimi</h1>
         </div>
 
         {/* Toolbar */}
@@ -96,7 +67,7 @@ export default function MutabakatYonetim() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="Cari veya açıklama ara..."
+                placeholder="Ünvan ara..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -110,7 +81,7 @@ export default function MutabakatYonetim() {
             </button>
             
             <button 
-              onClick={() => setShowModal(true)}
+              onClick={handleAddNew}
               className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium whitespace-nowrap"
             >
               <Plus className="w-4 h-4" />
@@ -126,54 +97,44 @@ export default function MutabakatYonetim() {
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">ID</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Cari Ünvan</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Alıcı Ünvanı</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Mutabakat Tarihi</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Tutar</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Şube</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Açıklama</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">İşlemler</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
                 {filteredList.map((mutabakat) => (
-                  <tr key={mutabakat.Mutabakat_ID} className="hover:bg-slate-50 transition-colors">
-                    <td className="px-6 py-4 text-sm text-slate-800 font-medium">#{mutabakat.Mutabakat_ID}</td>
+                  <tr key={mutabakat.Cari_ID} className="hover:bg-slate-50 transition-colors">
+                    <td className="px-6 py-4 text-sm text-slate-800 font-medium">#{mutabakat.Cari_ID}</td>
                     <td className="px-6 py-4">
-                      <div className="text-sm font-medium text-slate-800">{mutabakat.Cari_Unvani}</div>
-                      <div className="text-xs text-slate-500 mt-1">Cari ID: {mutabakat.Cari_ID}</div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-slate-600">
-                      {new Date(mutabakat.Mutabakat_Tarihi).toLocaleDateString('tr-TR')}
+                      <div className="text-sm font-medium text-slate-800">{mutabakat.Alici_Unvani}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm font-semibold text-green-700">
-                        {parseFloat(mutabakat.Tutar).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₺
+                      <div className="text-sm text-slate-600">
+                        {mutabakat.Mutabakat_Tarihi}
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="px-3 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
-                        {mutabakat.Sube_Adi}
-                      </span>
+                      <div className="text-sm text-slate-600">
+                        {mutabakat.Tutar}
+                      </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm text-slate-600 max-w-xs truncate">
-                        {mutabakat.Aciklama || '-'}
+                      <div className="text-sm text-slate-600">
+                        {mutabakat.Aciklama === "NULL" ? "-" : mutabakat.Aciklama}
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex gap-2">
-                        <button 
-                          onClick={() => handleEdit(mutabakat)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" 
-                          title="Düzenle"
-                        >
+                        <button className="p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors" title="Görüntüle">
+                          <Eye className="w-4 h-4" />
+                        </button>
+                        <button onClick={() => handleEdit(mutabakat)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Düzenle">
                           <Edit2 className="w-4 h-4" />
                         </button>
-                        <button 
-                          onClick={() => handleDelete(mutabakat.Mutabakat_ID)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" 
-                          title="Sil"
-                        >
+                        <button onClick={() => handleDelete(mutabakat.Cari_ID)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Sil">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
@@ -203,109 +164,6 @@ export default function MutabakatYonetim() {
           </div>
         </div>
       </div>
-
-      {/* Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-slate-200 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-slate-800">
-                {editMode ? 'Mutabakat Düzenle' : 'Yeni Mutabakat Ekle'}
-              </h2>
-              <button 
-                onClick={handleCloseModal}
-                className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
-              >
-                <X className="w-5 h-5 text-slate-600" />
-              </button>
-            </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Cari Firma *
-                </label>
-                <select 
-                  defaultValue={selectedMutabakat?.Cari_ID || ''}
-                  className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                >
-                  <option value="">Seçiniz...</option>
-                  {cariList.map(cari => (
-                    <option key={cari.Cari_ID} value={cari.Cari_ID}>
-                      {cari.Alici_Unvani}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Mutabakat Tarihi *
-                </label>
-                <input 
-                  type="date" 
-                  defaultValue={selectedMutabakat?.Mutabakat_Tarihi || ''}
-                  className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Tutar (₺) *
-                </label>
-                <input 
-                  type="number" 
-                  step="0.01"
-                  defaultValue={selectedMutabakat?.Tutar || ''}
-                  placeholder="0.00"
-                  className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Şube *
-                </label>
-                <select 
-                  defaultValue={selectedMutabakat?.Sube_ID || ''}
-                  className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                >
-                  <option value="">Seçiniz...</option>
-                  {subeList.map(sube => (
-                    <option key={sube.Sube_ID} value={sube.Sube_ID}>
-                      {sube.Sube_Adi}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Açıklama</label>
-                <textarea 
-                  rows="4" 
-                  defaultValue={selectedMutabakat?.Aciklama || ''}
-                  placeholder="Mutabakat ile ilgili notlar..."
-                  className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                ></textarea>
-              </div>
-            </div>
-            <div className="p-6 border-t border-slate-200 flex gap-3 justify-end">
-              <button 
-                onClick={handleCloseModal}
-                className="px-6 py-2.5 border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-medium"
-              >
-                İptal
-              </button>
-              <button className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                {editMode ? 'Güncelle' : 'Kaydet'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
