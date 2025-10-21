@@ -1,11 +1,99 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Plus, Edit2, Trash2, Download, Eye } from 'lucide-react';
 
+interface Mutabakat {
+  Cari_ID: number;
+  Alici_Unvani: string;
+  Mutabakat_Tarihi: string; // Assuming date as string for simplicity
+  Tutar: number;
+  Aciklama: string | null;
+  Mutabakat_ID: number;
+}
+
+interface MutabakatFormData {
+  Mutabakat_Tarihi: string;
+  Tutar: number;
+  Aciklama: string | null;
+}
+
+const MutabakatModal: React.FC<{initialData: Mutabakat | null, onSubmit: (data: MutabakatFormData) => void, onClose: () => void}> = ({initialData, onSubmit, onClose}) => {
+    console.log("MutabakatModal rendered. initialData:", initialData);
+    const [formData, setFormData] = useState<MutabakatFormData>({
+        Mutabakat_Tarihi: initialData?.Mutabakat_Tarihi || '',
+        Tutar: initialData?.Tutar || 0,
+        Aciklama: initialData?.Aciklama === "NULL" ? "" : initialData?.Aciklama || '',
+    });
+
+    useEffect(() => {
+        if (initialData) {
+            setFormData({
+                Mutabakat_Tarihi: initialData.Mutabakat_Tarihi,
+                Tutar: initialData.Tutar,
+                Aciklama: initialData.Aciklama === "NULL" ? "" : initialData.Aciklama,
+            });
+        }
+    }, [initialData]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleFormSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        onSubmit(formData);
+    };
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <form onSubmit={handleFormSubmit}>
+            <div className="p-6 border-b border-slate-200">
+              <h2 className="text-2xl font-bold text-slate-800">{initialData ? 'Mutabakat Düzenle' : 'Yeni Mutabakat Ekle'}</h2>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Alıcı Ünvanı *</label>
+                <input type="text" name="Alici_Unvani" value={formData.Alici_Unvani || ''} onChange={handleChange} className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" disabled={true} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Mutabakat Tarihi *</label>
+                <input type="date" name="Mutabakat_Tarihi" value={formData.Mutabakat_Tarihi || ''} onChange={handleChange} className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Tutar *</label>
+                <input type="number" name="Tutar" value={formData.Tutar || 0} onChange={handleChange} className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" step="0.01" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Açıklama</label>
+                <textarea name="Aciklama" value={formData.Aciklama || ''} onChange={handleChange} rows="3" className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+              </div>
+            </div>
+            <div className="p-6 border-t border-slate-200 flex gap-3 justify-end">
+              <button 
+                type="button"
+                onClick={onClose}
+                className="px-6 py-2.5 border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-medium"
+              >
+                İptal
+              </button>
+              <button type="submit" className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                Kaydet
+              </button>
+            </div>
+            </form>
+          </div>
+        </div>
+    );
+};
+
 export default function MutabakatYonetim() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [mutabakatList, setMutabakatList] = useState([]);
+  const [mutabakatList, setMutabakatList] = useState<Mutabakat[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [editingMutabakat, setEditingMutabakat] = useState<Mutabakat | null>(null);
 
   useEffect(() => {
     const fetchMutabakatData = async () => {
@@ -14,9 +102,9 @@ export default function MutabakatYonetim() {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json();
+        const data: Mutabakat[] = await response.json();
         setMutabakatList(data);
-      } catch (error) {
+      } catch (error: any) {
         setError(error);
       } finally {
         setLoading(false);
@@ -40,11 +128,46 @@ export default function MutabakatYonetim() {
   }
 
   const handleAddNew = () => {
-    alert("Yeni mutabakat ekleme özelliği henüz mevcut değil.");
+    setEditingMutabakat(null);
+    setShowModal(true);
   };
 
-  const handleEdit = (mutabakat: any) => {
-    alert("Mutabakat düzenleme özelliği henüz mevcut değil.");
+  const handleEdit = (mutabakat: Mutabakat) => {
+    console.log("handleEdit called with:", mutabakat);
+    setEditingMutabakat(mutabakat);
+    setShowModal(true);
+  };
+
+  const handleSubmit = async (formData: MutabakatFormData) => {
+    if (editingMutabakat) {
+      try {
+        const formattedData = {
+          ...formData,
+          Mutabakat_Tarihi: new Date(formData.Mutabakat_Tarihi).toISOString().split('T')[0], // Ensure YYYY-MM-DD format
+          Aciklama: formData.Aciklama === "" ? null : formData.Aciklama,
+        };
+
+        const response = await fetch(`http://localhost:8000/api/v1/mutabakat/${editingMutabakat.Mutabakat_ID}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formattedData),
+        });
+        console.log("Fetch response:", response);
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Backend validation error details:", errorData);
+          throw new Error(`HTTP error! status: ${response.status} - ${JSON.stringify(errorData)}`);
+        }
+        const updatedMutabakat: Mutabakat = await response.json();
+        setMutabakatList(prevList =>
+          prevList.map(m => (m.Mutabakat_ID === updatedMutabakat.Mutabakat_ID ? updatedMutabakat : m))
+        );
+        setShowModal(false);
+      } catch (error: any) {
+        setError(error);
+      }
+    }
   };
 
   const handleDelete = (mutabakatId: number) => {
@@ -164,6 +287,14 @@ export default function MutabakatYonetim() {
           </div>
         </div>
       </div>
+      {/* Modal */}
+      {showModal && (
+        <MutabakatModal 
+            initialData={editingMutabakat} 
+            onSubmit={handleSubmit} 
+            onClose={() => setShowModal(false)} 
+        />
+      )}
     </div>
   );
 }
