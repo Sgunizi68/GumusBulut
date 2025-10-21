@@ -8,6 +8,7 @@ interface Mutabakat {
   Tutar: number;
   Aciklama: string | null;
   Mutabakat_ID: number;
+  Kayit_Tarihi: string; // Add Kayit_Tarihi field
 }
 
 interface MutabakatFormData {
@@ -54,7 +55,7 @@ const MutabakatModal: React.FC<{initialData: Mutabakat | null, onSubmit: (data: 
             <div className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Alıcı Ünvanı *</label>
-                <input type="text" name="Alici_Unvani" value={formData.Alici_Unvani || ''} onChange={handleChange} className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" disabled={true} />
+                <input type="text" name="Alici_Unvani" value={initialData?.Alici_Unvani || ''} className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" disabled={true} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Mutabakat Tarihi *</label>
@@ -68,6 +69,12 @@ const MutabakatModal: React.FC<{initialData: Mutabakat | null, onSubmit: (data: 
                 <label className="block text-sm font-medium text-slate-700 mb-2">Açıklama</label>
                 <textarea name="Aciklama" value={formData.Aciklama || ''} onChange={handleChange} rows="3" className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
               </div>
+              {initialData?.Kayit_Tarihi && (
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Kayıt Tarihi</label>
+                  <p className="text-sm text-slate-600">{new Date(initialData.Kayit_Tarihi).toLocaleString()}</p>
+                </div>
+              )}
             </div>
             <div className="p-6 border-t border-slate-200 flex gap-3 justify-end">
               <button 
@@ -224,6 +231,7 @@ export default function MutabakatYonetim() {
                   <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Mutabakat Tarihi</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Tutar</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Açıklama</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Kayıt Tarihi</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">İşlemler</th>
                 </tr>
               </thead>
@@ -248,6 +256,9 @@ export default function MutabakatYonetim() {
                       <div className="text-sm text-slate-600">
                         {mutabakat.Aciklama === "NULL" ? "-" : mutabakat.Aciklama}
                       </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-slate-600">
+                      {mutabakat.Kayit_Tarihi ? new Date(mutabakat.Kayit_Tarihi).toLocaleString() : '-'}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex gap-2">
