@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Plus, Edit2, Trash2, Download, Eye } from 'lucide-react';
+import { useAppContext } from '../App';
 
 interface Mutabakat {
   Cari_ID: number;
@@ -11,15 +12,22 @@ interface Mutabakat {
   Kayit_Tarihi: string; // Add Kayit_Tarihi field
 }
 
+interface Cari {
+  Cari_ID: number;
+  Alici_Unvani: string;
+}
+
 interface MutabakatFormData {
+  Cari_ID: number | null;
   Mutabakat_Tarihi: string;
   Tutar: number;
   Aciklama: string | null;
 }
 
-const MutabakatModal: React.FC<{initialData: Mutabakat | null, onSubmit: (data: MutabakatFormData) => void, onClose: () => void}> = ({initialData, onSubmit, onClose}) => {
+const MutabakatModal: React.FC<{initialData: Mutabakat | null, onSubmit: (data: MutabakatFormData) => void, onClose: () => void, cariList: Cari[]}> = ({initialData, onSubmit, onClose, cariList}) => {
     console.log("MutabakatModal rendered. initialData:", initialData);
     const [formData, setFormData] = useState<MutabakatFormData>({
+        Cari_ID: initialData?.Cari_ID || null,
         Mutabakat_Tarihi: initialData?.Mutabakat_Tarihi || '',
         Tutar: initialData?.Tutar || 0,
         Aciklama: initialData?.Aciklama === "NULL" ? "" : initialData?.Aciklama || '',
@@ -28,6 +36,7 @@ const MutabakatModal: React.FC<{initialData: Mutabakat | null, onSubmit: (data: 
     useEffect(() => {
         if (initialData) {
             setFormData({
+                Cari_ID: initialData.Cari_ID,
                 Mutabakat_Tarihi: initialData.Mutabakat_Tarihi,
                 Tutar: initialData.Tutar,
                 Aciklama: initialData.Aciklama === "NULL" ? "" : initialData.Aciklama,
@@ -55,7 +64,20 @@ const MutabakatModal: React.FC<{initialData: Mutabakat | null, onSubmit: (data: 
             <div className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Alıcı Ünvanı *</label>
-                <input type="text" name="Alici_Unvani" value={initialData?.Alici_Unvani || ''} className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" disabled={true} />
+                <select
+                  name="Cari_ID"
+                  value={formData.Cari_ID || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, Cari_ID: e.target.value ? parseInt(e.target.value) : null }))}
+                  className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  disabled={!!initialData}
+                >
+                  <option value="">Seçiniz...</option>
+                  {cariList.map(cari => (
+                    <option key={cari.Cari_ID} value={cari.Cari_ID}>
+                      {cari.Alici_Unvani}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Mutabakat Tarihi *</label>
@@ -95,22 +117,24 @@ const MutabakatModal: React.FC<{initialData: Mutabakat | null, onSubmit: (data: 
 };
 
 export default function MutabakatYonetim() {
+  const { selectedBranch } = useAppContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [mutabakatList, setMutabakatList] = useState<Mutabakat[]>([]);
+  const [cariList, setCariList] = useState<Cari[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [editingMutabakat, setEditingMutabakat] = useState<Mutabakat | null>(null);
 
   useEffect(() => {
-    const fetchMutabakatData = async () => {
+    const fetchInitialData = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/v1/mutabakat');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data: Mutabakat[] = await response.json();
-        setMutabakatList(data);
+        const [mutabakatData, cariData] = await Promise.all([
+          fetch('http://localhost:8000/api/v1/mutabakat').then(res => res.json()),
+          fetch('http://localhost:8000/api/v1/cari').then(res => res.json())
+        ]);
+        setMutabakatList(mutabakatData);
+        setCariList(cariData);
       } catch (error: any) {
         setError(error);
       } finally {
@@ -118,7 +142,7 @@ export default function MutabakatYonetim() {
       }
     };
 
-    fetchMutabakatData();
+    fetchInitialData();
   }, []);
 
   const filteredList = mutabakatList.filter(item => {
@@ -146,34 +170,48 @@ export default function MutabakatYonetim() {
   };
 
   const handleSubmit = async (formData: MutabakatFormData) => {
-    if (editingMutabakat) {
-      try {
-        const formattedData = {
-          ...formData,
-          Mutabakat_Tarihi: new Date(formData.Mutabakat_Tarihi).toISOString().split('T')[0], // Ensure YYYY-MM-DD format
-          Aciklama: formData.Aciklama === "" ? null : formData.Aciklama,
-        };
+    try {
+      const formattedData = {
+        ...formData,
+        Sube_ID: selectedBranch?.Sube_ID,
+        Mutabakat_Tarihi: new Date(formData.Mutabakat_Tarihi).toISOString().split('T')[0], // Ensure YYYY-MM-DD format
+        Aciklama: formData.Aciklama === "" ? null : formData.Aciklama,
+      };
 
-        const response = await fetch(`http://localhost:8000/api/v1/mutabakat/${editingMutabakat.Mutabakat_ID}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formattedData),
-        });
-        console.log("Fetch response:", response);
+      console.log("Data being sent to backend:", formattedData); // Log the data
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error("Backend validation error details:", errorData);
-          throw new Error(`HTTP error! status: ${response.status} - ${JSON.stringify(errorData)}`);
-        }
-        const updatedMutabakat: Mutabakat = await response.json();
-        setMutabakatList(prevList =>
-          prevList.map(m => (m.Mutabakat_ID === updatedMutabakat.Mutabakat_ID ? updatedMutabakat : m))
-        );
-        setShowModal(false);
-      } catch (error: any) {
-        setError(error);
+      const url = editingMutabakat 
+        ? `http://localhost:8000/api/v1/mutabakat/${editingMutabakat.Mutabakat_ID}`
+        : 'http://localhost:8000/api/v1/mutabakat';
+      
+      const method = editingMutabakat ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formattedData),
+      });
+      console.log("Fetch response:", response);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Backend validation error details:", errorData);
+        throw new Error(`HTTP error! status: ${response.status} - ${JSON.stringify(errorData)}`);
       }
+      
+      const resultData: Mutabakat = await response.json();
+
+      if (editingMutabakat) {
+        setMutabakatList(prevList =>
+          prevList.map(m => (m.Mutabakat_ID === resultData.Mutabakat_ID ? resultData : m))
+        );
+      } else {
+        setMutabakatList(prevList => [...prevList, resultData]);
+      }
+      
+      setShowModal(false);
+    } catch (error: any) {
+      setError(error);
     }
   };
 
@@ -303,7 +341,8 @@ export default function MutabakatYonetim() {
         <MutabakatModal 
             initialData={editingMutabakat} 
             onSubmit={handleSubmit} 
-            onClose={() => setShowModal(false)} 
+            onClose={() => setShowModal(false)}
+            cariList={cariList}
         />
       )}
     </div>
