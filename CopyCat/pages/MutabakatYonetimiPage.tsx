@@ -215,8 +215,23 @@ export default function MutabakatYonetim() {
     }
   };
 
-  const handleDelete = (mutabakatId: number) => {
-    alert("Mutabakat silme özelliği henüz mevcut değil.");
+  const handleDelete = async (mutabakatId: number) => {
+    if (window.confirm("Bu mutabakat kaydını silmek istediğinizden emin misiniz?")) {
+      try {
+        const response = await fetch(`http://localhost:8000/api/v1/mutabakat/${mutabakatId}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(`HTTP error! status: ${response.status} - ${JSON.stringify(errorData)}`);
+        }
+
+        setMutabakatList(prevList => prevList.filter(m => m.Mutabakat_ID !== mutabakatId));
+      } catch (error: any) {
+        setError(error);
+      }
+    }
   };
 
   return (
@@ -300,13 +315,10 @@ export default function MutabakatYonetim() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex gap-2">
-                        <button className="p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors" title="Görüntüle">
-                          <Eye className="w-4 h-4" />
-                        </button>
                         <button onClick={() => handleEdit(mutabakat)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Düzenle">
                           <Edit2 className="w-4 h-4" />
                         </button>
-                        <button onClick={() => handleDelete(mutabakat.Cari_ID)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Sil">
+                        <button onClick={() => handleDelete(mutabakat.Mutabakat_ID)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Sil">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
