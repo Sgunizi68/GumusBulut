@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Plus, Edit2, Trash2, Download, Eye } from 'lucide-react';
 import { useAppContext } from '../App';
+import * as XLSX from 'xlsx';
 
 interface Mutabakat {
   Cari_ID: number;
@@ -158,6 +159,13 @@ export default function MutabakatYonetim() {
     return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">Hata: {error.message}</div>;
   }
 
+  const handleExport = () => {
+    const ws = XLSX.utils.json_to_sheet(filteredList);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Mutabakatlar");
+    XLSX.writeFile(wb, "mutabakatlar.xlsx");
+  };
+
   const handleAddNew = () => {
     setEditingMutabakat(null);
     setShowModal(true);
@@ -258,9 +266,9 @@ export default function MutabakatYonetim() {
             </div>
 
             {/* Actions */}
-            <button className="px-4 py-2.5 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors flex items-center gap-2 whitespace-nowrap">
+            <button onClick={handleExport} className="px-4 py-2.5 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors flex items-center gap-2 whitespace-nowrap">
               <Download className="w-4 h-4" />
-              <span>Dışa Aktar</span>
+              <span>Excel'e Aktar</span>
             </button>
             
             <button 
