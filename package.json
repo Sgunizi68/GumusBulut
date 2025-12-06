@@ -1,0 +1,16 @@
+{
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "gh-pages": "^6.3.0",
+    "husky": "^9.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "version": "6.0.0",
+  "dependencies": {
+    "lucide-react": "^0.544.0"
+  }
+}

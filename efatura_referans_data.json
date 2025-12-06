@@ -1,0 +1,162 @@
+[
+  {
+    "Alici_Unvani": "COCA COLA SATIŞ VE DAĞITIM A.Ş.",
+    "Referans_Kodu": "Coca Cola",
+    "Kategori_ID": 14,
+    "Aciklama": "",
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T11:16:03"
+  },
+  {
+    "Alici_Unvani": "EDENRED KURUMSAL ÇÖZÜMLER A.Ş.",
+    "Referans_Kodu": "",
+    "Kategori_ID": 22,
+    "Aciklama": null,
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T06:27:54"
+  },
+  {
+    "Alici_Unvani": "FASDAT GIDA DAĞITIM SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+    "Referans_Kodu": "",
+    "Kategori_ID": 17,
+    "Aciklama": null,
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T06:27:54"
+  },
+  {
+    "Alici_Unvani": "G2MEKSPER SATIŞ VE DAĞITIM HİZMETLERİ ANONİM ŞİRKETİ",
+    "Referans_Kodu": "",
+    "Kategori_ID": 16,
+    "Aciklama": null,
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T06:27:54"
+  },
+  {
+    "Alici_Unvani": "İGDAŞ İSTANBUL GAZ DAĞITIM SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+    "Referans_Kodu": "IGDAŞ",
+    "Kategori_ID": 30,
+    "Aciklama": "",
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T11:05:29"
+  },
+  {
+    "Alici_Unvani": "KÜBRA ŞERBETÇİ",
+    "Referans_Kodu": "Kübra Şerbetçi",
+    "Kategori_ID": 18,
+    "Aciklama": "Hal Faturaları",
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T06:27:54"
+  },
+  {
+    "Alici_Unvani": "Lion Tekstil San ve Tic Ltd Şti",
+    "Referans_Kodu": "",
+    "Kategori_ID": 25,
+    "Aciklama": null,
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T06:27:54"
+  },
+  {
+    "Alici_Unvani": "METROPAL KURUMSAL HİZMETLER A.Ş.",
+    "Referans_Kodu": "",
+    "Kategori_ID": 22,
+    "Aciklama": null,
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T06:27:54"
+  },
+  {
+    "Alici_Unvani": "MULTINET KURUMSAL HİZMETLER ANONİM ŞİRKETİ",
+    "Referans_Kodu": "",
+    "Kategori_ID": 22,
+    "Aciklama": null,
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T06:27:54"
+  },
+  {
+    "Alici_Unvani": "Pepsi Cola Servis ve Dağıtım Ltd. Şti.",
+    "Referans_Kodu": "Pepsi",
+    "Kategori_ID": 14,
+    "Aciklama": null,
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T06:27:54"
+  },
+  {
+    "Alici_Unvani": "PLUXEE ÇALIŞAN DENEYİMİ DANIŞMANLIK VE PAZARLAMA HİZMETLERİ ANONİM ŞİRKETİ",
+    "Referans_Kodu": "",
+    "Kategori_ID": 22,
+    "Aciklama": null,
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T06:27:54"
+  },
+  {
+    "Alici_Unvani": "ROBOTPOS BİLGİSAYAR SİSTEMLERİ A.Ş.",
+    "Referans_Kodu": "ROBOTPOS ",
+    "Kategori_ID": 48,
+    "Aciklama": "",
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T11:17:34"
+  },
+  {
+    "Alici_Unvani": "Seher Gıda Pazarlama Sanayi Ve Ticaret Anonim Şirketi",
+    "Referans_Kodu": "Seher",
+    "Kategori_ID": 15,
+    "Aciklama": null,
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T06:27:54"
+  },
+  {
+    "Alici_Unvani": "SET KURUMSAL HİZMETLER TİCARET A.Ş.",
+    "Referans_Kodu": "SET KURUMSAL HİZMETLER TİCARET A.Ş.",
+    "Kategori_ID": 22,
+    "Aciklama": "",
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T11:14:07"
+  },
+  {
+    "Alici_Unvani": "TAVUK DÜNYASI GIDA SANAYİ VE TİCARET A.Ş\t",
+    "Referans_Kodu": "Tavuk Dünyası",
+    "Kategori_ID": 13,
+    "Aciklama": "",
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-19T07:12:08"
+  },
+  {
+    "Alici_Unvani": "TAVUK DÜNYASI GIDA SANAYİ VE TİCARET A.Ş",
+    "Referans_Kodu": "Tavuk Dünyası",
+    "Kategori_ID": 13,
+    "Aciklama": "Değiştirdim",
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-24T12:09:16"
+  },
+  {
+    "Alici_Unvani": "TAVUK DÜNYASI GIDA SANAYİ VE TİCARET ANONİM ŞİRKETİ",
+    "Referans_Kodu": "Tavuk Dünyası- Eski",
+    "Kategori_ID": 13,
+    "Aciklama": null,
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T06:27:54"
+  },
+  {
+    "Alici_Unvani": "TTNET A.Ş.",
+    "Referans_Kodu": "",
+    "Kategori_ID": 32,
+    "Aciklama": null,
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T06:27:54"
+  },
+  {
+    "Alici_Unvani": "Türk Telekomünikasyon A.Ş.",
+    "Referans_Kodu": "",
+    "Kategori_ID": 31,
+    "Aciklama": null,
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T06:27:54"
+  },
+  {
+    "Alici_Unvani": "TÜRMOB-TESMER EĞİTİM YAYIN VE YAZILIM HİZMETLERİ İKTİSADİ İŞLETMESİ",
+    "Referans_Kodu": "e-Fatura",
+    "Kategori_ID": 52,
+    "Aciklama": "e-Fatura Sağlayıcısı",
+    "Aktif_Pasif": true,
+    "Kayit_Tarihi": "2025-08-02T11:07:37"
+  }
+]

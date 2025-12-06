@@ -1,0 +1,57 @@
+WITH X_Kategorileri AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'Depo Kira'   -- 🔸 Buraya istenen kategori adı yazılır
+),
+Tum_Veri AS (
+    SELECT Donem, Tutar, 'Diger_Harcama' AS Kaynak
+    FROM SilverCloud.Diger_Harcama
+    WHERE Kategori_ID IN (SELECT Kategori_ID FROM X_Kategorileri)
+    and Year(Belge_Tarihi)=Ekran.Year
+    and Sube_ID= Ekran.Sube_ID
+
+    UNION ALL
+
+    SELECT Donem, Tutar, 'e_Fatura' AS Kaynak
+    FROM SilverCloud.e_Fatura
+    WHERE Kategori_ID IN (SELECT Kategori_ID FROM X_Kategorileri)
+    and Year(Fatura_Tarihi)=Ekran.Year
+    and Sube_ID= Ekran.Sube_ID
+)
+SELECT
+    Donem,
+    SUM(Tutar) AS Toplam_Tutar
+FROM Tum_Veri
+GROUP BY Donem
+ORDER BY Donem;
+
+
+
+Örnek Ekran.Sube_ID=1 Ekran.Year =2025
+
+WITH X_Kategorileri AS (
+    SELECT Kategori_ID
+    FROM SilverCloud.Kategori
+    WHERE Kategori_Adi = 'Depo Kira'   -- 🔸 Buraya istenen kategori adı yazılır
+),
+Tum_Veri AS (
+    SELECT Donem, Tutar, 'Diger_Harcama' AS Kaynak
+    FROM SilverCloud.Diger_Harcama
+    WHERE Kategori_ID IN (SELECT Kategori_ID FROM X_Kategorileri)
+    and Year(Belge_Tarihi)=2025
+    and Sube_ID=1
+
+    UNION ALL
+
+    SELECT Donem, Tutar, 'e_Fatura' AS Kaynak
+    FROM SilverCloud.e_Fatura
+    WHERE Kategori_ID IN (SELECT Kategori_ID FROM X_Kategorileri)
+    and Year(Fatura_Tarihi)=2025
+    and Sube_ID=1
+)
+SELECT
+    Donem,
+    SUM(Tutar) AS Toplam_Tutar
+FROM Tum_Veri
+GROUP BY Donem
+ORDER BY Donem;

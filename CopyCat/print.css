@@ -1,0 +1,115 @@
+@media print {
+  /* Existing rules */
+  aside,
+  header,
+  .card-actions {
+    display: none !important;
+    width: 0 !important;
+    margin: 0 !important;
+  }
+
+  main.main-content {
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  .flex.h-screen {
+    display: block !important;
+    height: auto !important;
+  }
+
+  .flex-1.flex.flex-col.overflow-hidden {
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .dashboard-card > div > div {
+    page-break-inside: avoid !important;
+  }
+
+  /* New rules to hide more common UI elements and scrollbars */
+  nav, /* Hide any <nav> elements */
+  .sidebar, /* Common class for sidebars */
+  .navbar, /* Common class for navigation bars */
+  .print-hidden, /* Generic class for elements to hide during print */
+  [data-print-hide], /* Elements with a data-print-hide attribute */
+  ::-webkit-scrollbar, /* Hide WebKit scrollbars */
+  ::-moz-scrollbar, /* Hide Firefox scrollbars */
+  ::-ms-scrollbar, /* Hide IE/Edge scrollbars */
+  .no-print { /* Another common class for elements to hide */
+    display: none !important;
+  }
+
+  /* Ensure body and html are not constrained */
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Adjust main content for full width */
+  body > #root > div { /* Assuming #root is the main app container */
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .screen-only-input {
+    display: none !important;
+  }
+
+  .print-only-text {
+    display: block !important; /* Ensure it's visible in print */
+  }
+
+  /* Dashboard-specific print styles */
+  #dashboard-content {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    overflow: visible !important;
+  }
+
+  /* Force dashboard grid to stack vertically for better PDF layout */
+  #dashboard-content.grid {
+    display: block !important;
+    grid-template-columns: none !important;
+  }
+
+  #dashboard-content > div {
+    width: 100% !important;
+    margin-bottom: 2rem !important;
+    page-break-inside: avoid !important;
+    display: block !important;
+  }
+
+  /* Ensure all overflow containers show content */
+  .overflow-x-auto,
+  .overflow-y-auto,
+  .overflow-auto,
+  .overflow-hidden {
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  /* Make sure tables expand properly */
+  table {
+    width: 100% !important;
+    table-layout: auto !important;
+  }
+
+  /* Hide scrollable container constraints */
+  .space-y-1,
+  .space-y-2,
+  .space-y-4,
+  .space-y-6 {
+    display: block !important;
+  }
+}

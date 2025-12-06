@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formatting Functions Test</title>
+</head>
+<body>
+    <h1>Formatting Functions Test</h1>
+    <div id="results"></div>
+
+    <script>
+        // Numeric formatting helper with thousand separators (without currency symbol)
+        const formatNumber = (amount) => {
+            return amount.toLocaleString('tr-TR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true
+            });
+        };
+
+        // Currency formatting helper
+        const formatCurrency = (amount) => {
+            return amount.toLocaleString('tr-TR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                style: 'currency',
+                currency: 'TRY'
+            });
+        };
+
+        // Test data
+        const testData = [123.45, 1234.56, 1234567.89, 0, -1234.56, 1000, 50];
+
+        // Display results
+        const resultsDiv = document.getElementById('results');
+        
+        resultsDiv.innerHTML += '<h2>formatNumber function:</h2>';
+        testData.forEach(value => {
+            resultsDiv.innerHTML += `<p>formatNumber(${value}): ${formatNumber(value)}</p>`;
+        });
+
+        resultsDiv.innerHTML += '<h2>formatCurrency function:</h2>';
+        testData.forEach(value => {
+            resultsDiv.innerHTML += `<p>formatCurrency(${value}): ${formatCurrency(value)}</p>`;
+        });
+    </script>
+</body>
+</html>
