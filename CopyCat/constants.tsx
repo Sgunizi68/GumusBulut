@@ -1,8 +1,8 @@
 import React from 'react';
 import { Sube, Kullanici, Rol, Yetki, KullaniciRol, RolYetki, Deger, UstKategori, Kategori, EFatura, EFaturaExcelRow, B2BEkstre, B2BEkstreExcelRow, DigerHarcama, HarcamaTipi, Stok, StokFiyat, StokSayim, Calisan, PuantajSecimi, Puantaj, Gelir, GelirEkstra, AvansIstek } from './types';
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:8000/api/v1' : 'https://gumusbulut.onrender.com/api/v1');
-//export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://gumusbulut.onrender.com/api/v1';
+// export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:8000/api/v1' : 'https://gumusbulut.onrender.com/api/v1');
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://gumusbulut.onrender.com/api/v1';
 
 // Heroicons (Outline)
 // Updated to accept className prop
