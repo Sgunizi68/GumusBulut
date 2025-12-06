@@ -26,9 +26,13 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=[
+        "http://localhost:5173", # Frontend development server
+        "http://localhost:8000", # Backend itself
+        "https://gumusbulut.onrender.com", # Production
+    ],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"], # Explicitly list all common methods
     allow_headers=["*"],
 )
 
