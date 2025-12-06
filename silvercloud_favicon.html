@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SilverCloud Favicon Generator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5aa0 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .title {
+            color: #1e3a5f;
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .favicon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .favicon-item {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .favicon-item:hover {
+            border-color: #2c5aa0;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(44,90,160,0.2);
+        }
+
+        .favicon-preview {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            background: #1e3a5f;
+            color: white;
+        }
+
+        .favicon-size {
+            font-weight: 600;
+            color: #1e3a5f;
+            margin-bottom: 5px;
+        }
+
+        .favicon-desc {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #2c5aa0, #1e3a5f);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(44,90,160,0.3);
+        }
+
+        .cloud-icon {
+            width: 100%;
+            height: 100%;
+        }
+
+        .instructions {
+            background: #f0f7ff;
+            border-left: 4px solid #2c5aa0;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 10px 10px 0;
+            text-align: left;
+        }
+
+        .instructions h3 {
+            color: #1e3a5f;
+            margin-top: 0;
+        }
+
+        .instructions ul {
+            color: #555;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🌩️ SilverCloud Favicon</h1>
+        <p class="subtitle">Profesyonel bulut simgesi favicon tasarımları</p>
+
+        <div class="favicon-grid">
+            <div class="favicon-item" onclick="downloadFavicon(16)">
+                <div class="favicon-preview" style="width: 32px; height: 32px;">
+                    <svg class="cloud-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.86 1 14.58q0-1.95 1.17-3.48q1.18-1.53 3.08-1.95q.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5Q23 13.78 23 15.5q0 1.88-1.31 3.19Q20.37 20 18.5 20Z"/>
+                    </svg>
+                </div>
+                <div class="favicon-size">16×16</div>
+                <div class="favicon-desc">Tarayıcı sekmesi</div>
+            </div>
+
+            <div class="favicon-item" onclick="downloadFavicon(32)">
+                <div class="favicon-preview" style="width: 48px; height: 48px;">
+                    <svg class="cloud-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.86 1 14.58q0-1.95 1.17-3.48q1.18-1.53 3.08-1.95q.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5Q23 13.78 23 15.5q0 1.88-1.31 3.19Q20.37 20 18.5 20Z"/>
+                    </svg>
+                </div>
+                <div class="favicon-size">32×32</div>
+                <div class="favicon-desc">Standart favicon</div>
+            </div>
+
+            <div class="favicon-item" onclick="downloadFavicon(64)">
+                <div class="favicon-preview">
+                    <svg class="cloud-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.86 1 14.58q0-1.95 1.17-3.48q1.18-1.53 3.08-1.95q.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5Q23 13.78 23 15.5q0 1.88-1.31 3.19Q20.37 20 18.5 20Z"/>
+                    </svg>
+                </div>
+                <div class="favicon-size">64×64</div>
+                <div class="favicon-desc">Yüksek çözünürlük</div>
+            </div>
+
+            <div class="favicon-item" onclick="downloadAppleFavicon()">
+                <div class="favicon-preview" style="border-radius: 15px;">
+                    <svg class="cloud-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.86 1 14.58q0-1.95 1.17-3.48q1.18-1.53 3.08-1.95q.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5Q23 13.78 23 15.5q0 1.88-1.31 3.19Q20.37 20 18.5 20Z"/>
+                    </svg>
+                </div>
+                <div class="favicon-size">180×180</div>
+                <div class="favicon-desc">Apple Touch Icon</div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Kullanım Talimatları</h3>
+            <ul>
+                <li><strong>16x16:</strong> Tarayıcı sekmesi için temel favicon</li>
+                <li><strong>32x32:</strong> Standart favicon, çoğu durumda yeterli</li>
+                <li><strong>64x64:</strong> Retina ekranlar ve yüksek çözünürlük</li>
+                <li><strong>180x180:</strong> Apple cihazlar için touch icon</li>
+            </ul>
+            <p><strong>HTML'e eklemek için:</strong><br>
+            <code>&lt;link rel="icon" type="image/x-icon" href="/favicon.ico"&gt;</code><br>
+            <code>&lt;link rel="apple-touch-icon" href="/apple-touch-icon.png"&gt;</code></p>
+        </div>
+
+        <button class="download-btn" onclick="downloadAllFavicons()">
+            📦 Tümünü İndir (ZIP)
+        </button>
+        
+        <button class="download-btn" onclick="generateICO()">
+            💾 ICO Formatı İndir
+        </button>
+    </div>
+
+    <script>
+        function createCloudSVG(size, bgColor = '#1e3a5f', iconColor = 'white') {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            // Arka plan
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, size, size);
+
+            // Bulut simgesi çiz
+            ctx.fillStyle = iconColor;
+            ctx.beginPath();
+            
+            const scale = size / 24; // SVG 24x24 boyutunda
+            const cloudPath = "M6.5 20q-2.28 0-3.89-1.57Q1 16.86 1 14.58q0-1.95 1.17-3.48q1.18-1.53 3.08-1.95q.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5Q23 13.78 23 15.5q0 1.88-1.31 3.19Q20.37 20 18.5 20Z";
+            
+            // Basitleştirilmiş bulut şekli
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const cloudSize = size * 0.6;
+            
+            // Ana gövde (oval)
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY + cloudSize * 0.1, cloudSize * 0.4, cloudSize * 0.25, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Sol bulut parçası
+            ctx.beginPath();
+            ctx.arc(centerX - cloudSize * 0.25, centerY - cloudSize * 0.05, cloudSize * 0.2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Sağ bulut parçası
+            ctx.beginPath();
+            ctx.arc(centerX + cloudSize * 0.2, centerY - cloudSize * 0.1, cloudSize * 0.18, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Üst orta bulut parçası
+            ctx.beginPath();
+            ctx.arc(centerX - cloudSize * 0.05, centerY - cloudSize * 0.2, cloudSize * 0.15, 0, Math.PI * 2);
+            ctx.fill();
+
+            return canvas;
+        }
+
+        function downloadFavicon(size) {
+            const canvas = createCloudSVG(size);
+            const link = document.createElement('a');
+            link.download = `silvercloud-favicon-${size}x${size}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        function downloadAppleFavicon() {
+            const canvas = createCloudSVG(180, '#1e3a5f', 'white');
+            const link = document.createElement('a');
+            link.download = 'apple-touch-icon.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        function generateICO() {
+            // 16x16 favicon için ICO formatı simülasyonu
+            const canvas = createCloudSVG(32);
+            const link = document.createElement('a');
+            link.download = 'favicon.ico';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        function downloadAllFavicons() {
+            // Sırayla tüm boyutları indir
+            setTimeout(() => downloadFavicon(16), 100);
+            setTimeout(() => downloadFavicon(32), 300);
+            setTimeout(() => downloadFavicon(64), 500);
+            setTimeout(() => downloadAppleFavicon(), 700);
+            
+            alert('Tüm favicon dosyaları indiriliyor! Birkaç saniye bekleyin.');
+        }
+
+        // Sayfa yüklendiğinde animasyon
+        window.addEventListener('load', function() {
+            const items = document.querySelectorAll('.favicon-item');
+            items.forEach((item, index) => {
+                setTimeout(() => {
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateY(20px)';
+                    item.style.transition = 'all 0.5s ease';
+                    
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0)';
+                    }, 50);
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
