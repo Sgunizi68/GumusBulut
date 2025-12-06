@@ -201,7 +201,7 @@ export const YemekCekiKontrolDashboardPage: React.FC = () => {
                             const cekSonTarih = parseDate(cek.Son_Tarih);
                             return (
                                 f.Giden_Fatura &&
-                                Math.abs(f.Tutar - cek.Tutar) < 0.01 &&
+                                Math.abs(f.Tutar - cek.Tutar) / cek.Tutar < 0.01 &&
                                 faturaTarihi && cekSonTarih && faturaTarihi.getTime() === cekSonTarih.getTime() &&
                                 aliciUnvanlariForKategori.includes(f.Alici_Unvani)
                             );

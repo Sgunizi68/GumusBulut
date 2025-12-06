@@ -21,6 +21,7 @@ app = FastAPI(
 origins = [
     "http://localhost:5173", # Frontend development server
     "http://localhost:8000", # Backend itself
+    "https://gumusbulut.onrender.com", # Production
 ]
 
 app.add_middleware(
