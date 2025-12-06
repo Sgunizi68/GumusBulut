@@ -12,4 +12,4 @@ pandas>=1.3.0
 openpyxl>=3.0.7
 google-api-python-client
 google-auth-oauthlib
-lucide-react
+
