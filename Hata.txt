@@ -1,90 +1,3 @@
-2025-12-06T19:36:28.003511535Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/yemek-cekiler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:36:28.00414788Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/calisanlar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:36:28.004553799Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/avans-istekler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:36:28.008952048Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/calisan-talepler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:36:28.010307888Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/Odeme_Referans/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:36:28.088270475Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/diger-harcamalar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:36:28.312522807Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/stoklar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:36:28.339500034Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/puantaj-secimi/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:36:28.374631526Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/stok-fiyatlar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:36:29.899097309Z INFO:     Shutting down
-2025-12-06T19:36:30.00027657Z INFO:     Waiting for application shutdown.
-2025-12-06T19:36:30.000723603Z INFO:     Application shutdown complete.
-2025-12-06T19:36:30.001072773Z INFO:     Finished server process [39]
-2025-12-06T19:37:13.904199116Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/degerler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:13.90525665Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/kategoriler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:13.912592085Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/kullanici-rolleri/?kullanici_id=2 HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:13.91813076Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/kullanici-rolleri/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:13.919111172Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/users/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:13.919126442Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/yetkiler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:13.925923906Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/rol-yetkileri/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:13.925962326Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/ust-kategoriler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:13.9270175Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/roles/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:13.92791511Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/subeler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.158581477Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/Odeme_Referans/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.165214696Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/diger-harcamalar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.169135695Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/b2b-ekstreler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.172251935Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/stok-fiyatlar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.173749809Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/stoklar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.174788272Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/depo-kira-rapor/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.175267803Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/calisanlar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.175868106Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/gelir-ekstra/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.176217904Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/puantaj-secimi/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.177097214Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/gelirler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.178112257Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/puantajlar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.182433424Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/Odeme/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.18314926Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/e-fatura-referans/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.183978039Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/avans-istekler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.184236875Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/yemek-cekiler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.185700288Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/calisan-talepler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.186998177Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/nakit/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.272694348Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/e-faturalar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:14.375061764Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/stok-sayimlar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:16.862250046Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/roles/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:16.87263485Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/kategoriler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:16.880417646Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/yetkiler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:16.88151969Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/kullanici-rolleri/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:16.882557754Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/users/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:16.883943755Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/subeler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:16.884119109Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/ust-kategoriler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:16.887969916Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/rol-yetkileri/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:16.891380573Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/degerler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:16.895669559Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/kullanici-rolleri/?kullanici_id=2 HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.109712771Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/puantaj-secimi/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.118298925Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/stok-fiyatlar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.120359251Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/e-faturalar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.122356306Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/diger-harcamalar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.126142701Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/stoklar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.127507462Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/depo-kira-rapor/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.128690759Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/calisanlar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.129048837Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/b2b-ekstreler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.129339833Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/gelir-ekstra/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.132434203Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/avans-istekler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.132934824Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/puantajlar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.135660976Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/stok-sayimlar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.136409433Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/nakit/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.137912836Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/yemek-cekiler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.139249477Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/e-fatura-referans/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.140800381Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/calisan-talepler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.141011186Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/Odeme/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.142657593Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/Odeme_Referans/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:37:17.220116768Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/gelirler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:38:41.100492877Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/kullanici-rolleri/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:38:41.100869896Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/yetkiler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:38:41.101145002Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/users/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:38:41.102078204Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/kullanici-rolleri/?kullanici_id=2 HTTP/1.1" 400 Bad Request
-2025-12-06T19:38:41.102219137Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/kategoriler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:38:41.102711678Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/rol-yetkileri/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:38:41.102913223Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/ust-kategoriler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:38:41.10410828Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/subeler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:38:41.107859295Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/roles/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:38:41.290939607Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/degerler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:38:41.524000145Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/e-faturalar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:38:41.532666052Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/b2b-ekstreler/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:38:41.532893457Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/diger-harcamalar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:38:41.533544692Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/stoklar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:38:41.534666787Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/stok-fiyatlar/ HTTP/1.1" 400 Bad Request
-2025-12-06T19:38:41.534912043Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/Odeme_Referans/ HTTP/1.1" 400 Bad Request
 2025-12-06T19:38:41.536694534Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/avans-istekler/ HTTP/1.1" 400 Bad Request
 2025-12-06T19:38:41.538054924Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/calisan-talepler/ HTTP/1.1" 400 Bad Request
 2025-12-06T19:38:41.538910964Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/depo-kira-rapor/ HTTP/1.1" 400 Bad Request
@@ -98,3 +11,90 @@
 2025-12-06T19:38:41.7230582Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/puantajlar/ HTTP/1.1" 400 Bad Request
 2025-12-06T19:38:41.727279136Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/puantaj-secimi/ HTTP/1.1" 400 Bad Request
 2025-12-06T19:38:41.731128893Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/gelirler/ HTTP/1.1" 400 Bad Request
+2025-12-06T19:54:41.804810516Z INFO:     Shutting down
+2025-12-06T19:54:41.905528163Z INFO:     Waiting for application shutdown.
+2025-12-06T19:54:41.906193968Z INFO:     Application shutdown complete.
+2025-12-06T19:54:41.906206988Z INFO:     Finished server process [39]
+2025-12-06T20:10:58.573674018Z ==> Deploying...
+2025-12-06T20:11:38.537881059Z ==> Running 'cd backend && PYTHONPATH=. uvicorn main:app --host 0.0.0.0 --port $PORT'
+2025-12-06T20:11:58.738423641Z /opt/render/project/src/.venv/lib/python3.13/site-packages/pydantic/_internal/_config.py:383: UserWarning: Valid config keys have changed in V2:
+2025-12-06T20:11:58.738451392Z * 'orm_mode' has been renamed to 'from_attributes'
+2025-12-06T20:11:58.738457742Z   warnings.warn(message, UserWarning)
+2025-12-06T20:12:03.791524508Z ==> No open ports detected, continuing to scan...
+2025-12-06T20:12:03.858269052Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+2025-12-06T20:12:19.431265113Z /opt/render/project/src/.venv/lib/python3.13/site-packages/pydantic/_internal/_config.py:383: UserWarning: Valid config keys have changed in V2:
+2025-12-06T20:12:19.431286014Z * 'orm_mode' has been renamed to 'from_attributes'
+2025-12-06T20:12:19.431291564Z   warnings.warn(message, UserWarning)
+2025-12-06T20:12:19.64134239Z /opt/render/project/src/.venv/lib/python3.13/site-packages/pydantic/_internal/_config.py:383: UserWarning: Valid config keys have changed in V2:
+2025-12-06T20:12:19.641361341Z * 'orm_mode' has been renamed to 'from_attributes'
+2025-12-06T20:12:19.641365871Z   warnings.warn(message, UserWarning)
+2025-12-06T20:12:36.332473847Z INFO:     Started server process [57]
+2025-12-06T20:12:36.332521628Z INFO:     Waiting for application startup.
+2025-12-06T20:12:36.332930868Z INFO:     Application startup complete.
+2025-12-06T20:12:36.333573335Z INFO:     Uvicorn running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+2025-12-06T20:12:37.05183498Z INFO:     127.0.0.1:58414 - "HEAD / HTTP/1.1" 405 Method Not Allowed
+2025-12-06T20:12:39.213708794Z ==> Your service is live 🎉
+2025-12-06T20:12:39.236643612Z ==>
+2025-12-06T20:12:39.2556265Z ==> ///////////////////////////////////////////////////////////
+2025-12-06T20:12:39.275742458Z ==>
+2025-12-06T20:12:39.298932356Z ==> Available at your primary URL https://gumusbulut.onrender.com
+2025-12-06T20:12:39.317641995Z ==>
+2025-12-06T20:12:39.337520383Z ==> ///////////////////////////////////////////////////////////
+2025-12-06T20:12:40.230488726Z INFO:     34.82.57.203:0 - "GET / HTTP/1.1" 200 OK
+2025-12-06T20:13:29.605397165Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/subeler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:29.605877507Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/roles/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:29.606236156Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/ust-kategoriler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:29.606312748Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/kategoriler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:29.606689108Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/users/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:29.60714906Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/yetkiler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:29.607685813Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/degerler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:29.629867609Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/kullanici-rolleri/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:29.941464354Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/rol-yetkileri/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.201447604Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/e-faturalar/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.209089739Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/Odeme_Referans/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.21186266Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/stok-fiyatlar/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.214768064Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/gelirler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.216104738Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/diger-harcamalar/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.216355134Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/stok-sayimlar/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.217025921Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/b2b-ekstreler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.217508993Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/puantajlar/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.218517209Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/calisanlar/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.219493764Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/puantaj-secimi/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.21971005Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/nakit/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.22169734Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/gelir-ekstra/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.222294575Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/avans-istekler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.223798604Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/Odeme/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.224921393Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/e-fatura-referans/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.22639212Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/depo-kira-rapor/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.228236917Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/yemek-cekiler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.232075615Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/calisan-talepler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:30.251832689Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/stoklar/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.718070946Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/subeler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.719821031Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/rol-yetkileri/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.720286013Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/ust-kategoriler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.720860477Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/kategoriler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.721093983Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/users/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.723108715Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/degerler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.724580612Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/kullanici-rolleri/?kullanici_id=2 HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.727438685Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/yetkiler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.72800234Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/kullanici-rolleri/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.729555139Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/roles/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.950220926Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/Odeme_Referans/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.959635676Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/b2b-ekstreler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.962082828Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/e-faturalar/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.962853548Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/stoklar/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.963636808Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/stok-fiyatlar/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.963870444Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/diger-harcamalar/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.965381782Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/stok-sayimlar/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.968534003Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/puantajlar/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.969624171Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/calisanlar/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.970184565Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/avans-istekler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.970592405Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/e-fatura-referans/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.971058987Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/yemek-cekiler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.971730784Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/gelir-ekstra/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.971971501Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/puantaj-secimi/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.975840559Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/gelirler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.976060585Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/calisan-talepler/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:33.976380333Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/depo-kira-rapor/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:34.136164648Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/nakit/ HTTP/1.1" 400 Bad Request
+2025-12-06T20:13:34.160168869Z INFO:     176.234.95.47:0 - "OPTIONS /api/v1/Odeme/ HTTP/1.1" 400 Bad Request
