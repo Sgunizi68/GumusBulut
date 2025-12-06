@@ -9,7 +9,7 @@
   "scripts": {
     "prepare": "husky install"
   },
-  "version": "7.4.0",
+  "version": "7.5.0",
   "dependencies": {
     "lucide-react": "^0.544.0"
   }
