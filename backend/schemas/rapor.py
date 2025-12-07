@@ -7,21 +7,21 @@ class PosOdemesi(BaseModel):
     POS_Odemesi: float
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class YemekCekiOdemesi(BaseModel):
     Gun: date
     Yemek_Ceki: float
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class OnlineVirman(BaseModel):
     Gun: date
     Online_Virman: float
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class GidenFatura(BaseModel):
     Kategori_Adi: str
@@ -29,7 +29,7 @@ class GidenFatura(BaseModel):
     Tutar: float
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class CariFatura(BaseModel):
     Cari_Durumu: str
@@ -41,7 +41,7 @@ class CariFatura(BaseModel):
     Kategori_ID: Optional[int] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class CariMutabakat(BaseModel):
     Cari_ID: int
@@ -50,7 +50,7 @@ class CariMutabakat(BaseModel):
     Toplam_Mutabakat_Tutari: Optional[float] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class CariOdeme(BaseModel):
     Cari_ID: int
@@ -59,4 +59,4 @@ class CariOdeme(BaseModel):
     Tarih: date
 
     class Config:
-        orm_mode = True
+        from_attributes = True
