@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from datetime import date
@@ -507,13 +508,21 @@ def create_gelir(db: Session, gelir: gelir.GelirCreate):
     db.refresh(db_gelir)
     return db_gelir
 
-def update_gelir(db: Session, gelir_id: int, gelir: gelir.GelirUpdate):
+def update_gelir(db: Session, gelir_id: int, gelir: gelir.GelirUpdate, current_user: models.Kullanici):
     db_gelir = db.query(models.Gelir).filter(models.Gelir.Gelir_ID == gelir_id).first()
-    if db_gelir:
-        for key, value in gelir.dict(exclude_unset=True).items():
-            setattr(db_gelir, key, value)
-        db.commit()
-        db.refresh(db_gelir)
+    if not db_gelir:
+        return None
+
+    is_admin = any(rol.Rol_Adi == "Admin Kullanıcı" for rol in current_user.roller)
+
+    if not is_admin:
+        if db_gelir.Kayit_Tarihi != date.today():
+            raise HTTPException(status_code=403, detail="Geçmiş tarihli gelir kaydı değiştirilemez.")
+
+    for key, value in gelir.dict(exclude_unset=True).items():
+        setattr(db_gelir, key, value)
+    db.commit()
+    db.refresh(db_gelir)
     return db_gelir
 
 def delete_gelir(db: Session, gelir_id: int):
@@ -1151,6 +1160,14 @@ def get_yemek_ceki(db: Session, yemek_ceki_id: int):
     return yemek_ceki
 
 def get_yemek_cekiler(db: Session, skip: int = 0, limit: int = 100):
+    from sqlalchemy import select, func
+
+    gelir_sum_subquery = select(func.sum(models.Gelir.Tutar)).where(
+        (models.Gelir.Kategori_ID == models.YemekCeki.Kategori_ID) &
+        (models.Gelir.Tarih >= models.YemekCeki.Ilk_Tarih) &
+        (models.Gelir.Tarih <= models.YemekCeki.Son_Tarih)
+    ).correlate(models.YemekCeki).as_scalar()
+
     results = db.query(
         models.YemekCeki.ID,
         models.YemekCeki.Kategori_ID,
@@ -1161,7 +1178,8 @@ def get_yemek_cekiler(db: Session, skip: int = 0, limit: int = 100):
         models.YemekCeki.Son_Tarih,
         models.YemekCeki.Sube_ID,
         models.YemekCeki.Imaj_Adi,
-        (models.YemekCeki.Imaj != None).label('has_imaj')
+        (models.YemekCeki.Imaj != None).label('has_imaj'),
+        func.coalesce(gelir_sum_subquery, 0).label('Gelir')
     ).offset(skip).limit(limit).all()
     return results
 

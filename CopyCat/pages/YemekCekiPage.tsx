@@ -55,6 +55,7 @@ const YemekCekiPage: React.FC = () => {
             'Kategori': kategoriAdi,
             'Tarih': y.Tarih,
             'Tutar': y.Tutar,
+            'Gelir': y.Gelir,
             'Ödeme Tarihi': y.Odeme_Tarih,
             'İlk Tarih': y.Ilk_Tarih,
             'Son Tarih': y.Son_Tarih,
@@ -66,6 +67,7 @@ const YemekCekiPage: React.FC = () => {
     ws['!cols'] = [
         { wch: 20 },
         { wch: 12 },
+        { wch: 15 },
         { wch: 15 },
         { wch: 15 },
         { wch: 15 },
@@ -119,6 +121,18 @@ const YemekCekiPage: React.FC = () => {
     periods.add(currentPeriod || '');
     return Array.from(periods).sort((a, b) => b.localeCompare(a));
   }, [yemekCekiList, currentPeriod]);
+
+  const toplamGelir = useMemo(() => {
+    const uniqueKeys = new Set<string>();
+    return filteredYemekCekiList.reduce((acc, y) => {
+      const key = `${y.Kategori_ID}-${y.Ilk_Tarih}-${y.Son_Tarih}`;
+      if (!uniqueKeys.has(key)) {
+        uniqueKeys.add(key);
+        return acc + y.Gelir;
+      }
+      return acc;
+    }, 0);
+  }, [filteredYemekCekiList]);
 
   const filteredYemekCekiList = useMemo(() => {
     return yemekCekiList
@@ -335,7 +349,7 @@ const YemekCekiPage: React.FC = () => {
           </div>
         }>
         <TableLayout
-          headers={['Kategori', 'Tarih', 'Tutar', 'Ödeme Tarihi', 'İlk Tarih', 'Son Tarih', 'Resim', 'İşlemler']}
+          headers={['Kategori', 'Tarih', 'Tutar', 'Gelir', 'Ödeme Tarihi', 'İlk Tarih', 'Son Tarih', 'Resim', 'İşlemler']}
           compact={true}
         >
           {filteredYemekCekiList.map(y => {
@@ -347,6 +361,9 @@ const YemekCekiPage: React.FC = () => {
                 <td className="px-4 py-2 text-sm text-gray-500">{y.Tarih}</td>
                 <td className="px-4 py-2 text-sm text-gray-900 text-right">
                   {y.Tutar.toLocaleString('tr-TR', {style: 'currency', currency: 'TRY'})}
+                </td>
+                <td className="px-4 py-2 text-sm text-gray-900 text-right">
+                  {y.Gelir.toLocaleString('tr-TR', {style: 'currency', currency: 'TRY'})}
                 </td>
                 <td className="px-4 py-2 text-sm text-gray-500">{y.Odeme_Tarih}</td>
                 <td className="px-4 py-2 text-sm text-gray-500">{y.Ilk_Tarih}</td>
@@ -377,6 +394,18 @@ const YemekCekiPage: React.FC = () => {
               </tr>
             );
           })}
+          <tfoot>
+            <tr className="bg-gray-50 font-semibold">
+              <td colSpan={2} className="px-4 py-2 text-sm text-right text-gray-900">Toplam:</td>
+              <td className="px-4 py-2 text-sm text-gray-900 text-right">
+                {filteredYemekCekiList.reduce((acc, y) => acc + y.Tutar, 0).toLocaleString('tr-TR', {style: 'currency', currency: 'TRY'})}
+              </td>
+              <td className="px-4 py-2 text-sm text-gray-900 text-right">
+                {toplamGelir.toLocaleString('tr-TR', {style: 'currency', currency: 'TRY'})}
+              </td>
+              <td colSpan={5} className="px-4 py-2"></td>
+            </tr>
+          </tfoot>
         </TableLayout>
         {filteredYemekCekiList.length === 0 && (
           <p className="text-center py-4 text-gray-500">Kayıtlı yemek çeki bulunmamaktadır.</p>

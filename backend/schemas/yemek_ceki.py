@@ -37,6 +37,7 @@ class YemekCekiInDB(YemekCekiBase):
 class YemekCekiList(YemekCekiBase):
     ID: int
     has_imaj: bool
+    Gelir: float
 
     class Config:
         from_attributes = True

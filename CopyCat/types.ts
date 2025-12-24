@@ -470,7 +470,7 @@ export type NakitFormData = Omit<Nakit, 'Nakit_ID' | 'Kayıt_Tarih' | 'Imaj' | '
 
 export interface AppContextType {
   isAuthenticated: boolean;
-  login: (username: string) => void;
+  login: (username: string, password: string) => void;
   logout: () => void;
   currentUser: Kullanici | null;
   selectedBranch: Sube | null;
@@ -478,6 +478,7 @@ export interface AppContextType {
   currentPeriod: string; // YYAA format, e.g., "2307"
   setPeriod: (period: string) => void;
   hasPermission: (permissionName: string) => boolean;
+  isAdmin: boolean;
 }
 
 export interface DataContextType {
@@ -621,9 +622,12 @@ export interface YemekCeki {
   Imaj?: string; // Base64 encoded image
   Imaj_Adi?: string; // Image filename
   Kayit_Tarihi?: string; // TIMESTAMP
+  Gelir: number;
+  has_imaj: boolean;
 }
 
 // YemekCekiFormData can be used for form submissions
+export type YemekCekiFormData = Omit<YemekCeki, 'ID' | 'Kayit_Tarihi' | 'has_imaj' | 'Gelir'> & { Imaj?: File | null };
 export interface CalisanTalep {
   Talep_ID: number;
   TC_No: string;
