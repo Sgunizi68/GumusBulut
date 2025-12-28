@@ -3606,7 +3606,7 @@ export const DigerHarcamalarPage: React.FC = () => {
 
 // --- GELIR PAGE ---
 export const GelirPage: React.FC = () => {
-    const { selectedBranch, currentPeriod, hasPermission, isAdmin } = useAppContext();
+    const { selectedBranch, currentPeriod, hasPermission } = useAppContext();
     const { 
         gelirList, addOrUpdateGelirEntry, getGelirEntry, 
         gelirEkstraList, addOrUpdateGelirEkstraEntry, getGelirEkstraEntry,
@@ -3745,10 +3745,6 @@ export const GelirPage: React.FC = () => {
     
     useEffect(() => { setViewedPeriod(currentPeriod); }, [currentPeriod]);
     useEffect(() => {
-        if (isAdmin) {
-            setIsEditingDisabled(false);
-            return;
-        }
         const today = new Date();
         const currentDayOfMonth = today.getDate();
         const previousPeriod = getPreviousPeriod(currentPeriod);
@@ -3764,7 +3760,7 @@ export const GelirPage: React.FC = () => {
         }
 
         setIsEditingDisabled(disable);
-    }, [viewedPeriod, currentPeriod, canAccessHistory, isAdmin]);
+    }, [viewedPeriod, currentPeriod, canAccessHistory]);
 
     const handlePreviousPeriod = () => {
         if (!canAccessHistory) { alert("Geçmiş dönem verilerini görüntüleme yetkiniz yok."); return; }

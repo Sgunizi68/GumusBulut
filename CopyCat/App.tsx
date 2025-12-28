@@ -1690,7 +1690,6 @@ const AppWithToast: React.FC = () => {
     return storedState.currentPeriod || DEFAULT_PERIOD;
   });
   const [currentUserPermissions, setCurrentUserPermissions] = useState<string[]>([]);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   useEffect(() => {
     setCurrentPeriod(DEFAULT_PERIOD);
@@ -1718,13 +1717,11 @@ const AppWithToast: React.FC = () => {
         );
 
         if (isAdminRoleAssigned || currentUser.Kullanici_Adi.toLowerCase() === 'admin') {
-            setIsAdmin(true);
             const allPermissions = await fetchData<Yetki[]>(`${API_BASE_URL}/yetkiler/`);
             if (allPermissions) {
                 setCurrentUserPermissions(allPermissions.map(p => p.Yetki_Adi));
             }
         } else {
-            setIsAdmin(false);
             const rolePermissions = await fetchData<RolYetki[]>(`${API_BASE_URL}/rol-yetkileri/`);
             const allPermissions = await fetchData<Yetki[]>(`${API_BASE_URL}/yetkiler/`);
             if (rolePermissions && allPermissions) {
@@ -1737,7 +1734,6 @@ const AppWithToast: React.FC = () => {
         }
       } else {
         setCurrentUserPermissions([]);
-        setIsAdmin(false);
       }
     };
 
@@ -1814,7 +1810,6 @@ const AppWithToast: React.FC = () => {
     currentPeriod,
     setPeriod,
     hasPermission,
-    isAdmin,
   };
 
   return (

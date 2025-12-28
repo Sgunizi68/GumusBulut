@@ -6,7 +6,6 @@ import logging
 
 from db import crud, database, models
 from schemas import gelir
-from api.v1 import deps
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -28,8 +27,8 @@ def read_gelir(gelir_id: int, db: Session = Depends(database.get_db)):
     return db_gelir
 
 @router.put("/gelirler/{gelir_id}", response_model=gelir.GelirInDB)
-def update_gelir(gelir_id: int, gelir: gelir.GelirUpdate, db: Session = Depends(database.get_db), current_user: models.Kullanici = Depends(deps.get_current_active_user)):
-    db_gelir = crud.update_gelir(db=db, gelir_id=gelir_id, gelir=gelir, current_user=current_user)
+def update_gelir(gelir_id: int, gelir: gelir.GelirUpdate, db: Session = Depends(database.get_db)):
+    db_gelir = crud.update_gelir(db=db, gelir_id=gelir_id, gelir=gelir)
     if db_gelir is None:
         raise HTTPException(status_code=404, detail="Gelir not found")
     return db_gelir

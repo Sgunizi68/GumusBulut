@@ -1,5 +1,138 @@
-C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\db\crud.py:2573: FutureWarning: Passing bytes to 'read_excel' is deprecated and will be removed in a future version. To read from a byte string, wrap it in a `BytesIO` object.
-  df = pd.read_excel(contents, header=0)  # Assuming the first row is the header
-Excel columns: Index(['İşlem Tarihi', 'Hesaba Geçiş Tarihi', 'Para Birimi', 'İşlem Tutarı',
-       'Kesinti Tutarı', 'Net Tutar'],
-      dtype='obeject')
+Microsoft Windows [Version 10.0.19045.6466]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Gokova>Cd C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend
+
+C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend>.\venv\Scripts\activate
+
+(venv) C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend>uvicorn main:app --reload  --env-file "..\.env.local"
+←[32mINFO←[0m:     Will watch for changes in these directories: ['C:\\Users\\Gokova\\OneDrive - CELEBI HAVACILIK HOLDING A.S\\Personel\\Programming\\Python\\backend']
+←[32mINFO←[0m:     Loading environment from '..\.env.local'
+←[32mINFO←[0m:     Uvicorn running on ←[1mhttp://127.0.0.1:8000←[0m (Press CTRL+C to quit)
+←[32mINFO←[0m:     Started reloader process [←[36m←[1m5540←[0m] using ←[36m←[1mWatchFiles←[0m
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\networks.py", line 965, in import_email_validator
+    import email_validator
+ModuleNotFoundError: No module named 'email_validator'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Python313\Lib\multiprocessing\process.py", line 313, in _bootstrap
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Python313\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    ~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "C:\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\server.py", line 71, in serve
+    await self._serve(sockets)
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\server.py", line 78, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\config.py", line 439, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\main.py", line 6, in <module>
+    from api.v1.endpoints import (
+    ...<2 lines>...
+    )
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\api\v1\endpoints\__init__.py", line 1, in <module>
+    from . import sube, users, roles, permissions, kullanici_rol, rol_yetki, e_fatura, b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, calisan, puantaj_secimi, puantaj, avans_istek, token, deger, fatura_diger_harcama_rapor
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\api\v1\endpoints\sube.py", line 5, in <module>
+    from db import crud, database, models
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\db\crud.py", line 6, in <module>
+    from schemas import sube, user, role, permission, kullanici_rol, rol_yetki, e_fatura, b2b_ekstre, diger_harcama, gelir, gelir_ekstra, stok, stok_fiyat, stok_sayim, calisan, puantaj_secimi, puantaj, avans_istek, ust_kategori, kategori, deger, e_fatura_referans, nakit, odeme, odeme_referans, pos_hareketleri, yemek_ceki, calisan_talep, cari
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\schemas\__init__.py", line 20, in <module>
+    from .user import *
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\schemas\user.py", line 5, in <module>
+    class UserBase(BaseModel):
+    ...<4 lines>...
+        Aktif_Pasif: bool = True
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_model_construction.py", line 255, in __new__
+    complete_model_class(
+    ~~~~~~~~~~~~~~~~~~~~^
+        cls,
+        ^^^^
+    ...<3 lines>...
+        create_model_module=_create_model_module,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_model_construction.py", line 648, in complete_model_class
+    schema = gen_schema.generate_schema(cls)
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_generate_schema.py", line 729, in generate_schema
+    schema = self._generate_schema_inner(obj)
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_generate_schema.py", line 1023, in _generate_schema_inner
+    return self._model_schema(obj)
+           ~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_generate_schema.py", line 856, in _model_schema
+    {k: self._generate_md_field_schema(k, v, decorators) for k, v in fields.items()},
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_generate_schema.py", line 1228, in _generate_md_field_schema
+    schema, metadata = self._common_field_schema(name, field_info, decorators)
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_generate_schema.py", line 1282, in _common_field_schema
+    schema = self._apply_annotations(
+        source_type,
+        annotations + validators_from_decorators,
+    )
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_generate_schema.py", line 2227, in _apply_annotations
+    schema = get_inner_schema(source_type)
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_schema_generation_shared.py", line 83, in __call__
+    schema = self._handler(source_type)
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_generate_schema.py", line 2358, in new_handler
+    schema = get_inner_schema(source)
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_schema_generation_shared.py", line 83, in __call__
+    schema = self._handler(source_type)
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_generate_schema.py", line 2206, in inner_handler
+    schema = self._generate_schema_inner(obj)
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_generate_schema.py", line 1028, in _generate_schema_inner
+    return self.match_type(obj)
+           ~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_generate_schema.py", line 1144, in match_type
+    return self._match_generic_type(obj, origin)
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_generate_schema.py", line 1167, in _match_generic_type
+    return self._union_schema(obj)
+           ~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_generate_schema.py", line 1327, in _union_schema
+    choices.append(self.generate_schema(arg))
+                   ~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_generate_schema.py", line 726, in generate_schema
+    schema = self._generate_schema_from_get_schema_method(obj, obj)
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\_internal\_generate_schema.py", line 919, in _generate_schema_from_get_schema_method
+    schema = get_schema(
+        source, CallbackGetCoreSchemaHandler(self._generate_schema_inner, self, ref_mode=ref_mode)
+    )
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\networks.py", line 1005, in __get_pydantic_core_schema__
+    import_email_validator()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Gokova\OneDrive - CELEBI HAVACILIK HOLDING A.S\Personel\Programming\Python\backend\venv\Lib\site-packages\pydantic\networks.py", line 967, in import_email_validator
+    raise ImportError("email-validator is not installed, run `pip install 'pydantic[email]'`") from e
+ImportError: email-validator is not installed, run `pip install 'pydantic[email]'`
