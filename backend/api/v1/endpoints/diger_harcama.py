@@ -42,8 +42,8 @@ async def create_diger_harcama(
     return await crud.create_diger_harcama(db=db, harcama=harcama_data)
 
 @router.get("/diger-harcamalar/", response_model=List[diger_harcama.DigerHarcamaInDB])
-def read_diger_harcamalar(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
-    harcamalar = crud.get_diger_harcamalar(db, skip=skip, limit=limit)
+def read_diger_harcamalar(skip: int = 0, db: Session = Depends(database.get_db)):
+    harcamalar = crud.get_diger_harcamalar(db, skip=skip)
     return harcamalar
 
 @router.get("/diger-harcamalar/{harcama_id}", response_model=diger_harcama.DigerHarcamaInDB)

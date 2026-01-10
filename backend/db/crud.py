@@ -439,8 +439,8 @@ def get_diger_harcama(db: Session, harcama_id: int):
             harcama.Imaj = base64.b64encode(harcama.Imaj).decode('utf-8')
     return harcama
 
-def get_diger_harcamalar(db: Session, skip: int = 0, limit: int = 100):
-    harcamalar = db.query(models.DigerHarcama).offset(skip).limit(limit).all()
+def get_diger_harcamalar(db: Session, skip: int = 0):
+    harcamalar = db.query(models.DigerHarcama).offset(skip).all()
     for harcama in harcamalar:
         if harcama.Donem is not None:
             harcama.Donem = str(harcama.Donem)
