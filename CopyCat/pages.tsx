@@ -413,7 +413,7 @@ export const DashboardPage: React.FC = () => {
 
     // eFaturaList
     eFaturaList
-      .filter(ef => ef.Sube_ID === selectedBranch?.Sube_ID && ef.Kategori_ID === kategoriId && ef.Donem === parseInt(targetPeriod))
+      .filter(ef => ef.Sube_ID === selectedBranch?.Sube_ID && ef.Kategori_ID === kategoriId && ef.Donem === parseInt(targetPeriod) && !ef.Giden_Fatura)
       .forEach(ef => detailedItems.push({
         Alici_Unvani: ef.Alici_Unvani,
         Aciklama: ef.Aciklama !== undefined && ef.Aciklama !== null ? ef.Aciklama : ef.Fatura_Numarasi,
@@ -464,7 +464,7 @@ export const DashboardPage: React.FC = () => {
             .reduce((sum, g) => sum + g.Tutar, 0);
         } else if (kategoriTip === 'Gider') {
           eFaturaList
-            .filter(ef => ef.Sube_ID === selectedBranch.Sube_ID && ef.Kategori_ID === kategoriId && ef.Donem === parseInt(currentLookupPeriod))
+            .filter(ef => ef.Sube_ID === selectedBranch.Sube_ID && ef.Kategori_ID === kategoriId && ef.Donem === parseInt(currentLookupPeriod) && !ef.Giden_Fatura)
             .forEach(ef => periodTotal += ef.Tutar);
           digerHarcamaList
             .filter(dh => dh.Sube_ID === selectedBranch.Sube_ID && dh.Kategori_ID === kategoriId && dh.Donem === parseInt(currentLookupPeriod))
