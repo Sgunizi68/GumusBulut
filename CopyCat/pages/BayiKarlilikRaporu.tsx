@@ -138,6 +138,10 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
   const headers = months.map((m) => `${m}${String(year).slice(2)}`);
 
       const { processedExcelRows, processedDigerRows, processedMoreRows } = useMemo(() => {
+        const { selectedBranch } = useAppContext();
+        if (!selectedBranch) {
+            return { processedExcelRows: [], processedDigerRows: [], processedMoreRows: [] };
+        }
       const calculateWorkingDays = (monthIndex: number, year: number) => new Date(year, monthIndex + 1, 0).getDate();
   
       // --- Main Calculations ---
@@ -147,7 +151,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     const tabakSayisiValues = Array(12).fill(0);
     const toplamCiroValues = Array(12).fill(0);
     if (gelirEkstraList) {
-        gelirEkstraList.forEach(item => {
+        gelirEkstraList.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
             const itemDate = new Date(item.Tarih);
             if (itemDate.getFullYear() === year) {
                 const monthIndex = itemDate.getMonth();
@@ -173,7 +177,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     );
     const seftenisteCiroValues = Array(12).fill(0);
     if (gelirList) {
-        gelirList.forEach(item => {
+        gelirList.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
             const itemDate = new Date(item.Tarih);
             if (itemDate.getFullYear() === year && seftenisteKategoriIds.has(item.Kategori_ID)) {
                 const monthIndex = itemDate.getMonth();
@@ -194,7 +198,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         const periodStartDate = new Date(periodYear, periodMonth - 1, 1);
 
         const relevantPrices = stokFiyatList
-            .filter(sf => sf.Malzeme_Kodu === malzemeKodu && new Date(sf.Gecerlilik_Baslangic_Tarih) <= periodStartDate)
+            .filter(sf => sf.Sube_ID === selectedBranch.Sube_ID && sf.Malzeme_Kodu === malzemeKodu && new Date(sf.Gecerlilik_Baslangic_Tarih) <= periodStartDate)
             .sort((a, b) => new Date(b.Gecerlilik_Baslangic_Tarih).getTime() - new Date(a.Gecerlilik_Baslangic_Tarih).getTime());
 
         return relevantPrices.length > 0 ? relevantPrices[0].Fiyat : 0;
@@ -204,7 +208,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     if (stokSayimList) {
         const yearSayimlar = stokSayimList.filter(s => {
             const sayimYear = 2000 + parseInt(s.Donem.substring(0, 2));
-            return sayimYear === year;
+            return sayimYear === year && s.Sube_ID === selectedBranch.Sube_ID;
         });
 
         yearSayimlar.forEach(sayim => {
@@ -220,7 +224,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
 
     const prevYear = year - 1;
     const prevYearDonem = (prevYear % 100).toString().padStart(2, '0') + '12';
-    const prevYearDecemberSayimlar = stokSayimList.filter(s => s.Donem === prevYearDonem);
+    const prevYearDecemberSayimlar = stokSayimList.filter(s => s.Donem === prevYearDonem && s.Sube_ID === selectedBranch.Sube_ID);
     let prevYearDecemberStockValue = 0;
     if (prevYearDecemberSayimlar.length > 0) {
         prevYearDecemberSayimlar.forEach(sayim => {
@@ -242,7 +246,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
             let dailyCountsForMonth = 0;
             for (let day = 1; day <= days; day++) {
                 const currentDate = new Date(year, monthIndex, day);
-                const activeEmployeesOnDay = calisanList.filter(c => {
+                const activeEmployeesOnDay = calisanList.filter(c => c.Sube_ID === selectedBranch.Sube_ID).filter(c => {
                     if (!c.Sigorta_Giris) return false;
                     const girisDate = new Date(c.Sigorta_Giris);
                     const cikisDate = c.Sigorta_Cikis ? new Date(c.Sigorta_Cikis) : null;
@@ -265,7 +269,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         );
 
         const processList = (list: any[]) => {
-            list.forEach(item => {
+            list.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
                 const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
                 if (itemYear === year && maliyetKategoriIds.has(item.Kategori_ID)) {
                     const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
@@ -313,7 +317,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     const personelMaasGiderleriValues = Array(12).fill(0);
     if (maasGiderleriUstKategori && (digerHarcamaList || eFaturaList)) {
         const processList = (list: any[]) => {
-            list.forEach(item => {
+            list.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
                 const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
                 if (itemYear === year && maasKategoriIds.has(item.Kategori_ID)) {
                     const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
@@ -362,7 +366,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     const sabitKiraValues = Array(12).fill(0);
     if (sabitKiraKategoriId && (digerHarcamaList || eFaturaList)) {
         const processList = (list: any[]) => {
-            list.forEach(item => {
+            list.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
                 const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
                 if (itemYear === year && item.Kategori_ID === sabitKiraKategoriId) {
                     const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
@@ -387,7 +391,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     const ciroKiraValues = Array(12).fill(0);
     if (ciroKiraKategoriId && (digerHarcamaList || eFaturaList)) {
         const processList = (list: any[]) => {
-            list.forEach(item => {
+            list.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
                 const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
                 if (itemYear === year && item.Kategori_ID === ciroKiraKategoriId) {
                     const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
@@ -412,7 +416,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     const ortakGiderValues = Array(12).fill(0);
     if (ortakGiderKategoriId && (digerHarcamaList || eFaturaList)) {
         const processList = (list: any[]) => {
-            list.forEach(item => {
+            list.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
                 const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
                 if (itemYear === year && item.Kategori_ID === ortakGiderKategoriId) {
                     const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
@@ -430,7 +434,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
 
     const depoKiraValues = Array(12).fill(0);
     if (depoKiraRapor) {
-        depoKiraRapor.forEach(item => {
+        depoKiraRapor.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
             const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
             if (itemYear === year) {
                 const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
@@ -463,7 +467,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     const paketKomisyonLojistikGiderleriValues = Array(12).fill(0);
     if (yemekSepetiKomisyonKategoriId && (digerHarcamaList || eFaturaList)) {
         const processList = (list: any[]) => {
-            list.forEach(item => {
+            list.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
                 const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
                 if (itemYear === year && item.Kategori_ID === yemekSepetiKomisyonKategoriId) {
                     const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
@@ -495,7 +499,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     const tavukDunyasiLojistikGiderleriValues = Array(12).fill(0);
     if (tavukDunyasiLojistikGiderleriKategoriId && (digerHarcamaList || eFaturaList)) {
         const processList = (list: any[]) => {
-            list.forEach(item => {
+            list.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
                 const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
                 if (itemYear === year && item.Kategori_ID === tavukDunyasiLojistikGiderleriKategoriId) {
                     const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
@@ -520,7 +524,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     const tavukDunyasiCiroPrimiValues = Array(12).fill(0);
     if (tavukDunyasiCiroPrimiKategoriId && (digerHarcamaList || eFaturaList)) {
         const processList = (list: any[]) => {
-            list.forEach(item => {
+            list.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
                 const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
                 if (itemYear === year && item.Kategori_ID === tavukDunyasiCiroPrimiKategoriId) {
                     const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
@@ -545,7 +549,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     const tavukDunyasiReklamPrimiValues = Array(12).fill(0);
     if (tavukDunyasiReklamPrimiKategoriId && (digerHarcamaList || eFaturaList)) {
         const processList = (list: any[]) => {
-            list.forEach(item => {
+            list.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
                 const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
                 if (itemYear === year && item.Kategori_ID === tavukDunyasiReklamPrimiKategoriId) {
                     const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
@@ -582,7 +586,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     const elektrikValues = Array(12).fill(0);
     if (elektrikKategoriId && (digerHarcamaList || eFaturaList)) {
         const processList = (list: any[]) => {
-            list.forEach(item => {
+            list.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
                 const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
                 if (itemYear === year && item.Kategori_ID === elektrikKategoriId) {
                     const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
@@ -607,7 +611,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     const suValues = Array(12).fill(0);
     if (suKategoriId && (digerHarcamaList || eFaturaList)) {
         const processList = (list: any[]) => {
-            list.forEach(item => {
+            list.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
                 const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
                 if (itemYear === year && item.Kategori_ID === suKategoriId) {
                     const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
@@ -632,7 +636,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     const krediKartiKomisyonGiderleriValues = Array(12).fill(0);
     if (bankaKomisyonuKategoriIds.size > 0 && (digerHarcamaList || eFaturaList)) {
         const processList = (list: any[]) => {
-            list.forEach(item => {
+            list.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
                 const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
                 if (itemYear === year && bankaKomisyonuKategoriIds.has(item.Kategori_ID)) {
                     const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
@@ -656,21 +660,21 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
 
     const yemekKartiKomisyonGiderleriValues = Array(12).fill(0);
     if (yemekCekleriKomisyonuKategoriIds.size > 0 && (digerHarcamaList || eFaturaList)) {
-        const processList = (list: any[]) => {
-            list.forEach(item => {
-                const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
-                if (itemYear === year && yemekCekleriKomisyonuKategoriIds.has(item.Kategori_ID)) {
-                    const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
-                    if (monthIndex >= 0 && monthIndex < 12) {
-                        yemekKartiKomisyonGiderleriValues[monthIndex] += item.Tutar;
+            const processList = (list: any[], isFatura: boolean = false) => {
+                list.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
+                    if (isFatura && item.Giden_Fatura) return;
+                    const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
+                    if (itemYear === year && yemekCekleriKomisyonuKategoriIds.has(item.Kategori_ID)) {
+                        const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
+                        if (monthIndex >= 0 && monthIndex < 12) {
+                            yemekKartiKomisyonGiderleriValues[monthIndex] += item.Tutar;
+                        }
                     }
-                }
-            });
-        };
-
-        if (digerHarcamaList) processList(digerHarcamaList);
-        if (eFaturaList) processList(eFaturaList);
-    }
+                });
+            };
+        
+            if (digerHarcamaList) processList(digerHarcamaList);
+            if (eFaturaList) processList(eFaturaList, true);    }
     const totalYemekKartiKomisyonGiderleri = yemekKartiKomisyonGiderleriValues.reduce((a, b) => a + b, 0);
 
     const digerGiderlerUstKategori = ustKategoriList.find(uk => uk.UstKategori_Adi === 'Diğer Giderler');
@@ -686,7 +690,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
     const digerGiderlerValues = Array(12).fill(0);
     if (digerGiderlerKategoriIds.size > 0 && (digerHarcamaList || eFaturaList)) {
         const processList = (list: any[]) => {
-            list.forEach(item => {
+            list.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
                 const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
                 if (itemYear === year && digerGiderlerKategoriIds.has(item.Kategori_ID)) {
                     const monthIndex = parseInt(String(item.Donem).substring(2, 4)) - 1;
@@ -736,7 +740,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
 
     const yemeksepetiKomisyonVeLojistikGiderleriValues = Array(12).fill(0);
     if (yemekSepetiKomisyonKategoriId && eFaturaList) {
-        eFaturaList.forEach(item => {
+        eFaturaList.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
             const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
             if (
                 itemYear === year &&
@@ -754,7 +758,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
 
     const trendyolKomisyonVeLojistikGiderleriValues = Array(12).fill(0);
     if (yemekSepetiKomisyonKategoriId && eFaturaList) {
-        eFaturaList.forEach(item => {
+        eFaturaList.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
             const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
             if (
                 itemYear === year &&
@@ -772,7 +776,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
 
     const getirKomisyonVeLojistikGiderleriValues = Array(12).fill(0);
     if (yemekSepetiKomisyonKategoriId && eFaturaList) {
-        eFaturaList.forEach(item => {
+        eFaturaList.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
             const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
             if (
                 itemYear === year &&
@@ -790,7 +794,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
 
     const migrosKomisyonVeLojistikGiderleriValues = Array(12).fill(0);
     if (yemekSepetiKomisyonKategoriId && eFaturaList) {
-        eFaturaList.forEach(item => {
+        eFaturaList.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
             const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
             if (
                 itemYear === year &&
@@ -960,7 +964,7 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
 
             const processList = (list: any[]) => {
                 if (!list) return;
-                list.forEach(item => {
+                list.filter(item => item.Sube_ID === selectedBranch.Sube_ID).forEach(item => {
                     if (item.Kategori_ID === kategoriId) {
                         const itemYear = 2000 + parseInt(String(item.Donem).substring(0, 2));
                         if (itemYear === year) {
@@ -1008,7 +1012,8 @@ export const BayiKarlilikRaporuPage: React.FC = () => {
         processedDigerRows: processedDigerRows,
         processedMoreRows: newMoreRows
     };
-  }, [year, depoKiraRapor, gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList, calisanList, ustKategoriList, digerHarcamaList, eFaturaList, allExpensesByCategory]);
+  }, [year, depoKiraRapor, gelirEkstraList, gelirList, kategoriList, stokFiyatList, stokSayimList, calisanList, ustKategoriList, digerHarcamaList, eFaturaList, allExpensesByCategory, useAppContext().selectedBranch]);
+
 
   const formatCell = (v: any) => {
     if (v === null || v === undefined || v === '' || v === 0) return '';

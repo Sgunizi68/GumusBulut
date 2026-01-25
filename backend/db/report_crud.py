@@ -36,7 +36,8 @@ def get_bayi_karlilik_raporu(db: Session, year: int, sube_id: int):
         func.sum(models.EFatura.Tutar)
     ).filter(
         models.EFatura.Sube_ID == sube_id,
-        extract('year', models.EFatura.Fatura_Tarihi) == year
+        extract('year', models.EFatura.Fatura_Tarihi) == year,
+        models.EFatura.Giden_Fatura == 0
     ).group_by(extract('month', models.EFatura.Fatura_Tarihi))
 
     # Yemeksepeti
