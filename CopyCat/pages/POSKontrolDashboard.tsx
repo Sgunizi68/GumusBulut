@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAppContext } from '../App';
-import { API_BASE_URL } from '../constants';
+import { API_BASE_URL, DEFAULT_PERIOD } from '../constants';
 import { Button, Card, Select } from '../components';
 import { Icons, YAZDIRMA_YETKISI_ADI, EXCELE_AKTAR_YETKISI_ADI } from '../constants';
 import { generateDashboardPdf } from '../utils/pdfGenerator';
@@ -43,14 +43,21 @@ export const POSKontrolDashboardPage: React.FC = () => {
     const { selectedBranch, currentPeriod, hasPermission } = useAppContext();
     const [reportData, setReportData] = useState<POSKontrolDashboardResponse | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const [selectedPeriod, setSelectedPeriod] = useState(currentPeriod);
+    const [selectedPeriod, setSelectedPeriod] = useState(currentPeriod || DEFAULT_PERIOD);
     const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [limit] = useState<number>(31);
-    const [loadData, setLoadData] = useState(false);
+    const [loadData, setLoadData] = useState(true);
 
     const canPrint = hasPermission(YAZDIRMA_YETKISI_ADI);
     const canExportExcel = hasPermission(EXCELE_AKTAR_YETKISI_ADI);
+
+    // Sync selectedPeriod with currentPeriod when currentPeriod changes or becomes available
+    useEffect(() => {
+        if (currentPeriod) {
+            setSelectedPeriod(currentPeriod);
+        }
+    }, [currentPeriod]);
 
     const getPreviousPeriod = (periodYYAA: string): string => {
         if (!periodYYAA || periodYYAA.length !== 4) return periodYYAA;
@@ -67,7 +74,6 @@ export const POSKontrolDashboardPage: React.FC = () => {
     const fetchReportData = useCallback(async (isPolling = false) => {
         if (loadData && selectedBranch && selectedPeriod) {
             if (!isPolling) setLoading(true);
-            setError(null);
             const skip = (currentPage - 1) * limit;
 
             try {
@@ -77,12 +83,25 @@ export const POSKontrolDashboardPage: React.FC = () => {
                 if (response.ok) {
                     const newData: POSKontrolDashboardResponse = await response.json();
                     setReportData(newData);
-                    if (newData.data.length === 0 && currentPage === 1) {
+                    // Check if data is truly empty (all fields null or zero)
+                    const isTrulyEmpty = newData.data.length === 0 || 
+                        (newData.data.length > 0 && newData.data.every(item => 
+                            !item.Gelir_POS && !item.POS_Hareketleri && !item.Odeme));
+                    
+                    if (isTrulyEmpty && currentPage === 1) {
                         setError('Bu dönem için veri bulunamadı. Lütfen başka bir dönem seçin.');
+                    } else {
+                        setError(null);
                     }
                 } else {
-                    const errorText = await response.text();
-                    setError(`Veri alınırken hata oluştu: ${response.status} - ${errorText}`);
+                    let errorMsg = response.statusText;
+                    try {
+                        const errorData = await response.json();
+                        errorMsg = errorData.detail || errorMsg;
+                    } catch (e) {
+                        // Not JSON
+                    }
+                    setError(`Veri alınırken hata oluştu: ${response.status} - ${errorMsg}`);
                     setReportData(null);
                 }
             } catch (err) {
@@ -109,6 +128,7 @@ export const POSKontrolDashboardPage: React.FC = () => {
     useEffect(() => {
         setCurrentPage(1);
         setReportData(null);
+        setError(null); // Clear error when filters change
     }, [selectedBranch, selectedPeriod]);
     
     const handleGeneratePdf = () => { generateDashboardPdf('pos-kontrol-dashboard-content', `POS_Kontrol_Dashboard_${selectedBranch?.Sube_Adi}_${selectedPeriod}.pdf`); };
@@ -140,15 +160,16 @@ export const POSKontrolDashboardPage: React.FC = () => {
 
     const availablePeriods = useMemo(() => {
         const periods = new Set<string>();
-        periods.add(currentPeriod);
-        let tempPeriod = currentPeriod;
+        const startPeriod = currentPeriod || selectedPeriod || DEFAULT_PERIOD;
+        periods.add(startPeriod);
+        let tempPeriod = startPeriod;
         for (let i = 0; i < 12; i++) {
             const prevPeriod = getPreviousPeriod(tempPeriod);
             periods.add(prevPeriod);
             tempPeriod = prevPeriod;
         }
         return Array.from(periods).sort((a,b) => b.localeCompare(a));
-    }, [currentPeriod]);
+    }, [currentPeriod, selectedPeriod]);
     
     const calculateGrandTotals = useMemo(() => {
         if (!reportData || !reportData.data) return null;

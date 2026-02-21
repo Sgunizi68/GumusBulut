@@ -8,12 +8,12 @@ from schemas import gelir_ekstra
 router = APIRouter()
 
 @router.post("/upload-tabak-sayisi/")
-async def upload_tabak_sayisi(
+def upload_tabak_sayisi(
     file: UploadFile = File(...),
     sube_id: int = Form(...),
     db: Session = Depends(database.get_db)
 ):
-    result = await crud.process_tabak_sayisi_excel(db=db, file=file, sube_id=sube_id)
+    result = crud.process_tabak_sayisi_excel(db=db, file=file, sube_id=sube_id)
     if "error" in result:
         raise HTTPException(status_code=400, detail=result["error"])
     return result

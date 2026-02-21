@@ -216,6 +216,9 @@ def get_pos_kontrol_dashboard(
         
     except HTTPException:
         raise
+    except Exception as e:
+        logger.error(f"Error in get_pos_kontrol_dashboard: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/all-expenses-by-category/{donem}", response_model=List[Dict[str, Any]])
 def get_all_expenses_by_category(donem: int, db: Session = Depends(get_db)):
